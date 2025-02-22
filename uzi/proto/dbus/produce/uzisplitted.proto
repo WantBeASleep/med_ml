@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option go_package = "internal/generated/dbus/produce/uzisplitted";
+
+message UziSplitted {
+    string uzi_id = 100;
+    repeated string pages_id = 200;
+  }
