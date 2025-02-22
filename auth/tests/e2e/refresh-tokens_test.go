@@ -3,6 +3,8 @@
 package e2e_test
 
 import (
+	"context"
+
 	pb "auth/internal/generated/grpc/service"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -16,7 +18,7 @@ func (suite *TestSuite) TestRefresh_Success() {
 
 	// регистрация пользователя
 	_, err := suite.client.Register(
-		suite.ctx,
+		context.Background(),
 		&pb.RegisterIn{
 			Email:    testEmail,
 			Password: testPassword,
@@ -26,7 +28,7 @@ func (suite *TestSuite) TestRefresh_Success() {
 
 	// получаем токены
 	loginResponse, err := suite.client.Login(
-		suite.ctx,
+		context.Background(),
 		&pb.LoginIn{
 			Email:    testEmail,
 			Password: testPassword,
@@ -38,7 +40,7 @@ func (suite *TestSuite) TestRefresh_Success() {
 	refreshToken := loginResponse.RefreshToken
 	for range 3 {
 		newTokens, err := suite.client.Refresh(
-			suite.ctx,
+			context.Background(),
 			&pb.RefreshIn{RefreshToken: refreshToken},
 		)
 		require.NoError(suite.T(), err)

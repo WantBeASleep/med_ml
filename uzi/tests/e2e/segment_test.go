@@ -3,12 +3,13 @@
 package e2e_test
 
 import (
+	"context"
 	"math/rand"
 	"os"
 	"path/filepath"
 	"time"
 
-	pbBrokerUpload "uzi/internal/generated/broker/consume/uziupload"
+	pbDbusUpload "uzi/internal/generated/dbus/consume/uziupload"
 	pb "uzi/internal/generated/grpc/service"
 
 	"github.com/IBM/sarama"
@@ -19,15 +20,15 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func (suite *TestSuite) TestSegment_Success() {
+func (suite *TestSuite) TestCreateUpdateDeleteGetSegment_Success() {
 	// создаем девайс
-	deviceResp, err := suite.grpcClient.CreateDevice(suite.ctx, &pb.CreateDeviceIn{
+	deviceResp, err := suite.grpcClient.CreateDevice(context.Background(), &pb.CreateDeviceIn{
 		Name: "test_device",
 	})
 	require.NoError(suite.T(), err)
 
 	// создаем uzi
-	uziResp, err := suite.grpcClient.CreateUzi(suite.ctx, &pb.CreateUziIn{
+	uziResp, err := suite.grpcClient.CreateUzi(context.Background(), &pb.CreateUziIn{
 		Projection: "axial",
 		PatientId:  uuid.New().String(),
 		DeviceId:   deviceResp.Id,
@@ -44,7 +45,7 @@ func (suite *TestSuite) TestSegment_Success() {
 	require.NoError(suite.T(), err)
 
 	_, err = suite.s3Client.PutObject(
-		suite.ctx,
+		context.Background(),
 		suite.s3Bucket,
 		filepath.Join(uziResp.Id, uziResp.Id),
 		tiffFile,
@@ -54,7 +55,7 @@ func (suite *TestSuite) TestSegment_Success() {
 	require.NoError(suite.T(), err)
 
 	// тригерим событие обработки загруженного узи
-	msg, err := proto.Marshal(&pbBrokerUpload.UziUpload{
+	msg, err := proto.Marshal(&pbDbusUpload.UziUpload{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -71,14 +72,14 @@ func (suite *TestSuite) TestSegment_Success() {
 	time.Sleep(time.Second * 5)
 
 	// получаем изображения
-	uziImagesResp, err := suite.grpcClient.GetUziImages(suite.ctx, &pb.GetUziImagesIn{
+	uziImagesResp, err := suite.grpcClient.GetUziImages(context.Background(), &pb.GetUziImagesIn{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
 	require.Equal(suite.T(), 20, len(uziImagesResp.Images))
 
 	// создаем узел
-	createNodeResp, err := suite.grpcClient.CreateNode(suite.ctx, &pb.CreateNodeIn{
+	createNodeResp, err := suite.grpcClient.CreateNode(context.Background(), &pb.CreateNodeIn{
 		UziId:     uziResp.Id,
 		Segments:  []*pb.CreateNodeIn_NestedSegment{},
 		Tirads_23: 0.1,
@@ -88,7 +89,7 @@ func (suite *TestSuite) TestSegment_Success() {
 	require.NoError(suite.T(), err)
 
 	// создаем сегмент
-	createSegmentResp, err := suite.grpcClient.CreateSegment(suite.ctx, &pb.CreateSegmentIn{
+	createSegmentResp, err := suite.grpcClient.CreateSegment(context.Background(), &pb.CreateSegmentIn{
 		NodeId:    createNodeResp.Id,
 		ImageId:   uziImagesResp.Images[0].Id,
 		Contor:    "contor1",
@@ -99,7 +100,7 @@ func (suite *TestSuite) TestSegment_Success() {
 	require.NoError(suite.T(), err)
 
 	// проверяем что сегмент создался
-	segmentsResp, err := suite.grpcClient.GetNodeSegments(suite.ctx, &pb.GetNodeSegmentsIn{
+	segmentsResp, err := suite.grpcClient.GetNodeSegments(context.Background(), &pb.GetNodeSegmentsIn{
 		NodeId: createNodeResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -112,7 +113,7 @@ func (suite *TestSuite) TestSegment_Success() {
 	require.Equal(suite.T(), 0.3, segmentsResp.Segments[0].Tirads_5)
 
 	// обновляем сегмент
-	updateSegmentResp, err := suite.grpcClient.UpdateSegment(suite.ctx, &pb.UpdateSegmentIn{
+	updateSegmentResp, err := suite.grpcClient.UpdateSegment(context.Background(), &pb.UpdateSegmentIn{
 		Id:        createSegmentResp.Id,
 		Tirads_23: gtc.ValueToPointer(0.4),
 		Tirads_4:  gtc.ValueToPointer(0.5),
@@ -127,7 +128,7 @@ func (suite *TestSuite) TestSegment_Success() {
 	require.Equal(suite.T(), 0.6, updateSegmentResp.Segment.Tirads_5)
 
 	// проверяем что сегмент обновился
-	segmentsResp, err = suite.grpcClient.GetNodeSegments(suite.ctx, &pb.GetNodeSegmentsIn{
+	segmentsResp, err = suite.grpcClient.GetNodeSegments(context.Background(), &pb.GetNodeSegmentsIn{
 		NodeId: createNodeResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -140,28 +141,28 @@ func (suite *TestSuite) TestSegment_Success() {
 	require.Equal(suite.T(), 0.6, segmentsResp.Segments[0].Tirads_5)
 
 	// удаляем сегмент
-	_, err = suite.grpcClient.DeleteSegment(suite.ctx, &pb.DeleteSegmentIn{
+	_, err = suite.grpcClient.DeleteSegment(context.Background(), &pb.DeleteSegmentIn{
 		Id: createSegmentResp.Id,
 	})
 	require.NoError(suite.T(), err)
 
 	// проверяем что сегмент удалился
-	segmentsResp, err = suite.grpcClient.GetNodeSegments(suite.ctx, &pb.GetNodeSegmentsIn{
+	segmentsResp, err = suite.grpcClient.GetNodeSegments(context.Background(), &pb.GetNodeSegmentsIn{
 		NodeId: createNodeResp.Id,
 	})
 	require.NoError(suite.T(), err)
 	require.Equal(suite.T(), 0, len(segmentsResp.Segments))
 }
 
-func (suite *TestSuite) TestSegments_MultipleImages() {
+func (suite *TestSuite) TestGetImageSegmentsWithNodes_Success() {
 	// создаем девайс
-	deviceResp, err := suite.grpcClient.CreateDevice(suite.ctx, &pb.CreateDeviceIn{
+	deviceResp, err := suite.grpcClient.CreateDevice(context.Background(), &pb.CreateDeviceIn{
 		Name: "test_device",
 	})
 	require.NoError(suite.T(), err)
 
 	// создаем uzi
-	uziResp, err := suite.grpcClient.CreateUzi(suite.ctx, &pb.CreateUziIn{
+	uziResp, err := suite.grpcClient.CreateUzi(context.Background(), &pb.CreateUziIn{
 		Projection: "axial",
 		PatientId:  uuid.New().String(),
 		DeviceId:   deviceResp.Id,
@@ -178,7 +179,7 @@ func (suite *TestSuite) TestSegments_MultipleImages() {
 	require.NoError(suite.T(), err)
 
 	_, err = suite.s3Client.PutObject(
-		suite.ctx,
+		context.Background(),
 		suite.s3Bucket,
 		filepath.Join(uziResp.Id, uziResp.Id),
 		tiffFile,
@@ -188,7 +189,7 @@ func (suite *TestSuite) TestSegments_MultipleImages() {
 	require.NoError(suite.T(), err)
 
 	// тригерим событие обработки загруженного узи
-	msg, err := proto.Marshal(&pbBrokerUpload.UziUpload{
+	msg, err := proto.Marshal(&pbDbusUpload.UziUpload{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -205,14 +206,14 @@ func (suite *TestSuite) TestSegments_MultipleImages() {
 	time.Sleep(time.Second * 5)
 
 	// получаем изображения
-	uziImagesResp, err := suite.grpcClient.GetUziImages(suite.ctx, &pb.GetUziImagesIn{
+	uziImagesResp, err := suite.grpcClient.GetUziImages(context.Background(), &pb.GetUziImagesIn{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
 	require.Equal(suite.T(), 20, len(uziImagesResp.Images))
 
 	// создаем узел
-	createNodeResp, err := suite.grpcClient.CreateNode(suite.ctx, &pb.CreateNodeIn{
+	createNodeResp, err := suite.grpcClient.CreateNode(context.Background(), &pb.CreateNodeIn{
 		UziId:     uziResp.Id,
 		Segments:  []*pb.CreateNodeIn_NestedSegment{},
 		Tirads_23: 0.1,
@@ -229,7 +230,7 @@ func (suite *TestSuite) TestSegments_MultipleImages() {
 		imageIdx := rand.Intn(len(uziImagesResp.Images))
 		imageId := uziImagesResp.Images[imageIdx].Id
 
-		createSegmentResp, err := suite.grpcClient.CreateSegment(suite.ctx, &pb.CreateSegmentIn{
+		createSegmentResp, err := suite.grpcClient.CreateSegment(context.Background(), &pb.CreateSegmentIn{
 			NodeId:    createNodeResp.Id,
 			ImageId:   imageId,
 			Contor:    "contor",
@@ -254,7 +255,7 @@ func (suite *TestSuite) TestSegments_MultipleImages() {
 
 	// проверяем сегменты на каждой картинке
 	for _, image := range uziImagesResp.Images {
-		imageSegments, err := suite.grpcClient.GetImageSegmentsWithNodes(suite.ctx, &pb.GetImageSegmentsWithNodesIn{
+		imageSegments, err := suite.grpcClient.GetImageSegmentsWithNodes(context.Background(), &pb.GetImageSegmentsWithNodesIn{
 			Id: image.Id,
 		})
 		require.NoError(suite.T(), err)

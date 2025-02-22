@@ -3,7 +3,6 @@
 package e2e_test
 
 import (
-	"context"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
@@ -13,8 +12,6 @@ import (
 
 	pb "auth/internal/generated/grpc/service"
 
-	"github.com/WantBeASleep/med_ml_lib/auth"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -23,8 +20,6 @@ import (
 type TestSuite struct {
 	suite.Suite
 
-	// обогащен аутентификацией
-	ctx       context.Context
 	client    pb.AuthSrvClient
 	publicKey *rsa.PublicKey
 }
@@ -33,7 +28,6 @@ func (suite *TestSuite) SetupSuite() {
 	conn, err := grpc.NewClient(
 		os.Getenv("APP_URL"),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithUnaryInterceptor(auth.AuthEnrichClientCall),
 	)
 	if err != nil {
 		panic(fmt.Sprintf("grpc connection failed: %v", err))
@@ -45,7 +39,6 @@ func (suite *TestSuite) SetupSuite() {
 		panic(fmt.Sprintf("parse public key: %v", err))
 	}
 
-	suite.ctx = auth.WithRequestID(context.Background(), uuid.New())
 	suite.publicKey = publicKey.(*rsa.PublicKey)
 	suite.client = pb.NewAuthSrvClient(conn)
 }

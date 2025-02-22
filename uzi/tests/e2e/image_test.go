@@ -3,11 +3,12 @@
 package e2e_test
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"time"
 
-	pbBrokerUpload "uzi/internal/generated/broker/consume/uziupload"
+	pbDbusUpload "uzi/internal/generated/dbus/consume/uziupload"
 	pb "uzi/internal/generated/grpc/service"
 
 	"github.com/IBM/sarama"
@@ -17,15 +18,15 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func (suite *TestSuite) TestSplitImage_Success() {
+func (suite *TestSuite) TestUziSplittedGetUziImages_Success() {
 	// создаем девайс
-	deviceResp, err := suite.grpcClient.CreateDevice(suite.ctx, &pb.CreateDeviceIn{
+	deviceResp, err := suite.grpcClient.CreateDevice(context.Background(), &pb.CreateDeviceIn{
 		Name: "test_device",
 	})
 	require.NoError(suite.T(), err)
 
 	// создаем uzi
-	uziResp, err := suite.grpcClient.CreateUzi(suite.ctx, &pb.CreateUziIn{
+	uziResp, err := suite.grpcClient.CreateUzi(context.Background(), &pb.CreateUziIn{
 		Projection: "axial",
 		PatientId:  uuid.New().String(),
 		DeviceId:   deviceResp.Id,
@@ -42,7 +43,7 @@ func (suite *TestSuite) TestSplitImage_Success() {
 	require.NoError(suite.T(), err)
 
 	_, err = suite.s3Client.PutObject(
-		suite.ctx,
+		context.Background(),
 		suite.s3Bucket,
 		filepath.Join(uziResp.Id, uziResp.Id),
 		tiffFile,
@@ -52,7 +53,7 @@ func (suite *TestSuite) TestSplitImage_Success() {
 	require.NoError(suite.T(), err)
 
 	// тригерим событие обработки загруженного узи
-	msg, err := proto.Marshal(&pbBrokerUpload.UziUpload{
+	msg, err := proto.Marshal(&pbDbusUpload.UziUpload{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -73,7 +74,7 @@ func (suite *TestSuite) TestSplitImage_Success() {
 	// TODO: подумать над стабильностью теста в зависимости от версии нейронки
 	// на данный момент нейронка делает 20 частей
 
-	uziImagesResp, err := suite.grpcClient.GetUziImages(suite.ctx, &pb.GetUziImagesIn{
+	uziImagesResp, err := suite.grpcClient.GetUziImages(context.Background(), &pb.GetUziImagesIn{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)

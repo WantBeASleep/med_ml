@@ -3,6 +3,8 @@
 package e2e_test
 
 import (
+	"context"
+
 	pb "auth/internal/generated/grpc/service"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -17,7 +19,7 @@ func (suite *TestSuite) TestRegisterLogin_Success() {
 
 	// регистрация пользователя
 	registerResponse, err := suite.client.Register(
-		suite.ctx,
+		context.Background(),
 		&pb.RegisterIn{
 			Email:    testEmail,
 			Password: testPassword,
@@ -31,7 +33,7 @@ func (suite *TestSuite) TestRegisterLogin_Success() {
 
 	// проверка логина
 	loginResponse, err := suite.client.Login(
-		suite.ctx,
+		context.Background(),
 		&pb.LoginIn{
 			Email:    testEmail,
 			Password: testPassword,
@@ -59,7 +61,7 @@ func (suite *TestSuite) TestRegisterLogin_Fail_WrongPass() {
 
 	// регистрация пользователя
 	_, err := suite.client.Register(
-		suite.ctx,
+		context.Background(),
 		&pb.RegisterIn{
 			Email:    testEmail,
 			Password: testPassword,
@@ -69,7 +71,7 @@ func (suite *TestSuite) TestRegisterLogin_Fail_WrongPass() {
 
 	// проверка логина
 	_, err = suite.client.Login(
-		suite.ctx,
+		context.Background(),
 		&pb.LoginIn{
 			Email:    testEmail,
 			Password: "WRONG_PASSWORD",

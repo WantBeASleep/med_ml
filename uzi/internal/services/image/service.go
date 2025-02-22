@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"uzi/internal/adapters"
-	uzisplittedpb "uzi/internal/generated/broker/produce/uzisplitted"
+	"uzi/internal/adapters/dbus"
+	uzisplittedpb "uzi/internal/generated/dbus/produce/uzisplitted"
 
 	"uzi/internal/domain"
 	"uzi/internal/repository"
@@ -19,18 +19,17 @@ import (
 
 type Service interface {
 	GetUziImages(ctx context.Context, uziID uuid.UUID) ([]domain.Image, error)
-	GetImageSegmentsWithNodes(ctx context.Context, id uuid.UUID) ([]domain.Node, []domain.Segment, error)
 	SplitUzi(ctx context.Context, uziID uuid.UUID) error
 }
 
 type service struct {
 	dao     repository.DAO
-	adapter adapters.Adapter
+	adapter dbus.DbusAdapter
 }
 
 func New(
 	dao repository.DAO,
-	adapter adapters.Adapter,
+	adapter dbus.DbusAdapter,
 ) Service {
 	return &service{
 		dao:     dao,
@@ -63,21 +62,6 @@ func (s *service) GetUziImages(ctx context.Context, uziID uuid.UUID) ([]domain.I
 	}
 
 	return entity.Image{}.SliceToDomain(images), nil
-}
-
-func (s *service) GetImageSegmentsWithNodes(ctx context.Context, id uuid.UUID) ([]domain.Node, []domain.Segment, error) {
-	segments, err := s.dao.NewSegmentQuery(ctx).GetSegmentsByImageID(id)
-	if err != nil {
-		return nil, nil, fmt.Errorf("get segments by image_id: %w", err)
-	}
-
-	// TODO: переделать на запросе без JOIN
-	nodes, err := s.dao.NewNodeQuery(ctx).GetNodesByImageID(id)
-	if err != nil {
-		return nil, nil, fmt.Errorf("get nodes by image_id: %w", err)
-	}
-
-	return entity.Node{}.SliceToDomain(nodes), entity.Segment{}.SliceToDomain(segments), nil
 }
 
 // TODO: возвращать отсюда ID
@@ -127,7 +111,7 @@ func (s *service) SplitUzi(ctx context.Context, uziID uuid.UUID) error {
 		}
 	}
 
-	if err := s.adapter.BrokerAdapter.SendUziSplitted(&uzisplittedpb.UziSplitted{
+	if err := s.adapter.SendUziSplitted(ctx, &uzisplittedpb.UziSplitted{
 		UziId:   uziID.String(),
 		PagesId: uuid.UUIDs(ids).Strings(),
 	}); err != nil {

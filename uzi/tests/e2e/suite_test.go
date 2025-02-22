@@ -1,9 +1,9 @@
 //go:build e2e
 
+// TODO: вынести в тестах общую часть в сьют
 package e2e_test
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"testing"
@@ -11,8 +11,6 @@ import (
 	pb "uzi/internal/generated/grpc/service"
 
 	"github.com/IBM/sarama"
-	"github.com/WantBeASleep/med_ml_lib/auth"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -24,8 +22,6 @@ import (
 type TestSuite struct {
 	suite.Suite
 
-	// обогащен аутентификацией
-	ctx        context.Context
 	grpcClient pb.UziSrvClient
 	dbusClient sarama.SyncProducer
 
@@ -37,7 +33,6 @@ func (suite *TestSuite) SetupSuite() {
 	conn, err := grpc.NewClient(
 		os.Getenv("APP_URL"),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithUnaryInterceptor(auth.AuthEnrichClientCall),
 	)
 	if err != nil {
 		panic(fmt.Sprintf("grpc connection failed: %v", err))
@@ -61,8 +56,6 @@ func (suite *TestSuite) SetupSuite() {
 
 	// TODO: сделать прокидывание через env
 	suite.s3Bucket = "uzi"
-
-	suite.ctx = auth.WithRequestID(context.Background(), uuid.New())
 	suite.grpcClient = pb.NewUziSrvClient(conn)
 }
 

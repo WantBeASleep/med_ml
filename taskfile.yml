@@ -1,9 +1,0 @@
-version: "3"
-
-tasks:
-  reboot_deps:
-    cmds:
-      - docker compose --profile deps down
-      - docker rmi -f $(docker images -aq)
-      - docker volume rm $(docker volume ls -qf dangling=true)
-      - docker compose --profile deps up -d
