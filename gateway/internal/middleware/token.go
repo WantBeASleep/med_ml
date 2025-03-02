@@ -5,8 +5,9 @@ import (
 	"log/slog"
 	"net/http"
 
-	authlib "github.com/WantBeASleep/med_ml_lib/auth"
-	loglib "github.com/WantBeASleep/med_ml_lib/log"
+	"github.com/WantBeASleep/med_ml_lib/observer/consts"
+	"github.com/WantBeASleep/med_ml_lib/observer/cross"
+	"github.com/WantBeASleep/med_ml_lib/observer/log"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -60,8 +61,13 @@ func (m *middlewares) Jwt(next http.Handler) http.Handler {
 func (m *middlewares) Log(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		requestID := uuid.New()
-		ctx := authlib.WithRequestID(r.Context(), requestID)
-		ctx = loglib.WithField(ctx, "x-request_id", requestID.String())
+
+		ctx := cross.WithField(r.Context(), consts.RequestID, requestID)
+		ctx = log.WithFields(ctx, map[string]any{
+			consts.RequestID:     requestID,
+			consts.RequestMethod: r.Method,
+			"path":               r.URL.Path,
+		})
 
 		slog.InfoContext(ctx, "New request", slog.String("path", r.URL.Path))
 

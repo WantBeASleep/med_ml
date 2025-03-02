@@ -3,6 +3,8 @@
 package e2e_test
 
 import (
+	"context"
+
 	pb "med/internal/generated/grpc/service"
 
 	"github.com/google/uuid"
@@ -12,7 +14,7 @@ import (
 func (suite *TestSuite) TestCard_Success() {
 	// регистрируем доктора для теста
 	doctorId := uuid.New().String()
-	_, err := suite.grpcClient.RegisterDoctor(suite.ctx, &pb.RegisterDoctorIn{
+	_, err := suite.grpcClient.RegisterDoctor(context.Background(), &pb.RegisterDoctorIn{
 		Doctor: &pb.Doctor{
 			Id:       doctorId,
 			Fullname: "Test Doctor",
@@ -23,7 +25,7 @@ func (suite *TestSuite) TestCard_Success() {
 	require.NoError(suite.T(), err)
 
 	// создаем пациента
-	createPatientResp, err := suite.grpcClient.CreatePatient(suite.ctx, &pb.CreatePatientIn{
+	createPatientResp, err := suite.grpcClient.CreatePatient(context.Background(), &pb.CreatePatientIn{
 		Fullname:   "Test Patient",
 		Email:      "test@example.com",
 		Policy:     "1234567890",
@@ -34,7 +36,7 @@ func (suite *TestSuite) TestCard_Success() {
 
 	// создаем карту пациента
 	diagnosis := "Initial diagnosis"
-	_, err = suite.grpcClient.CreateCard(suite.ctx, &pb.CreateCardIn{
+	_, err = suite.grpcClient.CreateCard(context.Background(), &pb.CreateCardIn{
 		Card: &pb.Card{
 			DoctorId:  doctorId,
 			PatientId: createPatientResp.Id,
@@ -44,7 +46,7 @@ func (suite *TestSuite) TestCard_Success() {
 	require.NoError(suite.T(), err)
 
 	// получаем карту пациента
-	getCardResp, err := suite.grpcClient.GetCard(suite.ctx, &pb.GetCardIn{
+	getCardResp, err := suite.grpcClient.GetCard(context.Background(), &pb.GetCardIn{
 		DoctorId:  doctorId,
 		PatientId: createPatientResp.Id,
 	})
@@ -56,7 +58,7 @@ func (suite *TestSuite) TestCard_Success() {
 
 	// обновляем карту пациента
 	newDiagnosis := "Updated diagnosis"
-	updateCardResp, err := suite.grpcClient.UpdateCard(suite.ctx, &pb.UpdateCardIn{
+	updateCardResp, err := suite.grpcClient.UpdateCard(context.Background(), &pb.UpdateCardIn{
 		Card: &pb.Card{
 			DoctorId:  doctorId,
 			PatientId: createPatientResp.Id,
@@ -70,7 +72,7 @@ func (suite *TestSuite) TestCard_Success() {
 	require.Equal(suite.T(), newDiagnosis, *updateCardResp.Card.Diagnosis)
 
 	// проверяем что изменения сохранились
-	getCardResp, err = suite.grpcClient.GetCard(suite.ctx, &pb.GetCardIn{
+	getCardResp, err = suite.grpcClient.GetCard(context.Background(), &pb.GetCardIn{
 		DoctorId:  doctorId,
 		PatientId: createPatientResp.Id,
 	})

@@ -5,13 +5,14 @@ import (
 	"net"
 	"os"
 
-	authlib "github.com/WantBeASleep/med_ml_lib/auth"
 	grpclib "github.com/WantBeASleep/med_ml_lib/grpc"
-	loglib "github.com/WantBeASleep/med_ml_lib/log"
+	observergrpclib "github.com/WantBeASleep/med_ml_lib/observer/grpc"
+	loglib "github.com/WantBeASleep/med_ml_lib/observer/log"
 
 	"med/internal/config"
 
 	"github.com/ilyakaznacheev/cleanenv"
+	_ "github.com/joho/godotenv/autoload"
 
 	"med/internal/repository"
 
@@ -79,9 +80,9 @@ func run() (exitCode int) {
 
 	server := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
-			authlib.AuthServerCall,
-			loglib.GRPCServerCall,
 			grpclib.PanicRecover,
+			observergrpclib.CrossServerCall,
+			observergrpclib.LogServerCall,
 		),
 	)
 	pb.RegisterMedSrvServer(server, handler)

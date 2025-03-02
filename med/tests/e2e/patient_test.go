@@ -3,6 +3,7 @@
 package e2e_test
 
 import (
+	"context"
 	"time"
 
 	pb "med/internal/generated/grpc/service"
@@ -15,7 +16,7 @@ import (
 func (suite *TestSuite) TestPatient_Success() {
 	// регистрируем доктора для теста
 	doctorId := uuid.New().String()
-	_, err := suite.grpcClient.RegisterDoctor(suite.ctx, &pb.RegisterDoctorIn{
+	_, err := suite.grpcClient.RegisterDoctor(context.Background(), &pb.RegisterDoctorIn{
 		Doctor: &pb.Doctor{
 			Id:       doctorId,
 			Fullname: "Test Doctor",
@@ -26,7 +27,7 @@ func (suite *TestSuite) TestPatient_Success() {
 	require.NoError(suite.T(), err)
 
 	// создаем пациента
-	createPatientResp, err := suite.grpcClient.CreatePatient(suite.ctx, &pb.CreatePatientIn{
+	createPatientResp, err := suite.grpcClient.CreatePatient(context.Background(), &pb.CreatePatientIn{
 		Fullname:   "Test Patient",
 		Email:      "test@example.com",
 		Policy:     "1234567890",
@@ -36,7 +37,7 @@ func (suite *TestSuite) TestPatient_Success() {
 	require.NoError(suite.T(), err)
 
 	// получаем информацию о пациенте
-	getPatientResp, err := suite.grpcClient.GetPatient(suite.ctx, &pb.GetPatientIn{
+	getPatientResp, err := suite.grpcClient.GetPatient(context.Background(), &pb.GetPatientIn{
 		Id: createPatientResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -49,7 +50,7 @@ func (suite *TestSuite) TestPatient_Success() {
 	require.Nil(suite.T(), getPatientResp.Patient.LastUziDate)
 
 	// проверяем что пациент не привязан к доктору
-	getDoctorPatientsResp, err := suite.grpcClient.GetDoctorPatients(suite.ctx, &pb.GetDoctorPatientsIn{
+	getDoctorPatientsResp, err := suite.grpcClient.GetDoctorPatients(context.Background(), &pb.GetDoctorPatientsIn{
 		DoctorId: doctorId,
 	})
 	require.NoError(suite.T(), err)
@@ -57,7 +58,7 @@ func (suite *TestSuite) TestPatient_Success() {
 
 	// создаем карту пациента для связи с доктором
 	diagnosis := "Initial diagnosis"
-	_, err = suite.grpcClient.CreateCard(suite.ctx, &pb.CreateCardIn{
+	_, err = suite.grpcClient.CreateCard(context.Background(), &pb.CreateCardIn{
 		Card: &pb.Card{
 			DoctorId:  doctorId,
 			PatientId: createPatientResp.Id,
@@ -70,7 +71,7 @@ func (suite *TestSuite) TestPatient_Success() {
 	lastUziDate := timestamppb.New(time.Now())
 	malignancy := true
 	active := false
-	updatePatientResp, err := suite.grpcClient.UpdatePatient(suite.ctx, &pb.UpdatePatientIn{
+	updatePatientResp, err := suite.grpcClient.UpdatePatient(context.Background(), &pb.UpdatePatientIn{
 		DoctorId:    doctorId,
 		Id:          createPatientResp.Id,
 		Active:      &active,
@@ -87,7 +88,7 @@ func (suite *TestSuite) TestPatient_Success() {
 	require.NotNil(suite.T(), updatePatientResp.Patient.LastUziDate)
 
 	// проверяем что пациент теперь привязан к доктору
-	getDoctorPatientsResp, err = suite.grpcClient.GetDoctorPatients(suite.ctx, &pb.GetDoctorPatientsIn{
+	getDoctorPatientsResp, err = suite.grpcClient.GetDoctorPatients(context.Background(), &pb.GetDoctorPatientsIn{
 		DoctorId: doctorId,
 	})
 	require.NoError(suite.T(), err)

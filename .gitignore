@@ -21,3 +21,6 @@ bin
 *.key
 *.pem
 *.env
+
+# vscode
+*.code-workspace

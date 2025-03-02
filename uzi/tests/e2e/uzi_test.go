@@ -3,6 +3,8 @@
 package e2e_test
 
 import (
+	"context"
+
 	pb "uzi/internal/generated/grpc/service"
 
 	"github.com/google/uuid"
@@ -10,10 +12,10 @@ import (
 	"github.com/thanhpk/randstr"
 )
 
-func (suite *TestSuite) TestCreateGetUzi_Success() {
+func (suite *TestSuite) TestCreateUpdateGetGetByPatientUzi_Success() {
 	// Создаем узи девайс
 	deviceResp, err := suite.grpcClient.CreateDevice(
-		suite.ctx,
+		context.Background(),
 		&pb.CreateDeviceIn{Name: randstr.String(5)},
 	)
 	require.NoError(suite.T(), err)
@@ -23,7 +25,7 @@ func (suite *TestSuite) TestCreateGetUzi_Success() {
 
 	// Создаем УЗИ
 	createResp, err := suite.grpcClient.CreateUzi(
-		suite.ctx,
+		context.Background(),
 		&pb.CreateUziIn{
 			PatientId:  patientID,
 			DeviceId:   deviceResp.Id,
@@ -37,7 +39,7 @@ func (suite *TestSuite) TestCreateGetUzi_Success() {
 
 	// Получаем созданное УЗИ
 	getResp, err := suite.grpcClient.GetUzi(
-		suite.ctx,
+		context.Background(),
 		&pb.GetUziIn{Id: createResp.Id},
 	)
 	require.NoError(suite.T(), err)
@@ -50,7 +52,7 @@ func (suite *TestSuite) TestCreateGetUzi_Success() {
 	// Обновляем УЗИ
 	newProjection := randstr.String(5)
 	updateResp, err := suite.grpcClient.UpdateUzi(
-		suite.ctx,
+		context.Background(),
 		&pb.UpdateUziIn{
 			Id:         createResp.Id,
 			Projection: &newProjection,
@@ -63,7 +65,7 @@ func (suite *TestSuite) TestCreateGetUzi_Success() {
 
 	// Получаем список УЗИ пациента
 	listResp, err := suite.grpcClient.GetPatientUzis(
-		suite.ctx,
+		context.Background(),
 		&pb.GetPatientUzisIn{PatientId: patientID},
 	)
 	require.NoError(suite.T(), err)

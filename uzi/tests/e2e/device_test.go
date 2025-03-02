@@ -3,6 +3,8 @@
 package e2e_test
 
 import (
+	"context"
+
 	pb "uzi/internal/generated/grpc/service"
 
 	"github.com/stretchr/testify/require"
@@ -19,7 +21,7 @@ func (suite *TestSuite) TestCreateGetDevice_Success() {
 	for range 5 {
 		deviceName := randstr.String(5)
 		resp, err := suite.grpcClient.CreateDevice(
-			suite.ctx,
+			context.Background(),
 			&pb.CreateDeviceIn{Name: deviceName},
 		)
 		require.NoError(suite.T(), err)
@@ -27,7 +29,7 @@ func (suite *TestSuite) TestCreateGetDevice_Success() {
 		devices[int(resp.Id)] = deviceTestElem{value: deviceName}
 	}
 
-	resp, err := suite.grpcClient.GetDeviceList(suite.ctx, &emptypb.Empty{})
+	resp, err := suite.grpcClient.GetDeviceList(context.Background(), &emptypb.Empty{})
 	require.NoError(suite.T(), err)
 
 	for _, device := range resp.Devices {

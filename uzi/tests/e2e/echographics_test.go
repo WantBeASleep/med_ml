@@ -3,6 +3,8 @@
 package e2e_test
 
 import (
+	"context"
+
 	pb "uzi/internal/generated/grpc/service"
 
 	"github.com/google/uuid"
@@ -13,7 +15,7 @@ import (
 func (suite *TestSuite) TestCreateGetUpdateEchographic_Success() {
 	// Создаем узи девайс
 	deviceResp, err := suite.grpcClient.CreateDevice(
-		suite.ctx,
+		context.Background(),
 		&pb.CreateDeviceIn{Name: randstr.String(5)},
 	)
 	require.NoError(suite.T(), err)
@@ -23,7 +25,7 @@ func (suite *TestSuite) TestCreateGetUpdateEchographic_Success() {
 
 	// Создаем УЗИ
 	createResp, err := suite.grpcClient.CreateUzi(
-		suite.ctx,
+		context.Background(),
 		&pb.CreateUziIn{
 			PatientId:  patientID,
 			DeviceId:   deviceResp.Id,
@@ -37,7 +39,7 @@ func (suite *TestSuite) TestCreateGetUpdateEchographic_Success() {
 
 	// Получаем эхографику
 	getResp, err := suite.grpcClient.GetEchographic(
-		suite.ctx,
+		context.Background(),
 		&pb.GetEchographicIn{Id: createResp.Id},
 	)
 	require.NoError(suite.T(), err)
@@ -82,7 +84,7 @@ func (suite *TestSuite) TestCreateGetUpdateEchographic_Success() {
 	conclusion := randstr.String(5)
 
 	updateResp, err := suite.grpcClient.UpdateEchographic(
-		suite.ctx,
+		context.Background(),
 		&pb.UpdateEchographicIn{
 			Echographic: &pb.Echographic{
 				Id:              createResp.Id,
@@ -129,7 +131,7 @@ func (suite *TestSuite) TestCreateGetUpdateEchographic_Success() {
 
 	// Получаем обновленную эхографику
 	getUpdatedResp, err := suite.grpcClient.GetEchographic(
-		suite.ctx,
+		context.Background(),
 		&pb.GetEchographicIn{Id: createResp.Id},
 	)
 	require.NoError(suite.T(), err)

@@ -3,11 +3,12 @@
 package e2e_test
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"time"
 
-	pbBrokerUpload "uzi/internal/generated/broker/consume/uziupload"
+	pbDbusUpload "uzi/internal/generated/dbus/consume/uziupload"
 	pb "uzi/internal/generated/grpc/service"
 
 	"github.com/IBM/sarama"
@@ -20,13 +21,13 @@ import (
 
 func (suite *TestSuite) TestNode_Success() {
 	// создаем девайс
-	deviceResp, err := suite.grpcClient.CreateDevice(suite.ctx, &pb.CreateDeviceIn{
+	deviceResp, err := suite.grpcClient.CreateDevice(context.Background(), &pb.CreateDeviceIn{
 		Name: "test_device",
 	})
 	require.NoError(suite.T(), err)
 
 	// создаем uzi
-	uziResp, err := suite.grpcClient.CreateUzi(suite.ctx, &pb.CreateUziIn{
+	uziResp, err := suite.grpcClient.CreateUzi(context.Background(), &pb.CreateUziIn{
 		Projection: "axial",
 		PatientId:  uuid.New().String(),
 		DeviceId:   deviceResp.Id,
@@ -43,7 +44,7 @@ func (suite *TestSuite) TestNode_Success() {
 	require.NoError(suite.T(), err)
 
 	_, err = suite.s3Client.PutObject(
-		suite.ctx,
+		context.Background(),
 		suite.s3Bucket,
 		filepath.Join(uziResp.Id, uziResp.Id),
 		tiffFile,
@@ -53,7 +54,7 @@ func (suite *TestSuite) TestNode_Success() {
 	require.NoError(suite.T(), err)
 
 	// тригерим событие обработки загруженного узи
-	msg, err := proto.Marshal(&pbBrokerUpload.UziUpload{
+	msg, err := proto.Marshal(&pbDbusUpload.UziUpload{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -70,14 +71,14 @@ func (suite *TestSuite) TestNode_Success() {
 	time.Sleep(time.Second * 5)
 
 	// получаем изображения
-	uziImagesResp, err := suite.grpcClient.GetUziImages(suite.ctx, &pb.GetUziImagesIn{
+	uziImagesResp, err := suite.grpcClient.GetUziImages(context.Background(), &pb.GetUziImagesIn{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
 	require.Equal(suite.T(), 20, len(uziImagesResp.Images))
 
 	// создаем узел с сегментами
-	createNodeResp, err := suite.grpcClient.CreateNode(suite.ctx, &pb.CreateNodeIn{
+	createNodeResp, err := suite.grpcClient.CreateNode(context.Background(), &pb.CreateNodeIn{
 		UziId: uziResp.Id,
 		Segments: []*pb.CreateNodeIn_NestedSegment{
 			{
@@ -102,7 +103,7 @@ func (suite *TestSuite) TestNode_Success() {
 	require.NoError(suite.T(), err)
 
 	// проверяем что узел создался
-	nodesResp, err := suite.grpcClient.GetAllNodes(suite.ctx, &pb.GetAllNodesIn{
+	nodesResp, err := suite.grpcClient.GetAllNodes(context.Background(), &pb.GetAllNodesIn{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -114,7 +115,7 @@ func (suite *TestSuite) TestNode_Success() {
 	require.Equal(suite.T(), 0.3, nodesResp.Nodes[0].Tirads_5)
 
 	// проверяем что сегменты создались
-	segmentsResp, err := suite.grpcClient.GetNodeSegments(suite.ctx, &pb.GetNodeSegmentsIn{
+	segmentsResp, err := suite.grpcClient.GetNodeSegments(context.Background(), &pb.GetNodeSegmentsIn{
 		NodeId: createNodeResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -131,7 +132,7 @@ func (suite *TestSuite) TestNode_Success() {
 	require.Equal(suite.T(), 0.6, segmentsResp.Segments[1].Tirads_5)
 
 	// обновляем узел
-	updateNodeResp, err := suite.grpcClient.UpdateNode(suite.ctx, &pb.UpdateNodeIn{
+	updateNodeResp, err := suite.grpcClient.UpdateNode(context.Background(), &pb.UpdateNodeIn{
 		Id:        createNodeResp.Id,
 		Tirads_23: gtc.ValueToPointer(0.4),
 		Tirads_4:  gtc.ValueToPointer(0.5),
@@ -145,7 +146,7 @@ func (suite *TestSuite) TestNode_Success() {
 	require.Equal(suite.T(), 0.6, updateNodeResp.Node.Tirads_5)
 
 	// проверяем что узел обновился
-	nodesResp, err = suite.grpcClient.GetAllNodes(suite.ctx, &pb.GetAllNodesIn{
+	nodesResp, err = suite.grpcClient.GetAllNodes(context.Background(), &pb.GetAllNodesIn{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
@@ -157,20 +158,20 @@ func (suite *TestSuite) TestNode_Success() {
 	require.Equal(suite.T(), 0.6, nodesResp.Nodes[0].Tirads_5)
 
 	// удаляем узел
-	_, err = suite.grpcClient.DeleteNode(suite.ctx, &pb.DeleteNodeIn{
+	_, err = suite.grpcClient.DeleteNode(context.Background(), &pb.DeleteNodeIn{
 		Id: createNodeResp.Id,
 	})
 	require.NoError(suite.T(), err)
 
 	// проверяем что узел удалился
-	nodesResp, err = suite.grpcClient.GetAllNodes(suite.ctx, &pb.GetAllNodesIn{
+	nodesResp, err = suite.grpcClient.GetAllNodes(context.Background(), &pb.GetAllNodesIn{
 		UziId: uziResp.Id,
 	})
 	require.NoError(suite.T(), err)
 	require.Equal(suite.T(), 0, len(nodesResp.Nodes))
 
 	// проверяем что сегменты удалились
-	segmentsResp, err = suite.grpcClient.GetNodeSegments(suite.ctx, &pb.GetNodeSegmentsIn{
+	segmentsResp, err = suite.grpcClient.GetNodeSegments(context.Background(), &pb.GetNodeSegmentsIn{
 		NodeId: createNodeResp.Id,
 	})
 	require.NoError(suite.T(), err)

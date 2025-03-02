@@ -3,6 +3,8 @@
 package e2e_test
 
 import (
+	"context"
+
 	pb "med/internal/generated/grpc/service"
 
 	"github.com/google/uuid"
@@ -12,7 +14,7 @@ import (
 func (suite *TestSuite) TestDoctor_Success() {
 	// регистрируем доктора
 	doctorId := uuid.New().String()
-	_, err := suite.grpcClient.RegisterDoctor(suite.ctx, &pb.RegisterDoctorIn{
+	_, err := suite.grpcClient.RegisterDoctor(context.Background(), &pb.RegisterDoctorIn{
 		Doctor: &pb.Doctor{
 			Id:       doctorId,
 			Fullname: "Test Doctor",
@@ -24,7 +26,7 @@ func (suite *TestSuite) TestDoctor_Success() {
 	require.NoError(suite.T(), err)
 
 	// получаем информацию о докторе
-	getDoctorResp, err := suite.grpcClient.GetDoctor(suite.ctx, &pb.GetDoctorIn{
+	getDoctorResp, err := suite.grpcClient.GetDoctor(context.Background(), &pb.GetDoctorIn{
 		Id: doctorId,
 	})
 	require.NoError(suite.T(), err)
@@ -37,7 +39,7 @@ func (suite *TestSuite) TestDoctor_Success() {
 	// обновляем информацию о докторе
 	newDesc := "Experienced surgeon"
 	newOrg := "New Hospital"
-	updateDoctorResp, err := suite.grpcClient.UpdateDoctor(suite.ctx, &pb.UpdateDoctorIn{
+	updateDoctorResp, err := suite.grpcClient.UpdateDoctor(context.Background(), &pb.UpdateDoctorIn{
 		Id:   doctorId,
 		Org:  &newOrg,
 		Desc: &newDesc,
@@ -50,7 +52,7 @@ func (suite *TestSuite) TestDoctor_Success() {
 	require.Equal(suite.T(), newDesc, *updateDoctorResp.Doctor.Desc)
 
 	// проверяем что изменения сохранились
-	getDoctorResp, err = suite.grpcClient.GetDoctor(suite.ctx, &pb.GetDoctorIn{
+	getDoctorResp, err = suite.grpcClient.GetDoctor(context.Background(), &pb.GetDoctorIn{
 		Id: doctorId,
 	})
 	require.NoError(suite.T(), err)

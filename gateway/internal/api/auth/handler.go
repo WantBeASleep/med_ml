@@ -5,21 +5,25 @@ import (
 	"fmt"
 	"net/http"
 
-	adapters "gateway/internal/adapters"
+	authadapter "gateway/internal/adapters/grpc/auth"
+	medadapter "gateway/internal/adapters/grpc/med"
 
 	authpb "gateway/internal/generated/grpc/client/auth"
 	medpb "gateway/internal/generated/grpc/client/med"
 )
 
 type Handler struct {
-	adapter adapters.Adapter
+	authAdapter authadapter.AuthAdapter
+	medAdapter  medadapter.MedAdapter
 }
 
 func New(
-	adapter adapters.Adapter,
+	authAdapter authadapter.AuthAdapter,
+	medAdapter medadapter.MedAdapter,
 ) *Handler {
 	return &Handler{
-		adapter: adapter,
+		authAdapter: authAdapter,
+		medAdapter:  medAdapter,
 	}
 }
 
@@ -43,7 +47,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// нужна распред транзакция
-	authResp, err := h.adapter.AuthAdapter.Register(ctx, &authpb.RegisterIn{
+	authResp, err := h.authAdapter.Register(ctx, &authpb.RegisterIn{
 		Email:    req.Email,
 		Password: req.Password,
 	})
@@ -52,7 +56,7 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = h.adapter.MedAdapter.RegisterDoctor(ctx, &medpb.RegisterDoctorIn{
+	_, err = h.medAdapter.RegisterDoctor(ctx, &medpb.RegisterDoctorIn{
 		Doctor: &medpb.Doctor{
 			Id:       authResp.Id,
 			Fullname: req.Fullname,
@@ -91,7 +95,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	authResp, err := h.adapter.AuthAdapter.Login(ctx, &authpb.LoginIn{
+	authResp, err := h.authAdapter.Login(ctx, &authpb.LoginIn{
 		Email:    req.Email,
 		Password: req.Password,
 	})
@@ -121,7 +125,7 @@ func (h *Handler) Refresh(w http.ResponseWriter, r *http.Request) {
 
 	refreshKey := r.Header.Get("token")
 
-	authResp, err := h.adapter.AuthAdapter.Refresh(ctx, &authpb.RefreshIn{
+	authResp, err := h.authAdapter.Refresh(ctx, &authpb.RefreshIn{
 		RefreshToken: refreshKey,
 	})
 	if err != nil {

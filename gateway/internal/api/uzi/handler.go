@@ -9,10 +9,12 @@ import (
 	"path/filepath"
 	"strconv"
 
-	adapters "gateway/internal/adapters"
+	dbusadapter "gateway/internal/adapters/dbus"
+	uziadapter "gateway/internal/adapters/grpc/uzi"
+
 	"gateway/internal/domain"
 
-	uziuploadpb "gateway/internal/generated/broker/produce/uziupload"
+	uziuploadpb "gateway/internal/generated/dbus/produce/uziupload"
 	uzipb "gateway/internal/generated/grpc/client/uzi"
 	"gateway/internal/repository"
 
@@ -21,17 +23,20 @@ import (
 )
 
 type Handler struct {
-	adapter adapters.Adapter
-	dao     repository.DAO
+	uziAdapter  uziadapter.UziAdapter
+	dbusAdapter dbusadapter.DbusAdapter
+	dao         repository.DAO
 }
 
 func New(
-	adapter adapters.Adapter,
+	uziAdapter uziadapter.UziAdapter,
+	dbusAdapter dbusadapter.DbusAdapter,
 	dao repository.DAO,
 ) *Handler {
 	return &Handler{
-		adapter: adapter,
-		dao:     dao,
+		uziAdapter:  uziAdapter,
+		dbusAdapter: dbusAdapter,
+		dao:         dao,
 	}
 }
 
@@ -56,7 +61,7 @@ func (h *Handler) PostUzi(w http.ResponseWriter, r *http.Request) {
 	patientID := r.FormValue("patient_id")
 	deviceID, _ := strconv.Atoi(r.FormValue("device_id"))
 
-	uziResp, err := h.adapter.UziAdapter.CreateUzi(ctx, &uzipb.CreateUziIn{
+	uziResp, err := h.uziAdapter.CreateUzi(ctx, &uzipb.CreateUziIn{
 		Projection: projection,
 		PatientId:  patientID,
 		DeviceId:   int64(deviceID),
@@ -88,7 +93,7 @@ func (h *Handler) PostUzi(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: нужна тотальная сага тут
-	if err := h.adapter.BrokerAdapter.SendUziUpload(&uziuploadpb.UziUpload{UziId: uziResp.Id}); err != nil {
+	if err := h.dbusAdapter.SendUziUpload(ctx, &uziuploadpb.UziUpload{UziId: uziResp.Id}); err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
 	}
@@ -124,7 +129,7 @@ func (h *Handler) PatchUzi(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.adapter.UziAdapter.UpdateUzi(ctx, &uzipb.UpdateUziIn{
+	resp, err := h.uziAdapter.UpdateUzi(ctx, &uzipb.UpdateUziIn{
 		Id:         id,
 		Projection: req.Projection,
 		Checked:    req.Checked,
@@ -163,7 +168,7 @@ func (h *Handler) PatchEchographics(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.adapter.UziAdapter.UpdateEchographic(ctx, &uzipb.UpdateEchographicIn{
+	resp, err := h.uziAdapter.UpdateEchographic(ctx, &uzipb.UpdateEchographicIn{
 		Echographic: &uzipb.Echographic{
 			Id:              id,
 			LeftLobeLength:  req.LeftLobeLength,
@@ -212,7 +217,7 @@ func (h *Handler) GetUzi(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
 
-	resp, err := h.adapter.UziAdapter.GetUzi(ctx, &uzipb.GetUziIn{Id: id})
+	resp, err := h.uziAdapter.GetUzi(ctx, &uzipb.GetUziIn{Id: id})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
@@ -241,7 +246,7 @@ func (h *Handler) GetPatientUzi(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
 
-	res, err := h.adapter.UziAdapter.GetPatientUzis(ctx, &uzipb.GetPatientUzisIn{
+	res, err := h.uziAdapter.GetPatientUzis(ctx, &uzipb.GetPatientUzisIn{
 		PatientId: id,
 	})
 	if err != nil {
@@ -273,7 +278,7 @@ func (h *Handler) GetEchographics(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
 
-	resp, err := h.adapter.UziAdapter.GetEchographic(ctx, &uzipb.GetEchographicIn{Id: id})
+	resp, err := h.uziAdapter.GetEchographic(ctx, &uzipb.GetEchographicIn{Id: id})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
@@ -302,7 +307,7 @@ func (h *Handler) GetUziImages(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
 
-	resp, err := h.adapter.UziAdapter.GetUziImages(ctx, &uzipb.GetUziImagesIn{UziId: id})
+	resp, err := h.uziAdapter.GetUziImages(ctx, &uzipb.GetUziImagesIn{UziId: id})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
@@ -330,7 +335,7 @@ func (h *Handler) GetUziNodeSegments(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
 
-	resp, err := h.adapter.UziAdapter.GetImageSegmentsWithNodes(
+	resp, err := h.uziAdapter.GetImageSegmentsWithNodes(
 		ctx,
 		&uzipb.GetImageSegmentsWithNodesIn{Id: id},
 	)
@@ -358,7 +363,7 @@ func (h *Handler) GetUziNodeSegments(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) GetUziDevices(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	resp, err := h.adapter.UziAdapter.GetDeviceList(ctx, &emptypb.Empty{})
+	resp, err := h.uziAdapter.GetDeviceList(ctx, &emptypb.Empty{})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
@@ -401,7 +406,7 @@ func (h *Handler) PostNodes(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	resp, err := h.adapter.UziAdapter.CreateNode(ctx, &uzipb.CreateNodeIn{
+	resp, err := h.uziAdapter.CreateNode(ctx, &uzipb.CreateNodeIn{
 		UziId:     req.UziID.String(),
 		Segments:  segments,
 		Tirads_23: req.Tirads23,
@@ -436,7 +441,7 @@ func (h *Handler) GetAllNodes(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 
 	// TODO: в ответе пустые поля будут опущены, убрать теги omitempty.
-	resp, err := h.adapter.UziAdapter.GetAllNodes(ctx, &uzipb.GetAllNodesIn{
+	resp, err := h.uziAdapter.GetAllNodes(ctx, &uzipb.GetAllNodesIn{
 		UziId: id,
 	})
 	if err != nil {
@@ -465,7 +470,7 @@ func (h *Handler) DeleteNode(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
 
-	resp, err := h.adapter.UziAdapter.DeleteNode(ctx, &uzipb.DeleteNodeIn{Id: id})
+	resp, err := h.uziAdapter.DeleteNode(ctx, &uzipb.DeleteNodeIn{Id: id})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
@@ -498,7 +503,7 @@ func (h *Handler) PatchNode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.adapter.UziAdapter.UpdateNode(ctx, &uzipb.UpdateNodeIn{
+	resp, err := h.uziAdapter.UpdateNode(ctx, &uzipb.UpdateNodeIn{
 		Id:        id,
 		Tirads_23: req.Tirads23,
 		Tirads_4:  req.Tirads4,
@@ -535,7 +540,7 @@ func (h *Handler) PostSegment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.adapter.UziAdapter.CreateSegment(ctx, &uzipb.CreateSegmentIn{
+	resp, err := h.uziAdapter.CreateSegment(ctx, &uzipb.CreateSegmentIn{
 		ImageId:   req.ImageID.String(),
 		NodeId:    req.NodeID.String(),
 		Contor:    req.Contor,
@@ -569,7 +574,7 @@ func (h *Handler) DeleteSegment(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
 
-	resp, err := h.adapter.UziAdapter.DeleteSegment(ctx, &uzipb.DeleteSegmentIn{Id: id})
+	resp, err := h.uziAdapter.DeleteSegment(ctx, &uzipb.DeleteSegmentIn{Id: id})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
@@ -602,7 +607,7 @@ func (h *Handler) PatchSegment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.adapter.UziAdapter.UpdateSegment(ctx, &uzipb.UpdateSegmentIn{
+	resp, err := h.uziAdapter.UpdateSegment(ctx, &uzipb.UpdateSegmentIn{
 		Id:        id,
 		Tirads_23: req.Tirads23,
 		Tirads_4:  req.Tirads4,
