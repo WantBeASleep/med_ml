@@ -3,12 +3,13 @@ module gateway
 go 1.24.0
 
 require (
-	github.com/WantBeASleep/med_ml_lib v1.0.6
+	github.com/IBM/sarama v1.45.0
+	github.com/WantBeASleep/med_ml_lib v1.0.8
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
 	github.com/ilyakaznacheev/cleanenv v1.5.0
-	github.com/minio/minio-go/v7 v7.0.86
+	github.com/minio/minio-go/v7 v7.0.87
 	github.com/swaggo/http-swagger v1.3.4
 	github.com/swaggo/swag v1.16.4
 	google.golang.org/grpc v1.70.0
@@ -17,7 +18,6 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
-	github.com/IBM/sarama v1.45.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

@@ -44,13 +44,13 @@ tasks:
 
   run:
     cmds:
-      # - task: build
+      - task: build
       - ./bin/service
   
   # TODO: перевести все на go tool go 1.24
   e2e:
     cmds:
-      - go test -v -count=1 ./tests/e2e/... -tags=e2e -run TestTestSuite -testify.m TestCreateUpdateDeleteGetSegment_Success
+      - go test -v -count=1 ./tests/e2e/... -tags=e2e
 
   migration-up:
     cmds:

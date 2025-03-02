@@ -16,9 +16,9 @@ service UziSrv {
   rpc getEchographic(GetEchographicIn) returns (GetEchographicOut);
 
   rpc getUziImages(GetUziImagesIn) returns (GetUziImagesOut);
+  
   rpc getImageSegmentsWithNodes(GetImageSegmentsWithNodesIn)
       returns (GetImageSegmentsWithNodesOut);
-
   rpc createSegment(CreateSegmentIn) returns (CreateSegmentOut);
   rpc getNodeSegments(GetNodeSegmentsIn) returns (GetNodeSegmentsOut);
   rpc deleteSegment(DeleteSegmentIn) returns (google.protobuf.Empty);

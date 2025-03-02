@@ -5,6 +5,7 @@ go 1.24.0
 require (
 	github.com/IBM/sarama v1.45.0
 	github.com/Masterminds/squirrel v1.5.4
+	github.com/WantBeASleep/med_ml_lib v1.0.8
 	github.com/chai2010/tiff v0.0.0-20211005095045-4ec2aa243943
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
@@ -14,6 +15,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.86
 	github.com/stretchr/testify v1.10.0
 	github.com/thanhpk/randstr v1.0.6
+	google.golang.org/grpc v1.70.0
 	google.golang.org/protobuf v1.36.5
 )
 
@@ -103,7 +105,6 @@ require (
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/text v0.22.0 // indirect
 	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d // indirect
-	google.golang.org/genproto v0.0.0-20250219182151-9fdb1cabc7b2 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250219182151-9fdb1cabc7b2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	howett.net/plist v1.0.0 // indirect

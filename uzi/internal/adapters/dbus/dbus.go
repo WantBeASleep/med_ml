@@ -1,4 +1,4 @@
-// время покажет, но пока выглядит будто бесполезный пакет, раз воткнул сюда дженерики, можно уж было 
+// время покажет, но пока выглядит будто бесполезный пакет, раз воткнул сюда дженерики, можно уж было
 // вообще везде либу использовать просто пихая интерфейс
 
 package dbus
@@ -6,9 +6,10 @@ package dbus
 import (
 	"context"
 
-	dbuslib "github.com/WantBeASleep/med_ml_lib/dbus"
-	uzisplittedpb "uzi/internal/generated/dbus/produce/uzisplitted"
 	uzicompletepb "uzi/internal/generated/dbus/produce/uzicomplete"
+	uzisplittedpb "uzi/internal/generated/dbus/produce/uzisplitted"
+
+	dbuslib "github.com/WantBeASleep/med_ml_lib/dbus"
 )
 
 type DbusAdapter interface {

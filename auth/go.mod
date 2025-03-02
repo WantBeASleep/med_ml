@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
-	github.com/WantBeASleep/med_ml_lib v1.0.7-1
+	github.com/WantBeASleep/med_ml_lib v1.0.8
 	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0

@@ -7,21 +7,21 @@ import (
 
 	gtclib "github.com/WantBeASleep/med_ml_lib/gtc"
 
-	adapters "gateway/internal/adapters"
+	medadapter "gateway/internal/adapters/grpc/med"
 	pb "gateway/internal/generated/grpc/client/med"
 
 	"github.com/gorilla/mux"
 )
 
 type Handler struct {
-	adapter adapters.Adapter
+	medAdapter medadapter.MedAdapter
 }
 
 func New(
-	adapter adapters.Adapter,
+	medAdapter medadapter.MedAdapter,
 ) *Handler {
 	return &Handler{
-		adapter: adapter,
+		medAdapter: medAdapter,
 	}
 }
 
@@ -40,7 +40,7 @@ func (h *Handler) GetDoctor(w http.ResponseWriter, r *http.Request) {
 
 	XUserID := r.Header.Get("x-user_id")
 
-	res, err := h.adapter.MedAdapter.GetDoctor(ctx, &pb.GetDoctorIn{Id: XUserID})
+	res, err := h.medAdapter.GetDoctor(ctx, &pb.GetDoctorIn{Id: XUserID})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
@@ -69,7 +69,7 @@ func (h *Handler) GetDoctorPatients(w http.ResponseWriter, r *http.Request) {
 
 	XUserID := r.Header.Get("x-user_id")
 
-	res, err := h.adapter.MedAdapter.GetDoctorPatients(ctx, &pb.GetDoctorPatientsIn{DoctorId: XUserID})
+	res, err := h.medAdapter.GetDoctorPatients(ctx, &pb.GetDoctorPatientsIn{DoctorId: XUserID})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
@@ -105,7 +105,7 @@ func (h *Handler) UpdateDoctor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := h.adapter.MedAdapter.UpdateDoctor(ctx, &pb.UpdateDoctorIn{
+	res, err := h.medAdapter.UpdateDoctor(ctx, &pb.UpdateDoctorIn{
 		Id:   XUserID,
 		Org:  req.Org,
 		Job:  req.Job,
@@ -144,7 +144,7 @@ func (h *Handler) PostPatient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := h.adapter.MedAdapter.CreatePatient(ctx, &pb.CreatePatientIn{
+	res, err := h.medAdapter.CreatePatient(ctx, &pb.CreatePatientIn{
 		Fullname:   req.FullName,
 		Email:      req.Email,
 		Policy:     req.Policy,
@@ -180,7 +180,7 @@ func (h *Handler) GetPatient(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
 
-	res, err := h.adapter.MedAdapter.GetPatient(ctx, &pb.GetPatientIn{Id: id})
+	res, err := h.medAdapter.GetPatient(ctx, &pb.GetPatientIn{Id: id})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("что то пошло не так: %v", err), 500)
 		return
@@ -218,7 +218,7 @@ func (h *Handler) UpdatePatient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := h.adapter.MedAdapter.UpdatePatient(ctx, &pb.UpdatePatientIn{
+	res, err := h.medAdapter.UpdatePatient(ctx, &pb.UpdatePatientIn{
 		DoctorId:    XUserID,
 		Id:          id,
 		Active:      req.Active,
@@ -260,7 +260,7 @@ func (h *Handler) PostCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := h.adapter.MedAdapter.CreateCard(ctx, &pb.CreateCardIn{
+	res, err := h.medAdapter.CreateCard(ctx, &pb.CreateCardIn{
 		Card: &pb.Card{
 			DoctorId:  XUserID,
 			PatientId: req.PatientID.String(),
@@ -297,7 +297,7 @@ func (h *Handler) GetCard(w http.ResponseWriter, r *http.Request) {
 	XUserID := r.Header.Get("x-user_id")
 	patientID := mux.Vars(r)["id"]
 
-	res, err := h.adapter.MedAdapter.GetCard(ctx, &pb.GetCardIn{
+	res, err := h.medAdapter.GetCard(ctx, &pb.GetCardIn{
 		DoctorId:  XUserID,
 		PatientId: patientID,
 	})
@@ -338,7 +338,7 @@ func (h *Handler) UpdateCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := h.adapter.MedAdapter.UpdateCard(ctx, &pb.UpdateCardIn{
+	res, err := h.medAdapter.UpdateCard(ctx, &pb.UpdateCardIn{
 		Card: &pb.Card{
 			DoctorId:  XUserID,
 			PatientId: id,

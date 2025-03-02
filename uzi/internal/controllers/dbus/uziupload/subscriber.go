@@ -2,7 +2,6 @@ package uziupload
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/WantBeASleep/med_ml_lib/dbus"
@@ -26,8 +25,8 @@ func New(
 }
 
 func (h *subscriber) Consume(ctx context.Context, event *pb.UziUpload) error {
-	if err := h.imageSrv.SplitUzi(ctx, uuid.MustParse(event.UziId)); err != nil {
-		return errors.New("wrong msg type. uziupload required")
+	if _, err := uuid.Parse(event.UziId); err != nil {
+		return fmt.Errorf("uzi id is not uuid: %s", event.UziId)
 	}
 
 	if err := h.imageSrv.SplitUzi(ctx, uuid.MustParse(event.UziId)); err != nil {

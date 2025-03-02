@@ -6,8 +6,6 @@ import (
 	pb "uzi/internal/generated/grpc/service"
 	"uzi/internal/services/image"
 
-
-
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -45,5 +43,3 @@ func (h *handler) GetUziImages(ctx context.Context, in *pb.GetUziImagesIn) (*pb.
 
 	return &out, nil
 }
-
-

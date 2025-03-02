@@ -26,6 +26,27 @@ func New(
 }
 
 func (h *subscriber) Consume(ctx context.Context, event *pb.UziProcessed) error {
+	for _, v := range event.Nodes {
+		if _, err := uuid.Parse(v.Id); err != nil {
+			return fmt.Errorf("node id is not uuid: %s", v.Id)
+		}
+		if _, err := uuid.Parse(v.UziId); err != nil {
+			return fmt.Errorf("uzi id is not uuid: %s", v.UziId)
+		}
+	}
+
+	for _, v := range event.Segments {
+		if _, err := uuid.Parse(v.Id); err != nil {
+			return fmt.Errorf("segment id is not uuid: %s", v.Id)
+		}
+		if _, err := uuid.Parse(v.ImageId); err != nil {
+			return fmt.Errorf("image id is not uuid: %s", v.ImageId)
+		}
+		if _, err := uuid.Parse(v.NodeId); err != nil {
+			return fmt.Errorf("node id is not uuid: %s", v.NodeId)
+		}
+	}
+
 	nodes := make([]domain.Node, 0, len(event.Nodes))
 	segments := make([]domain.Segment, 0, len(event.Segments))
 

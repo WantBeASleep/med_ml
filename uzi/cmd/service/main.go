@@ -40,8 +40,8 @@ import (
 	uziuploadsubscriber "uzi/internal/controllers/dbus/uziupload"
 
 	dbusadapters "uzi/internal/adapters/dbus"
-	uziupload "uzi/internal/generated/dbus/consume/uziupload"
 	uziprocessed "uzi/internal/generated/dbus/consume/uziprocessed"
+	uziupload "uzi/internal/generated/dbus/consume/uziupload"
 	uzicompletepb "uzi/internal/generated/dbus/produce/uzicomplete"
 	uzisplittedpb "uzi/internal/generated/dbus/produce/uzisplitted"
 
@@ -101,7 +101,7 @@ func run() (exitCode int) {
 
 	producerUziSplitted := dbuslib.NewProducer[*uzisplittedpb.UziSplitted](
 		producer,
-		"uzi_splitted",
+		"uzisplitted",
 		dbuslib.WithProducerMiddlewares[*uzisplittedpb.UziSplitted](
 			observerdbuslib.CrossEventProduce,
 			observerdbuslib.LogEventProduce,
@@ -110,7 +110,7 @@ func run() (exitCode int) {
 
 	producerUziComplete := dbuslib.NewProducer[*uzicompletepb.UziComplete](
 		producer,
-		"uzi_complete",
+		"uzicomplete",
 		dbuslib.WithProducerMiddlewares[*uzicompletepb.UziComplete](
 			observerdbuslib.CrossEventProduce,
 			observerdbuslib.LogEventProduce,

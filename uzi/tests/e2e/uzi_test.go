@@ -3,9 +3,9 @@
 package e2e_test
 
 import (
-	pb "uzi/internal/generated/grpc/service"
-
 	"context"
+
+	pb "uzi/internal/generated/grpc/service"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"

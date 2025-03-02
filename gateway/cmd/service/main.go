@@ -1,18 +1,21 @@
 package main
 
+// TODO: импорты в нормальном порядке сделать
 import (
 	"log/slog"
 	"net/http"
 	"os"
 
-	authlib "github.com/WantBeASleep/med_ml_lib/auth"
-
-	"github.com/WantBeASleep/med_ml_lib/brokerlib"
-	loglib "github.com/WantBeASleep/med_ml_lib/log"
-
 	_ "gateway/docs"
 
+	dbuslib "github.com/WantBeASleep/med_ml_lib/dbus"
+	observerdbuslib "github.com/WantBeASleep/med_ml_lib/observer/dbus"
+	observergrpclib "github.com/WantBeASleep/med_ml_lib/observer/grpc"
+	loglib "github.com/WantBeASleep/med_ml_lib/observer/log"
+
 	"github.com/ilyakaznacheev/cleanenv"
+
+	"gateway/internal/generated/dbus/produce/uziupload"
 
 	"github.com/gorilla/mux"
 	"github.com/minio/minio-go/v7"
@@ -22,8 +25,7 @@ import (
 	"gateway/internal/config"
 	"gateway/internal/repository"
 
-	adapters "gateway/internal/adapters"
-	brokeradapters "gateway/internal/adapters/broker"
+	dbusadapters "gateway/internal/adapters/dbus"
 	authgrpcadapter "gateway/internal/adapters/grpc/auth"
 	medgrpcadapter "gateway/internal/adapters/grpc/med"
 	uzigrpcadapter "gateway/internal/adapters/grpc/uzi"
@@ -35,6 +37,7 @@ import (
 
 	"gateway/internal/middleware"
 
+	"github.com/IBM/sarama"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )
 
@@ -79,23 +82,30 @@ func run() (exitCode int) {
 
 	dao := repository.NewRepository(client, "uzi")
 
-	// TODO: обернуть в интерфейсы продьюсера/консьюмера
-
-	producer, err := brokerlib.NewProducer(cfg.Broker.Addrs)
+	producer, err := sarama.NewSyncProducer(cfg.Broker.Addrs, nil)
 	if err != nil {
-		slog.Error("init broker producer", "err", err)
+		slog.Error("init sarama producer", "err", err)
 		return failExitCode
 	}
 
-	brokeradapter := brokeradapters.New(producer)
+	producerUziUpload := dbuslib.NewProducer[*uziupload.UziUpload](
+		producer,
+		"uziupload",
+		dbuslib.WithProducerMiddlewares[*uziupload.UziUpload](
+			observerdbuslib.CrossEventProduce,
+			observerdbuslib.LogEventProduce,
+		),
+	)
+
+	dbusAdapter := dbusadapters.New(producerUziUpload)
 
 	// TODO: поновыносить по папкам весь этот мусор
 	medConn, err := grpc.NewClient(
 		cfg.Adapters.MedUrl,
 		grpc.WithInsecure(),
 		grpc.WithChainUnaryInterceptor(
-			authlib.AuthEnrichClientCall,
-			loglib.GRPCClientCall,
+			observergrpclib.CrossClientCall,
+			observergrpclib.LogClientCall,
 		),
 	)
 	if err != nil {
@@ -107,8 +117,8 @@ func run() (exitCode int) {
 		cfg.Adapters.UziUrl,
 		grpc.WithInsecure(),
 		grpc.WithChainUnaryInterceptor(
-			authlib.AuthEnrichClientCall,
-			loglib.GRPCClientCall,
+			observergrpclib.CrossClientCall,
+			observergrpclib.LogClientCall,
 		),
 	)
 	if err != nil {
@@ -120,8 +130,8 @@ func run() (exitCode int) {
 		cfg.Adapters.AuthUrl,
 		grpc.WithInsecure(),
 		grpc.WithChainUnaryInterceptor(
-			authlib.AuthEnrichClientCall,
-			loglib.GRPCClientCall,
+			observergrpclib.CrossClientCall,
+			observergrpclib.LogClientCall,
 		),
 	)
 	if err != nil {
@@ -133,16 +143,9 @@ func run() (exitCode int) {
 	uziAdapter := uzigrpcadapter.New(uziConn)
 	authAdapter := authgrpcadapter.New(authConn)
 
-	adapter := adapters.New(
-		authAdapter,
-		medAdapter,
-		uziAdapter,
-		brokeradapter,
-	)
-
-	authHandler := authhandler.New(adapter)
-	medHandler := medhandler.New(adapter)
-	uziHandler := uzihandler.New(adapter, dao)
+	authHandler := authhandler.New(authAdapter, medAdapter)
+	medHandler := medhandler.New(medAdapter)
+	uziHandler := uzihandler.New(uziAdapter, dbusAdapter, dao)
 	downloadHandler := downloadhandler.New(dao)
 
 	// TODO: пробросить ошибки с логированием на верхнем уровне
