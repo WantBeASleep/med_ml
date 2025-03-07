@@ -1,15 +1,20 @@
 package node
 
-import "uzi/internal/domain"
+import (
+	"github.com/google/uuid"
+
+	"uzi/internal/domain"
+)
 
 // TODO: починить баг при запросе со всеми полями nil
-type UpdateNode struct {
+type UpdateNodeArg struct {
+	Id       uuid.UUID
 	Tirads23 *float64
 	Tirads4  *float64
 	Tirads5  *float64
 }
 
-func (u UpdateNode) Update(d *domain.Node) {
+func (u UpdateNodeArg) UpdateDomain(d *domain.Node) {
 	if u.Tirads23 != nil {
 		d.Tirads23 = *u.Tirads23
 	}

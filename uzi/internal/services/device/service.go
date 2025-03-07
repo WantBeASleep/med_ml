@@ -1,18 +1,16 @@
-package node
+package device
 
 import (
 	"context"
 
 	"uzi/internal/domain"
 	"uzi/internal/repository"
-
-	"github.com/google/uuid"
 )
 
 type Service interface {
-	GetNodesByUziID(ctx context.Context, id uuid.UUID) ([]domain.Node, error)
-
-	UpdateNode(ctx context.Context, arg UpdateNodeArg) (domain.Node, error)
+	CreateDevice(ctx context.Context, deviceName string) (int, error)
+	
+	GetDeviceList(ctx context.Context) ([]domain.Device, error)
 }
 
 type service struct {
