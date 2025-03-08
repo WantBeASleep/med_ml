@@ -19,7 +19,7 @@ import (
 
 var TiffSplit flowfuncDepsInjector = func(deps *Deps) flowfunc {
 	return func(ctx context.Context, data FlowData) (FlowData, error) {
-		tiffFile, err := os.Open("assets/sample.tiff")
+		tiffFile, err := os.Open(os.Getenv("ASSETS_PATH"))
 		if err != nil {
 			return FlowData{}, fmt.Errorf("open tiff file: %w", err)
 		}
@@ -61,7 +61,7 @@ var TiffSplit flowfuncDepsInjector = func(deps *Deps) flowfunc {
 		}
 
 		// ретраимся пока не получим статус обработанного узи
-		ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+		ctx, cancel := context.WithTimeout(ctx, time.Second*20)
 		defer cancel()
 
 		backoff := time.Second * 1

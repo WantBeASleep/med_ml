@@ -12,6 +12,7 @@ func (q *repo) GetImagesByUziID(uziID uuid.UUID) ([]entity.Image, error) {
 	query := q.QueryBuilder().
 		Select(
 			columnId,
+			columnUziId,
 			columnPage,
 		).
 		From(table).

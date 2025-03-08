@@ -1,9 +1,10 @@
 package uzi
 
 import (
-	"uzi/internal/repository/uzi/entity"
-
 	sq "github.com/Masterminds/squirrel"
+	"github.com/google/uuid"
+
+	"uzi/internal/repository/uzi/entity"
 )
 
 func (q *repo) UpdateUzi(uzi entity.Uzi) error {
@@ -16,6 +17,25 @@ func (q *repo) UpdateUzi(uzi entity.Uzi) error {
 		}).
 		Where(sq.Eq{
 			columnID: uzi.Id,
+		})
+
+	_, err := q.Runner().Execx(q.Context(), query)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// TODO: статус должен быть enum
+func (q *repo) UpdateUziStatus(id uuid.UUID, status string) error {
+	query := q.QueryBuilder().
+		Update(uziTable).
+		SetMap(sq.Eq{
+			columnStatus: status,
+		}).
+		Where(sq.Eq{
+			columnID: id,
 		})
 
 	_, err := q.Runner().Execx(q.Context(), query)

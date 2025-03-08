@@ -28,6 +28,7 @@ type Repository interface {
 	GetUzisByExternalID(externalID uuid.UUID) ([]entity.Uzi, error)
 
 	UpdateUzi(uzi entity.Uzi) error
+	UpdateUziStatus(id uuid.UUID, status string) error
 }
 
 type repo struct {

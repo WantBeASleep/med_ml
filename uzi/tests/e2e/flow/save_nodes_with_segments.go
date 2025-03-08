@@ -23,9 +23,9 @@ var SaveNodesWithSegments flowfuncDepsInjector = func(deps *Deps) flowfunc {
 
 		// создадим 10 узлов
 		for range 10 {
-			nodeWithSegments := &pbDbus.NodeWithSegments{}
+			nodeWithSegments := &pbDbus.UziProcessed_NodeWithSegments{}
 
-			node := &pbDbus.Node{
+			node := &pbDbus.UziProcessed_Node{
 				Ai:        true,
 				Tirads_23: rand.Float64(),
 				Tirads_4:  rand.Float64(),
@@ -36,9 +36,9 @@ var SaveNodesWithSegments flowfuncDepsInjector = func(deps *Deps) flowfunc {
 			// по 3 сегмента на узел
 			for range 3 {
 				imageId := data.Images[rand.Intn(len(data.Images))].Id
-				segment := &pbDbus.Segment{
+				segment := &pbDbus.UziProcessed_Segment{
 					ImageId:   imageId.String(),
-					Contor:    []byte(`{[{"x": 1, "y": 1}]}`),
+					Contor:    []byte(`{"contor":[{"x": 1, "y": 1}]}`),
 					Tirads_23: rand.Float64(),
 					Tirads_4:  rand.Float64(),
 					Tirads_5:  rand.Float64(),
@@ -66,7 +66,7 @@ var SaveNodesWithSegments flowfuncDepsInjector = func(deps *Deps) flowfunc {
 		}
 
 		// ретраимся пока не получим статус обработанного узи
-		ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+		ctx, cancel := context.WithTimeout(ctx, time.Second*20)
 		defer cancel()
 
 		backoff := time.Second * 1
@@ -74,7 +74,7 @@ var SaveNodesWithSegments flowfuncDepsInjector = func(deps *Deps) flowfunc {
 		for {
 			select {
 			case <-ctx.Done():
-				return FlowData{}, fmt.Errorf("context done. uzi not splitted")
+				return FlowData{}, fmt.Errorf("context done. uzi not completed")
 
 			case <-time.After(backoff):
 				resp, err := deps.Adapter.GetUziById(ctx, &pbSrv.GetUziByIdIn{Id: data.Uzi.Id.String()})

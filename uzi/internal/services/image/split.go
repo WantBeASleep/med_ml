@@ -57,8 +57,22 @@ func (s *service) SplitUzi(ctx context.Context, id uuid.UUID) error {
 		}
 	}
 
+	ctx, err = s.dao.BeginTx(ctx)
+	if err != nil {
+		return fmt.Errorf("begin tx: %w", err)
+	}
+	defer func() { _ = s.dao.RollbackTx(ctx) }()
+
 	if err := s.dao.NewImageQuery(ctx).InsertImages(entity.Image{}.SliceFromDomain(images)...); err != nil {
 		return fmt.Errorf("insert images: %w", err)
+	}
+
+	if err := s.dao.NewUziQuery(ctx).UpdateUziStatus(id, string(domain.UziStatusPending)); err != nil {
+		return fmt.Errorf("update uzi status: %w", err)
+	}
+
+	if err := s.dao.CommitTx(ctx); err != nil {
+		return fmt.Errorf("commit tx: %w", err)
 	}
 
 	imageIds := make([]uuid.UUID, 0, len(images))

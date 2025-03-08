@@ -6,6 +6,8 @@ import (
 	"errors"
 	"fmt"
 
+	"uzi/internal/domain"
+
 	"github.com/WantBeASleep/med_ml_lib/dbus"
 	"github.com/google/uuid"
 
@@ -73,6 +75,7 @@ func (h *subscriber) Consume(ctx context.Context, message *pb.UziProcessed) erro
 		})
 	}
 
-	h.services.NodeSegment.CreateNodesWithSegments(ctx, arg)
+	// TODO: вынести в отдельный метод, что бы тут не было логики с статусом
+	h.services.NodeSegment.CreateNodesWithSegments(ctx, arg, node_segment.WithNewUziStatus(domain.UziStatusCompleted))
 	return nil
 }

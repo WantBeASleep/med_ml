@@ -15,16 +15,21 @@ const (
 	avgSegmentPerNode = 3
 )
 
-func (s *service) CreateNodesWithSegments(ctx context.Context, arg []CreateNodesWithSegmentsArg) ([]CreateNodesWithSegmentsID, error) {
+func (s *service) CreateNodesWithSegments(ctx context.Context, arg []CreateNodesWithSegmentsArg, opts ...CreateNodesWithSegmentsOption) ([]CreateNodesWithSegmentsID, error) {
+	options := &createNodesWithSegmentsOption{}
+	for _, opt := range opts {
+		opt(options)
+	}
+
 	result := make([]CreateNodesWithSegmentsID, 0, len(arg))
 	nodes := make([]domain.Node, 0, len(arg))
-	segments := make([]domain.Segment, 0, 3*len(arg))
+	segments := make([]domain.Segment, 0, avgSegmentPerNode*len(arg))
 
 	for _, vNode := range arg {
 		nodeID := uuid.New()
 		nodes = append(nodes, domain.Node{
 			Id:       nodeID,
-			Ai:       false,
+			Ai:       vNode.Node.Ai,
 			UziID:    vNode.Node.UziID,
 			Tirads23: vNode.Node.Tirads23,
 			Tirads4:  vNode.Node.Tirads4,
@@ -59,13 +64,19 @@ func (s *service) CreateNodesWithSegments(ctx context.Context, arg []CreateNodes
 	nodeQuery := s.dao.NewNodeQuery(ctx)
 	segmentQuery := s.dao.NewSegmentQuery(ctx)
 
-	// вставить после переписывания репы на батчи
 	if err := nodeQuery.InsertNodes(nodeEntity.Node{}.SliceFromDomain(nodes)...); err != nil {
 		return nil, fmt.Errorf("insert nodes: %w", err)
 	}
 
 	if err := segmentQuery.InsertSegments(segmentEntity.Segment{}.SliceFromDomain(segments)...); err != nil {
 		return nil, fmt.Errorf("insert segments: %w", err)
+	}
+
+	// TODO: это очень плохое решение с arg[0], но тут нужно как то флоу выносить/pattern композит
+	if options.newUziStatus != nil {
+		if err := s.dao.NewUziQuery(ctx).UpdateUziStatus(arg[0].Node.UziID, string(*options.newUziStatus)); err != nil {
+			return nil, fmt.Errorf("update uzi status: %w", err)
+		}
 	}
 
 	if err := s.dao.CommitTx(ctx); err != nil {

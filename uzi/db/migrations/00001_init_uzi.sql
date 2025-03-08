@@ -11,18 +11,20 @@ COMMENT ON COLUMN device.name IS 'Название аппарата';
 
 CREATE TABLE uzi
 (
-    id         uuid         PRIMARY KEY,
-    projection varchar(255) NOT NULL,
-    checked    boolean      NOT NULL,
-    create_at  date         NOT NULL,
-    patient_id uuid         NOT NULL,
-    device_id  integer      NOT NULL REFERENCES device (id)
+    id          uuid         PRIMARY KEY,
+    projection  varchar(255) NOT NULL,
+    checked     boolean      NOT NULL,
+    external_id uuid         NOT NULL,
+    device_id   integer      NOT NULL REFERENCES device (id),
+    "status"      varchar(255) NOT NULL,
+    create_at   date         NOT NULL
 );
 
 COMMENT ON TABLE uzi IS 'Хранилище описаний и характеристик узи';
 COMMENT ON COLUMN uzi.projection IS 'Проекция в которой было сделано узи';
-COMMENT ON COLUMN uzi.patient_id IS 'Идентификатор пациента к которому относится узи';
+COMMENT ON COLUMN uzi.external_id IS 'Внешний идентификатор узи';
 COMMENT ON COLUMN uzi.device_id IS 'Идентификатор узи аппарата на котором снято узи';
+COMMENT ON COLUMN uzi."status" IS 'Статус узи';
 
 CREATE TABLE image
 (
@@ -50,13 +52,13 @@ COMMENT ON COLUMN node.tirads_5 IS 'процент отношения к кла�
 
 CREATE TABLE segment
 (
-    id        uuid PRIMARY KEY,
-    node_id   uuid NOT NULL REFERENCES node (id),
-    image_id  uuid NOT NULL REFERENCES image (id),
-    contor    text NOT NULL,
-    tirads_23 real NOT NULL,
-    tirads_4  real NOT NULL,
-    tirads_5  real NOT NULL
+    id        uuid  PRIMARY KEY,
+    node_id   uuid  NOT NULL REFERENCES node (id),
+    image_id  uuid  NOT NULL REFERENCES image (id),
+    contor    jsonb NOT NULL,
+    tirads_23 real  NOT NULL,
+    tirads_4  real  NOT NULL,
+    tirads_5  real  NOT NULL
 );
 
 COMMENT ON TABLE segment IS 'Хранилище сегментов в узи';

@@ -12,7 +12,7 @@ import (
 )
 
 type Service interface {
-	CreateNodesWithSegments(ctx context.Context, arg []CreateNodesWithSegmentsArg) ([]CreateNodesWithSegmentsID, error)
+	CreateNodesWithSegments(ctx context.Context, arg []CreateNodesWithSegmentsArg, opts ...CreateNodesWithSegmentsOption) ([]CreateNodesWithSegmentsID, error)
 
 	GetNodesWithSegmentsByImageID(ctx context.Context, id uuid.UUID) ([]domain.Node, []domain.Segment, error)
 
