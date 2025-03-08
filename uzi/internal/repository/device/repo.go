@@ -23,7 +23,7 @@ type repo struct {
 	*daolib.BaseQuery
 }
 
-//TODO: костыль, иначе переписывать dao Либу, это не сегодня
+// TODO: костыль, иначе переписывать dao Либу, это не сегодня
 func NewR() *repo {
 	return &repo{}
 }

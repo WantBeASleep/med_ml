@@ -19,27 +19,16 @@ import (
 
 	"uzi/internal/repository"
 
-	devicesrv "uzi/internal/services/device"
-	imagesrv "uzi/internal/services/image"
-	isnsrv "uzi/internal/services/image-segment-node"
-	nodesrv "uzi/internal/services/node"
-	segmentsrv "uzi/internal/services/segment"
-	uzisrv "uzi/internal/services/uzi"
+	services "uzi/internal/services"
 
 	pb "uzi/internal/generated/grpc/service"
 
-	grpchandler "uzi/internal/controllers/grpc"
-	devicehandler "uzi/internal/controllers/grpc/device"
-	imagehandler "uzi/internal/controllers/grpc/image"
-	isnhandler "uzi/internal/controllers/grpc/image-segment-node"
-	nodehandler "uzi/internal/controllers/grpc/node"
-	segmenthandler "uzi/internal/controllers/grpc/segment"
-	uzihandler "uzi/internal/controllers/grpc/uzi"
+	grpchandler "uzi/internal/server"
 
-	uziprocessedsubscriber "uzi/internal/controllers/dbus/uziprocessed"
-	uziuploadsubscriber "uzi/internal/controllers/dbus/uziupload"
+	uziprocessedsubscriber "uzi/internal/dbus/consumers/uziprocessed"
+	uziuploadsubscriber "uzi/internal/dbus/consumers/uziupload"
 
-	dbusadapters "uzi/internal/adapters/dbus"
+	dbusproducers "uzi/internal/dbus/producers"
 	uziprocessed "uzi/internal/generated/dbus/consume/uziprocessed"
 	uziupload "uzi/internal/generated/dbus/consume/uziupload"
 	uzicompletepb "uzi/internal/generated/dbus/produce/uzicomplete"
@@ -117,33 +106,16 @@ func run() (exitCode int) {
 		),
 	)
 
-	dbusAdapter := dbusadapters.New(producerUziSplitted, producerUziComplete)
+	dbusAdapter := dbusproducers.New(producerUziSplitted, producerUziComplete)
 
 	dao := repository.NewRepository(db, client, "uzi")
 
-	deviceSrv := devicesrv.New(dao)
-	uziSrv := uzisrv.New(dao)
-	imageSrv := imagesrv.New(dao, dbusAdapter)
-	isnSrv := isnsrv.New(dao)
-	nodeSrv := nodesrv.New(dao)
-	serviceSrv := segmentsrv.New(dao)
-
-	// grpc
-	deviceHandler := devicehandler.New(deviceSrv)
-	uziHandler := uzihandler.New(uziSrv)
-	imageHandler := imagehandler.New(imageSrv)
-	isnHandler := isnhandler.New(isnSrv)
-	nodeHandler := nodehandler.New(nodeSrv)
-	segmentHandler := segmenthandler.New(serviceSrv)
-
-	handler := grpchandler.New(
-		deviceHandler,
-		uziHandler,
-		imageHandler,
-		isnHandler,
-		segmentHandler,
-		nodeHandler,
+	services := services.New(
+		dao,
+		dbusAdapter,
 	)
+
+	handler := grpchandler.New(services)
 
 	server := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
@@ -155,8 +127,8 @@ func run() (exitCode int) {
 	pb.RegisterUziSrvServer(server, handler)
 
 	// dbus
-	uziuploadSubscriber := uziuploadsubscriber.New(imageSrv)
-	uziprocessedSubscriber := uziprocessedsubscriber.New(nodeSrv)
+	uziuploadSubscriber := uziuploadsubscriber.New(services)
+	uziprocessedSubscriber := uziprocessedsubscriber.New(services)
 
 	uziUploadHandler := dbuslib.NewGroupSubscriber(
 		"uziupload",

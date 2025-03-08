@@ -66,7 +66,7 @@ func (s *service) SplitUzi(ctx context.Context, id uuid.UUID) error {
 		imageIds = append(imageIds, image.Id)
 	}
 
-	if err := s.adapter.SendUziSplitted(ctx, &uzisplittedpb.UziSplitted{
+	if err := s.dbus.SendUziSplitted(ctx, &uzisplittedpb.UziSplitted{
 		UziId:   id.String(),
 		PagesId: uuid.UUIDs(imageIds).Strings(),
 	}); err != nil {

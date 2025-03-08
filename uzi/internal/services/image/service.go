@@ -3,7 +3,7 @@ package image
 import (
 	"context"
 
-	"uzi/internal/adapters/dbus"
+	dbus "uzi/internal/dbus/producers"
 
 	"uzi/internal/domain"
 	"uzi/internal/repository"
@@ -18,16 +18,16 @@ type Service interface {
 }
 
 type service struct {
-	dao     repository.DAO
-	adapter dbus.DbusAdapter
+	dao  repository.DAO
+	dbus dbus.Producer
 }
 
 func New(
 	dao repository.DAO,
-	adapter dbus.DbusAdapter,
+	dbus dbus.Producer,
 ) Service {
 	return &service{
-		dao:     dao,
-		adapter: adapter,
+		dao:  dao,
+		dbus: dbus,
 	}
 }

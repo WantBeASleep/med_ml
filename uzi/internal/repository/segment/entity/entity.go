@@ -2,6 +2,7 @@ package entity
 
 import (
 	"encoding/json"
+
 	"uzi/internal/domain"
 
 	"github.com/google/uuid"

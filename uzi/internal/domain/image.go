@@ -8,4 +8,4 @@ type Image struct {
 	Id    uuid.UUID
 	UziID uuid.UUID
 	Page  int
-}	
+}

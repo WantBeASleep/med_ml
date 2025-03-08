@@ -9,7 +9,7 @@ import (
 
 type Service interface {
 	CreateDevice(ctx context.Context, deviceName string) (int, error)
-	
+
 	GetDeviceList(ctx context.Context) ([]domain.Device, error)
 }
 
