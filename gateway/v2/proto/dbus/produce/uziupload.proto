@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "internal/generated/dbus/consume/uziupload";
+option go_package = "internal/generated/dbus/produce/uziupload";
 
 message UziUpload {
   string uzi_id = 100;

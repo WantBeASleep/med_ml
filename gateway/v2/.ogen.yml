@@ -1,0 +1,16 @@
+generator:
+  features:
+    enable:
+      # Enables paths server generation
+      - 'paths/server'
+      # Enables webhooks server generation
+      - 'webhooks/server'
+      # Enables client usage in security source implementations
+      - 'client/security/reentrant'
+      # Enables validation of client requests
+      - 'client/request/validation'
+      # Enables validation of server responses
+      - 'server/response/validation'
+      # Enables stub Handler generation
+      - 'ogen/unimplemented'
+    disable_all: true
