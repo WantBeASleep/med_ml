@@ -19,3 +19,6 @@ _лучше подгружать через `.env`_
 
 Представлены на картинке: 
 ![uzi_db](docs/assets/uzi_db.png)
+
+//TODO: переделать название топиков на человеское, типа uzi.upload
+//TODO: сделать tirads NULLABLE

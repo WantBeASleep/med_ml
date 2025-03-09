@@ -14,8 +14,6 @@ tasks:
 
   codegen:
     vars:
-      proto_libs:
-        sh: find {{.VENDOR_PROTOGEN}} -mindepth 1 -maxdepth 1 -type d | xargs echo
       proto_files:
         sh: find proto -type f -name "*.proto" | xargs echo
 
@@ -27,7 +25,6 @@ tasks:
           -I {{dir .ITEM}}
           --plugin=protoc-gen-go=$(pwd)/bin/protoc-gen-go
           --plugin=protoc-gen-go-grpc=$(pwd)/bin/protoc-gen-go-grpc
-          {{range $lib := splitList " " .proto_libs}}-I {{$lib}} {{end}}
           --experimental_allow_proto3_optional
           --go_out . --go-grpc_out .
           {{.ITEM}}

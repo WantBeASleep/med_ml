@@ -3,5 +3,5 @@ syntax = "proto3";
 option go_package = "internal/generated/dbus/produce/uzicomplete";
 
 message UziComplete {
-    string uzi_id = 100;
-  }
+  string uzi_id = 100;
+}

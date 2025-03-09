@@ -5,33 +5,39 @@ option go_package = "internal/generated/grpc/service";
 import "google/protobuf/empty.proto";
 
 service UziSrv {
+  // DEVICE
   rpc createDevice(createDeviceIn) returns (createDeviceOut);
   rpc getDeviceList(google.protobuf.Empty) returns (GetDeviceListOut);
 
+  // UZI
   rpc createUzi(CreateUziIn) returns (CreateUziOut);
+  rpc getUziById(GetUziByIdIn) returns (GetUziByIdOut);
+  rpc getUzisByExternalId(GetUzisByExternalIdIn) returns (GetUzisByExternalIdOut);
+  rpc getEchographicByUziId(GetEchographicByUziIdIn) returns (GetEchographicByUziIdOut);
   rpc updateUzi(UpdateUziIn) returns (UpdateUziOut);
-  rpc getUzi(GetUziIn) returns (GetUziOut);
-  rpc getPatientUzis(GetPatientUzisIn) returns (GetPatientUzisOut);
   rpc updateEchographic(UpdateEchographicIn) returns (UpdateEchographicOut);
-  rpc getEchographic(GetEchographicIn) returns (GetEchographicOut);
 
-  rpc getUziImages(GetUziImagesIn) returns (GetUziImagesOut);
+  // IMAGE
+  rpc getImagesByUziId(GetImagesByUziIdIn) returns (GetImagesByUziIdOut);
   
-  rpc getImageSegmentsWithNodes(GetImageSegmentsWithNodesIn)
-      returns (GetImageSegmentsWithNodesOut);
+  // NODE
+  rpc getNodesByUziId(GetNodesByUziIdIn) returns (GetNodesByUziIdOut);
+  rpc updateNode(UpdateNodeIn) returns (UpdateNodeOut);
+
+  // SEGMENT
   rpc createSegment(CreateSegmentIn) returns (CreateSegmentOut);
-  rpc getNodeSegments(GetNodeSegmentsIn) returns (GetNodeSegmentsOut);
-  rpc deleteSegment(DeleteSegmentIn) returns (google.protobuf.Empty);
+  rpc getSegmentsByNodeId(GetSegmentsByNodeIdIn) returns (GetSegmentsByNodeIdOut);
   rpc updateSegment(UpdateSegmentIn) returns (UpdateSegmentOut);
 
-  rpc createNode(CreateNodeIn) returns (CreateNodeOut);
-  rpc getAllNodes(GetAllNodesIn) returns (GetAllNodesOut);
+  // доменные области слишком сильно пересекаются, вынесено в одну надобласть
+  // NODE-SEGMENT
+  rpc createNodeWithSegments(CreateNodeWithSegmentsIn) returns (CreateNodeWithSegmentsOut);
+  rpc getNodesWithSegmentsByImageId(GetNodesWithSegmentsByImageIdIn)
+      returns (GetNodesWithSegmentsByImageIdOut);
   rpc deleteNode(DeleteNodeIn) returns (google.protobuf.Empty);
-  rpc updateNode(UpdateNodeIn) returns (UpdateNodeOut);
+  rpc deleteSegment(DeleteSegmentIn) returns (google.protobuf.Empty);
 }
 
-// COMMON
-message Id { string id = 100; }
 
 // DEVICE
 
@@ -49,6 +55,24 @@ message createDeviceOut {
 }
 
 message GetDeviceListOut { repeated Device devices = 100; }
+
+// UZI
+
+enum UziStatus {
+  UZI_STATUS_NEW = 0;
+  UZI_STATUS_PENDING = 1;
+  UZI_STATUS_COMPLETED = 2;
+}
+
+message Uzi {
+  string id = 100;
+  string projection = 300;
+  bool checked = 400;
+  string external_id = 500;
+  int64 device_id = 600;
+  UziStatus status = 700;
+  string create_at = 800;
+}
 
 message Echographic {
   string id = 100;
@@ -72,35 +96,29 @@ message Echographic {
   optional string conclusion = 1900;
 }
 
-// Обусловлено что ВСЕ параметры меняются
-message UpdateEchographicIn {
-  Echographic echographic = 100;
-}
-
-message UpdateEchographicOut { Echographic echographic = 400; }
-
-message GetEchographicIn { string id = 100; }
-
-message GetEchographicOut { Echographic echographic = 400; }
-
-// UZI
-
-message Uzi {
-  string id = 100;
-  string projection = 300;
-  bool checked = 400;
-  string patient_id = 500;
-  int64 device_id = 600;
-  string create_at = 700;
-}
-
 message CreateUziIn {
   string projection = 100;
-  string patient_id = 200;
+  string external_id = 200;
   int64 device_id = 300;
 }
 
 message CreateUziOut { string id = 100; }
+
+message GetUziByIdIn { string id = 100; }
+
+message GetUziByIdOut { Uzi uzi = 100; }
+
+message GetUzisByExternalIdIn {
+  string external_id = 100;
+}
+
+message GetUzisByExternalIdOut {
+  repeated Uzi uzis = 100;
+}
+
+message GetEchographicByUziIdIn { string uzi_id = 100; }
+
+message GetEchographicByUziIdOut { Echographic echographic = 100; }
 
 message UpdateUziIn {
   string id = 100;
@@ -110,102 +128,39 @@ message UpdateUziIn {
 
 message UpdateUziOut { Uzi uzi = 100; }
 
-message GetUziIn { string id = 100; }
+message UpdateEchographicIn { Echographic echographic = 100; }
 
-message GetUziOut { Uzi uzi = 100; }
+message UpdateEchographicOut { Echographic echographic = 100; }
 
-message GetPatientUzisIn {
-  string patient_id = 100;
-}
-
-message GetPatientUzisOut {
-  repeated Uzi uzis = 100;
-}
 
 // IMAGE
 
 message Image {
   string id = 100;
-  int64 page = 200;
+  string uzi_id = 200;
+  int64 page = 300;
 };
 
-message GetUziImagesIn { string uzi_id = 100; }
+message GetImagesByUziIdIn { string uzi_id = 100; }
 
-message GetUziImagesOut { repeated Image images = 100; }
-
-// SEGMENT
-
-message Segment {
-  string id = 100;
-  string node_id = 200;
-  string image_id = 300;
-  string contor = 400;
-  double tirads_23 = 500;
-  double tirads_4 = 600;
-  double tirads_5 = 700;
-}
-
-message CreateSegmentIn {
-  string node_id = 100;
-  string image_id = 200;
-  string contor = 300;
-  double tirads_23 = 400;
-  double tirads_4 = 500;
-  double tirads_5 = 600;
-}
-
-message CreateSegmentOut { string id = 100; }
-
-message GetNodeSegmentsIn { string node_id = 100; }
-
-message GetNodeSegmentsOut { repeated Segment segments = 100; }
-
-message DeleteSegmentIn { string id = 100; }
-
-message UpdateSegmentIn {
-  string id = 100;
-  optional double tirads_23 = 200;
-  optional double tirads_4 = 300;
-  optional double tirads_5 = 400;
-}
-
-message UpdateSegmentOut { Segment segment = 100; }
+message GetImagesByUziIdOut { repeated Image images = 100; }
 
 // NODE
 
 message Node {
   string id = 100;
   bool ai = 200;
+  string uzi_id = 300;
   double tirads_23 = 400;
   double tirads_4 = 500;
   double tirads_5 = 600;
 }
 
-message CreateNodeIn {
-  message NestedSegment {
-    string image_id = 300;
-    string contor = 400;
-    double tirads_23 = 500;
-    double tirads_4 = 600;
-    double tirads_5 = 700;
-  }
-// TODO: потом это прокинуть везде, пока только в создании
-  string uzi_id = 100;
-  repeated NestedSegment segments = 200;
-  double tirads_23 = 300;
-  double tirads_4 = 400;
-  double tirads_5 = 500;
-}
+message GetNodesByUziIdIn{ string uzi_id = 100; };
 
-message CreateNodeOut { string id = 100; }
-
-message GetAllNodesIn{ string uzi_id = 100; };
-
-message GetAllNodesOut{
+message GetNodesByUziIdOut{
   repeated Node nodes = 100;
 };
-
-message DeleteNodeIn { string id = 100; }
 
 message UpdateNodeIn {
   string id = 100;
@@ -216,9 +171,77 @@ message UpdateNodeIn {
 
 message UpdateNodeOut { Node node = 100; }
 
-message GetImageSegmentsWithNodesIn { string id = 100; }
+// SEGMENT
 
-message GetImageSegmentsWithNodesOut {
+message Segment {
+  string id = 100;
+  string image_id = 200;
+  string node_id = 300;
+  bytes contor = 400;
+  double tirads_23 = 500;
+  double tirads_4 = 600;
+  double tirads_5 = 700;
+}
+
+message CreateSegmentIn {
+  string image_id = 100;
+  string node_id = 200;
+  bytes contor = 300;
+  double tirads_23 = 400;
+  double tirads_4 = 500;
+  double tirads_5 = 600;
+}
+
+message CreateSegmentOut { string id = 100; }
+
+message GetSegmentsByNodeIdIn { string node_id = 100; }
+
+message GetSegmentsByNodeIdOut { repeated Segment segments = 100; }
+
+message UpdateSegmentIn {
+  string id = 100;
+  optional double tirads_23 = 200;
+  optional double tirads_4 = 300;
+  optional double tirads_5 = 400;
+}
+
+message UpdateSegmentOut { Segment segment = 100; }
+
+// IMAGE-SEGMENT-NODE
+
+message CreateNodeWithSegmentsIn {
+  message Node {
+    string uzi_id = 100;
+    bool ai = 200;
+    double tirads_23 = 300;
+    double tirads_4 = 400;
+    double tirads_5 = 500;
+  }
+  message Segment {
+    string image_id = 100;
+    bytes contor = 200;
+    double tirads_23 = 300;
+    double tirads_4 = 400;
+    double tirads_5 = 500;
+  }
+
+  Node node = 100;
+  repeated Segment segments = 200;
+}
+
+message CreateNodeWithSegmentsOut { 
+  string node_id = 100;
+  repeated string segment_ids = 200;
+}
+
+
+message GetNodesWithSegmentsByImageIdIn { string id = 100; }
+
+message GetNodesWithSegmentsByImageIdOut {
   repeated Node nodes = 100;
   repeated Segment segments = 200;
 }
+
+message DeleteNodeIn { string id = 100; }
+
+message DeleteSegmentIn { string id = 100; }
