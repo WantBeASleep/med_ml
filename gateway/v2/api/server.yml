@@ -494,13 +494,13 @@ paths:
         default:
           $ref: "#/components/responses/error"
 
-  /uzi/echographics/{uzi_id}:
+  /uzi/{id}/echographics:
     get:
       summary: получить эхографику uzi
       tags:
         - uzi
       parameters:
-        - name: uzi_id
+        - name: id
           in: path
           required: true
           description: id узи
@@ -524,7 +524,7 @@ paths:
       tags:
         - uzi
       parameters:
-        - name: uzi_id
+        - name: id
           in: path
           required: true
           description: id узи

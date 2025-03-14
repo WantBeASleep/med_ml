@@ -307,8 +307,8 @@ func (s *Echographics) SetConclusion(val OptString) {
 	s.Conclusion = val
 }
 
-func (*Echographics) uziEchographicsUziIDGetRes()   {}
-func (*Echographics) uziEchographicsUziIDPatchRes() {}
+func (*Echographics) uziIDEchographicsGetRes()   {}
+func (*Echographics) uziIDEchographicsPatchRes() {}
 
 // Ошибка.
 // Ref: #/components/schemas/error
@@ -365,8 +365,8 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 
 func (*ErrorStatusCode) uziDevicePostRes()              {}
 func (*ErrorStatusCode) uziDevicesGetRes()              {}
-func (*ErrorStatusCode) uziEchographicsUziIDGetRes()    {}
-func (*ErrorStatusCode) uziEchographicsUziIDPatchRes()  {}
+func (*ErrorStatusCode) uziIDEchographicsGetRes()       {}
+func (*ErrorStatusCode) uziIDEchographicsPatchRes()     {}
 func (*ErrorStatusCode) uziIDGetRes()                   {}
 func (*ErrorStatusCode) uziIDImagesGetRes()             {}
 func (*ErrorStatusCode) uziIDNodesGetRes()              {}

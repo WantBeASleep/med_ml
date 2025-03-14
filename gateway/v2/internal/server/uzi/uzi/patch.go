@@ -24,9 +24,9 @@ func (h *handler) UziIDPatch(ctx context.Context, req *api.UziIDPatchReq, params
 	return pointer.To(mappers.Uzi(uzi)), nil
 }
 
-func (h *handler) UziEchographicsUziIDPatch(ctx context.Context, req *api.Echographics, params api.UziEchographicsUziIDPatchParams) (api.UziEchographicsUziIDPatchRes, error) {
+func (h *handler) UziIDEchographicsPatch(ctx context.Context, req *api.Echographics, params api.UziIDEchographicsPatchParams) (api.UziIDEchographicsPatchRes, error) {
 	echographics, err := h.services.UziService.UpdateEchographics(ctx, domain.Echographic{
-		Id:              params.UziID,
+		Id:              params.ID,
 		Contors:         apimappers.FromOptString(req.Contors),
 		LeftLobeLength:  apimappers.FromOptFloat64(req.LeftLobeLength),
 		LeftLobeWidth:   apimappers.FromOptFloat64(req.LeftLobeWidth),

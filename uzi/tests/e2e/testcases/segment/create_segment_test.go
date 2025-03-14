@@ -22,7 +22,7 @@ func (suite *TestSuite) TestCreateSegment_Success() {
 	).Do(suite.T().Context())
 	require.NoError(suite.T(), err)
 
-	contor := []byte(`{"contour": [{"x": 1, "y": 1}]}`)
+	contor := []byte(`[{"x": 1, "y": 1}]`)
 	tirads23 := rand.Float64()
 	tirads4 := rand.Float64()
 	tirads5 := rand.Float64()

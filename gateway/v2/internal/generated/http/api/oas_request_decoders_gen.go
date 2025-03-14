@@ -90,7 +90,7 @@ func (s *Server) decodeUziDevicePostRequest(r *http.Request) (
 	}
 }
 
-func (s *Server) decodeUziEchographicsUziIDPatchRequest(r *http.Request) (
+func (s *Server) decodeUziIDEchographicsPatchRequest(r *http.Request) (
 	req *Echographics,
 	close func() error,
 	rerr error,

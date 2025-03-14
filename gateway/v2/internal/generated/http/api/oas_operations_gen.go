@@ -8,8 +8,8 @@ type OperationName = string
 const (
 	UziDevicePostOperation              OperationName = "UziDevicePost"
 	UziDevicesGetOperation              OperationName = "UziDevicesGet"
-	UziEchographicsUziIDGetOperation    OperationName = "UziEchographicsUziIDGet"
-	UziEchographicsUziIDPatchOperation  OperationName = "UziEchographicsUziIDPatch"
+	UziIDEchographicsGetOperation       OperationName = "UziIDEchographicsGet"
+	UziIDEchographicsPatchOperation     OperationName = "UziIDEchographicsPatch"
 	UziIDGetOperation                   OperationName = "UziIDGet"
 	UziIDImagesGetOperation             OperationName = "UziIDImagesGet"
 	UziIDNodesGetOperation              OperationName = "UziIDNodesGet"

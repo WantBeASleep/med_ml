@@ -33,18 +33,18 @@ type Invoker interface {
 	//
 	// GET /uzi/devices
 	UziDevicesGet(ctx context.Context) (UziDevicesGetRes, error)
-	// UziEchographicsUziIDGet invokes GET /uzi/echographics/{uzi_id} operation.
+	// UziIDEchographicsGet invokes GET /uzi/{id}/echographics operation.
 	//
 	// Получить эхографику uzi.
 	//
-	// GET /uzi/echographics/{uzi_id}
-	UziEchographicsUziIDGet(ctx context.Context, params UziEchographicsUziIDGetParams) (UziEchographicsUziIDGetRes, error)
-	// UziEchographicsUziIDPatch invokes PATCH /uzi/echographics/{uzi_id} operation.
+	// GET /uzi/{id}/echographics
+	UziIDEchographicsGet(ctx context.Context, params UziIDEchographicsGetParams) (UziIDEchographicsGetRes, error)
+	// UziIDEchographicsPatch invokes PATCH /uzi/{id}/echographics operation.
 	//
 	// Обновить эхографику.
 	//
-	// PATCH /uzi/echographics/{uzi_id}
-	UziEchographicsUziIDPatch(ctx context.Context, request *Echographics, params UziEchographicsUziIDPatchParams) (UziEchographicsUziIDPatchRes, error)
+	// PATCH /uzi/{id}/echographics
+	UziIDEchographicsPatch(ctx context.Context, request *Echographics, params UziIDEchographicsPatchParams) (UziIDEchographicsPatchRes, error)
 	// UziIDGet invokes GET /uzi/{id} operation.
 	//
 	// Получить узи.
@@ -262,30 +262,30 @@ func (c *Client) sendUziDevicesGet(ctx context.Context) (res UziDevicesGetRes, e
 	return result, nil
 }
 
-// UziEchographicsUziIDGet invokes GET /uzi/echographics/{uzi_id} operation.
+// UziIDEchographicsGet invokes GET /uzi/{id}/echographics operation.
 //
 // Получить эхографику uzi.
 //
-// GET /uzi/echographics/{uzi_id}
-func (c *Client) UziEchographicsUziIDGet(ctx context.Context, params UziEchographicsUziIDGetParams) (UziEchographicsUziIDGetRes, error) {
-	res, err := c.sendUziEchographicsUziIDGet(ctx, params)
+// GET /uzi/{id}/echographics
+func (c *Client) UziIDEchographicsGet(ctx context.Context, params UziIDEchographicsGetParams) (UziIDEchographicsGetRes, error) {
+	res, err := c.sendUziIDEchographicsGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendUziEchographicsUziIDGet(ctx context.Context, params UziEchographicsUziIDGetParams) (res UziEchographicsUziIDGetRes, err error) {
+func (c *Client) sendUziIDEchographicsGet(ctx context.Context, params UziIDEchographicsGetParams) (res UziIDEchographicsGetRes, err error) {
 
 	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [2]string
-	pathParts[0] = "/uzi/echographics/"
+	var pathParts [3]string
+	pathParts[0] = "/uzi/"
 	{
-		// Encode "uzi_id" parameter.
+		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "uzi_id",
+			Param:   "id",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.UUIDToString(params.UziID))
+			return e.EncodeValue(conv.UUIDToString(params.ID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -295,6 +295,7 @@ func (c *Client) sendUziEchographicsUziIDGet(ctx context.Context, params UziEcho
 		}
 		pathParts[1] = encoded
 	}
+	pathParts[2] = "/echographics"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	r, err := ht.NewRequest(ctx, "GET", u)
@@ -308,7 +309,7 @@ func (c *Client) sendUziEchographicsUziIDGet(ctx context.Context, params UziEcho
 	}
 	defer resp.Body.Close()
 
-	result, err := decodeUziEchographicsUziIDGetResponse(resp)
+	result, err := decodeUziIDEchographicsGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -316,17 +317,17 @@ func (c *Client) sendUziEchographicsUziIDGet(ctx context.Context, params UziEcho
 	return result, nil
 }
 
-// UziEchographicsUziIDPatch invokes PATCH /uzi/echographics/{uzi_id} operation.
+// UziIDEchographicsPatch invokes PATCH /uzi/{id}/echographics operation.
 //
 // Обновить эхографику.
 //
-// PATCH /uzi/echographics/{uzi_id}
-func (c *Client) UziEchographicsUziIDPatch(ctx context.Context, request *Echographics, params UziEchographicsUziIDPatchParams) (UziEchographicsUziIDPatchRes, error) {
-	res, err := c.sendUziEchographicsUziIDPatch(ctx, request, params)
+// PATCH /uzi/{id}/echographics
+func (c *Client) UziIDEchographicsPatch(ctx context.Context, request *Echographics, params UziIDEchographicsPatchParams) (UziIDEchographicsPatchRes, error) {
+	res, err := c.sendUziIDEchographicsPatch(ctx, request, params)
 	return res, err
 }
 
-func (c *Client) sendUziEchographicsUziIDPatch(ctx context.Context, request *Echographics, params UziEchographicsUziIDPatchParams) (res UziEchographicsUziIDPatchRes, err error) {
+func (c *Client) sendUziIDEchographicsPatch(ctx context.Context, request *Echographics, params UziIDEchographicsPatchParams) (res UziIDEchographicsPatchRes, err error) {
 	// Validate request before sending.
 	if err := func() error {
 		if err := request.Validate(); err != nil {
@@ -338,17 +339,17 @@ func (c *Client) sendUziEchographicsUziIDPatch(ctx context.Context, request *Ech
 	}
 
 	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [2]string
-	pathParts[0] = "/uzi/echographics/"
+	var pathParts [3]string
+	pathParts[0] = "/uzi/"
 	{
-		// Encode "uzi_id" parameter.
+		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "uzi_id",
+			Param:   "id",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.UUIDToString(params.UziID))
+			return e.EncodeValue(conv.UUIDToString(params.ID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -358,13 +359,14 @@ func (c *Client) sendUziEchographicsUziIDPatch(ctx context.Context, request *Ech
 		}
 		pathParts[1] = encoded
 	}
+	pathParts[2] = "/echographics"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeUziEchographicsUziIDPatchRequest(request, r); err != nil {
+	if err := encodeUziIDEchographicsPatchRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -374,7 +376,7 @@ func (c *Client) sendUziEchographicsUziIDPatch(ctx context.Context, request *Ech
 	}
 	defer resp.Body.Close()
 
-	result, err := decodeUziEchographicsUziIDPatchResponse(resp)
+	result, err := decodeUziIDEchographicsPatchResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

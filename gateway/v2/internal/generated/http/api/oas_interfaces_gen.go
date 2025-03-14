@@ -9,12 +9,12 @@ type UziDevicesGetRes interface {
 	uziDevicesGetRes()
 }
 
-type UziEchographicsUziIDGetRes interface {
-	uziEchographicsUziIDGetRes()
+type UziIDEchographicsGetRes interface {
+	uziIDEchographicsGetRes()
 }
 
-type UziEchographicsUziIDPatchRes interface {
-	uziEchographicsUziIDPatchRes()
+type UziIDEchographicsPatchRes interface {
+	uziIDEchographicsPatchRes()
 }
 
 type UziIDGetRes interface {

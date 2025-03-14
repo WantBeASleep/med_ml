@@ -32,14 +32,14 @@ func (suite *TestSuite) TestCreateNodeWithSegment_Success() {
 	segments := []*pb.CreateNodeWithSegmentsIn_Segment{
 		{
 			ImageId:   data.Images[0].Id.String(),
-			Contor:    []byte(`{"contor": [{"x": 1, "y": 1}]}`),
+			Contor:    []byte(`[{"x": 1, "y": 1}]`),
 			Tirads_23: rand.Float64(),
 			Tirads_4:  rand.Float64(),
 			Tirads_5:  rand.Float64(),
 		},
 		{
 			ImageId:   data.Images[1].Id.String(),
-			Contor:    []byte(`{"contor": [{"x": 1, "y": 1}]}`),
+			Contor:    []byte(`[{"x": 1, "y": 1}]`),
 			Tirads_23: rand.Float64(),
 			Tirads_4:  rand.Float64(),
 			Tirads_5:  rand.Float64(),

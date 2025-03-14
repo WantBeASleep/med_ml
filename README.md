@@ -2,6 +2,7 @@
 
 // TODO: поменять TEXT поле postgres на JSONB для контуров
 // TODO: добавить визуализатор protodot
+// TODO: поправить в схеме echographics на update и ответ, что бы go не зажевывала поля
 
 __РУЧКИ В SWAGGER БЕЗ ПРИПИСКИ API__
 

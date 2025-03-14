@@ -265,7 +265,7 @@ func decodeUziDevicesGetResponse(resp *http.Response) (res UziDevicesGetRes, _ e
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeUziEchographicsUziIDGetResponse(resp *http.Response) (res UziEchographicsUziIDGetRes, _ error) {
+func decodeUziIDEchographicsGetResponse(resp *http.Response) (res UziIDEchographicsGetRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -395,7 +395,7 @@ func decodeUziEchographicsUziIDGetResponse(resp *http.Response) (res UziEchograp
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeUziEchographicsUziIDPatchResponse(resp *http.Response) (res UziEchographicsUziIDPatchRes, _ error) {
+func decodeUziIDEchographicsPatchResponse(resp *http.Response) (res UziIDEchographicsPatchRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.

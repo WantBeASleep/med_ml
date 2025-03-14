@@ -31,21 +31,21 @@ func (UnimplementedHandler) UziDevicesGet(ctx context.Context) (r UziDevicesGetR
 	return r, ht.ErrNotImplemented
 }
 
-// UziEchographicsUziIDGet implements GET /uzi/echographics/{uzi_id} operation.
+// UziIDEchographicsGet implements GET /uzi/{id}/echographics operation.
 //
 // Получить эхографику uzi.
 //
-// GET /uzi/echographics/{uzi_id}
-func (UnimplementedHandler) UziEchographicsUziIDGet(ctx context.Context, params UziEchographicsUziIDGetParams) (r UziEchographicsUziIDGetRes, _ error) {
+// GET /uzi/{id}/echographics
+func (UnimplementedHandler) UziIDEchographicsGet(ctx context.Context, params UziIDEchographicsGetParams) (r UziIDEchographicsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// UziEchographicsUziIDPatch implements PATCH /uzi/echographics/{uzi_id} operation.
+// UziIDEchographicsPatch implements PATCH /uzi/{id}/echographics operation.
 //
 // Обновить эхографику.
 //
-// PATCH /uzi/echographics/{uzi_id}
-func (UnimplementedHandler) UziEchographicsUziIDPatch(ctx context.Context, req *Echographics, params UziEchographicsUziIDPatchParams) (r UziEchographicsUziIDPatchRes, _ error) {
+// PATCH /uzi/{id}/echographics
+func (UnimplementedHandler) UziIDEchographicsPatch(ctx context.Context, req *Echographics, params UziIDEchographicsPatchParams) (r UziIDEchographicsPatchRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

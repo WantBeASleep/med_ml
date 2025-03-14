@@ -123,38 +123,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
-				case 'e': // Prefix: "echographics/"
-					origElem := elem
-					if l := len("echographics/"); len(elem) >= l && elem[0:l] == "echographics/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "uzi_id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "GET":
-							s.handleUziEchographicsUziIDGetRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						case "PATCH":
-							s.handleUziEchographicsUziIDPatchRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET,PATCH")
-						}
-
-						return
-					}
-
-					elem = origElem
 				case 'i': // Prefix: "image/"
 					origElem := elem
 					if l := len("image/"); len(elem) >= l && elem[0:l] == "image/" {
@@ -391,6 +359,33 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
+					case 'e': // Prefix: "echographics"
+						origElem := elem
+						if l := len("echographics"); len(elem) >= l && elem[0:l] == "echographics" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleUziIDEchographicsGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "PATCH":
+								s.handleUziIDEchographicsPatchRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,PATCH")
+							}
+
+							return
+						}
+
+						elem = origElem
 					case 'i': // Prefix: "images"
 						origElem := elem
 						if l := len("images"); len(elem) >= l && elem[0:l] == "images" {
@@ -637,44 +632,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
-					}
-
-					elem = origElem
-				case 'e': // Prefix: "echographics/"
-					origElem := elem
-					if l := len("echographics/"); len(elem) >= l && elem[0:l] == "echographics/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "uzi_id"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "GET":
-							r.name = UziEchographicsUziIDGetOperation
-							r.summary = "получить эхографику uzi"
-							r.operationID = ""
-							r.pathPattern = "/uzi/echographics/{uzi_id}"
-							r.args = args
-							r.count = 1
-							return r, true
-						case "PATCH":
-							r.name = UziEchographicsUziIDPatchOperation
-							r.summary = "обновить эхографику"
-							r.operationID = ""
-							r.pathPattern = "/uzi/echographics/{uzi_id}"
-							r.args = args
-							r.count = 1
-							return r, true
-						default:
-							return
-						}
 					}
 
 					elem = origElem
@@ -944,6 +901,39 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
+					case 'e': // Prefix: "echographics"
+						origElem := elem
+						if l := len("echographics"); len(elem) >= l && elem[0:l] == "echographics" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = UziIDEchographicsGetOperation
+								r.summary = "получить эхографику uzi"
+								r.operationID = ""
+								r.pathPattern = "/uzi/{id}/echographics"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "PATCH":
+								r.name = UziIDEchographicsPatchOperation
+								r.summary = "обновить эхографику"
+								r.operationID = ""
+								r.pathPattern = "/uzi/{id}/echographics"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					case 'i': // Prefix: "images"
 						origElem := elem
 						if l := len("images"); len(elem) >= l && elem[0:l] == "images" {

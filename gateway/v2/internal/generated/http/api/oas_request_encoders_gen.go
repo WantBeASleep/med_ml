@@ -30,7 +30,7 @@ func encodeUziDevicePostRequest(
 	return nil
 }
 
-func encodeUziEchographicsUziIDPatchRequest(
+func encodeUziIDEchographicsPatchRequest(
 	req *Echographics,
 	r *http.Request,
 ) error {

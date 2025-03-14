@@ -190,12 +190,12 @@ func (s *Server) handleUziDevicesGetRequest(args [0]string, argsEscaped bool, w 
 	}
 }
 
-// handleUziEchographicsUziIDGetRequest handles GET /uzi/echographics/{uzi_id} operation.
+// handleUziIDEchographicsGetRequest handles GET /uzi/{id}/echographics operation.
 //
 // Получить эхографику uzi.
 //
-// GET /uzi/echographics/{uzi_id}
-func (s *Server) handleUziEchographicsUziIDGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /uzi/{id}/echographics
+func (s *Server) handleUziIDEchographicsGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -203,11 +203,11 @@ func (s *Server) handleUziEchographicsUziIDGetRequest(args [1]string, argsEscape
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: UziEchographicsUziIDGetOperation,
+			Name: UziIDEchographicsGetOperation,
 			ID:   "",
 		}
 	)
-	params, err := decodeUziEchographicsUziIDGetParams(args, argsEscaped, r)
+	params, err := decodeUziIDEchographicsGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -218,27 +218,27 @@ func (s *Server) handleUziEchographicsUziIDGetRequest(args [1]string, argsEscape
 		return
 	}
 
-	var response UziEchographicsUziIDGetRes
+	var response UziIDEchographicsGetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    UziEchographicsUziIDGetOperation,
+			OperationName:    UziIDEchographicsGetOperation,
 			OperationSummary: "получить эхографику uzi",
 			OperationID:      "",
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
-					Name: "uzi_id",
+					Name: "id",
 					In:   "path",
-				}: params.UziID,
+				}: params.ID,
 			},
 			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = UziEchographicsUziIDGetParams
-			Response = UziEchographicsUziIDGetRes
+			Params   = UziIDEchographicsGetParams
+			Response = UziIDEchographicsGetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -247,14 +247,14 @@ func (s *Server) handleUziEchographicsUziIDGetRequest(args [1]string, argsEscape
 		](
 			m,
 			mreq,
-			unpackUziEchographicsUziIDGetParams,
+			unpackUziIDEchographicsGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.UziEchographicsUziIDGet(ctx, params)
+				response, err = s.h.UziIDEchographicsGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.UziEchographicsUziIDGet(ctx, params)
+		response, err = s.h.UziIDEchographicsGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -273,7 +273,7 @@ func (s *Server) handleUziEchographicsUziIDGetRequest(args [1]string, argsEscape
 		return
 	}
 
-	if err := encodeUziEchographicsUziIDGetResponse(response, w); err != nil {
+	if err := encodeUziIDEchographicsGetResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -282,12 +282,12 @@ func (s *Server) handleUziEchographicsUziIDGetRequest(args [1]string, argsEscape
 	}
 }
 
-// handleUziEchographicsUziIDPatchRequest handles PATCH /uzi/echographics/{uzi_id} operation.
+// handleUziIDEchographicsPatchRequest handles PATCH /uzi/{id}/echographics operation.
 //
 // Обновить эхографику.
 //
-// PATCH /uzi/echographics/{uzi_id}
-func (s *Server) handleUziEchographicsUziIDPatchRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// PATCH /uzi/{id}/echographics
+func (s *Server) handleUziIDEchographicsPatchRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -295,11 +295,11 @@ func (s *Server) handleUziEchographicsUziIDPatchRequest(args [1]string, argsEsca
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: UziEchographicsUziIDPatchOperation,
+			Name: UziIDEchographicsPatchOperation,
 			ID:   "",
 		}
 	)
-	params, err := decodeUziEchographicsUziIDPatchParams(args, argsEscaped, r)
+	params, err := decodeUziIDEchographicsPatchParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -309,7 +309,7 @@ func (s *Server) handleUziEchographicsUziIDPatchRequest(args [1]string, argsEsca
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	request, close, err := s.decodeUziEchographicsUziIDPatchRequest(r)
+	request, close, err := s.decodeUziIDEchographicsPatchRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -325,27 +325,27 @@ func (s *Server) handleUziEchographicsUziIDPatchRequest(args [1]string, argsEsca
 		}
 	}()
 
-	var response UziEchographicsUziIDPatchRes
+	var response UziIDEchographicsPatchRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    UziEchographicsUziIDPatchOperation,
+			OperationName:    UziIDEchographicsPatchOperation,
 			OperationSummary: "обновить эхографику",
 			OperationID:      "",
 			Body:             request,
 			Params: middleware.Parameters{
 				{
-					Name: "uzi_id",
+					Name: "id",
 					In:   "path",
-				}: params.UziID,
+				}: params.ID,
 			},
 			Raw: r,
 		}
 
 		type (
 			Request  = *Echographics
-			Params   = UziEchographicsUziIDPatchParams
-			Response = UziEchographicsUziIDPatchRes
+			Params   = UziIDEchographicsPatchParams
+			Response = UziIDEchographicsPatchRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -354,14 +354,14 @@ func (s *Server) handleUziEchographicsUziIDPatchRequest(args [1]string, argsEsca
 		](
 			m,
 			mreq,
-			unpackUziEchographicsUziIDPatchParams,
+			unpackUziIDEchographicsPatchParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.UziEchographicsUziIDPatch(ctx, request, params)
+				response, err = s.h.UziIDEchographicsPatch(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.UziEchographicsUziIDPatch(ctx, request, params)
+		response, err = s.h.UziIDEchographicsPatch(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -380,7 +380,7 @@ func (s *Server) handleUziEchographicsUziIDPatchRequest(args [1]string, argsEsca
 		return
 	}
 
-	if err := encodeUziEchographicsUziIDPatchResponse(response, w); err != nil {
+	if err := encodeUziIDEchographicsPatchResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

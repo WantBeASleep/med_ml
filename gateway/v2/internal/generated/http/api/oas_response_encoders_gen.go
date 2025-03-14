@@ -97,7 +97,7 @@ func encodeUziDevicesGetResponse(response UziDevicesGetRes, w http.ResponseWrite
 	}
 }
 
-func encodeUziEchographicsUziIDGetResponse(response UziEchographicsUziIDGetRes, w http.ResponseWriter) error {
+func encodeUziIDEchographicsGetResponse(response UziIDEchographicsGetRes, w http.ResponseWriter) error {
 	switch response := response.(type) {
 	case *Echographics:
 		if err := func() error {
@@ -144,7 +144,7 @@ func encodeUziEchographicsUziIDGetResponse(response UziEchographicsUziIDGetRes, 
 	}
 }
 
-func encodeUziEchographicsUziIDPatchResponse(response UziEchographicsUziIDPatchRes, w http.ResponseWriter) error {
+func encodeUziIDEchographicsPatchResponse(response UziIDEchographicsPatchRes, w http.ResponseWriter) error {
 	switch response := response.(type) {
 	case *Echographics:
 		if err := func() error {

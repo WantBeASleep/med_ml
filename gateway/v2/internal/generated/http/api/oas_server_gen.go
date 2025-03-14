@@ -20,18 +20,18 @@ type Handler interface {
 	//
 	// GET /uzi/devices
 	UziDevicesGet(ctx context.Context) (UziDevicesGetRes, error)
-	// UziEchographicsUziIDGet implements GET /uzi/echographics/{uzi_id} operation.
+	// UziIDEchographicsGet implements GET /uzi/{id}/echographics operation.
 	//
 	// Получить эхографику uzi.
 	//
-	// GET /uzi/echographics/{uzi_id}
-	UziEchographicsUziIDGet(ctx context.Context, params UziEchographicsUziIDGetParams) (UziEchographicsUziIDGetRes, error)
-	// UziEchographicsUziIDPatch implements PATCH /uzi/echographics/{uzi_id} operation.
+	// GET /uzi/{id}/echographics
+	UziIDEchographicsGet(ctx context.Context, params UziIDEchographicsGetParams) (UziIDEchographicsGetRes, error)
+	// UziIDEchographicsPatch implements PATCH /uzi/{id}/echographics operation.
 	//
 	// Обновить эхографику.
 	//
-	// PATCH /uzi/echographics/{uzi_id}
-	UziEchographicsUziIDPatch(ctx context.Context, req *Echographics, params UziEchographicsUziIDPatchParams) (UziEchographicsUziIDPatchRes, error)
+	// PATCH /uzi/{id}/echographics
+	UziIDEchographicsPatch(ctx context.Context, req *Echographics, params UziIDEchographicsPatchParams) (UziIDEchographicsPatchRes, error)
 	// UziIDGet implements GET /uzi/{id} operation.
 	//
 	// Получить узи.

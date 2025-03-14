@@ -27,8 +27,8 @@ func (h *handler) UzisExternalIDGet(ctx context.Context, params api.UzisExternal
 	return pointer.To(api.UzisExternalIDGetOKApplicationJSON(mappers.SliceUzi(uzis))), nil
 }
 
-func (h *handler) UziEchographicsUziIDGet(ctx context.Context, params api.UziEchographicsUziIDGetParams) (api.UziEchographicsUziIDGetRes, error) {
-	echographics, err := h.services.UziService.GetEchographicsByID(ctx, params.UziID)
+func (h *handler) UziIDEchographicsGet(ctx context.Context, params api.UziIDEchographicsGetParams) (api.UziIDEchographicsGetRes, error) {
+	echographics, err := h.services.UziService.GetEchographicsByID(ctx, params.ID)
 	if err != nil {
 		return nil, err
 	}

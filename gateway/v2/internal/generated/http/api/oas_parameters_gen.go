@@ -16,25 +16,25 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// UziEchographicsUziIDGetParams is parameters of GET /uzi/echographics/{uzi_id} operation.
-type UziEchographicsUziIDGetParams struct {
+// UziIDEchographicsGetParams is parameters of GET /uzi/{id}/echographics operation.
+type UziIDEchographicsGetParams struct {
 	// Id узи.
-	UziID uuid.UUID
+	ID uuid.UUID
 }
 
-func unpackUziEchographicsUziIDGetParams(packed middleware.Parameters) (params UziEchographicsUziIDGetParams) {
+func unpackUziIDEchographicsGetParams(packed middleware.Parameters) (params UziIDEchographicsGetParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "uzi_id",
+			Name: "id",
 			In:   "path",
 		}
-		params.UziID = packed[key].(uuid.UUID)
+		params.ID = packed[key].(uuid.UUID)
 	}
 	return params
 }
 
-func decodeUziEchographicsUziIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UziEchographicsUziIDGetParams, _ error) {
-	// Decode path: uzi_id.
+func decodeUziIDEchographicsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UziIDEchographicsGetParams, _ error) {
+	// Decode path: id.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -46,7 +46,7 @@ func decodeUziEchographicsUziIDGetParams(args [1]string, argsEscaped bool, r *ht
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "uzi_id",
+				Param:   "id",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -63,7 +63,7 @@ func decodeUziEchographicsUziIDGetParams(args [1]string, argsEscaped bool, r *ht
 					return err
 				}
 
-				params.UziID = c
+				params.ID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -74,7 +74,7 @@ func decodeUziEchographicsUziIDGetParams(args [1]string, argsEscaped bool, r *ht
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "uzi_id",
+			Name: "id",
 			In:   "path",
 			Err:  err,
 		}
@@ -82,25 +82,25 @@ func decodeUziEchographicsUziIDGetParams(args [1]string, argsEscaped bool, r *ht
 	return params, nil
 }
 
-// UziEchographicsUziIDPatchParams is parameters of PATCH /uzi/echographics/{uzi_id} operation.
-type UziEchographicsUziIDPatchParams struct {
+// UziIDEchographicsPatchParams is parameters of PATCH /uzi/{id}/echographics operation.
+type UziIDEchographicsPatchParams struct {
 	// Id узи.
-	UziID uuid.UUID
+	ID uuid.UUID
 }
 
-func unpackUziEchographicsUziIDPatchParams(packed middleware.Parameters) (params UziEchographicsUziIDPatchParams) {
+func unpackUziIDEchographicsPatchParams(packed middleware.Parameters) (params UziIDEchographicsPatchParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "uzi_id",
+			Name: "id",
 			In:   "path",
 		}
-		params.UziID = packed[key].(uuid.UUID)
+		params.ID = packed[key].(uuid.UUID)
 	}
 	return params
 }
 
-func decodeUziEchographicsUziIDPatchParams(args [1]string, argsEscaped bool, r *http.Request) (params UziEchographicsUziIDPatchParams, _ error) {
-	// Decode path: uzi_id.
+func decodeUziIDEchographicsPatchParams(args [1]string, argsEscaped bool, r *http.Request) (params UziIDEchographicsPatchParams, _ error) {
+	// Decode path: id.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -112,7 +112,7 @@ func decodeUziEchographicsUziIDPatchParams(args [1]string, argsEscaped bool, r *
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "uzi_id",
+				Param:   "id",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -129,7 +129,7 @@ func decodeUziEchographicsUziIDPatchParams(args [1]string, argsEscaped bool, r *
 					return err
 				}
 
-				params.UziID = c
+				params.ID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -140,7 +140,7 @@ func decodeUziEchographicsUziIDPatchParams(args [1]string, argsEscaped bool, r *
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "uzi_id",
+			Name: "id",
 			In:   "path",
 			Err:  err,
 		}

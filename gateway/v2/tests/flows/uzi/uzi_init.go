@@ -33,9 +33,9 @@ var UziInit flowfuncDepsInjector = func(deps *Deps) flowfunc {
 
 		projection := gofakeit.Word()
 		externalId := uuid.New()
-		
+
 		resp, err := deps.Adapter.UziPost(ctx, &api.UziPostReq{
-			File: file,
+			File:       file,
 			Projection: projection,
 			ExternalID: externalId,
 			DeviceID:   data.Got.DeviceID,
