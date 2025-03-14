@@ -13,7 +13,7 @@ import (
 func (a *adapter) CreateNodeWithSegments(ctx context.Context, in CreateNodeWithSegmentsIn) (uuid.UUID, []uuid.UUID, error) {
 	req := &pb.CreateNodeWithSegmentsIn{
 		Node: &pb.CreateNodeWithSegmentsIn_Node{
-			UziId:     in.Node.UziID,
+			UziId:     in.Node.UziID.String(),
 			Ai:        in.Node.Ai,
 			Tirads_23: in.Node.Tirads_23,
 			Tirads_4:  in.Node.Tirads_4,
@@ -23,7 +23,7 @@ func (a *adapter) CreateNodeWithSegments(ctx context.Context, in CreateNodeWithS
 
 	for _, segment := range in.Segments {
 		req.Segments = append(req.Segments, &pb.CreateNodeWithSegmentsIn_Segment{
-			ImageId:   segment.ImageID,
+			ImageId:   segment.ImageID.String(),
 			Contor:    segment.Contor,
 			Tirads_23: segment.Tirads_23,
 			Tirads_4:  segment.Tirads_4,

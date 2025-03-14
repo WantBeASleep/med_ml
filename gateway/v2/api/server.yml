@@ -224,6 +224,9 @@ components:
       description: контур сегмента в формате json
       items:
         type: object
+        required:
+          - x
+          - y
         properties:
           x:
             type: integer
@@ -321,6 +324,8 @@ components:
     simpleUuid:
       type: object
       description: uuid
+      required:
+        - id
       properties:
         id:
           type: string
@@ -342,11 +347,6 @@ components:
         - message
 
 # TODO: описать для auth
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-
   responses:
     error:
       description: Ошибка
@@ -363,8 +363,6 @@ paths:
       summary: загрузить узи на обработку
       tags:
         - uzi
-      security:
-        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -406,8 +404,6 @@ paths:
   /uzi/{id}:
     get:
       summary: получить узи
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -432,8 +428,6 @@ paths:
     
     patch:
       summary: обновить узи
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -476,8 +470,6 @@ paths:
   /uzis/{external_id}:
     get:
       summary: получить узи по внешнему id
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -505,8 +497,6 @@ paths:
   /uzi/echographics/{uzi_id}:
     get:
       summary: получить эхографику uzi
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -531,8 +521,6 @@ paths:
     
     patch:
       summary: обновить эхографику
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -564,8 +552,6 @@ paths:
   /uzi/device:
     post:
       summary: добавить uzi аппарат
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       requestBody:
@@ -606,8 +592,6 @@ paths:
   /uzi/devices:              
     get:
       summary: получит список uzi апппапапратов
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       responses:
@@ -627,8 +611,6 @@ paths:
   /uzi/{id}/images:
     get:
       summary: получает списк изображений uzi
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -656,8 +638,6 @@ paths:
   /uzi/image/{id}/nodes-segments:
     get:
       summary: получит узлы и сегменты на указанном изображении
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -689,12 +669,9 @@ paths:
         default:
           $ref: "#/components/responses/error"
 
-
   /uzi/nodes-segments:
     post:
       summary: добавить узел с сегментами
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       requestBody:
@@ -703,9 +680,18 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - node
+                - segments
               properties:
                 node:
                   type: object
+                  required:
+                    - uzi_id
+                    - ai
+                    - tirads_23
+                    - tirads_4
+                    - tirads_5
                   properties:
                     uzi_id:
                       type: string
@@ -728,6 +714,12 @@ paths:
                   type: array
                   items:
                     type: object
+                    required:
+                      - image_id
+                      - contor
+                      - tirads_23
+                      - tirads_4
+                      - tirads_5
                     properties:
                       image_id:
                         type: string
@@ -753,6 +745,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - node_id
+                  - segment_ids
                 properties:
                   node_id:
                     type: string
@@ -770,8 +765,6 @@ paths:
   /uzi/{id}/nodes:
     get:
       summary: получить все узлы узи
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -781,6 +774,7 @@ paths:
           description: uzi_id
           schema:
             type: string
+            format: uuid
       responses:
         '200':
           description: id узла
@@ -798,8 +792,6 @@ paths:
   /uzi/nodes/{id}:
     patch:
       summary: обновить узел
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -849,8 +841,6 @@ paths:
     delete:
       summary: удалить узел
       description: сегменты узла будут также удалены
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -868,11 +858,36 @@ paths:
         default:
           $ref: "#/components/responses/error"
 
+  /uzi/nodes/{id}/segments:
+    get:
+      summary: получить сегменты узла
+      tags:
+        - uzi
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id узла
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: сегменты узла
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/segment'
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
   /uzi/segment:
     post:
       summary: добавить новый сегмент
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       requestBody:
@@ -924,8 +939,6 @@ paths:
   /uzi/segment/{id}:
     patch:
       summary: обновить сегмент
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:
@@ -975,8 +988,6 @@ paths:
     delete:
       summary: удалить сегмент
       description: если у узла не останется сегментов, он будет **удален**
-      security:
-        - BearerAuth: []
       tags:
         - uzi
       parameters:

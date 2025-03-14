@@ -17,6 +17,7 @@ const (
 	UziImageIDNodesSegmentsGetOperation OperationName = "UziImageIDNodesSegmentsGet"
 	UziNodesIDDeleteOperation           OperationName = "UziNodesIDDelete"
 	UziNodesIDPatchOperation            OperationName = "UziNodesIDPatch"
+	UziNodesIDSegmentsGetOperation      OperationName = "UziNodesIDSegmentsGet"
 	UziNodesSegmentsPostOperation       OperationName = "UziNodesSegmentsPost"
 	UziPostOperation                    OperationName = "UziPost"
 	UziSegmentIDDeleteOperation         OperationName = "UziSegmentIDDelete"

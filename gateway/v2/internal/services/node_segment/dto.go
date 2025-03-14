@@ -1,8 +1,10 @@
 package node_segment
 
+import "github.com/google/uuid"
+
 type CreateNodeWithSegmentArg struct {
 	Node struct {
-		UziID     string
+		UziID     uuid.UUID
 		Ai        bool
 		Tirads_23 float64
 		Tirads_4  float64
@@ -10,7 +12,7 @@ type CreateNodeWithSegmentArg struct {
 	}
 
 	Segments []struct {
-		ImageID   string
+		ImageID   uuid.UUID
 		Contor    []byte
 		Tirads_23 float64
 		Tirads_4  float64

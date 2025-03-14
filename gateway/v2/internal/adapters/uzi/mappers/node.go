@@ -9,12 +9,12 @@ import (
 
 func Node(pb *pb.Node) domain.Node {
 	return domain.Node{
-		Id:        uuid.MustParse(pb.Id),
-		Ai:        pb.Ai,
-		UziID:     uuid.MustParse(pb.UziId),
-		Tirads23:  pb.Tirads_23,
-		Tirads4:   pb.Tirads_4,
-		Tirads5:   pb.Tirads_5,
+		Id:       uuid.MustParse(pb.Id),
+		Ai:       pb.Ai,
+		UziID:    uuid.MustParse(pb.UziId),
+		Tirads23: pb.Tirads_23,
+		Tirads4:  pb.Tirads_4,
+		Tirads5:  pb.Tirads_5,
 	}
 }
 

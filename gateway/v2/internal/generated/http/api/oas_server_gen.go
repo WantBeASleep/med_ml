@@ -74,6 +74,12 @@ type Handler interface {
 	//
 	// PATCH /uzi/nodes/{id}
 	UziNodesIDPatch(ctx context.Context, req *UziNodesIDPatchReq, params UziNodesIDPatchParams) (UziNodesIDPatchRes, error)
+	// UziNodesIDSegmentsGet implements GET /uzi/nodes/{id}/segments operation.
+	//
+	// Получить сегменты узла.
+	//
+	// GET /uzi/nodes/{id}/segments
+	UziNodesIDSegmentsGet(ctx context.Context, params UziNodesIDSegmentsGetParams) (UziNodesIDSegmentsGetRes, error)
 	// UziNodesSegmentsPost implements POST /uzi/nodes-segments operation.
 	//
 	// Добавить узел с сегментами.
@@ -119,20 +125,18 @@ type Handler interface {
 // Server implements http server based on OpenAPI v3 specification and
 // calls Handler to handle requests.
 type Server struct {
-	h   Handler
-	sec SecurityHandler
+	h Handler
 	baseServer
 }
 
 // NewServer creates new Server.
-func NewServer(h Handler, sec SecurityHandler, opts ...ServerOption) (*Server, error) {
+func NewServer(h Handler, opts ...ServerOption) (*Server, error) {
 	s, err := newServerConfig(opts...).baseServer()
 	if err != nil {
 		return nil, err
 	}
 	return &Server{
 		h:          h,
-		sec:        sec,
 		baseServer: s,
 	}, nil
 }

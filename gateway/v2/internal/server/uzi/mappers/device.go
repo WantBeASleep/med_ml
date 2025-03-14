@@ -1,8 +1,8 @@
 package mappers
 
 import (
-	api "gateway/internal/generated/http/api"
 	domain "gateway/internal/domain/uzi"
+	api "gateway/internal/generated/http/api"
 )
 
 func Device(device domain.Device) api.Device {

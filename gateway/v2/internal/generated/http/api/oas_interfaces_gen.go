@@ -45,6 +45,10 @@ type UziNodesIDPatchRes interface {
 	uziNodesIDPatchRes()
 }
 
+type UziNodesIDSegmentsGetRes interface {
+	uziNodesIDSegmentsGetRes()
+}
+
 type UziNodesSegmentsPostRes interface {
 	uziNodesSegmentsPostRes()
 }

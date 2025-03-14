@@ -34,7 +34,7 @@ tasks:
 
   build:
     cmds:
-      - task: style
+      # - task: style
       - go build -v -o bin/service cmd/service/main.go
 
   run:

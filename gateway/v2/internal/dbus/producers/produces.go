@@ -6,9 +6,10 @@ package producers
 import (
 	"context"
 
-	uziuploadpb "gateway/internal/generated/dbus/produce/uziupload"
-
+	"github.com/IBM/sarama"
 	dbuslib "github.com/WantBeASleep/med_ml_lib/dbus"
+
+	uziuploadpb "gateway/internal/generated/dbus/produce/uziupload"
 )
 
 type Producer interface {
@@ -20,8 +21,13 @@ type producer struct {
 }
 
 func New(
-	producerUziUpload dbuslib.Producer[*uziuploadpb.UziUpload],
+	client sarama.SyncProducer,
 ) Producer {
+	producerUziUpload := dbuslib.NewProducer[*uziuploadpb.UziUpload](
+		client,
+		"uziupload",
+	)
+
 	return &producer{
 		producerUziUpload: producerUziUpload,
 	}

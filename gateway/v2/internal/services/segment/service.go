@@ -11,6 +11,7 @@ import (
 
 type Service interface {
 	Create(ctx context.Context, arg CreateSegmentArg) (uuid.UUID, error)
+	GetByNodeID(ctx context.Context, nodeID uuid.UUID) ([]domain.Segment, error)
 	Update(ctx context.Context, arg UpdateSegmentArg) (domain.Segment, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 }

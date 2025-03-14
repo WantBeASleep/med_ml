@@ -5,9 +5,9 @@ import (
 
 	"google.golang.org/protobuf/types/known/emptypb"
 
+	"gateway/internal/adapters/uzi/mappers"
 	domain "gateway/internal/domain/uzi"
 	pb "gateway/internal/generated/grpc/clients/uzi"
-	"gateway/internal/adapters/uzi/mappers"
 )
 
 func (a *adapter) CreateDevice(ctx context.Context, name string) (int, error) {

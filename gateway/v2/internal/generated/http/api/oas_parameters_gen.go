@@ -283,7 +283,7 @@ func decodeUziIDImagesGetParams(args [1]string, argsEscaped bool, r *http.Reques
 // UziIDNodesGetParams is parameters of GET /uzi/{id}/nodes operation.
 type UziIDNodesGetParams struct {
 	// Uzi_id.
-	ID string
+	ID uuid.UUID
 }
 
 func unpackUziIDNodesGetParams(packed middleware.Parameters) (params UziIDNodesGetParams) {
@@ -292,7 +292,7 @@ func unpackUziIDNodesGetParams(packed middleware.Parameters) (params UziIDNodesG
 			Name: "id",
 			In:   "path",
 		}
-		params.ID = packed[key].(string)
+		params.ID = packed[key].(uuid.UUID)
 	}
 	return params
 }
@@ -322,7 +322,7 @@ func decodeUziIDNodesGetParams(args [1]string, argsEscaped bool, r *http.Request
 					return err
 				}
 
-				c, err := conv.ToString(val)
+				c, err := conv.ToUUID(val)
 				if err != nil {
 					return err
 				}
@@ -561,6 +561,72 @@ func unpackUziNodesIDPatchParams(packed middleware.Parameters) (params UziNodesI
 }
 
 func decodeUziNodesIDPatchParams(args [1]string, argsEscaped bool, r *http.Request) (params UziNodesIDPatchParams, _ error) {
+	// Decode path: id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// UziNodesIDSegmentsGetParams is parameters of GET /uzi/nodes/{id}/segments operation.
+type UziNodesIDSegmentsGetParams struct {
+	// Id узла.
+	ID uuid.UUID
+}
+
+func unpackUziNodesIDSegmentsGetParams(packed middleware.Parameters) (params UziNodesIDSegmentsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeUziNodesIDSegmentsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UziNodesIDSegmentsGetParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
 		param := args[0]

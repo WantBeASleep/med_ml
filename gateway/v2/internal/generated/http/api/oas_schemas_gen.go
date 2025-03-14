@@ -16,46 +16,32 @@ func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
-type BearerAuth struct {
-	Token string
-}
-
-// GetToken returns the value of Token.
-func (s *BearerAuth) GetToken() string {
-	return s.Token
-}
-
-// SetToken sets the value of Token.
-func (s *BearerAuth) SetToken(val string) {
-	s.Token = val
-}
-
 type Contor []ContorItem
 
 type ContorItem struct {
 	// X координата точки.
-	X OptInt `json:"x"`
+	X int `json:"x"`
 	// Y координата точки.
-	Y OptInt `json:"y"`
+	Y int `json:"y"`
 }
 
 // GetX returns the value of X.
-func (s *ContorItem) GetX() OptInt {
+func (s *ContorItem) GetX() int {
 	return s.X
 }
 
 // GetY returns the value of Y.
-func (s *ContorItem) GetY() OptInt {
+func (s *ContorItem) GetY() int {
 	return s.Y
 }
 
 // SetX sets the value of X.
-func (s *ContorItem) SetX(val OptInt) {
+func (s *ContorItem) SetX(val int) {
 	s.X = val
 }
 
 // SetY sets the value of Y.
-func (s *ContorItem) SetY(val OptInt) {
+func (s *ContorItem) SetY(val int) {
 	s.Y = val
 }
 
@@ -388,6 +374,7 @@ func (*ErrorStatusCode) uziIDPatchRes()                 {}
 func (*ErrorStatusCode) uziImageIDNodesSegmentsGetRes() {}
 func (*ErrorStatusCode) uziNodesIDDeleteRes()           {}
 func (*ErrorStatusCode) uziNodesIDPatchRes()            {}
+func (*ErrorStatusCode) uziNodesIDSegmentsGetRes()      {}
 func (*ErrorStatusCode) uziNodesSegmentsPostRes()       {}
 func (*ErrorStatusCode) uziPostRes()                    {}
 func (*ErrorStatusCode) uziSegmentIDDeleteRes()         {}
@@ -607,52 +594,6 @@ func (o OptFloat64) Or(d float64) float64 {
 	return d
 }
 
-// NewOptInt returns new OptInt with value set to v.
-func NewOptInt(v int) OptInt {
-	return OptInt{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptInt is optional int.
-type OptInt struct {
-	Value int
-	Set   bool
-}
-
-// IsSet returns true if OptInt was set.
-func (o OptInt) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptInt) Reset() {
-	var v int
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptInt) SetTo(v int) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptInt) Get() (v int, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptInt) Or(d int) int {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -693,98 +634,6 @@ func (o OptString) Get() (v string, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptString) Or(d string) string {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptUUID returns new OptUUID with value set to v.
-func NewOptUUID(v uuid.UUID) OptUUID {
-	return OptUUID{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptUUID is optional uuid.UUID.
-type OptUUID struct {
-	Value uuid.UUID
-	Set   bool
-}
-
-// IsSet returns true if OptUUID was set.
-func (o OptUUID) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptUUID) Reset() {
-	var v uuid.UUID
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptUUID) SetTo(v uuid.UUID) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptUUID) Get() (v uuid.UUID, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptUUID) Or(d uuid.UUID) uuid.UUID {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptUziNodesSegmentsPostReqNode returns new OptUziNodesSegmentsPostReqNode with value set to v.
-func NewOptUziNodesSegmentsPostReqNode(v UziNodesSegmentsPostReqNode) OptUziNodesSegmentsPostReqNode {
-	return OptUziNodesSegmentsPostReqNode{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptUziNodesSegmentsPostReqNode is optional UziNodesSegmentsPostReqNode.
-type OptUziNodesSegmentsPostReqNode struct {
-	Value UziNodesSegmentsPostReqNode
-	Set   bool
-}
-
-// IsSet returns true if OptUziNodesSegmentsPostReqNode was set.
-func (o OptUziNodesSegmentsPostReqNode) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptUziNodesSegmentsPostReqNode) Reset() {
-	var v UziNodesSegmentsPostReqNode
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptUziNodesSegmentsPostReqNode) SetTo(v UziNodesSegmentsPostReqNode) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptUziNodesSegmentsPostReqNode) Get() (v UziNodesSegmentsPostReqNode, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptUziNodesSegmentsPostReqNode) Or(d UziNodesSegmentsPostReqNode) UziNodesSegmentsPostReqNode {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -885,16 +734,16 @@ func (*Segment) uziSegmentIDPatchRes() {}
 // Uuid.
 // Ref: #/components/schemas/simpleUuid
 type SimpleUuid struct {
-	ID OptUUID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 // GetID returns the value of ID.
-func (s *SimpleUuid) GetID() OptUUID {
+func (s *SimpleUuid) GetID() uuid.UUID {
 	return s.ID
 }
 
 // SetID sets the value of ID.
-func (s *SimpleUuid) SetID(val OptUUID) {
+func (s *SimpleUuid) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
@@ -1133,13 +982,17 @@ func (s *UziNodesIDPatchReq) SetTirads5(val OptFloat64) {
 	s.Tirads5 = val
 }
 
+type UziNodesIDSegmentsGetOKApplicationJSON []Segment
+
+func (*UziNodesIDSegmentsGetOKApplicationJSON) uziNodesIDSegmentsGetRes() {}
+
 type UziNodesSegmentsPostOK struct {
-	NodeID     OptUUID     `json:"node_id"`
+	NodeID     uuid.UUID   `json:"node_id"`
 	SegmentIds []uuid.UUID `json:"segment_ids"`
 }
 
 // GetNodeID returns the value of NodeID.
-func (s *UziNodesSegmentsPostOK) GetNodeID() OptUUID {
+func (s *UziNodesSegmentsPostOK) GetNodeID() uuid.UUID {
 	return s.NodeID
 }
 
@@ -1149,7 +1002,7 @@ func (s *UziNodesSegmentsPostOK) GetSegmentIds() []uuid.UUID {
 }
 
 // SetNodeID sets the value of NodeID.
-func (s *UziNodesSegmentsPostOK) SetNodeID(val OptUUID) {
+func (s *UziNodesSegmentsPostOK) SetNodeID(val uuid.UUID) {
 	s.NodeID = val
 }
 
@@ -1161,12 +1014,12 @@ func (s *UziNodesSegmentsPostOK) SetSegmentIds(val []uuid.UUID) {
 func (*UziNodesSegmentsPostOK) uziNodesSegmentsPostRes() {}
 
 type UziNodesSegmentsPostReq struct {
-	Node     OptUziNodesSegmentsPostReqNode        `json:"node"`
+	Node     UziNodesSegmentsPostReqNode           `json:"node"`
 	Segments []UziNodesSegmentsPostReqSegmentsItem `json:"segments"`
 }
 
 // GetNode returns the value of Node.
-func (s *UziNodesSegmentsPostReq) GetNode() OptUziNodesSegmentsPostReqNode {
+func (s *UziNodesSegmentsPostReq) GetNode() UziNodesSegmentsPostReqNode {
 	return s.Node
 }
 
@@ -1176,7 +1029,7 @@ func (s *UziNodesSegmentsPostReq) GetSegments() []UziNodesSegmentsPostReqSegment
 }
 
 // SetNode sets the value of Node.
-func (s *UziNodesSegmentsPostReq) SetNode(val OptUziNodesSegmentsPostReqNode) {
+func (s *UziNodesSegmentsPostReq) SetNode(val UziNodesSegmentsPostReqNode) {
 	s.Node = val
 }
 
@@ -1186,73 +1039,73 @@ func (s *UziNodesSegmentsPostReq) SetSegments(val []UziNodesSegmentsPostReqSegme
 }
 
 type UziNodesSegmentsPostReqNode struct {
-	UziID    OptUUID    `json:"uzi_id"`
-	Ai       OptBool    `json:"ai"`
-	Tirads23 OptFloat64 `json:"tirads_23"`
-	Tirads4  OptFloat64 `json:"tirads_4"`
-	Tirads5  OptFloat64 `json:"tirads_5"`
+	UziID    uuid.UUID `json:"uzi_id"`
+	Ai       bool      `json:"ai"`
+	Tirads23 float64   `json:"tirads_23"`
+	Tirads4  float64   `json:"tirads_4"`
+	Tirads5  float64   `json:"tirads_5"`
 }
 
 // GetUziID returns the value of UziID.
-func (s *UziNodesSegmentsPostReqNode) GetUziID() OptUUID {
+func (s *UziNodesSegmentsPostReqNode) GetUziID() uuid.UUID {
 	return s.UziID
 }
 
 // GetAi returns the value of Ai.
-func (s *UziNodesSegmentsPostReqNode) GetAi() OptBool {
+func (s *UziNodesSegmentsPostReqNode) GetAi() bool {
 	return s.Ai
 }
 
 // GetTirads23 returns the value of Tirads23.
-func (s *UziNodesSegmentsPostReqNode) GetTirads23() OptFloat64 {
+func (s *UziNodesSegmentsPostReqNode) GetTirads23() float64 {
 	return s.Tirads23
 }
 
 // GetTirads4 returns the value of Tirads4.
-func (s *UziNodesSegmentsPostReqNode) GetTirads4() OptFloat64 {
+func (s *UziNodesSegmentsPostReqNode) GetTirads4() float64 {
 	return s.Tirads4
 }
 
 // GetTirads5 returns the value of Tirads5.
-func (s *UziNodesSegmentsPostReqNode) GetTirads5() OptFloat64 {
+func (s *UziNodesSegmentsPostReqNode) GetTirads5() float64 {
 	return s.Tirads5
 }
 
 // SetUziID sets the value of UziID.
-func (s *UziNodesSegmentsPostReqNode) SetUziID(val OptUUID) {
+func (s *UziNodesSegmentsPostReqNode) SetUziID(val uuid.UUID) {
 	s.UziID = val
 }
 
 // SetAi sets the value of Ai.
-func (s *UziNodesSegmentsPostReqNode) SetAi(val OptBool) {
+func (s *UziNodesSegmentsPostReqNode) SetAi(val bool) {
 	s.Ai = val
 }
 
 // SetTirads23 sets the value of Tirads23.
-func (s *UziNodesSegmentsPostReqNode) SetTirads23(val OptFloat64) {
+func (s *UziNodesSegmentsPostReqNode) SetTirads23(val float64) {
 	s.Tirads23 = val
 }
 
 // SetTirads4 sets the value of Tirads4.
-func (s *UziNodesSegmentsPostReqNode) SetTirads4(val OptFloat64) {
+func (s *UziNodesSegmentsPostReqNode) SetTirads4(val float64) {
 	s.Tirads4 = val
 }
 
 // SetTirads5 sets the value of Tirads5.
-func (s *UziNodesSegmentsPostReqNode) SetTirads5(val OptFloat64) {
+func (s *UziNodesSegmentsPostReqNode) SetTirads5(val float64) {
 	s.Tirads5 = val
 }
 
 type UziNodesSegmentsPostReqSegmentsItem struct {
-	ImageID  OptUUID    `json:"image_id"`
-	Contor   Contor     `json:"contor"`
-	Tirads23 OptFloat64 `json:"tirads_23"`
-	Tirads4  OptFloat64 `json:"tirads_4"`
-	Tirads5  OptFloat64 `json:"tirads_5"`
+	ImageID  uuid.UUID `json:"image_id"`
+	Contor   Contor    `json:"contor"`
+	Tirads23 float64   `json:"tirads_23"`
+	Tirads4  float64   `json:"tirads_4"`
+	Tirads5  float64   `json:"tirads_5"`
 }
 
 // GetImageID returns the value of ImageID.
-func (s *UziNodesSegmentsPostReqSegmentsItem) GetImageID() OptUUID {
+func (s *UziNodesSegmentsPostReqSegmentsItem) GetImageID() uuid.UUID {
 	return s.ImageID
 }
 
@@ -1262,22 +1115,22 @@ func (s *UziNodesSegmentsPostReqSegmentsItem) GetContor() Contor {
 }
 
 // GetTirads23 returns the value of Tirads23.
-func (s *UziNodesSegmentsPostReqSegmentsItem) GetTirads23() OptFloat64 {
+func (s *UziNodesSegmentsPostReqSegmentsItem) GetTirads23() float64 {
 	return s.Tirads23
 }
 
 // GetTirads4 returns the value of Tirads4.
-func (s *UziNodesSegmentsPostReqSegmentsItem) GetTirads4() OptFloat64 {
+func (s *UziNodesSegmentsPostReqSegmentsItem) GetTirads4() float64 {
 	return s.Tirads4
 }
 
 // GetTirads5 returns the value of Tirads5.
-func (s *UziNodesSegmentsPostReqSegmentsItem) GetTirads5() OptFloat64 {
+func (s *UziNodesSegmentsPostReqSegmentsItem) GetTirads5() float64 {
 	return s.Tirads5
 }
 
 // SetImageID sets the value of ImageID.
-func (s *UziNodesSegmentsPostReqSegmentsItem) SetImageID(val OptUUID) {
+func (s *UziNodesSegmentsPostReqSegmentsItem) SetImageID(val uuid.UUID) {
 	s.ImageID = val
 }
 
@@ -1287,17 +1140,17 @@ func (s *UziNodesSegmentsPostReqSegmentsItem) SetContor(val Contor) {
 }
 
 // SetTirads23 sets the value of Tirads23.
-func (s *UziNodesSegmentsPostReqSegmentsItem) SetTirads23(val OptFloat64) {
+func (s *UziNodesSegmentsPostReqSegmentsItem) SetTirads23(val float64) {
 	s.Tirads23 = val
 }
 
 // SetTirads4 sets the value of Tirads4.
-func (s *UziNodesSegmentsPostReqSegmentsItem) SetTirads4(val OptFloat64) {
+func (s *UziNodesSegmentsPostReqSegmentsItem) SetTirads4(val float64) {
 	s.Tirads4 = val
 }
 
 // SetTirads5 sets the value of Tirads5.
-func (s *UziNodesSegmentsPostReqSegmentsItem) SetTirads5(val OptFloat64) {
+func (s *UziNodesSegmentsPostReqSegmentsItem) SetTirads5(val float64) {
 	s.Tirads5 = val
 }
 

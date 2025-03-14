@@ -4,15 +4,19 @@ import (
 	"context"
 
 	api "gateway/internal/generated/http/api"
+	services "gateway/internal/services"
 )
 
-type Handler interface {
+type ImageHandler interface {
 	UziIDImagesGet(ctx context.Context, params api.UziIDImagesGetParams) (api.UziIDImagesGetRes, error)
 }
 
 type handler struct {
+	services *services.Services
 }
 
-func NewHandler() Handler {
-	return &handler{}
+func NewHandler(services *services.Services) ImageHandler {
+	return &handler{
+		services: services,
+	}
 }

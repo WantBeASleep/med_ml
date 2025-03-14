@@ -17,17 +17,12 @@ import (
 // Encode encodes Contor as json.
 func (s Contor) Encode(e *jx.Encoder) {
 	unwrapped := []ContorItem(s)
-	if unwrapped == nil {
-		e.ArrEmpty()
-		return
+
+	e.ArrStart()
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
-	if unwrapped != nil {
-		e.ArrStart()
-		for _, elem := range unwrapped {
-			elem.Encode(e)
-		}
-		e.ArrEnd()
-	}
+	e.ArrEnd()
 }
 
 // Decode decodes Contor from json.
@@ -79,16 +74,12 @@ func (s *ContorItem) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *ContorItem) encodeFields(e *jx.Encoder) {
 	{
-		if s.X.Set {
-			e.FieldStart("x")
-			s.X.Encode(e)
-		}
+		e.FieldStart("x")
+		e.Int(s.X)
 	}
 	{
-		if s.Y.Set {
-			e.FieldStart("y")
-			s.Y.Encode(e)
-		}
+		e.FieldStart("y")
+		e.Int(s.Y)
 	}
 }
 
@@ -102,13 +93,16 @@ func (s *ContorItem) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode ContorItem to nil")
 	}
+	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "x":
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.X.Reset()
-				if err := s.X.Decode(d); err != nil {
+				v, err := d.Int()
+				s.X = int(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -116,9 +110,11 @@ func (s *ContorItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"x\"")
 			}
 		case "y":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				s.Y.Reset()
-				if err := s.Y.Decode(d); err != nil {
+				v, err := d.Int()
+				s.Y = int(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -131,6 +127,38 @@ func (s *ContorItem) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode ContorItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfContorItem) {
+					name = jsonFieldsNameOfContorItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
 	}
 
 	return nil
@@ -1160,41 +1188,6 @@ func (s *OptFloat64) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes int as json.
-func (o OptInt) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	e.Int(int(o.Value))
-}
-
-// Decode decodes int from json.
-func (o *OptInt) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptInt to nil")
-	}
-	o.Set = true
-	v, err := d.Int()
-	if err != nil {
-		return err
-	}
-	o.Value = int(v)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptInt) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptInt) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes string as json.
 func (o OptString) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -1230,74 +1223,6 @@ func (s *OptString) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes uuid.UUID as json.
-func (o OptUUID) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	json.EncodeUUID(e, o.Value)
-}
-
-// Decode decodes uuid.UUID from json.
-func (o *OptUUID) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptUUID to nil")
-	}
-	o.Set = true
-	v, err := json.DecodeUUID(d)
-	if err != nil {
-		return err
-	}
-	o.Value = v
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptUUID) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptUUID) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes UziNodesSegmentsPostReqNode as json.
-func (o OptUziNodesSegmentsPostReqNode) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes UziNodesSegmentsPostReqNode from json.
-func (o *OptUziNodesSegmentsPostReqNode) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptUziNodesSegmentsPostReqNode to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptUziNodesSegmentsPostReqNode) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptUziNodesSegmentsPostReqNode) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode implements json.Marshaler.
 func (s *Segment) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -1320,10 +1245,8 @@ func (s *Segment) encodeFields(e *jx.Encoder) {
 		json.EncodeUUID(e, s.NodeID)
 	}
 	{
-		if s.Contor != nil {
-			e.FieldStart("contor")
-			s.Contor.Encode(e)
-		}
+		e.FieldStart("contor")
+		s.Contor.Encode(e)
 	}
 	{
 		e.FieldStart("tirads_23")
@@ -1506,10 +1429,8 @@ func (s *SimpleUuid) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *SimpleUuid) encodeFields(e *jx.Encoder) {
 	{
-		if s.ID.Set {
-			e.FieldStart("id")
-			s.ID.Encode(e)
-		}
+		e.FieldStart("id")
+		json.EncodeUUID(e, s.ID)
 	}
 }
 
@@ -1522,13 +1443,16 @@ func (s *SimpleUuid) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode SimpleUuid to nil")
 	}
+	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "id":
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.ID.Reset()
-				if err := s.ID.Decode(d); err != nil {
+				v, err := json.DecodeUUID(d)
+				s.ID = v
+				if err != nil {
 					return err
 				}
 				return nil
@@ -1541,6 +1465,38 @@ func (s *SimpleUuid) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode SimpleUuid")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfSimpleUuid) {
+					name = jsonFieldsNameOfSimpleUuid[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
 	}
 
 	return nil
@@ -2376,6 +2332,56 @@ func (s *UziNodesIDPatchReq) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes UziNodesIDSegmentsGetOKApplicationJSON as json.
+func (s UziNodesIDSegmentsGetOKApplicationJSON) Encode(e *jx.Encoder) {
+	unwrapped := []Segment(s)
+
+	e.ArrStart()
+	for _, elem := range unwrapped {
+		elem.Encode(e)
+	}
+	e.ArrEnd()
+}
+
+// Decode decodes UziNodesIDSegmentsGetOKApplicationJSON from json.
+func (s *UziNodesIDSegmentsGetOKApplicationJSON) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UziNodesIDSegmentsGetOKApplicationJSON to nil")
+	}
+	var unwrapped []Segment
+	if err := func() error {
+		unwrapped = make([]Segment, 0)
+		if err := d.Arr(func(d *jx.Decoder) error {
+			var elem Segment
+			if err := elem.Decode(d); err != nil {
+				return err
+			}
+			unwrapped = append(unwrapped, elem)
+			return nil
+		}); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = UziNodesIDSegmentsGetOKApplicationJSON(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s UziNodesIDSegmentsGetOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UziNodesIDSegmentsGetOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
 func (s *UziNodesSegmentsPostOK) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -2386,20 +2392,16 @@ func (s *UziNodesSegmentsPostOK) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UziNodesSegmentsPostOK) encodeFields(e *jx.Encoder) {
 	{
-		if s.NodeID.Set {
-			e.FieldStart("node_id")
-			s.NodeID.Encode(e)
-		}
+		e.FieldStart("node_id")
+		json.EncodeUUID(e, s.NodeID)
 	}
 	{
-		if s.SegmentIds != nil {
-			e.FieldStart("segment_ids")
-			e.ArrStart()
-			for _, elem := range s.SegmentIds {
-				json.EncodeUUID(e, elem)
-			}
-			e.ArrEnd()
+		e.FieldStart("segment_ids")
+		e.ArrStart()
+		for _, elem := range s.SegmentIds {
+			json.EncodeUUID(e, elem)
 		}
+		e.ArrEnd()
 	}
 }
 
@@ -2413,13 +2415,16 @@ func (s *UziNodesSegmentsPostOK) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode UziNodesSegmentsPostOK to nil")
 	}
+	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "node_id":
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.NodeID.Reset()
-				if err := s.NodeID.Decode(d); err != nil {
+				v, err := json.DecodeUUID(d)
+				s.NodeID = v
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2427,6 +2432,7 @@ func (s *UziNodesSegmentsPostOK) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"node_id\"")
 			}
 		case "segment_ids":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				s.SegmentIds = make([]uuid.UUID, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -2451,6 +2457,38 @@ func (s *UziNodesSegmentsPostOK) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode UziNodesSegmentsPostOK")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfUziNodesSegmentsPostOK) {
+					name = jsonFieldsNameOfUziNodesSegmentsPostOK[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
 	}
 
 	return nil
@@ -2479,20 +2517,16 @@ func (s *UziNodesSegmentsPostReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UziNodesSegmentsPostReq) encodeFields(e *jx.Encoder) {
 	{
-		if s.Node.Set {
-			e.FieldStart("node")
-			s.Node.Encode(e)
-		}
+		e.FieldStart("node")
+		s.Node.Encode(e)
 	}
 	{
-		if s.Segments != nil {
-			e.FieldStart("segments")
-			e.ArrStart()
-			for _, elem := range s.Segments {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
+		e.FieldStart("segments")
+		e.ArrStart()
+		for _, elem := range s.Segments {
+			elem.Encode(e)
 		}
+		e.ArrEnd()
 	}
 }
 
@@ -2506,12 +2540,13 @@ func (s *UziNodesSegmentsPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode UziNodesSegmentsPostReq to nil")
 	}
+	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "node":
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.Node.Reset()
 				if err := s.Node.Decode(d); err != nil {
 					return err
 				}
@@ -2520,6 +2555,7 @@ func (s *UziNodesSegmentsPostReq) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"node\"")
 			}
 		case "segments":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				s.Segments = make([]UziNodesSegmentsPostReqSegmentsItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -2542,6 +2578,38 @@ func (s *UziNodesSegmentsPostReq) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode UziNodesSegmentsPostReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfUziNodesSegmentsPostReq) {
+					name = jsonFieldsNameOfUziNodesSegmentsPostReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
 	}
 
 	return nil
@@ -2570,34 +2638,24 @@ func (s *UziNodesSegmentsPostReqNode) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UziNodesSegmentsPostReqNode) encodeFields(e *jx.Encoder) {
 	{
-		if s.UziID.Set {
-			e.FieldStart("uzi_id")
-			s.UziID.Encode(e)
-		}
+		e.FieldStart("uzi_id")
+		json.EncodeUUID(e, s.UziID)
 	}
 	{
-		if s.Ai.Set {
-			e.FieldStart("ai")
-			s.Ai.Encode(e)
-		}
+		e.FieldStart("ai")
+		e.Bool(s.Ai)
 	}
 	{
-		if s.Tirads23.Set {
-			e.FieldStart("tirads_23")
-			s.Tirads23.Encode(e)
-		}
+		e.FieldStart("tirads_23")
+		e.Float64(s.Tirads23)
 	}
 	{
-		if s.Tirads4.Set {
-			e.FieldStart("tirads_4")
-			s.Tirads4.Encode(e)
-		}
+		e.FieldStart("tirads_4")
+		e.Float64(s.Tirads4)
 	}
 	{
-		if s.Tirads5.Set {
-			e.FieldStart("tirads_5")
-			s.Tirads5.Encode(e)
-		}
+		e.FieldStart("tirads_5")
+		e.Float64(s.Tirads5)
 	}
 }
 
@@ -2614,13 +2672,16 @@ func (s *UziNodesSegmentsPostReqNode) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode UziNodesSegmentsPostReqNode to nil")
 	}
+	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "uzi_id":
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.UziID.Reset()
-				if err := s.UziID.Decode(d); err != nil {
+				v, err := json.DecodeUUID(d)
+				s.UziID = v
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2628,9 +2689,11 @@ func (s *UziNodesSegmentsPostReqNode) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"uzi_id\"")
 			}
 		case "ai":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				s.Ai.Reset()
-				if err := s.Ai.Decode(d); err != nil {
+				v, err := d.Bool()
+				s.Ai = bool(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2638,9 +2701,11 @@ func (s *UziNodesSegmentsPostReqNode) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"ai\"")
 			}
 		case "tirads_23":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				s.Tirads23.Reset()
-				if err := s.Tirads23.Decode(d); err != nil {
+				v, err := d.Float64()
+				s.Tirads23 = float64(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2648,9 +2713,11 @@ func (s *UziNodesSegmentsPostReqNode) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"tirads_23\"")
 			}
 		case "tirads_4":
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				s.Tirads4.Reset()
-				if err := s.Tirads4.Decode(d); err != nil {
+				v, err := d.Float64()
+				s.Tirads4 = float64(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2658,9 +2725,11 @@ func (s *UziNodesSegmentsPostReqNode) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"tirads_4\"")
 			}
 		case "tirads_5":
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
-				s.Tirads5.Reset()
-				if err := s.Tirads5.Decode(d); err != nil {
+				v, err := d.Float64()
+				s.Tirads5 = float64(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2673,6 +2742,38 @@ func (s *UziNodesSegmentsPostReqNode) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode UziNodesSegmentsPostReqNode")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00011111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfUziNodesSegmentsPostReqNode) {
+					name = jsonFieldsNameOfUziNodesSegmentsPostReqNode[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
 	}
 
 	return nil
@@ -2701,34 +2802,24 @@ func (s *UziNodesSegmentsPostReqSegmentsItem) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UziNodesSegmentsPostReqSegmentsItem) encodeFields(e *jx.Encoder) {
 	{
-		if s.ImageID.Set {
-			e.FieldStart("image_id")
-			s.ImageID.Encode(e)
-		}
+		e.FieldStart("image_id")
+		json.EncodeUUID(e, s.ImageID)
 	}
 	{
-		if s.Contor != nil {
-			e.FieldStart("contor")
-			s.Contor.Encode(e)
-		}
+		e.FieldStart("contor")
+		s.Contor.Encode(e)
 	}
 	{
-		if s.Tirads23.Set {
-			e.FieldStart("tirads_23")
-			s.Tirads23.Encode(e)
-		}
+		e.FieldStart("tirads_23")
+		e.Float64(s.Tirads23)
 	}
 	{
-		if s.Tirads4.Set {
-			e.FieldStart("tirads_4")
-			s.Tirads4.Encode(e)
-		}
+		e.FieldStart("tirads_4")
+		e.Float64(s.Tirads4)
 	}
 	{
-		if s.Tirads5.Set {
-			e.FieldStart("tirads_5")
-			s.Tirads5.Encode(e)
-		}
+		e.FieldStart("tirads_5")
+		e.Float64(s.Tirads5)
 	}
 }
 
@@ -2745,13 +2836,16 @@ func (s *UziNodesSegmentsPostReqSegmentsItem) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode UziNodesSegmentsPostReqSegmentsItem to nil")
 	}
+	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "image_id":
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.ImageID.Reset()
-				if err := s.ImageID.Decode(d); err != nil {
+				v, err := json.DecodeUUID(d)
+				s.ImageID = v
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2759,6 +2853,7 @@ func (s *UziNodesSegmentsPostReqSegmentsItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"image_id\"")
 			}
 		case "contor":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				if err := s.Contor.Decode(d); err != nil {
 					return err
@@ -2768,9 +2863,11 @@ func (s *UziNodesSegmentsPostReqSegmentsItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"contor\"")
 			}
 		case "tirads_23":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				s.Tirads23.Reset()
-				if err := s.Tirads23.Decode(d); err != nil {
+				v, err := d.Float64()
+				s.Tirads23 = float64(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2778,9 +2875,11 @@ func (s *UziNodesSegmentsPostReqSegmentsItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"tirads_23\"")
 			}
 		case "tirads_4":
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				s.Tirads4.Reset()
-				if err := s.Tirads4.Decode(d); err != nil {
+				v, err := d.Float64()
+				s.Tirads4 = float64(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2788,9 +2887,11 @@ func (s *UziNodesSegmentsPostReqSegmentsItem) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"tirads_4\"")
 			}
 		case "tirads_5":
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
-				s.Tirads5.Reset()
-				if err := s.Tirads5.Decode(d); err != nil {
+				v, err := d.Float64()
+				s.Tirads5 = float64(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2803,6 +2904,38 @@ func (s *UziNodesSegmentsPostReqSegmentsItem) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode UziNodesSegmentsPostReqSegmentsItem")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00011111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfUziNodesSegmentsPostReqSegmentsItem) {
+					name = jsonFieldsNameOfUziNodesSegmentsPostReqSegmentsItem[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
 	}
 
 	return nil
@@ -2936,10 +3069,8 @@ func (s *UziSegmentPostReq) encodeFields(e *jx.Encoder) {
 		json.EncodeUUID(e, s.NodeID)
 	}
 	{
-		if s.Contor != nil {
-			e.FieldStart("contor")
-			s.Contor.Encode(e)
-		}
+		e.FieldStart("contor")
+		s.Contor.Encode(e)
 	}
 	{
 		e.FieldStart("tirads_23")

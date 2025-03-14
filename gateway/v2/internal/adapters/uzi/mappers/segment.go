@@ -9,13 +9,13 @@ import (
 
 func Segment(pb *pb.Segment) domain.Segment {
 	return domain.Segment{
-		Id:        uuid.MustParse(pb.Id),
-		ImageID:   uuid.MustParse(pb.ImageId),
-		NodeID:    uuid.MustParse(pb.NodeId),
-		Contor:    pb.Contor,
-		Tirads23:  pb.Tirads_23,
-		Tirads4:   pb.Tirads_4,
-		Tirads5:   pb.Tirads_5,
+		Id:       uuid.MustParse(pb.Id),
+		ImageID:  uuid.MustParse(pb.ImageId),
+		NodeID:   uuid.MustParse(pb.NodeId),
+		Contor:   pb.Contor,
+		Tirads23: pb.Tirads_23,
+		Tirads4:  pb.Tirads_4,
+		Tirads5:  pb.Tirads_5,
 	}
 }
 

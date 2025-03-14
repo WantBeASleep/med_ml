@@ -2,9 +2,9 @@ package device
 
 import (
 	"context"
-	
-	domain "gateway/internal/domain/uzi"
+
 	"gateway/internal/adapters"
+	domain "gateway/internal/domain/uzi"
 )
 
 type Service interface {
@@ -19,4 +19,3 @@ type service struct {
 func New(adapters *adapters.Adapters) Service {
 	return &service{adapters: adapters}
 }
-

@@ -1,6 +1,10 @@
 generator:
   features:
     enable:
+      # Enables paths client generation
+      - 'paths/client'
+      # Enables webhooks client generation
+      - 'webhooks/client'
       # Enables paths server generation
       - 'paths/server'
       # Enables webhooks server generation
@@ -13,4 +17,6 @@ generator:
       - 'server/response/validation'
       # Enables stub Handler generation
       - 'ogen/unimplemented'
+      # Enables example tests generation
+      - 'debug/example_tests'
     disable_all: true

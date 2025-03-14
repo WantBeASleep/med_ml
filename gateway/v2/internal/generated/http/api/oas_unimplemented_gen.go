@@ -112,6 +112,15 @@ func (UnimplementedHandler) UziNodesIDPatch(ctx context.Context, req *UziNodesID
 	return r, ht.ErrNotImplemented
 }
 
+// UziNodesIDSegmentsGet implements GET /uzi/nodes/{id}/segments operation.
+//
+// Получить сегменты узла.
+//
+// GET /uzi/nodes/{id}/segments
+func (UnimplementedHandler) UziNodesIDSegmentsGet(ctx context.Context, params UziNodesIDSegmentsGetParams) (r UziNodesIDSegmentsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // UziNodesSegmentsPost implements POST /uzi/nodes-segments operation.
 //
 // Добавить узел с сегментами.

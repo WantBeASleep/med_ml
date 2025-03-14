@@ -3,15 +3,15 @@ package uzi
 import (
 	"context"
 
-	domain "gateway/internal/domain/uzi"
 	adapter "gateway/internal/adapters/uzi"
+	domain "gateway/internal/domain/uzi"
 )
 
 func (s *service) Update(ctx context.Context, arg UpdateUziArg) (domain.Uzi, error) {
 	uzi, err := s.adapters.Uzi.UpdateUzi(ctx, adapter.UpdateUziIn{
-		Id: arg.Id,
+		Id:         arg.Id,
 		Projection: arg.Projection,
-		Checked: arg.Checked,
+		Checked:    arg.Checked,
 	})
 	if err != nil {
 		return domain.Uzi{}, err
