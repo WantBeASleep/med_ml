@@ -42,32 +42,28 @@ class uziUseCase:
         # tracked - probs по formations
         # tirads=probs
 
-        nodes = dict()
+        nodes_with_segments = dict()
         # k - это formation_id из модели
         formation_ids = {}
         for k in tracked:
             print(k)
 
             formation_uuid = str(uuid.uuid4())
+            formation_ids[k] = formation_uuid
 
-            nodes[k] = pb_event.UziProcessed.Node(
-                id=formation_uuid,
-                uzi_id=uzi_id,
+            node = pb_event.UziProcessed.Node(
+                ai=True,
                 tirads_23=tracked[k][0],
                 tirads_4=tracked[k][1],
                 tirads_5=tracked[k][2],
             )
-            formation_ids[k] = formation_uuid
 
-        # Это мы запихнули в словарик dct[formation] = probs
-        # print_lengths_return_ndarray_list(tracked)
-
-        segment_ids = []
+            nodes_with_segments[k] = pb_event.UziProcessed.NodeWithSegments(
+                node=node,
+                segments=[],
+            )
 
         # Далее бежим по всем картинкам и сегментам с целью отдать
-
-        segments = []
-
         for i in range(len(rois)):
             print("ROI num: ", i)
             for j in range(len(rois[i])):
@@ -75,7 +71,7 @@ class uziUseCase:
                 print("FORMATION ID FROM MODEL: ", formation_id_from_model)
                 if formation_id_from_model not in formation_ids:
                     formation_ids[formation_id_from_model] = str(uuid.uuid4())
-                formation_id = formation_ids.get(formation_id_from_model)
+
                 # бинаризуем
                 mask = rois[i][j][2]
                 mask = mask.astype(np.uint8)
@@ -92,14 +88,9 @@ class uziUseCase:
                 contour_points = [
                     {"x": int(point[0]), "y": int(point[1])} for point in contour
                 ]
-                contour = json.dumps(contour_points)
-
-                segment_id = str(uuid.uuid4())
-                segment_ids.append(segment_id)
+                contour = json.dumps(contour_points).encode()
 
                 segment = pb_event.UziProcessed.Segment(
-                    id=segment_id,
-                    node_id=formation_id,
                     image_id=pages_id[i],
                     contor=contour,
                     tirads_23=indv[i][j][0],
@@ -107,13 +98,17 @@ class uziUseCase:
                     tirads_5=indv[i][j][2],
                 )
 
-                segments.append(segment)
+                nodes_with_segments[formation_id_from_model].segments.append(segment)
 
-        msg_event = pb_event.UziProcessed(nodes=list(nodes.values()), segments=segments)
+        msg_event = pb_event.UziProcessed(
+            uzi_id=uzi_id, nodes_with_segments=list(nodes_with_segments.values())
+        )
 
         content = msg_event.SerializeToString()
 
-        producer_config = {"bootstrap.servers": settings.kafka_host + ":" + str(settings.kafka_port)}
+        producer_config = {
+            "bootstrap.servers": settings.kafka_host + ":" + str(settings.kafka_port)
+        }
         producer = Producer(producer_config)
 
         producer.produce("uziprocessed", content)

@@ -1,0 +1,94 @@
+package main
+
+import (
+	"log/slog"
+	"net/http"
+	"os"
+
+	"github.com/IBM/sarama"
+	loglib "github.com/WantBeASleep/med_ml_lib/observer/log"
+	"github.com/ilyakaznacheev/cleanenv"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+
+	"gateway/internal/adapters"
+	"gateway/internal/config"
+	"gateway/internal/dbus/producers"
+	api "gateway/internal/generated/http/api"
+	"gateway/internal/repository"
+	"gateway/internal/server"
+	"gateway/internal/services"
+)
+
+const (
+	successExitCode = 0
+	failExitCode    = 1
+)
+
+func main() {
+	os.Exit(run())
+}
+
+func run() (exitCode int) {
+	loglib.InitLogger(loglib.WithEnv())
+
+	cfg := config.Config{}
+	if err := cleanenv.ReadEnv(&cfg); err != nil {
+		slog.Error("init config", slog.Any("err", err))
+		return failExitCode
+	}
+
+	// adapters
+	uziConn, err := grpc.NewClient(
+		cfg.Adapters.UziUrl,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		slog.Error("init uziConn", slog.Any("err", err))
+		return failExitCode
+	}
+
+	adapters := adapters.NewAdapters(uziConn)
+
+	// infra
+	s3Client, err := minio.New(cfg.S3.Endpoint, &minio.Options{
+		Secure: false,
+		Creds:  credentials.NewStaticV4(cfg.S3.Access_Token, cfg.S3.Secret_Token, ""),
+	})
+	if err != nil {
+		slog.Error("init s3", slog.Any("err", err))
+		return failExitCode
+	}
+
+	dao := repository.NewRepository(s3Client, "uzi")
+
+	dbusClient, err := sarama.NewSyncProducer(cfg.Dbus.Addrs, nil)
+	if err != nil {
+		slog.Error("init sarama producer", slog.Any("err", err))
+		return failExitCode
+	}
+
+	producer := producers.New(dbusClient)
+
+	// services
+	services := services.New(adapters, producer, dao)
+
+	// server
+	handlers := server.New(services)
+
+	server, err := api.NewServer(handlers)
+	if err != nil {
+		slog.Error("init server", slog.Any("err", err))
+		return failExitCode
+	}
+
+	slog.Info("start serve", slog.String("url", cfg.App.Url))
+	if err := http.ListenAndServe(cfg.App.Url, server); err != nil {
+		slog.Error("listen and serve", slog.Any("err", err))
+		return failExitCode
+	}
+
+	return successExitCode
+}
