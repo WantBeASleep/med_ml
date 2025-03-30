@@ -24,6 +24,7 @@ func (s *service) CreateUzi(ctx context.Context, arg CreateUziArg) (uuid.UUID, e
 		Projection: arg.Projection,
 		Checked:    false,
 		ExternalID: arg.ExternalID,
+		Author:     arg.Author,
 		DeviceID:   arg.DeviceID,
 		Status:     domain.UziStatusNew,
 		CreateAt:   time.Now(),

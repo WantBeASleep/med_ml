@@ -18,6 +18,7 @@ func (q *repo) GetUziByID(id uuid.UUID) (entity.Uzi, error) {
 			columnProjection,
 			columnChecked,
 			columnExternalID,
+			columnAuthor,
 			columnDeviceID,
 			columnStatus,
 			columnCreateAt,
@@ -45,6 +46,7 @@ func (q *repo) GetUzisByExternalID(externalID uuid.UUID) ([]entity.Uzi, error) {
 			columnProjection,
 			columnChecked,
 			columnExternalID,
+			columnAuthor,
 			columnDeviceID,
 			columnStatus,
 			columnCreateAt,
@@ -66,6 +68,35 @@ func (q *repo) GetUzisByExternalID(externalID uuid.UUID) ([]entity.Uzi, error) {
 	return uzi, nil
 }
 
+func (q *repo) GetUzisByAuthor(author uuid.UUID) ([]entity.Uzi, error) {
+	query := q.QueryBuilder().
+		Select(
+			columnID,
+			columnProjection,
+			columnChecked,
+			columnExternalID,
+			columnAuthor,
+			columnDeviceID,
+			columnStatus,
+			columnCreateAt,
+		).
+		From(uziTable).
+		Where(sq.Eq{
+			columnAuthor: author,
+		})
+
+	var uzi []entity.Uzi
+	if err := q.Runner().Selectx(q.Context(), &uzi, query); err != nil {
+		return nil, err
+	}
+
+	if len(uzi) == 0 {
+		return nil, daoEntity.ErrNotFound
+	}
+
+	return uzi, nil
+}
+
 func (q *repo) CheckExist(id uuid.UUID) (bool, error) {
 	query := q.QueryBuilder().
 		Select(
@@ -73,6 +104,7 @@ func (q *repo) CheckExist(id uuid.UUID) (bool, error) {
 			columnProjection,
 			columnChecked,
 			columnExternalID,
+			columnAuthor,
 			columnDeviceID,
 			columnStatus,
 			columnCreateAt,

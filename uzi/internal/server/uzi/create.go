@@ -16,9 +16,14 @@ func (h *handler) CreateUzi(ctx context.Context, in *pb.CreateUziIn) (*pb.Create
 		return nil, status.Errorf(codes.InvalidArgument, "external_id is not a valid uuid: %s", err.Error())
 	}
 
+	if _, err := uuid.Parse(in.Author); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "author is not a valid uuid: %s", err.Error())
+	}
+
 	id, err := h.services.Uzi.CreateUzi(ctx, uzi.CreateUziArg{
 		Projection: in.Projection,
 		ExternalID: uuid.MustParse(in.ExternalId),
+		Author:     uuid.MustParse(in.Author),
 		DeviceID:   int(in.DeviceId),
 	})
 	if err != nil {

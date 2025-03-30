@@ -29,6 +29,7 @@ func (h *handler) CreateSegment(ctx context.Context, in *pb.CreateSegmentIn) (*p
 		ImageID:  uuid.MustParse(in.ImageId),
 		NodeID:   uuid.MustParse(in.NodeId),
 		Contor:   in.Contor,
+		Ai:       in.Ai,
 		Tirads23: in.Tirads_23,
 		Tirads4:  in.Tirads_4,
 		Tirads5:  in.Tirads_5,

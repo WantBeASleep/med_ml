@@ -11,6 +11,7 @@ type Uzi struct {
 	Projection string
 	Checked    bool
 	ExternalID uuid.UUID
+	Author     uuid.UUID
 	DeviceID   int
 	Status     UziStatus
 	CreateAt   time.Time

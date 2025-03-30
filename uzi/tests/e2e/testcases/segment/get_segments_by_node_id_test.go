@@ -38,6 +38,7 @@ func (suite *TestSuite) TestGetSegmentsByNodeId_Success() {
 		require.Equal(suite.T(), expectedSegments[segment.Id].NodeID.String(), segment.NodeId)
 		require.Equal(suite.T(), expectedSegments[segment.Id].ImageID.String(), segment.ImageId)
 		require.Equal(suite.T(), string(expectedSegments[segment.Id].Contor), string(segment.Contor))
+		require.Equal(suite.T(), expectedSegments[segment.Id].Ai, segment.Ai)
 		require.Equal(suite.T(), expectedSegments[segment.Id].Tirads23, segment.Tirads_23)
 		require.Equal(suite.T(), expectedSegments[segment.Id].Tirads4, segment.Tirads_4)
 		require.Equal(suite.T(), expectedSegments[segment.Id].Tirads5, segment.Tirads_5)

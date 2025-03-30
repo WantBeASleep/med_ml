@@ -7,8 +7,6 @@ import (
 )
 
 type CreateNodesWithSegmentsArgNode struct {
-	Ai       bool
-	UziID    uuid.UUID
 	Tirads23 float64
 	Tirads4  float64
 	Tirads5  float64

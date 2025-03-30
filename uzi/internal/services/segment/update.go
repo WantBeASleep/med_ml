@@ -15,8 +15,12 @@ func (s *service) UpdateSegment(ctx context.Context, arg UpdateSegmentArg) (doma
 		return domain.Segment{}, fmt.Errorf("get segment by id: %w", err)
 	}
 	segment := segmentDB.ToDomain()
-	arg.UpdateDomain(&segment)
 
+	if segment.Ai {
+		return domain.Segment{}, ErrChangeAiSegment
+	}
+
+	arg.UpdateDomain(&segment)
 	if err := segmentQuery.UpdateSegment(segmentEntity.Segment{}.FromDomain(segment)); err != nil {
 		return domain.Segment{}, fmt.Errorf("update segment: %w", err)
 	}

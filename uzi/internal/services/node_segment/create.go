@@ -15,45 +15,19 @@ const (
 	avgSegmentPerNode = 3
 )
 
-func (s *service) CreateNodesWithSegments(ctx context.Context, arg []CreateNodesWithSegmentsArg, opts ...CreateNodesWithSegmentsOption) ([]CreateNodesWithSegmentsID, error) {
-	options := &createNodesWithSegmentsOption{}
-	for _, opt := range opts {
-		opt(options)
+func (s *service) CreateNodesWithSegments(
+	ctx context.Context,
+	uziID uuid.UUID,
+	ai bool,
+	arg []CreateNodesWithSegmentsArg,
+	opts ...CreateNodesWithSegmentsOption,
+) ([]CreateNodesWithSegmentsID, error) {
+	opt := &createNodesWithSegmentsOption{}
+	for _, o := range opts {
+		o(opt)
 	}
 
-	result := make([]CreateNodesWithSegmentsID, 0, len(arg))
-	nodes := make([]domain.Node, 0, len(arg))
-	segments := make([]domain.Segment, 0, avgSegmentPerNode*len(arg))
-
-	for _, vNode := range arg {
-		nodeID := uuid.New()
-		nodes = append(nodes, domain.Node{
-			Id:       nodeID,
-			Ai:       vNode.Node.Ai,
-			UziID:    vNode.Node.UziID,
-			Tirads23: vNode.Node.Tirads23,
-			Tirads4:  vNode.Node.Tirads4,
-			Tirads5:  vNode.Node.Tirads5,
-		})
-		ids := CreateNodesWithSegmentsID{NodeID: nodeID}
-
-		for _, vSegment := range vNode.Segments {
-			segmentID := uuid.New()
-			segments = append(segments, domain.Segment{
-				Id:       segmentID,
-				ImageID:  vSegment.ImageID,
-				NodeID:   nodeID,
-				Contor:   vSegment.Contor,
-				Tirads23: vSegment.Tirads23,
-				Tirads4:  vSegment.Tirads4,
-				Tirads5:  vSegment.Tirads5,
-			})
-
-			ids.SegmentsID = append(ids.SegmentsID, segmentID)
-		}
-
-		result = append(result, ids)
-	}
+	nodes, segments, ids := s.createDomainNodeSegmentsFromArgs(uziID, ai, arg)
 
 	ctx, err := s.dao.BeginTx(ctx)
 	if err != nil {
@@ -72,9 +46,8 @@ func (s *service) CreateNodesWithSegments(ctx context.Context, arg []CreateNodes
 		return nil, fmt.Errorf("insert segments: %w", err)
 	}
 
-	// TODO: это очень плохое решение с arg[0], но тут нужно как то флоу выносить/pattern композит
-	if options.newUziStatus != nil {
-		if err := s.dao.NewUziQuery(ctx).UpdateUziStatus(arg[0].Node.UziID, string(*options.newUziStatus)); err != nil {
+	if opt.newUziStatus != nil {
+		if err := s.dao.NewUziQuery(ctx).UpdateUziStatus(uziID, opt.newUziStatus.String()); err != nil {
 			return nil, fmt.Errorf("update uzi status: %w", err)
 		}
 	}
@@ -83,5 +56,69 @@ func (s *service) CreateNodesWithSegments(ctx context.Context, arg []CreateNodes
 		return nil, fmt.Errorf("commit transaction: %w", err)
 	}
 
-	return result, nil
+	return ids, nil
+}
+
+func (s *service) SaveProcessedNodesWithSegments(
+	ctx context.Context,
+	uziID uuid.UUID,
+	arg []CreateNodesWithSegmentsArg,
+) error {
+	_, err := s.CreateNodesWithSegments(
+		ctx,
+		uziID,
+		true,
+		arg,
+		WithNewUziStatus(domain.UziStatusCompleted),
+	)
+
+	return err
+}
+
+func (s *service) createDomainNodeSegmentsFromArgs(
+	uziID uuid.UUID,
+	ai bool,
+	arg []CreateNodesWithSegmentsArg,
+) (
+	[]domain.Node,
+	[]domain.Segment,
+	[]CreateNodesWithSegmentsID,
+) {
+	ids := make([]CreateNodesWithSegmentsID, 0, len(arg))
+	nodes := make([]domain.Node, 0, len(arg))
+	segments := make([]domain.Segment, 0, avgSegmentPerNode*len(arg))
+
+	for _, NodeAndSeg := range arg {
+		nodeID := uuid.New()
+		nodes = append(nodes, domain.Node{
+			Id:       nodeID,
+			Ai:       ai,
+			UziID:    uziID,
+			Tirads23: NodeAndSeg.Node.Tirads23,
+			Tirads4:  NodeAndSeg.Node.Tirads4,
+			Tirads5:  NodeAndSeg.Node.Tirads5,
+		})
+
+		id := CreateNodesWithSegmentsID{NodeID: nodeID}
+
+		for _, segment := range NodeAndSeg.Segments {
+			segmentID := uuid.New()
+			segments = append(segments, domain.Segment{
+				Id:       segmentID,
+				ImageID:  segment.ImageID,
+				NodeID:   nodeID,
+				Contor:   segment.Contor,
+				Ai:       ai,
+				Tirads23: segment.Tirads23,
+				Tirads4:  segment.Tirads4,
+				Tirads5:  segment.Tirads5,
+			})
+
+			id.SegmentsID = append(id.SegmentsID, segmentID)
+		}
+
+		ids = append(ids, id)
+	}
+
+	return nodes, segments, ids
 }

@@ -13,6 +13,7 @@ type Segment struct {
 	ImageID  uuid.UUID       `db:"image_id"`
 	NodeID   uuid.UUID       `db:"node_id"`
 	Contor   json.RawMessage `db:"contor"`
+	Ai       bool            `db:"ai"`
 	Tirads23 float64         `db:"tirads_23"`
 	Tirads4  float64         `db:"tirads_4"`
 	Tirads5  float64         `db:"tirads_5"`
@@ -24,6 +25,7 @@ func (Segment) FromDomain(d domain.Segment) Segment {
 		ImageID:  d.ImageID,
 		NodeID:   d.NodeID,
 		Contor:   d.Contor,
+		Ai:       d.Ai,
 		Tirads23: d.Tirads23,
 		Tirads4:  d.Tirads4,
 		Tirads5:  d.Tirads5,
@@ -44,6 +46,7 @@ func (d Segment) ToDomain() domain.Segment {
 		ImageID:  d.ImageID,
 		NodeID:   d.NodeID,
 		Contor:   d.Contor,
+		Ai:       d.Ai,
 		Tirads23: d.Tirads23,
 		Tirads4:  d.Tirads4,
 		Tirads5:  d.Tirads5,

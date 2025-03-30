@@ -43,6 +43,22 @@ func (h *handler) GetUzisByExternalId(ctx context.Context, in *pb.GetUzisByExter
 	return out, nil
 }
 
+func (h *handler) GetUzisByAuthor(ctx context.Context, in *pb.GetUzisByAuthorIn) (*pb.GetUzisByAuthorOut, error) {
+	if _, err := uuid.Parse(in.Author); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "author is not a valid uuid: %s", err.Error())
+	}
+
+	uzis, err := h.services.Uzi.GetUzisByAuthor(ctx, uuid.MustParse(in.Author))
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+	}
+
+	out := new(pb.GetUzisByAuthorOut)
+	out.Uzis = mappers.SliceUziFromDomain(uzis)
+
+	return out, nil
+}
+
 func (h *handler) GetEchographicByUziId(ctx context.Context, in *pb.GetEchographicByUziIdIn) (*pb.GetEchographicByUziIdOut, error) {
 	if _, err := uuid.Parse(in.UziId); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "uzi_id is not a valid uuid: %s", err.Error())

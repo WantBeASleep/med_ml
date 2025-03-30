@@ -13,7 +13,7 @@ import (
 )
 
 func (h *handler) CreateNodeWithSegments(ctx context.Context, in *pb.CreateNodeWithSegmentsIn) (*pb.CreateNodeWithSegmentsOut, error) {
-	if _, err := uuid.Parse(in.Node.UziId); err != nil {
+	if _, err := uuid.Parse(in.UziId); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "uzi_id is not a valid uuid: %s", err.Error())
 	}
 
@@ -39,19 +39,21 @@ func (h *handler) CreateNodeWithSegments(ctx context.Context, in *pb.CreateNodeW
 	}
 
 	node := node_segment.CreateNodesWithSegmentsArgNode{
-		Ai:       in.Node.Ai,
-		UziID:    uuid.MustParse(in.Node.UziId),
 		Tirads23: in.Node.Tirads_23,
 		Tirads4:  in.Node.Tirads_4,
 		Tirads5:  in.Node.Tirads_5,
 	}
 
-	ids, err := h.services.NodeSegment.CreateNodesWithSegments(ctx, []node_segment.CreateNodesWithSegmentsArg{
-		{
-			Node:     node,
-			Segments: segments,
+	ids, err := h.services.NodeSegment.CreateNodesWithSegments(ctx,
+		uuid.MustParse(in.UziId),
+		in.Ai,
+		[]node_segment.CreateNodesWithSegmentsArg{
+			{
+				Node:     node,
+				Segments: segments,
+			},
 		},
-	})
+	)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
 	}

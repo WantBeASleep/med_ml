@@ -13,6 +13,7 @@ type Uzi struct {
 	Projection string    `db:"projection"`
 	Checked    bool      `db:"checked"`
 	ExternalID uuid.UUID `db:"external_id"`
+	Author     uuid.UUID `db:"author"`
 	DeviceID   int       `db:"device_id"`
 	Status     string    `db:"status"`
 	CreateAt   time.Time `db:"create_at"`
@@ -24,6 +25,7 @@ func (Uzi) FromDomain(d domain.Uzi) Uzi {
 		Projection: d.Projection,
 		Checked:    d.Checked,
 		ExternalID: d.ExternalID,
+		Author:     d.Author,
 		DeviceID:   d.DeviceID,
 		Status:     d.Status.String(),
 		CreateAt:   d.CreateAt,
@@ -40,6 +42,7 @@ func (d Uzi) ToDomain() domain.Uzi {
 		Projection: d.Projection,
 		Checked:    d.Checked,
 		ExternalID: d.ExternalID,
+		Author:     d.Author,
 		DeviceID:   d.DeviceID,
 		Status:     status,
 		CreateAt:   d.CreateAt,

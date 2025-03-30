@@ -2,13 +2,29 @@ package node_segment
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
+
+	daoEntity "uzi/internal/repository/entity"
+)
+
+var (
+	ErrChangeAiNode    = errors.New("change ai node not allowed")
+	ErrChangeAiSegment = errors.New("change ai segment not allowed")
 )
 
 func (s *service) DeleteNode(ctx context.Context, id uuid.UUID) error {
-	ctx, err := s.dao.BeginTx(ctx)
+	node, err := s.dao.NewNodeQuery(ctx).GetNodeByID(id)
+	if err != nil {
+		return fmt.Errorf("get node by id: %w", err)
+	}
+	if node.Ai {
+		return ErrChangeAiNode
+	}
+
+	ctx, err = s.dao.BeginTx(ctx)
 	if err != nil {
 		return fmt.Errorf("begin transaction: %w", err)
 	}
@@ -43,19 +59,25 @@ func (s *service) DeleteSegment(ctx context.Context, id uuid.UUID) error {
 		return fmt.Errorf("get segment by id: %w", err)
 	}
 
+	if segment.Ai {
+		return ErrChangeAiSegment
+	}
+
 	if err := segmentQuery.DeleteSegmentByID(id); err != nil {
 		return fmt.Errorf("delete segment: %w", err)
 	}
 
-	remainingSegments, err := segmentQuery.GetSegmentsByNodeID(segment.NodeID)
+	_, err = segmentQuery.GetSegmentsByNodeID(segment.NodeID)
 	if err != nil {
-		return fmt.Errorf("get segment by node_id: %w", err)
-	}
+		switch {
+		case errors.Is(err, daoEntity.ErrNotFound):
+			// у node не осталось сегментов, удаляем
+			if err := s.dao.NewNodeQuery(ctx).DeleteNodeByID(segment.NodeID); err != nil {
+				return fmt.Errorf("delete node by id: %w", err)
+			}
 
-	// у node не осталось сегментов, удаляем
-	if len(remainingSegments) == 0 {
-		if err := s.dao.NewNodeQuery(ctx).DeleteNodeByID(segment.NodeID); err != nil {
-			return fmt.Errorf("delete node by id: %w", err)
+		default:
+			return fmt.Errorf("get remaining segments by node_id: %w", err)
 		}
 	}
 

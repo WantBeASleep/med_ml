@@ -9,15 +9,16 @@ import (
 	"uzi/tests/e2e/flow"
 )
 
-func (suite *TestSuite) TestGetUziByExternalId_Success() {
+func (suite *TestSuite) TestGetUziByAuthor_Success() {
 	data, err := flow.New(suite.deps, flow.DeviceInit, flow.UziInit).Do(suite.T().Context())
 	require.NoError(suite.T(), err)
 
-	getResp, err := suite.deps.Adapter.GetUzisByExternalId(
+	getResp, err := suite.deps.Adapter.GetUzisByAuthor(
 		suite.T().Context(),
-		&pb.GetUzisByExternalIdIn{ExternalId: data.Uzi.ExternalID.String()},
+		&pb.GetUzisByAuthorIn{Author: data.Uzi.Author.String()},
 	)
 	require.NoError(suite.T(), err)
+	require.Equal(suite.T(), 1, len(getResp.Uzis))
 	require.Equal(suite.T(), data.Uzi.Id.String(), getResp.Uzis[0].Id)
 	require.Equal(suite.T(), data.Uzi.Projection, getResp.Uzis[0].Projection)
 	require.Equal(suite.T(), false, getResp.Uzis[0].Checked)

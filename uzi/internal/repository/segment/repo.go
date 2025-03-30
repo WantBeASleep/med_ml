@@ -14,6 +14,7 @@ const (
 	columnNodeID   = "node_id"
 	columnImageID  = "image_id"
 	columnContor   = "contor"
+	columnAi       = "ai"
 	columnTirads23 = "tirads_23"
 	columnTirads4  = "tirads_4"
 	columnTirads5  = "tirads_5"

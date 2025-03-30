@@ -27,6 +27,15 @@ func (s *service) GetUzisByExternalID(ctx context.Context, externalID uuid.UUID)
 	return uziEntity.Uzi{}.SliceToDomain(uzis), nil
 }
 
+func (s *service) GetUzisByAuthor(ctx context.Context, author uuid.UUID) ([]domain.Uzi, error) {
+	uzis, err := s.dao.NewUziQuery(ctx).GetUzisByAuthor(author)
+	if err != nil {
+		return nil, err
+	}
+
+	return uziEntity.Uzi{}.SliceToDomain(uzis), nil
+}
+
 func (s *service) GetUziEchographicsByID(ctx context.Context, id uuid.UUID) (domain.Echographic, error) {
 	echographics, err := s.dao.NewEchographicQuery(ctx).GetEchographicByID(id)
 	if err != nil {

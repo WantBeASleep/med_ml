@@ -2,10 +2,15 @@ package node
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"uzi/internal/domain"
 	nodeEntity "uzi/internal/repository/node/entity"
+)
+
+var (
+	ErrAiNodeEdit = errors.New("unable to edit ai node")
 )
 
 func (s *service) UpdateNode(ctx context.Context, arg UpdateNodeArg) (domain.Node, error) {
@@ -16,8 +21,12 @@ func (s *service) UpdateNode(ctx context.Context, arg UpdateNodeArg) (domain.Nod
 		return domain.Node{}, fmt.Errorf("get node: %w", err)
 	}
 	node := nodeDB.ToDomain()
-	arg.UpdateDomain(&node)
 
+	if node.Ai {
+		return domain.Node{}, ErrAiNodeEdit
+	}
+
+	arg.UpdateDomain(&node)
 	if err := nodeQuery.UpdateNode(nodeEntity.Node{}.FromDomain(node)); err != nil {
 		return domain.Node{}, fmt.Errorf("update node: %w", err)
 	}

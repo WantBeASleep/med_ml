@@ -11,6 +11,7 @@ func SegmentFromDomain(domain domain.Segment) *pb.Segment {
 		ImageId:   domain.ImageID.String(),
 		NodeId:    domain.NodeID.String(),
 		Contor:    domain.Contor,
+		Ai:        domain.Ai,
 		Tirads_23: domain.Tirads23,
 		Tirads_4:  domain.Tirads4,
 		Tirads_5:  domain.Tirads5,

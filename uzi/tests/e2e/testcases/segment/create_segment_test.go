@@ -12,7 +12,7 @@ import (
 	"uzi/tests/e2e/flow"
 )
 
-func (suite *TestSuite) TestCreateSegment_Success() {
+func (suite *TestSuite) TestCreateSegment_AiNodeCreateNotAllowed() {
 	data, err := flow.New(
 		suite.deps,
 		flow.DeviceInit,
@@ -27,7 +27,7 @@ func (suite *TestSuite) TestCreateSegment_Success() {
 	tirads4 := rand.Float64()
 	tirads5 := rand.Float64()
 
-	createResp, err := suite.deps.Adapter.CreateSegment(
+	_, err = suite.deps.Adapter.CreateSegment(
 		suite.T().Context(),
 		&pb.CreateSegmentIn{
 			NodeId:    data.Nodes[0].Id.String(),
@@ -38,27 +38,77 @@ func (suite *TestSuite) TestCreateSegment_Success() {
 			Tirads_5:  tirads5,
 		},
 	)
+	require.Error(suite.T(), err)
+}
+
+func (suite *TestSuite) TestCreateSegment_Success() {
+	data, err := flow.New(
+		suite.deps,
+		flow.DeviceInit,
+		flow.UziInit,
+		flow.TiffSplit,
+	).Do(suite.T().Context())
 	require.NoError(suite.T(), err)
 
-	getResp, err := suite.deps.Adapter.GetSegmentsByNodeId(
+	node := &pb.CreateNodeWithSegmentsIn_Node{
+		Tirads_23: rand.Float64(),
+		Tirads_4:  rand.Float64(),
+		Tirads_5:  rand.Float64(),
+	}
+
+	segments := []*pb.CreateNodeWithSegmentsIn_Segment{
+		{
+			ImageId:   data.Images[0].Id.String(),
+			Contor:    []byte(`[{"x": 1, "y": 1}]`),
+			Tirads_23: rand.Float64(),
+			Tirads_4:  rand.Float64(),
+			Tirads_5:  rand.Float64(),
+		},
+	}
+
+	createNodeResp, err := suite.deps.Adapter.CreateNodeWithSegments(
 		suite.T().Context(),
-		&pb.GetSegmentsByNodeIdIn{NodeId: data.Nodes[0].Id.String()},
+		&pb.CreateNodeWithSegmentsIn{
+			UziId:    data.Uzi.Id.String(),
+			Ai:       false,
+			Node:     node,
+			Segments: segments,
+		},
 	)
 	require.NoError(suite.T(), err)
 
-	var findedSegment *pb.Segment
-	for _, segment := range getResp.Segments {
-		if segment.Id == createResp.Id {
-			findedSegment = segment
-			break
-		}
-	}
-	require.NotNil(suite.T(), findedSegment)
-	require.Equal(suite.T(), createResp.Id, findedSegment.Id)
-	require.Equal(suite.T(), data.Nodes[0].Id.String(), findedSegment.NodeId)
-	require.Equal(suite.T(), data.Images[0].Id.String(), findedSegment.ImageId)
-	require.Equal(suite.T(), contor, findedSegment.Contor)
-	require.True(suite.T(), math.Abs(tirads23-findedSegment.Tirads_23) < 0.0001)
-	require.True(suite.T(), math.Abs(tirads4-findedSegment.Tirads_4) < 0.0001)
-	require.True(suite.T(), math.Abs(tirads5-findedSegment.Tirads_5) < 0.0001)
+	contor := []byte(`[{"x": 1, "y": 1}]`)
+	tirads23 := rand.Float64()
+	tirads4 := rand.Float64()
+	tirads5 := rand.Float64()
+
+	createResp, err := suite.deps.Adapter.CreateSegment(
+		suite.T().Context(),
+		&pb.CreateSegmentIn{
+			NodeId:    createNodeResp.NodeId,
+			ImageId:   data.Images[1].Id.String(),
+			Contor:    contor,
+			Ai:        false,
+			Tirads_23: tirads23,
+			Tirads_4:  tirads4,
+			Tirads_5:  tirads5,
+		},
+	)
+	require.NoError(suite.T(), err)
+
+	getResp, err := suite.deps.Adapter.GetNodesWithSegmentsByImageId(
+		suite.T().Context(),
+		&pb.GetNodesWithSegmentsByImageIdIn{Id: data.Images[1].Id.String()},
+	)
+	require.NoError(suite.T(), err)
+	require.Equal(suite.T(), 1, len(getResp.Segments))
+	require.NotNil(suite.T(), getResp.Segments[0])
+	require.Equal(suite.T(), createResp.Id, getResp.Segments[0].Id)
+	require.Equal(suite.T(), createNodeResp.NodeId, getResp.Segments[0].NodeId)
+	require.Equal(suite.T(), data.Images[1].Id.String(), getResp.Segments[0].ImageId)
+	require.Equal(suite.T(), contor, getResp.Segments[0].Contor)
+	require.False(suite.T(), getResp.Segments[0].Ai)
+	require.True(suite.T(), math.Abs(tirads23-getResp.Segments[0].Tirads_23) < 0.0001)
+	require.True(suite.T(), math.Abs(tirads4-getResp.Segments[0].Tirads_4) < 0.0001)
+	require.True(suite.T(), math.Abs(tirads5-getResp.Segments[0].Tirads_5) < 0.0001)
 }

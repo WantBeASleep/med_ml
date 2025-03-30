@@ -119,6 +119,7 @@ var SaveNodesWithSegments flowfuncDepsInjector = func(deps *Deps) flowfunc {
 					ImageID:  uuid.MustParse(segment.ImageId),
 					NodeID:   uuid.MustParse(segment.NodeId),
 					Contor:   segment.Contor,
+					Ai:       segment.Ai,
 					Tirads23: segment.Tirads_23,
 					Tirads4:  segment.Tirads_4,
 					Tirads5:  segment.Tirads_5,

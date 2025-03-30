@@ -12,6 +12,7 @@ type UziHandler interface {
 
 	GetUziById(ctx context.Context, req *pb.GetUziByIdIn) (*pb.GetUziByIdOut, error)
 	GetUzisByExternalId(ctx context.Context, req *pb.GetUzisByExternalIdIn) (*pb.GetUzisByExternalIdOut, error)
+	GetUzisByAuthor(ctx context.Context, req *pb.GetUzisByAuthorIn) (*pb.GetUzisByAuthorOut, error)
 	GetEchographicByUziId(ctx context.Context, req *pb.GetEchographicByUziIdIn) (*pb.GetEchographicByUziIdOut, error)
 
 	UpdateUzi(ctx context.Context, req *pb.UpdateUziIn) (*pb.UpdateUziOut, error)

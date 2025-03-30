@@ -6,8 +6,6 @@ import (
 	"errors"
 	"fmt"
 
-	"uzi/internal/domain"
-
 	"github.com/WantBeASleep/med_ml_lib/dbus"
 	"github.com/google/uuid"
 
@@ -46,8 +44,6 @@ func (h *subscriber) Consume(ctx context.Context, message *pb.UziProcessed) erro
 	arg := make([]node_segment.CreateNodesWithSegmentsArg, 0, len(message.NodesWithSegments))
 	for _, v := range message.NodesWithSegments {
 		node := node_segment.CreateNodesWithSegmentsArgNode{
-			Ai:       v.Node.Ai,
-			UziID:    uuid.MustParse(message.UziId),
 			Tirads23: v.Node.Tirads_23,
 			Tirads4:  v.Node.Tirads_4,
 			Tirads5:  v.Node.Tirads_5,
@@ -75,7 +71,5 @@ func (h *subscriber) Consume(ctx context.Context, message *pb.UziProcessed) erro
 		})
 	}
 
-	// TODO: вынести в отдельный метод, что бы тут не было логики с статусом
-	h.services.NodeSegment.CreateNodesWithSegments(ctx, arg, node_segment.WithNewUziStatus(domain.UziStatusCompleted))
-	return nil
+	return h.services.NodeSegment.SaveProcessedNodesWithSegments(ctx, uuid.MustParse(message.UziId), arg)
 }

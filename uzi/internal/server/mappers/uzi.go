@@ -19,6 +19,7 @@ func UziFromDomain(domain domain.Uzi) *pb.Uzi {
 		Projection: domain.Projection,
 		Checked:    domain.Checked,
 		ExternalId: domain.ExternalID.String(),
+		Author:     domain.Author.String(),
 		DeviceId:   int64(domain.DeviceID),
 		Status:     uziStatusMap[domain.Status],
 		CreateAt:   domain.CreateAt.Format(time.RFC3339),

@@ -14,6 +14,7 @@ type Service interface {
 
 	GetUziByID(ctx context.Context, id uuid.UUID) (domain.Uzi, error)
 	GetUzisByExternalID(ctx context.Context, externalID uuid.UUID) ([]domain.Uzi, error)
+	GetUzisByAuthor(ctx context.Context, author uuid.UUID) ([]domain.Uzi, error)
 	GetUziEchographicsByID(ctx context.Context, id uuid.UUID) (domain.Echographic, error)
 
 	UpdateUzi(ctx context.Context, arg UpdateUziArg) (domain.Uzi, error)

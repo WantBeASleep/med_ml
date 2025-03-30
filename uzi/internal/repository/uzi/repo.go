@@ -14,6 +14,7 @@ const (
 	columnProjection = "projection"
 	columnChecked    = "checked"
 	columnExternalID = "external_id"
+	columnAuthor     = "author"
 	columnDeviceID   = "device_id"
 	columnStatus     = "status"
 	columnCreateAt   = "create_at"
@@ -26,6 +27,7 @@ type Repository interface {
 
 	GetUziByID(id uuid.UUID) (entity.Uzi, error)
 	GetUzisByExternalID(externalID uuid.UUID) ([]entity.Uzi, error)
+	GetUzisByAuthor(author uuid.UUID) ([]entity.Uzi, error)
 
 	UpdateUzi(uzi entity.Uzi) error
 	UpdateUziStatus(id uuid.UUID, status string) error

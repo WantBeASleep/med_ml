@@ -2,11 +2,17 @@ package segment
 
 import (
 	"context"
+	"errors"
 
 	"uzi/internal/domain"
 	"uzi/internal/repository"
 
 	"github.com/google/uuid"
+)
+
+var (
+	ErrChangeAiSegment = errors.New("change ai segment not allowed")
+	ErrAddSegmentToAiNode = errors.New("add segment to ai node not allowed")
 )
 
 type Service interface {

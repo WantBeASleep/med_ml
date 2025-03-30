@@ -2,6 +2,7 @@ package segment
 
 import (
 	"context"
+	"fmt"
 
 	"uzi/internal/domain"
 	segmentEntity "uzi/internal/repository/segment/entity"
@@ -10,11 +11,21 @@ import (
 )
 
 func (s *service) CreateSegment(ctx context.Context, arg CreateSegmentArg) (uuid.UUID, error) {
+	node, err := s.dao.NewNodeQuery(ctx).GetNodeByID(arg.NodeID)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("get node by id: %w", err)
+	}
+
+	if node.Ai {
+		return uuid.Nil, ErrAddSegmentToAiNode
+	}
+
 	segment := domain.Segment{
 		Id:       uuid.New(),
 		ImageID:  arg.ImageID,
 		NodeID:   arg.NodeID,
 		Contor:   arg.Contor,
+		Ai:       arg.Ai,
 		Tirads23: arg.Tirads23,
 		Tirads4:  arg.Tirads4,
 		Tirads5:  arg.Tirads5,

@@ -13,6 +13,7 @@ service UziSrv {
   rpc createUzi(CreateUziIn) returns (CreateUziOut);
   rpc getUziById(GetUziByIdIn) returns (GetUziByIdOut);
   rpc getUzisByExternalId(GetUzisByExternalIdIn) returns (GetUzisByExternalIdOut);
+  rpc getUzisByAuthor(GetUzisByAuthorIn) returns (GetUzisByAuthorOut);
   rpc getEchographicByUziId(GetEchographicByUziIdIn) returns (GetEchographicByUziIdOut);
   rpc updateUzi(UpdateUziIn) returns (UpdateUziOut);
   rpc updateEchographic(UpdateEchographicIn) returns (UpdateEchographicOut);
@@ -69,9 +70,10 @@ message Uzi {
   string projection = 300;
   bool checked = 400;
   string external_id = 500;
-  int64 device_id = 600;
-  UziStatus status = 700;
-  string create_at = 800;
+  string author = 600;
+  int64 device_id = 700;
+  UziStatus status = 800;
+  string create_at = 900;
 }
 
 message Echographic {
@@ -99,7 +101,8 @@ message Echographic {
 message CreateUziIn {
   string projection = 100;
   string external_id = 200;
-  int64 device_id = 300;
+  string author = 300;
+  int64 device_id = 400;
 }
 
 message CreateUziOut { string id = 100; }
@@ -113,6 +116,14 @@ message GetUzisByExternalIdIn {
 }
 
 message GetUzisByExternalIdOut {
+  repeated Uzi uzis = 100;
+}
+
+message GetUzisByAuthorIn {
+  string author = 100;
+}
+
+message GetUzisByAuthorOut {
   repeated Uzi uzis = 100;
 }
 
@@ -178,18 +189,20 @@ message Segment {
   string image_id = 200;
   string node_id = 300;
   bytes contor = 400;
-  double tirads_23 = 500;
-  double tirads_4 = 600;
-  double tirads_5 = 700;
+  bool ai = 500;
+  double tirads_23 = 600;
+  double tirads_4 = 700;
+  double tirads_5 = 800;
 }
 
 message CreateSegmentIn {
   string image_id = 100;
   string node_id = 200;
   bytes contor = 300;
-  double tirads_23 = 400;
-  double tirads_4 = 500;
-  double tirads_5 = 600;
+  bool ai = 400;
+  double tirads_23 = 500;
+  double tirads_4 = 600;
+  double tirads_5 = 700;
 }
 
 message CreateSegmentOut { string id = 100; }
@@ -211,11 +224,9 @@ message UpdateSegmentOut { Segment segment = 100; }
 
 message CreateNodeWithSegmentsIn {
   message Node {
-    string uzi_id = 100;
-    bool ai = 200;
-    double tirads_23 = 300;
-    double tirads_4 = 400;
-    double tirads_5 = 500;
+    double tirads_23 = 200;
+    double tirads_4 = 300;
+    double tirads_5 = 400;
   }
   message Segment {
     string image_id = 100;
@@ -225,8 +236,10 @@ message CreateNodeWithSegmentsIn {
     double tirads_5 = 500;
   }
 
-  Node node = 100;
-  repeated Segment segments = 200;
+  string uzi_id = 100;
+  bool ai = 200;
+  Node node = 300;
+  repeated Segment segments = 400;
 }
 
 message CreateNodeWithSegmentsOut { 
