@@ -65,6 +65,12 @@ enum UziStatus {
   UZI_STATUS_COMPLETED = 2;
 }
 
+enum NodeValidation {
+  NODE_VALIDATION_NULL = 0;
+  NODE_VALIDATION_VALID = 1;
+  NODE_VALIDATION_INVALID = 2;
+}
+
 message Uzi {
   string id = 100;
   string projection = 300;
@@ -161,10 +167,11 @@ message GetImagesByUziIdOut { repeated Image images = 100; }
 message Node {
   string id = 100;
   bool ai = 200;
-  string uzi_id = 300;
-  double tirads_23 = 400;
-  double tirads_4 = 500;
-  double tirads_5 = 600;
+  optional NodeValidation validation = 300;
+  string uzi_id = 400;
+  double tirads_23 = 500;
+  double tirads_4 = 600;
+  double tirads_5 = 700;
 }
 
 message GetNodesByUziIdIn{ string uzi_id = 100; };
@@ -175,9 +182,10 @@ message GetNodesByUziIdOut{
 
 message UpdateNodeIn {
   string id = 100;
-  optional double tirads_23 = 200;
-  optional double tirads_4 = 300;
-  optional double tirads_5 = 400;
+  optional NodeValidation validation = 200;
+  optional double tirads_23 = 300;
+  optional double tirads_4 = 400;
+  optional double tirads_5 = 500;
 }
 
 message UpdateNodeOut { Node node = 100; }
@@ -199,10 +207,9 @@ message CreateSegmentIn {
   string image_id = 100;
   string node_id = 200;
   bytes contor = 300;
-  bool ai = 400;
-  double tirads_23 = 500;
-  double tirads_4 = 600;
-  double tirads_5 = 700;
+  double tirads_23 = 400;
+  double tirads_4 = 500;
+  double tirads_5 = 600;
 }
 
 message CreateSegmentOut { string id = 100; }
@@ -237,9 +244,8 @@ message CreateNodeWithSegmentsIn {
   }
 
   string uzi_id = 100;
-  bool ai = 200;
-  Node node = 300;
-  repeated Segment segments = 400;
+  Node node = 200;
+  repeated Segment segments = 300;
 }
 
 message CreateNodeWithSegmentsOut { 

@@ -44,9 +44,8 @@ func (h *handler) CreateNodeWithSegments(ctx context.Context, in *pb.CreateNodeW
 		Tirads5:  in.Node.Tirads_5,
 	}
 
-	ids, err := h.services.NodeSegment.CreateNodesWithSegments(ctx,
+	ids, err := h.services.NodeSegment.CreateManualNodesWithSegments(ctx,
 		uuid.MustParse(in.UziId),
-		in.Ai,
 		[]node_segment.CreateNodesWithSegmentsArg{
 			{
 				Node:     node,

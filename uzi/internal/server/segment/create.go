@@ -25,11 +25,10 @@ func (h *handler) CreateSegment(ctx context.Context, in *pb.CreateSegmentIn) (*p
 		return nil, status.Errorf(codes.InvalidArgument, "contor is not a valid json")
 	}
 
-	id, err := h.services.Segment.CreateSegment(ctx, segment.CreateSegmentArg{
+	id, err := h.services.Segment.CreateManualSegment(ctx, segment.CreateSegmentArg{
 		ImageID:  uuid.MustParse(in.ImageId),
 		NodeID:   uuid.MustParse(in.NodeId),
 		Contor:   in.Contor,
-		Ai:       in.Ai,
 		Tirads23: in.Tirads_23,
 		Tirads4:  in.Tirads_4,
 		Tirads5:  in.Tirads_5,

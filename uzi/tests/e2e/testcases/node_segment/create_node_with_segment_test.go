@@ -48,7 +48,6 @@ func (suite *TestSuite) TestCreateNodeWithSegment_Success() {
 		suite.T().Context(),
 		&pb.CreateNodeWithSegmentsIn{
 			UziId:    data.Uzi.Id.String(),
-			Ai:       false,
 			Node:     node,
 			Segments: segments,
 		},
@@ -64,6 +63,7 @@ func (suite *TestSuite) TestCreateNodeWithSegment_Success() {
 	require.Equal(suite.T(), len(getResp.Nodes), 1)
 	require.Equal(suite.T(), getResp.Nodes[0].Id, createResp.NodeId)
 	require.Equal(suite.T(), getResp.Nodes[0].Ai, false)
+	require.Nil(suite.T(), getResp.Nodes[0].Validation)
 	require.Equal(suite.T(), getResp.Nodes[0].UziId, data.Uzi.Id.String())
 	require.True(suite.T(), math.Abs(getResp.Nodes[0].Tirads_23-node.Tirads_23) < 0.0001)
 	require.True(suite.T(), math.Abs(getResp.Nodes[0].Tirads_4-node.Tirads_4) < 0.0001)

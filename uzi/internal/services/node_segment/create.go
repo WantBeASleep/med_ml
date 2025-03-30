@@ -15,7 +15,7 @@ const (
 	avgSegmentPerNode = 3
 )
 
-func (s *service) CreateNodesWithSegments(
+func (s *service) createNodesWithSegments(
 	ctx context.Context,
 	uziID uuid.UUID,
 	ai bool,
@@ -28,6 +28,12 @@ func (s *service) CreateNodesWithSegments(
 	}
 
 	nodes, segments, ids := s.createDomainNodeSegmentsFromArgs(uziID, ai, arg)
+
+	if opt.setNodesValidation != nil {
+		for i := range nodes {
+			nodes[i].Validation = opt.setNodesValidation
+		}
+	}
 
 	ctx, err := s.dao.BeginTx(ctx)
 	if err != nil {
@@ -64,15 +70,24 @@ func (s *service) SaveProcessedNodesWithSegments(
 	uziID uuid.UUID,
 	arg []CreateNodesWithSegmentsArg,
 ) error {
-	_, err := s.CreateNodesWithSegments(
+	_, err := s.createNodesWithSegments(
 		ctx,
 		uziID,
 		true,
 		arg,
 		WithNewUziStatus(domain.UziStatusCompleted),
+		WithSetNodesValidation(domain.NodeValidationNull),
 	)
 
 	return err
+}
+
+func (s *service) CreateManualNodesWithSegments(
+	ctx context.Context,
+	uziID uuid.UUID,
+	arg []CreateNodesWithSegmentsArg,
+) ([]CreateNodesWithSegmentsID, error) {
+	return s.createNodesWithSegments(ctx, uziID, false, arg)
 }
 
 func (s *service) createDomainNodeSegmentsFromArgs(

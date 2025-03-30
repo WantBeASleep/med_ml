@@ -11,12 +11,12 @@ import (
 )
 
 var (
-	ErrChangeAiSegment = errors.New("change ai segment not allowed")
+	ErrChangeAiSegment    = errors.New("change ai segment not allowed")
 	ErrAddSegmentToAiNode = errors.New("add segment to ai node not allowed")
 )
 
 type Service interface {
-	CreateSegment(ctx context.Context, arg CreateSegmentArg) (uuid.UUID, error)
+	CreateManualSegment(ctx context.Context, arg CreateSegmentArg) (uuid.UUID, error)
 
 	GetSegmentsByNodeID(ctx context.Context, id uuid.UUID) ([]domain.Segment, error)
 

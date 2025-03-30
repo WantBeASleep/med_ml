@@ -70,7 +70,6 @@ func (suite *TestSuite) TestCreateSegment_Success() {
 		suite.T().Context(),
 		&pb.CreateNodeWithSegmentsIn{
 			UziId:    data.Uzi.Id.String(),
-			Ai:       false,
 			Node:     node,
 			Segments: segments,
 		},
@@ -88,7 +87,6 @@ func (suite *TestSuite) TestCreateSegment_Success() {
 			NodeId:    createNodeResp.NodeId,
 			ImageId:   data.Images[1].Id.String(),
 			Contor:    contor,
-			Ai:        false,
 			Tirads_23: tirads23,
 			Tirads_4:  tirads4,
 			Tirads_5:  tirads5,

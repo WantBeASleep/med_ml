@@ -20,10 +20,11 @@ func (h *handler) UpdateNode(ctx context.Context, in *pb.UpdateNodeIn) (*pb.Upda
 	node, err := h.services.Node.UpdateNode(
 		ctx,
 		node.UpdateNodeArg{
-			Id:       uuid.MustParse(in.Id),
-			Tirads23: in.Tirads_23,
-			Tirads4:  in.Tirads_4,
-			Tirads5:  in.Tirads_5,
+			Id:         uuid.MustParse(in.Id),
+			Validation: mappers.NodeValidationToDomain(in.Validation),
+			Tirads23:   in.Tirads_23,
+			Tirads4:    in.Tirads_4,
+			Tirads5:    in.Tirads_5,
 		},
 	)
 	if err != nil {

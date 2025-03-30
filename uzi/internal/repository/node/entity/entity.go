@@ -1,28 +1,33 @@
 package entity
 
 import (
-	"uzi/internal/domain"
+	"database/sql"
 
+	"github.com/WantBeASleep/med_ml_lib/gtc"
 	"github.com/google/uuid"
+
+	"uzi/internal/domain"
 )
 
 type Node struct {
-	Id       uuid.UUID `db:"id"`
-	Ai       bool      `db:"ai"`
-	UziID    uuid.UUID `db:"uzi_id"`
-	Tirads23 float64   `db:"tirads_23"`
-	Tirads4  float64   `db:"tirads_4"`
-	Tirads5  float64   `db:"tirads_5"`
+	Id         uuid.UUID      `db:"id"`
+	Ai         bool           `db:"ai"`
+	UziID      uuid.UUID      `db:"uzi_id"`
+	Validation sql.NullString `db:"validation"`
+	Tirads23   float64        `db:"tirads_23"`
+	Tirads4    float64        `db:"tirads_4"`
+	Tirads5    float64        `db:"tirads_5"`
 }
 
 func (Node) FromDomain(d domain.Node) Node {
 	return Node{
-		Id:       d.Id,
-		Ai:       d.Ai,
-		UziID:    d.UziID,
-		Tirads23: d.Tirads23,
-		Tirads4:  d.Tirads4,
-		Tirads5:  d.Tirads5,
+		Id:         d.Id,
+		Ai:         d.Ai,
+		UziID:      d.UziID,
+		Validation: gtc.String.PointerToSql((*string)(d.Validation)),
+		Tirads23:   d.Tirads23,
+		Tirads4:    d.Tirads4,
+		Tirads5:    d.Tirads5,
 	}
 }
 
@@ -35,7 +40,7 @@ func (Node) SliceFromDomain(slice []domain.Node) []Node {
 }
 
 func (d Node) ToDomain() domain.Node {
-	return domain.Node{
+	node := domain.Node{
 		Id:       d.Id,
 		Ai:       d.Ai,
 		UziID:    d.UziID,
@@ -43,6 +48,13 @@ func (d Node) ToDomain() domain.Node {
 		Tirads4:  d.Tirads4,
 		Tirads5:  d.Tirads5,
 	}
+
+	if d.Validation.Valid {
+		validation, _ := domain.NodeValidation.Parse("", d.Validation.String)
+		node.Validation = &validation
+	}
+
+	return node
 }
 
 func (Node) SliceToDomain(slice []Node) []domain.Node {

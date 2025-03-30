@@ -39,15 +39,17 @@ COMMENT ON TABLE image IS 'Хранилище кадров в узи';
 
 CREATE TABLE node
 (
-    id        uuid    PRIMARY KEY,
-    ai        boolean NOT NULL,
-    tirads_23 real    NOT NULL,
-    tirads_4  real    NOT NULL,
-    tirads_5  real    NOT NULL
+    id              uuid        PRIMARY KEY,
+    ai              boolean     NOT NULL,
+    "validation"    varchar(255),
+    tirads_23       real        NOT NULL,
+    tirads_4        real        NOT NULL,
+    tirads_5        real        NOT NULL
 );
 
 COMMENT ON TABLE node IS 'Хранилище узлов в узи';
 COMMENT ON COLUMN node.ai IS 'Автор узла(нейронка ли)';
+COMMENT ON COLUMN node."validation" IS 'валидация узла специалистом (null, invalid, valid). Доступно только для нейроночных узлов';
 COMMENT ON COLUMN node.tirads_23 IS 'процент отношения к классу tirads_23';
 COMMENT ON COLUMN node.tirads_4 IS 'процент отношения к классу tirads_4';
 COMMENT ON COLUMN node.tirads_5 IS 'процент отношения к классу tirads_5';

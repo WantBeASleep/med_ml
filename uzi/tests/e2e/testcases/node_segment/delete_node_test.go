@@ -71,7 +71,6 @@ func (suite *TestSuite) TestDeleteNode_Success() {
 		suite.T().Context(),
 		&pb.CreateNodeWithSegmentsIn{
 			UziId:    data.Uzi.Id.String(),
-			Ai:       false,
 			Node:     node,
 			Segments: segments,
 		},

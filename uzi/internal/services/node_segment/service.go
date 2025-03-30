@@ -12,8 +12,8 @@ import (
 )
 
 type Service interface {
-	CreateNodesWithSegments(ctx context.Context, uziID uuid.UUID, ai bool, arg []CreateNodesWithSegmentsArg, opts ...CreateNodesWithSegmentsOption) ([]CreateNodesWithSegmentsID, error)
 	SaveProcessedNodesWithSegments(ctx context.Context, uziID uuid.UUID, arg []CreateNodesWithSegmentsArg) error
+	CreateManualNodesWithSegments(ctx context.Context, uziID uuid.UUID, arg []CreateNodesWithSegmentsArg) ([]CreateNodesWithSegmentsID, error)
 
 	GetNodesWithSegmentsByImageID(ctx context.Context, id uuid.UUID) ([]domain.Node, []domain.Segment, error)
 

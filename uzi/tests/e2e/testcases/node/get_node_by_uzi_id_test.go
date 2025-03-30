@@ -28,6 +28,7 @@ func (suite *TestSuite) TestGetNodesByUziId_Success() {
 	for i, node := range getResp.Nodes {
 		require.Equal(suite.T(), data.Nodes[i].Id.String(), node.Id)
 		require.Equal(suite.T(), data.Nodes[i].Ai, node.Ai)
+		require.Equal(suite.T(), pb.NodeValidation_NODE_VALIDATION_NULL, *node.Validation)
 		require.Equal(suite.T(), data.Uzi.Id.String(), node.UziId)
 		require.Equal(suite.T(), data.Nodes[i].Tirads23, node.Tirads_23)
 		require.Equal(suite.T(), data.Nodes[i].Tirads4, node.Tirads_4)

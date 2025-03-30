@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (s *service) CreateSegment(ctx context.Context, arg CreateSegmentArg) (uuid.UUID, error) {
+func (s *service) CreateManualSegment(ctx context.Context, arg CreateSegmentArg) (uuid.UUID, error) {
 	node, err := s.dao.NewNodeQuery(ctx).GetNodeByID(arg.NodeID)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("get node by id: %w", err)
@@ -25,7 +25,7 @@ func (s *service) CreateSegment(ctx context.Context, arg CreateSegmentArg) (uuid
 		ImageID:  arg.ImageID,
 		NodeID:   arg.NodeID,
 		Contor:   arg.Contor,
-		Ai:       arg.Ai,
+		Ai:       false,
 		Tirads23: arg.Tirads23,
 		Tirads4:  arg.Tirads4,
 		Tirads5:  arg.Tirads5,
