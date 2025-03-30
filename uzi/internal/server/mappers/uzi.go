@@ -13,10 +13,20 @@ var uziStatusMap = map[domain.UziStatus]pb.UziStatus{
 	domain.UziStatusCompleted: pb.UziStatus_UZI_STATUS_COMPLETED,
 }
 
+var UziProjectionMap = map[domain.UziProjection]pb.UziProjection{
+	domain.UziProjectionLong:  pb.UziProjection_UZI_PROJECTION_LONG,
+	domain.UziProjectionCross: pb.UziProjection_UZI_PROJECTION_CROSS,
+}
+
+var UziProjectionReverseMap = map[pb.UziProjection]domain.UziProjection{
+	pb.UziProjection_UZI_PROJECTION_LONG:  domain.UziProjectionLong,
+	pb.UziProjection_UZI_PROJECTION_CROSS: domain.UziProjectionCross,
+}
+
 func UziFromDomain(domain domain.Uzi) *pb.Uzi {
 	return &pb.Uzi{
 		Id:          domain.Id.String(),
-		Projection:  domain.Projection,
+		Projection:  UziProjectionMap[domain.Projection],
 		Checked:     domain.Checked,
 		ExternalId:  domain.ExternalID.String(),
 		Author:      domain.Author.String(),

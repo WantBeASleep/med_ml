@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	pb "uzi/internal/generated/grpc/service"
+	"uzi/internal/server/mappers"
 	"uzi/internal/services/uzi"
 )
 
@@ -21,7 +22,7 @@ func (h *handler) CreateUzi(ctx context.Context, in *pb.CreateUziIn) (*pb.Create
 	}
 
 	id, err := h.services.Uzi.CreateUzi(ctx, uzi.CreateUziArg{
-		Projection:  in.Projection,
+		Projection:  mappers.UziProjectionReverseMap[in.Projection],
 		ExternalID:  uuid.MustParse(in.ExternalId),
 		Author:      uuid.MustParse(in.Author),
 		DeviceID:    int(in.DeviceId),

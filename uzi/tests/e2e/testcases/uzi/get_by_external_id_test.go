@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	pb "uzi/internal/generated/grpc/service"
+	"uzi/internal/server/mappers"
 	"uzi/tests/e2e/flow"
 )
 
@@ -19,7 +20,7 @@ func (suite *TestSuite) TestGetUziByExternalId_Success() {
 	)
 	require.NoError(suite.T(), err)
 	require.Equal(suite.T(), data.Uzi.Id.String(), getResp.Uzis[0].Id)
-	require.Equal(suite.T(), data.Uzi.Projection, getResp.Uzis[0].Projection)
+	require.Equal(suite.T(), data.Uzi.Projection, mappers.UziProjectionReverseMap[getResp.Uzis[0].Projection])
 	require.Equal(suite.T(), false, getResp.Uzis[0].Checked)
 	require.Equal(suite.T(), data.Uzi.ExternalID.String(), getResp.Uzis[0].ExternalId)
 	require.Equal(suite.T(), data.Uzi.Author.String(), getResp.Uzis[0].Author)

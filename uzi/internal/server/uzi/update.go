@@ -7,6 +7,10 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	"uzi/internal/domain"
+
+	"github.com/AlekSi/pointer"
+
 	pb "uzi/internal/generated/grpc/service"
 	"uzi/internal/server/mappers"
 	"uzi/internal/services/uzi"
@@ -17,9 +21,14 @@ func (h *handler) UpdateUzi(ctx context.Context, in *pb.UpdateUziIn) (*pb.Update
 		return nil, status.Errorf(codes.InvalidArgument, "id is not a valid uuid: %s", err.Error())
 	}
 
+	var projection *domain.UziProjection
+	if in.Projection != nil {
+		projection = pointer.To(mappers.UziProjectionReverseMap[*in.Projection])
+	}
+
 	uzi, err := h.services.Uzi.UpdateUzi(ctx, uzi.UpdateUziArg{
 		Id:         uuid.MustParse(in.Id),
-		Projection: in.Projection,
+		Projection: projection,
 		Checked:    in.Checked,
 	})
 	if err != nil {

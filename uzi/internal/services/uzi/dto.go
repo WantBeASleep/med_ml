@@ -7,7 +7,7 @@ import (
 )
 
 type CreateUziArg struct {
-	Projection  string
+	Projection  domain.UziProjection
 	ExternalID  uuid.UUID
 	Author      uuid.UUID
 	DeviceID    int
@@ -16,7 +16,7 @@ type CreateUziArg struct {
 
 type UpdateUziArg struct {
 	Id         uuid.UUID
-	Projection *string
+	Projection *domain.UziProjection
 	Checked    *bool
 }
 

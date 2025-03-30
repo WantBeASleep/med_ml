@@ -9,17 +9,18 @@ import (
 
 	"uzi/internal/domain"
 	pb "uzi/internal/generated/grpc/service"
+	"uzi/internal/server/mappers"
 )
 
 var UziInit flowfuncDepsInjector = func(deps *Deps) flowfunc {
 	return func(ctx context.Context, data FlowData) (FlowData, error) {
-		projection := gofakeit.Word()
+		projection := domain.UziProjectionLong
 		externalId := uuid.New()
 		author := uuid.New()
 		description := gofakeit.Word()
 
 		resp, err := deps.Adapter.CreateUzi(ctx, &pb.CreateUziIn{
-			Projection:  projection,
+			Projection:  mappers.UziProjectionMap[projection],
 			ExternalId:  externalId.String(),
 			DeviceId:    int64(data.Device.Id),
 			Author:      author.String(),

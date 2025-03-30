@@ -25,7 +25,7 @@ type Uzi struct {
 func (Uzi) FromDomain(d domain.Uzi) Uzi {
 	return Uzi{
 		Id:          d.Id,
-		Projection:  d.Projection,
+		Projection:  d.Projection.String(),
 		Checked:     d.Checked,
 		ExternalID:  d.ExternalID,
 		Author:      d.Author,
@@ -40,10 +40,11 @@ func (d Uzi) ToDomain() domain.Uzi {
 	// TODO: обработать ошибку
 	// но нигде встретиться не должна
 	status, _ := domain.UziStatus.Parse("", d.Status)
+	projection, _ := domain.UziProjection.Parse("", d.Projection)
 
 	return domain.Uzi{
 		Id:          d.Id,
-		Projection:  d.Projection,
+		Projection:  projection,
 		Checked:     d.Checked,
 		ExternalID:  d.ExternalID,
 		Author:      d.Author,

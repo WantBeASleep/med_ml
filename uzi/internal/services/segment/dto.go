@@ -20,12 +20,16 @@ type CreateSegmentArg struct {
 // TODO: починить баг при запросе со всеми полями nil
 type UpdateSegmentArg struct {
 	Id       uuid.UUID
+	Contor   *json.RawMessage
 	Tirads23 *float64
 	Tirads4  *float64
 	Tirads5  *float64
 }
 
 func (u UpdateSegmentArg) UpdateDomain(d *domain.Segment) {
+	if u.Contor != nil {
+		d.Contor = *u.Contor
+	}
 	if u.Tirads23 != nil {
 		d.Tirads23 = *u.Tirads23
 	}

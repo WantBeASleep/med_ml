@@ -72,15 +72,20 @@ enum NodeValidation {
   NODE_VALIDATION_INVALID = 2;
 }
 
+enum UziProjection {
+  UZI_PROJECTION_LONG = 0;
+  UZI_PROJECTION_CROSS = 1;
+}
+
 message Uzi {
   string id = 100;
-  string projection = 300;
-  bool checked = 400;
-  string external_id = 500;
-  string author = 600;
-  int64 device_id = 700;
-  UziStatus status = 800;
-  optional string description = 900;
+  UziProjection projection = 200;
+  bool checked = 300;
+  string external_id = 400;
+  string author = 500;
+  int64 device_id = 600;
+  UziStatus status = 700;
+  optional string description = 800;
   string create_at = 1000;
 }
 
@@ -107,7 +112,7 @@ message Echographic {
 }
 
 message CreateUziIn {
-  string projection = 100;
+  UziProjection projection = 100;
   string external_id = 200;
   string author = 300;
   int64 device_id = 400;
@@ -142,7 +147,7 @@ message GetEchographicByUziIdOut { Echographic echographic = 100; }
 
 message UpdateUziIn {
   string id = 100;
-  optional string projection = 200;
+  optional UziProjection projection = 200;
   optional bool checked = 300;
 }
 
@@ -226,9 +231,10 @@ message GetSegmentsByNodeIdOut { repeated Segment segments = 100; }
 
 message UpdateSegmentIn {
   string id = 100;
-  optional double tirads_23 = 200;
-  optional double tirads_4 = 300;
-  optional double tirads_5 = 400;
+  optional bytes contor = 200;
+  optional double tirads_23 = 300;
+  optional double tirads_4 = 400;
+  optional double tirads_5 = 500;
 }
 
 message UpdateSegmentOut { Segment segment = 100; }

@@ -3,6 +3,7 @@ module uzi
 go 1.24.0
 
 require (
+	github.com/AlekSi/pointer v1.2.0
 	github.com/IBM/sarama v1.45.0
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/WantBeASleep/med_ml_lib v1.0.8

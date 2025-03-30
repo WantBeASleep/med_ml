@@ -7,7 +7,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
+	"uzi/internal/domain"
+
 	pb "uzi/internal/generated/grpc/service"
+	"uzi/internal/server/mappers"
 	"uzi/tests/e2e/flow"
 )
 
@@ -15,7 +18,7 @@ func (suite *TestSuite) TestCreateUzi_Success() {
 	data, err := flow.New(suite.deps, flow.DeviceInit).Do(suite.T().Context())
 	require.NoError(suite.T(), err)
 
-	projection := gofakeit.Word()
+	projection := domain.UziProjectionLong
 	externalID := uuid.New()
 	author := uuid.New()
 	description := gofakeit.Word()
@@ -23,7 +26,7 @@ func (suite *TestSuite) TestCreateUzi_Success() {
 		suite.T().Context(),
 		&pb.CreateUziIn{
 			DeviceId:    int64(data.Device.Id),
-			Projection:  projection,
+			Projection:  mappers.UziProjectionMap[projection],
 			ExternalId:  externalID.String(),
 			Author:      author.String(),
 			Description: &description,
@@ -37,7 +40,7 @@ func (suite *TestSuite) TestCreateUzi_Success() {
 	)
 	require.NoError(suite.T(), err)
 	require.Equal(suite.T(), createResp.Id, getResp.Uzi.Id)
-	require.Equal(suite.T(), projection, getResp.Uzi.Projection)
+	require.Equal(suite.T(), projection, mappers.UziProjectionReverseMap[getResp.Uzi.Projection])
 	require.Equal(suite.T(), false, getResp.Uzi.Checked)
 	require.Equal(suite.T(), externalID.String(), getResp.Uzi.ExternalId)
 	require.Equal(suite.T(), author.String(), getResp.Uzi.Author)

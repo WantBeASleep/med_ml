@@ -3,6 +3,7 @@
 package segment_test
 
 import (
+	"encoding/json"
 	"math"
 	"math/rand"
 
@@ -47,6 +48,7 @@ func (suite *TestSuite) TestUpdateSegment_Success() {
 	)
 	require.NoError(suite.T(), err)
 
+	newContor := json.RawMessage(`[{"x": 2, "y": 2}]`)
 	tirads23 := rand.Float64()
 	tirads4 := rand.Float64()
 	tirads5 := rand.Float64()
@@ -55,6 +57,7 @@ func (suite *TestSuite) TestUpdateSegment_Success() {
 		suite.T().Context(),
 		&pb.UpdateSegmentIn{
 			Id:        createResp.SegmentIds[0],
+			Contor:    []byte(newContor),
 			Tirads_23: &tirads23,
 			Tirads_4:  &tirads4,
 			Tirads_5:  &tirads5,
@@ -64,7 +67,7 @@ func (suite *TestSuite) TestUpdateSegment_Success() {
 	require.Equal(suite.T(), createResp.SegmentIds[0], updateResp.Segment.Id)
 	require.Equal(suite.T(), createResp.NodeId, updateResp.Segment.NodeId)
 	require.Equal(suite.T(), data.Images[0].Id.String(), updateResp.Segment.ImageId)
-	require.Equal(suite.T(), string(segments[0].Contor), string(updateResp.Segment.Contor))
+	require.Equal(suite.T(), string(newContor), string(updateResp.Segment.Contor))
 	require.True(suite.T(), math.Abs(tirads23-updateResp.Segment.Tirads_23) < 0.0001)
 	require.True(suite.T(), math.Abs(tirads4-updateResp.Segment.Tirads_4) < 0.0001)
 	require.True(suite.T(), math.Abs(tirads5-updateResp.Segment.Tirads_5) < 0.0001)

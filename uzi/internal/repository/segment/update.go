@@ -10,6 +10,7 @@ func (q *repo) UpdateSegment(segment entity.Segment) error {
 	query := q.QueryBuilder().
 		Update(table).
 		SetMap(sq.Eq{
+			columnContor:   segment.Contor,
 			columnTirads23: segment.Tirads23,
 			columnTirads4:  segment.Tirads4,
 			columnTirads5:  segment.Tirads5,

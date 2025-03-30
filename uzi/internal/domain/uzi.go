@@ -8,7 +8,7 @@ import (
 
 type Uzi struct {
 	Id          uuid.UUID
-	Projection  string
+	Projection  UziProjection
 	Checked     bool
 	ExternalID  uuid.UUID
 	Author      uuid.UUID
