@@ -16,6 +16,76 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
+func encodeMedCardDoctorDoctorIDPatientPatientIDPatchRequest(
+	req *MedCardDoctorDoctorIDPatientPatientIDPatchReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeMedCardPostRequest(
+	req *Card,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeMedDoctorPostRequest(
+	req *MedDoctorPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeMedPatientIDPatchRequest(
+	req *MedPatientIDPatchReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeMedPatientPostRequest(
+	req *MedPatientPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeUziDevicePostRequest(
 	req *UziDevicePostReq,
 	r *http.Request,
@@ -32,6 +102,20 @@ func encodeUziDevicePostRequest(
 
 func encodeUziIDEchographicsPatchRequest(
 	req *Echographics,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeUziIDNodesSegmentsPostRequest(
+	req *UziIDNodesSegmentsPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -72,20 +156,6 @@ func encodeUziNodesIDPatchRequest(
 	return nil
 }
 
-func encodeUziNodesSegmentsPostRequest(
-	req *UziNodesSegmentsPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
 func encodeUziPostRequest(
 	req *UziPostReq,
 	r *http.Request,
@@ -102,7 +172,7 @@ func encodeUziPostRequest(
 			Explode: true,
 		}
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			return e.EncodeValue(conv.StringToString(request.Projection))
+			return e.EncodeValue(conv.StringToString(string(request.Projection)))
 		}); err != nil {
 			return errors.Wrap(err, "encode query")
 		}
@@ -129,6 +199,22 @@ func encodeUziPostRequest(
 		}
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
 			return e.EncodeValue(conv.IntToString(request.DeviceID))
+		}); err != nil {
+			return errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "description" form field.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "description",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := request.Description.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
 		}); err != nil {
 			return errors.Wrap(err, "encode query")
 		}

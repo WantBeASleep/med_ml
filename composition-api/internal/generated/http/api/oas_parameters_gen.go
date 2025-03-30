@@ -16,6 +16,576 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// MedCardDoctorDoctorIDPatientPatientIDGetParams is parameters of GET /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+type MedCardDoctorDoctorIDPatientPatientIDGetParams struct {
+	// Id врача.
+	DoctorID uuid.UUID
+	// Id пациента.
+	PatientID uuid.UUID
+}
+
+func unpackMedCardDoctorDoctorIDPatientPatientIDGetParams(packed middleware.Parameters) (params MedCardDoctorDoctorIDPatientPatientIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "doctor_id",
+			In:   "path",
+		}
+		params.DoctorID = packed[key].(uuid.UUID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "patient_id",
+			In:   "path",
+		}
+		params.PatientID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeMedCardDoctorDoctorIDPatientPatientIDGetParams(args [2]string, argsEscaped bool, r *http.Request) (params MedCardDoctorDoctorIDPatientPatientIDGetParams, _ error) {
+	// Decode path: doctor_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "doctor_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.DoctorID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "doctor_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: patient_id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "patient_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.PatientID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "patient_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// MedCardDoctorDoctorIDPatientPatientIDPatchParams is parameters of PATCH /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+type MedCardDoctorDoctorIDPatientPatientIDPatchParams struct {
+	// Id врача.
+	DoctorID uuid.UUID
+	// Id пациента.
+	PatientID uuid.UUID
+}
+
+func unpackMedCardDoctorDoctorIDPatientPatientIDPatchParams(packed middleware.Parameters) (params MedCardDoctorDoctorIDPatientPatientIDPatchParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "doctor_id",
+			In:   "path",
+		}
+		params.DoctorID = packed[key].(uuid.UUID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "patient_id",
+			In:   "path",
+		}
+		params.PatientID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeMedCardDoctorDoctorIDPatientPatientIDPatchParams(args [2]string, argsEscaped bool, r *http.Request) (params MedCardDoctorDoctorIDPatientPatientIDPatchParams, _ error) {
+	// Decode path: doctor_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "doctor_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.DoctorID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "doctor_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: patient_id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "patient_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.PatientID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "patient_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// MedDoctorIDGetParams is parameters of GET /med/doctor/{id} operation.
+type MedDoctorIDGetParams struct {
+	// Id врача.
+	ID uuid.UUID
+}
+
+func unpackMedDoctorIDGetParams(packed middleware.Parameters) (params MedDoctorIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeMedDoctorIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params MedDoctorIDGetParams, _ error) {
+	// Decode path: id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// MedPatientIDGetParams is parameters of GET /med/patient/{id} operation.
+type MedPatientIDGetParams struct {
+	// Id пациента.
+	ID uuid.UUID
+}
+
+func unpackMedPatientIDGetParams(packed middleware.Parameters) (params MedPatientIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeMedPatientIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params MedPatientIDGetParams, _ error) {
+	// Decode path: id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// MedPatientIDPatchParams is parameters of PATCH /med/patient/{id} operation.
+type MedPatientIDPatchParams struct {
+	// Id пациента.
+	ID uuid.UUID
+}
+
+func unpackMedPatientIDPatchParams(packed middleware.Parameters) (params MedPatientIDPatchParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeMedPatientIDPatchParams(args [1]string, argsEscaped bool, r *http.Request) (params MedPatientIDPatchParams, _ error) {
+	// Decode path: id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// MedPatientsDoctorIDGetParams is parameters of GET /med/patients/{doctor_id} operation.
+type MedPatientsDoctorIDGetParams struct {
+	// Id врача.
+	DoctorID uuid.UUID
+}
+
+func unpackMedPatientsDoctorIDGetParams(packed middleware.Parameters) (params MedPatientsDoctorIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "doctor_id",
+			In:   "path",
+		}
+		params.DoctorID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeMedPatientsDoctorIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params MedPatientsDoctorIDGetParams, _ error) {
+	// Decode path: doctor_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "doctor_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.DoctorID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "doctor_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// UziIDDeleteParams is parameters of DELETE /uzi/{id} operation.
+type UziIDDeleteParams struct {
+	// Id узи.
+	ID uuid.UUID
+}
+
+func unpackUziIDDeleteParams(packed middleware.Parameters) (params UziIDDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeUziIDDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params UziIDDeleteParams, _ error) {
+	// Decode path: id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // UziIDEchographicsGetParams is parameters of GET /uzi/{id}/echographics operation.
 type UziIDEchographicsGetParams struct {
 	// Id узи.
@@ -298,6 +868,72 @@ func unpackUziIDNodesGetParams(packed middleware.Parameters) (params UziIDNodesG
 }
 
 func decodeUziIDNodesGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UziIDNodesGetParams, _ error) {
+	// Decode path: id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// UziIDNodesSegmentsPostParams is parameters of POST /uzi/{id}/nodes-segments operation.
+type UziIDNodesSegmentsPostParams struct {
+	// Id узи.
+	ID uuid.UUID
+}
+
+func unpackUziIDNodesSegmentsPostParams(packed middleware.Parameters) (params UziIDNodesSegmentsPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeUziIDNodesSegmentsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params UziIDNodesSegmentsPostParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
 		param := args[0]
@@ -806,13 +1442,79 @@ func decodeUziSegmentIDPatchParams(args [1]string, argsEscaped bool, r *http.Req
 	return params, nil
 }
 
-// UzisExternalIDGetParams is parameters of GET /uzis/{external_id} operation.
-type UzisExternalIDGetParams struct {
+// UzisAuthorAuthorIDGetParams is parameters of GET /uzis/author/{author_id} operation.
+type UzisAuthorAuthorIDGetParams struct {
+	// Id аккаунта, загрузившего узи.
+	AuthorID uuid.UUID
+}
+
+func unpackUzisAuthorAuthorIDGetParams(packed middleware.Parameters) (params UzisAuthorAuthorIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "author_id",
+			In:   "path",
+		}
+		params.AuthorID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeUzisAuthorAuthorIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UzisAuthorAuthorIDGetParams, _ error) {
+	// Decode path: author_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "author_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.AuthorID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "author_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// UzisExternalExternalIDGetParams is parameters of GET /uzis/external/{external_id} operation.
+type UzisExternalExternalIDGetParams struct {
 	// Внешний id пациента/организации etc.
 	ExternalID uuid.UUID
 }
 
-func unpackUzisExternalIDGetParams(packed middleware.Parameters) (params UzisExternalIDGetParams) {
+func unpackUzisExternalExternalIDGetParams(packed middleware.Parameters) (params UzisExternalExternalIDGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "external_id",
@@ -823,7 +1525,7 @@ func unpackUzisExternalIDGetParams(packed middleware.Parameters) (params UzisExt
 	return params
 }
 
-func decodeUzisExternalIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UzisExternalIDGetParams, _ error) {
+func decodeUzisExternalExternalIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UzisExternalExternalIDGetParams, _ error) {
 	// Decode path: external_id.
 	if err := func() error {
 		param := args[0]

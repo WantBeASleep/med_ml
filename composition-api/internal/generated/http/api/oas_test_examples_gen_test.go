@@ -16,6 +16,47 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestCard_EncodeDecode(t *testing.T) {
+	var typ Card
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 Card
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestCard_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"diagnosis\":\"опухоль\",\"doctor_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"patient_id\":\"123e4567-e89b-12d3-a456-426614174000\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ Card
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 Card
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
 func TestContor_EncodeDecode(t *testing.T) {
 	var typ Contor
 	typ.SetFake()
@@ -81,6 +122,47 @@ func TestDevice_Examples(t *testing.T) {
 		})
 	}
 }
+func TestDoctor_EncodeDecode(t *testing.T) {
+	var typ Doctor
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 Doctor
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestDoctor_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"description\":\"работает в медицинском центре с 2010 года\",\"fullname\":\"Иван Иванов\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"job\":\"Хирург\",\"org\":\"Медицинский центр\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ Doctor
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 Doctor
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
 func TestEchographics_EncodeDecode(t *testing.T) {
 	var typ Echographics
 	typ.SetFake()
@@ -99,7 +181,7 @@ func TestEchographics_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"additional\":\"пьет курит и ебет\",\"conclusion\":\"грустно\",\"contors\":\"контуры\",\"echogenicity\":\"эхогенность\",\"gland_volum\":100,\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"isthmus\":100,\"left_lobe_length\":100,\"left_lobe_thick\":100,\"left_lobe_volum\":100,\"left_lobe_width\":100,\"location\":\"в правой части\",\"regional_lymph\":\"в правой части\",\"right_lobe_length\":100,\"right_lobe_thick\":100,\"right_lobe_volum\":100,\"right_lobe_width\":100,\"struct\":\"квадрат блять\",\"vascularization\":\"выраженная\"}"},
+		{Input: "{\"additional\":\"видны последстввия нездорового образа жизни\",\"conclusion\":\"требуется лечение\",\"contors\":\"контуры\",\"echogenicity\":\"эхогенность\",\"gland_volum\":100,\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"isthmus\":100,\"left_lobe_length\":100,\"left_lobe_thick\":100,\"left_lobe_volum\":100,\"left_lobe_width\":100,\"location\":\"в правой части\",\"regional_lymph\":\"в правой части\",\"right_lobe_length\":100,\"right_lobe_thick\":100,\"right_lobe_volum\":100,\"right_lobe_width\":100,\"struct\":\"квадрат\",\"vascularization\":\"выраженная\"}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
@@ -175,6 +257,66 @@ func TestImage_Examples(t *testing.T) {
 		})
 	}
 }
+func TestMedCardDoctorDoctorIDPatientPatientIDPatchReq_EncodeDecode(t *testing.T) {
+	var typ MedCardDoctorDoctorIDPatientPatientIDPatchReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 MedCardDoctorDoctorIDPatientPatientIDPatchReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestMedDoctorPostReq_EncodeDecode(t *testing.T) {
+	var typ MedDoctorPostReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 MedDoctorPostReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestMedPatientIDPatchReq_EncodeDecode(t *testing.T) {
+	var typ MedPatientIDPatchReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 MedPatientIDPatchReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestMedPatientPostReq_EncodeDecode(t *testing.T) {
+	var typ MedPatientPostReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 MedPatientPostReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestMedPatientsDoctorIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ MedPatientsDoctorIDGetOKApplicationJSON
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 MedPatientsDoctorIDGetOKApplicationJSON
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
 func TestNode_EncodeDecode(t *testing.T) {
 	var typ Node
 	typ.SetFake()
@@ -193,7 +335,7 @@ func TestNode_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"ai\":false,\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"tirads_23\":0.67,\"tirads_4\":0.23,\"tirads_5\":0.89,\"uzi_id\":\"123e4567-e89b-12d3-a456-426614174000\"}"},
+		{Input: "{\"ai\":false,\"description\":\"узел явно неправильный\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"tirads_23\":0.67,\"tirads_4\":0.23,\"tirads_5\":0.89,\"uzi_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"validation\":\"invalid\"}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
@@ -216,6 +358,59 @@ func TestNode_Examples(t *testing.T) {
 		})
 	}
 }
+func TestNodeValidation_EncodeDecode(t *testing.T) {
+	var typ NodeValidation
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 NodeValidation
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestPatient_EncodeDecode(t *testing.T) {
+	var typ Patient
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 Patient
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestPatient_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"active\":true,\"birth_date\":\"2021-01-01\",\"email\":\"ivan@example.com\",\"fullname\":\"Иван Иванов\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"last_uzi_date\":\"2024-01-01\",\"malignancy\":false,\"policy\":\"1234567890\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ Patient
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 Patient
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
 func TestSegment_EncodeDecode(t *testing.T) {
 	var typ Segment
 	typ.SetFake()
@@ -234,7 +429,7 @@ func TestSegment_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"contor\":[{\"true\":100,\"x\":100},{\"true\":200,\"x\":200}],\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"image_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"node_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"tirads_23\":0.45,\"tirads_4\":0.78,\"tirads_5\":0.12}"},
+		{Input: "{\"ai\":false,\"contor\":[{\"true\":100,\"x\":100},{\"true\":200,\"x\":200}],\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"image_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"node_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"tirads_23\":0.45,\"tirads_4\":0.78,\"tirads_5\":0.12}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
@@ -316,7 +511,7 @@ func TestUzi_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"checked\":false,\"create_at\":\"2021-01-01T00:00:00Z\",\"device_id\":1,\"external_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"projection\":\"задняя крутая\",\"status\":\"pending\"}"},
+		{Input: "{\"author_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"checked\":false,\"create_at\":\"2021-01-01T00:00:00Z\",\"device_id\":1,\"external_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"projection\":\"cross\",\"status\":\"pending\"}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
@@ -457,6 +652,54 @@ func TestUziIDNodesGetOKApplicationJSON_EncodeDecode(t *testing.T) {
 	var typ2 UziIDNodesGetOKApplicationJSON
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
+func TestUziIDNodesSegmentsPostOK_EncodeDecode(t *testing.T) {
+	var typ UziIDNodesSegmentsPostOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 UziIDNodesSegmentsPostOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestUziIDNodesSegmentsPostReq_EncodeDecode(t *testing.T) {
+	var typ UziIDNodesSegmentsPostReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 UziIDNodesSegmentsPostReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestUziIDNodesSegmentsPostReqNode_EncodeDecode(t *testing.T) {
+	var typ UziIDNodesSegmentsPostReqNode
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 UziIDNodesSegmentsPostReqNode
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestUziIDNodesSegmentsPostReqSegmentsItem_EncodeDecode(t *testing.T) {
+	var typ UziIDNodesSegmentsPostReqSegmentsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 UziIDNodesSegmentsPostReqSegmentsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
 func TestUziIDPatchReq_EncodeDecode(t *testing.T) {
 	var typ UziIDPatchReq
 	typ.SetFake()
@@ -475,7 +718,7 @@ func TestUziIDPatchReq_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"checked\":true,\"projection\":\"52 улица\"}"},
+		{Input: "{\"checked\":true,\"projection\":\"cross\"}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
@@ -497,6 +740,18 @@ func TestUziIDPatchReq_Examples(t *testing.T) {
 			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
 		})
 	}
+}
+func TestUziIDPatchReqProjection_EncodeDecode(t *testing.T) {
+	var typ UziIDPatchReqProjection
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 UziIDPatchReqProjection
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
 func TestUziImageIDNodesSegmentsGetOK_EncodeDecode(t *testing.T) {
 	var typ UziImageIDNodesSegmentsGetOK
@@ -528,7 +783,7 @@ func TestUziNodesIDPatchReq_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"tirads_23\":0.67,\"tirads_4\":0.23,\"tirads_5\":0.89}"},
+		{Input: "{\"tirads_23\":0.67,\"tirads_4\":0.23,\"tirads_5\":0.89,\"validation\":\"invalid\"}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
@@ -551,6 +806,18 @@ func TestUziNodesIDPatchReq_Examples(t *testing.T) {
 		})
 	}
 }
+func TestUziNodesIDPatchReqValidation_EncodeDecode(t *testing.T) {
+	var typ UziNodesIDPatchReqValidation
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 UziNodesIDPatchReqValidation
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
 func TestUziNodesIDSegmentsGetOKApplicationJSON_EncodeDecode(t *testing.T) {
 	var typ UziNodesIDSegmentsGetOKApplicationJSON
 	typ.SetFake()
@@ -563,8 +830,8 @@ func TestUziNodesIDSegmentsGetOKApplicationJSON_EncodeDecode(t *testing.T) {
 	var typ2 UziNodesIDSegmentsGetOKApplicationJSON
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
-func TestUziNodesSegmentsPostOK_EncodeDecode(t *testing.T) {
-	var typ UziNodesSegmentsPostOK
+func TestUziProjection_EncodeDecode(t *testing.T) {
+	var typ UziProjection
 	typ.SetFake()
 
 	e := jx.Encoder{}
@@ -572,43 +839,7 @@ func TestUziNodesSegmentsPostOK_EncodeDecode(t *testing.T) {
 	data := e.Bytes()
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
-	var typ2 UziNodesSegmentsPostOK
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
-func TestUziNodesSegmentsPostReq_EncodeDecode(t *testing.T) {
-	var typ UziNodesSegmentsPostReq
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 UziNodesSegmentsPostReq
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
-func TestUziNodesSegmentsPostReqNode_EncodeDecode(t *testing.T) {
-	var typ UziNodesSegmentsPostReqNode
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 UziNodesSegmentsPostReqNode
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
-func TestUziNodesSegmentsPostReqSegmentsItem_EncodeDecode(t *testing.T) {
-	var typ UziNodesSegmentsPostReqSegmentsItem
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 UziNodesSegmentsPostReqSegmentsItem
+	var typ2 UziProjection
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
 func TestUziSegmentIDPatchReq_EncodeDecode(t *testing.T) {
@@ -629,7 +860,7 @@ func TestUziSegmentIDPatchReq_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"tirads_23\":0.67,\"tirads_4\":0.23,\"tirads_5\":0.89}"},
+		{Input: "{\"contor\":[{\"true\":100,\"x\":100},{\"true\":200,\"x\":200}],\"tirads_23\":0.67,\"tirads_4\":0.23,\"tirads_5\":0.89}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
@@ -676,8 +907,8 @@ func TestUziStatus_EncodeDecode(t *testing.T) {
 	var typ2 UziStatus
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
-func TestUzisExternalIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
-	var typ UzisExternalIDGetOKApplicationJSON
+func TestUzisAuthorAuthorIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ UzisAuthorAuthorIDGetOKApplicationJSON
 	typ.SetFake()
 
 	e := jx.Encoder{}
@@ -685,6 +916,18 @@ func TestUzisExternalIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
 	data := e.Bytes()
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
-	var typ2 UzisExternalIDGetOKApplicationJSON
+	var typ2 UzisAuthorAuthorIDGetOKApplicationJSON
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestUzisExternalExternalIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ UzisExternalExternalIDGetOKApplicationJSON
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 UzisExternalExternalIDGetOKApplicationJSON
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }

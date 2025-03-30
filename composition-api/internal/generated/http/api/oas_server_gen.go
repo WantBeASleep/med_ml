@@ -8,6 +8,60 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// MedCardDoctorDoctorIDPatientPatientIDGet implements GET /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+	//
+	// Получить карту пациента.
+	//
+	// GET /med/card/doctor/{doctor_id}/patient/{patient_id}
+	MedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Context, params MedCardDoctorDoctorIDPatientPatientIDGetParams) (MedCardDoctorDoctorIDPatientPatientIDGetRes, error)
+	// MedCardDoctorDoctorIDPatientPatientIDPatch implements PATCH /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+	//
+	// Обновить карту пациента.
+	//
+	// PATCH /med/card/doctor/{doctor_id}/patient/{patient_id}
+	MedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Context, req *MedCardDoctorDoctorIDPatientPatientIDPatchReq, params MedCardDoctorDoctorIDPatientPatientIDPatchParams) (MedCardDoctorDoctorIDPatientPatientIDPatchRes, error)
+	// MedCardPost implements POST /med/card operation.
+	//
+	// Создать карту пациента.
+	//
+	// POST /med/card
+	MedCardPost(ctx context.Context, req *Card) (MedCardPostRes, error)
+	// MedDoctorIDGet implements GET /med/doctor/{id} operation.
+	//
+	// Получить врача.
+	//
+	// GET /med/doctor/{id}
+	MedDoctorIDGet(ctx context.Context, params MedDoctorIDGetParams) (MedDoctorIDGetRes, error)
+	// MedDoctorPost implements POST /med/doctor operation.
+	//
+	// Зарегистрировать врача.
+	//
+	// POST /med/doctor
+	MedDoctorPost(ctx context.Context, req *MedDoctorPostReq) (MedDoctorPostRes, error)
+	// MedPatientIDGet implements GET /med/patient/{id} operation.
+	//
+	// Получить пациента.
+	//
+	// GET /med/patient/{id}
+	MedPatientIDGet(ctx context.Context, params MedPatientIDGetParams) (MedPatientIDGetRes, error)
+	// MedPatientIDPatch implements PATCH /med/patient/{id} operation.
+	//
+	// Обновить пациента.
+	//
+	// PATCH /med/patient/{id}
+	MedPatientIDPatch(ctx context.Context, req *MedPatientIDPatchReq, params MedPatientIDPatchParams) (MedPatientIDPatchRes, error)
+	// MedPatientPost implements POST /med/patient operation.
+	//
+	// Зарегистрировать пациента.
+	//
+	// POST /med/patient
+	MedPatientPost(ctx context.Context, req *MedPatientPostReq) (MedPatientPostRes, error)
+	// MedPatientsDoctorIDGet implements GET /med/patients/{doctor_id} operation.
+	//
+	// Получить пациентов врача.
+	//
+	// GET /med/patients/{doctor_id}
+	MedPatientsDoctorIDGet(ctx context.Context, params MedPatientsDoctorIDGetParams) (MedPatientsDoctorIDGetRes, error)
 	// UziDevicePost implements POST /uzi/device operation.
 	//
 	// Добавить uzi аппарат.
@@ -20,6 +74,12 @@ type Handler interface {
 	//
 	// GET /uzi/devices
 	UziDevicesGet(ctx context.Context) (UziDevicesGetRes, error)
+	// UziIDDelete implements DELETE /uzi/{id} operation.
+	//
+	// Удалить узи.
+	//
+	// DELETE /uzi/{id}
+	UziIDDelete(ctx context.Context, params UziIDDeleteParams) (UziIDDeleteRes, error)
 	// UziIDEchographicsGet implements GET /uzi/{id}/echographics operation.
 	//
 	// Получить эхографику uzi.
@@ -50,6 +110,12 @@ type Handler interface {
 	//
 	// GET /uzi/{id}/nodes
 	UziIDNodesGet(ctx context.Context, params UziIDNodesGetParams) (UziIDNodesGetRes, error)
+	// UziIDNodesSegmentsPost implements POST /uzi/{id}/nodes-segments operation.
+	//
+	// Добавить узел с сегментами.
+	//
+	// POST /uzi/{id}/nodes-segments
+	UziIDNodesSegmentsPost(ctx context.Context, req *UziIDNodesSegmentsPostReq, params UziIDNodesSegmentsPostParams) (UziIDNodesSegmentsPostRes, error)
 	// UziIDPatch implements PATCH /uzi/{id} operation.
 	//
 	// Обновить узи.
@@ -80,12 +146,6 @@ type Handler interface {
 	//
 	// GET /uzi/nodes/{id}/segments
 	UziNodesIDSegmentsGet(ctx context.Context, params UziNodesIDSegmentsGetParams) (UziNodesIDSegmentsGetRes, error)
-	// UziNodesSegmentsPost implements POST /uzi/nodes-segments operation.
-	//
-	// Добавить узел с сегментами.
-	//
-	// POST /uzi/nodes-segments
-	UziNodesSegmentsPost(ctx context.Context, req *UziNodesSegmentsPostReq) (UziNodesSegmentsPostRes, error)
 	// UziPost implements POST /uzi operation.
 	//
 	// Загрузить узи на обработку.
@@ -110,12 +170,18 @@ type Handler interface {
 	//
 	// POST /uzi/segment
 	UziSegmentPost(ctx context.Context, req *UziSegmentPostReq) (UziSegmentPostRes, error)
-	// UzisExternalIDGet implements GET /uzis/{external_id} operation.
+	// UzisAuthorAuthorIDGet implements GET /uzis/author/{author_id} operation.
+	//
+	// Получить узи по id автора.
+	//
+	// GET /uzis/author/{author_id}
+	UzisAuthorAuthorIDGet(ctx context.Context, params UzisAuthorAuthorIDGetParams) (UzisAuthorAuthorIDGetRes, error)
+	// UzisExternalExternalIDGet implements GET /uzis/external/{external_id} operation.
 	//
 	// Получить узи по внешнему id.
 	//
-	// GET /uzis/{external_id}
-	UzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (UzisExternalIDGetRes, error)
+	// GET /uzis/external/{external_id}
+	UzisExternalExternalIDGet(ctx context.Context, params UzisExternalExternalIDGetParams) (UzisExternalExternalIDGetRes, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

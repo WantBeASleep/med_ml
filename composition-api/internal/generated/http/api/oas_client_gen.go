@@ -27,6 +27,60 @@ func trimTrailingSlashes(u *url.URL) {
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
+	// MedCardDoctorDoctorIDPatientPatientIDGet invokes GET /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+	//
+	// Получить карту пациента.
+	//
+	// GET /med/card/doctor/{doctor_id}/patient/{patient_id}
+	MedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Context, params MedCardDoctorDoctorIDPatientPatientIDGetParams) (MedCardDoctorDoctorIDPatientPatientIDGetRes, error)
+	// MedCardDoctorDoctorIDPatientPatientIDPatch invokes PATCH /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+	//
+	// Обновить карту пациента.
+	//
+	// PATCH /med/card/doctor/{doctor_id}/patient/{patient_id}
+	MedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Context, request *MedCardDoctorDoctorIDPatientPatientIDPatchReq, params MedCardDoctorDoctorIDPatientPatientIDPatchParams) (MedCardDoctorDoctorIDPatientPatientIDPatchRes, error)
+	// MedCardPost invokes POST /med/card operation.
+	//
+	// Создать карту пациента.
+	//
+	// POST /med/card
+	MedCardPost(ctx context.Context, request *Card) (MedCardPostRes, error)
+	// MedDoctorIDGet invokes GET /med/doctor/{id} operation.
+	//
+	// Получить врача.
+	//
+	// GET /med/doctor/{id}
+	MedDoctorIDGet(ctx context.Context, params MedDoctorIDGetParams) (MedDoctorIDGetRes, error)
+	// MedDoctorPost invokes POST /med/doctor operation.
+	//
+	// Зарегистрировать врача.
+	//
+	// POST /med/doctor
+	MedDoctorPost(ctx context.Context, request *MedDoctorPostReq) (MedDoctorPostRes, error)
+	// MedPatientIDGet invokes GET /med/patient/{id} operation.
+	//
+	// Получить пациента.
+	//
+	// GET /med/patient/{id}
+	MedPatientIDGet(ctx context.Context, params MedPatientIDGetParams) (MedPatientIDGetRes, error)
+	// MedPatientIDPatch invokes PATCH /med/patient/{id} operation.
+	//
+	// Обновить пациента.
+	//
+	// PATCH /med/patient/{id}
+	MedPatientIDPatch(ctx context.Context, request *MedPatientIDPatchReq, params MedPatientIDPatchParams) (MedPatientIDPatchRes, error)
+	// MedPatientPost invokes POST /med/patient operation.
+	//
+	// Зарегистрировать пациента.
+	//
+	// POST /med/patient
+	MedPatientPost(ctx context.Context, request *MedPatientPostReq) (MedPatientPostRes, error)
+	// MedPatientsDoctorIDGet invokes GET /med/patients/{doctor_id} operation.
+	//
+	// Получить пациентов врача.
+	//
+	// GET /med/patients/{doctor_id}
+	MedPatientsDoctorIDGet(ctx context.Context, params MedPatientsDoctorIDGetParams) (MedPatientsDoctorIDGetRes, error)
 	// UziDevicePost invokes POST /uzi/device operation.
 	//
 	// Добавить uzi аппарат.
@@ -39,6 +93,12 @@ type Invoker interface {
 	//
 	// GET /uzi/devices
 	UziDevicesGet(ctx context.Context) (UziDevicesGetRes, error)
+	// UziIDDelete invokes DELETE /uzi/{id} operation.
+	//
+	// Удалить узи.
+	//
+	// DELETE /uzi/{id}
+	UziIDDelete(ctx context.Context, params UziIDDeleteParams) (UziIDDeleteRes, error)
 	// UziIDEchographicsGet invokes GET /uzi/{id}/echographics operation.
 	//
 	// Получить эхографику uzi.
@@ -69,6 +129,12 @@ type Invoker interface {
 	//
 	// GET /uzi/{id}/nodes
 	UziIDNodesGet(ctx context.Context, params UziIDNodesGetParams) (UziIDNodesGetRes, error)
+	// UziIDNodesSegmentsPost invokes POST /uzi/{id}/nodes-segments operation.
+	//
+	// Добавить узел с сегментами.
+	//
+	// POST /uzi/{id}/nodes-segments
+	UziIDNodesSegmentsPost(ctx context.Context, request *UziIDNodesSegmentsPostReq, params UziIDNodesSegmentsPostParams) (UziIDNodesSegmentsPostRes, error)
 	// UziIDPatch invokes PATCH /uzi/{id} operation.
 	//
 	// Обновить узи.
@@ -99,12 +165,6 @@ type Invoker interface {
 	//
 	// GET /uzi/nodes/{id}/segments
 	UziNodesIDSegmentsGet(ctx context.Context, params UziNodesIDSegmentsGetParams) (UziNodesIDSegmentsGetRes, error)
-	// UziNodesSegmentsPost invokes POST /uzi/nodes-segments operation.
-	//
-	// Добавить узел с сегментами.
-	//
-	// POST /uzi/nodes-segments
-	UziNodesSegmentsPost(ctx context.Context, request *UziNodesSegmentsPostReq) (UziNodesSegmentsPostRes, error)
 	// UziPost invokes POST /uzi operation.
 	//
 	// Загрузить узи на обработку.
@@ -129,12 +189,18 @@ type Invoker interface {
 	//
 	// POST /uzi/segment
 	UziSegmentPost(ctx context.Context, request *UziSegmentPostReq) (UziSegmentPostRes, error)
-	// UzisExternalIDGet invokes GET /uzis/{external_id} operation.
+	// UzisAuthorAuthorIDGet invokes GET /uzis/author/{author_id} operation.
+	//
+	// Получить узи по id автора.
+	//
+	// GET /uzis/author/{author_id}
+	UzisAuthorAuthorIDGet(ctx context.Context, params UzisAuthorAuthorIDGetParams) (UzisAuthorAuthorIDGetRes, error)
+	// UzisExternalExternalIDGet invokes GET /uzis/external/{external_id} operation.
 	//
 	// Получить узи по внешнему id.
 	//
-	// GET /uzis/{external_id}
-	UzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (UzisExternalIDGetRes, error)
+	// GET /uzis/external/{external_id}
+	UzisExternalExternalIDGet(ctx context.Context, params UzisExternalExternalIDGetParams) (UzisExternalExternalIDGetRes, error)
 }
 
 // Client implements OAS client.
@@ -182,6 +248,824 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 		return c.serverURL
 	}
 	return u
+}
+
+// MedCardDoctorDoctorIDPatientPatientIDGet invokes GET /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+//
+// Получить карту пациента.
+//
+// GET /med/card/doctor/{doctor_id}/patient/{patient_id}
+func (c *Client) MedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Context, params MedCardDoctorDoctorIDPatientPatientIDGetParams) (MedCardDoctorDoctorIDPatientPatientIDGetRes, error) {
+	res, err := c.sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Context, params MedCardDoctorDoctorIDPatientPatientIDGetParams) (res MedCardDoctorDoctorIDPatientPatientIDGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/med/card/doctor/{doctor_id}/patient/{patient_id}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedCardDoctorDoctorIDPatientPatientIDGetOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [4]string
+	pathParts[0] = "/med/card/doctor/"
+	{
+		// Encode "doctor_id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "doctor_id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.DoctorID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/patient/"
+	{
+		// Encode "patient_id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "patient_id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.PatientID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeMedCardDoctorDoctorIDPatientPatientIDGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// MedCardDoctorDoctorIDPatientPatientIDPatch invokes PATCH /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+//
+// Обновить карту пациента.
+//
+// PATCH /med/card/doctor/{doctor_id}/patient/{patient_id}
+func (c *Client) MedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Context, request *MedCardDoctorDoctorIDPatientPatientIDPatchReq, params MedCardDoctorDoctorIDPatientPatientIDPatchParams) (MedCardDoctorDoctorIDPatientPatientIDPatchRes, error) {
+	res, err := c.sendMedCardDoctorDoctorIDPatientPatientIDPatch(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Context, request *MedCardDoctorDoctorIDPatientPatientIDPatchReq, params MedCardDoctorDoctorIDPatientPatientIDPatchParams) (res MedCardDoctorDoctorIDPatientPatientIDPatchRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/med/card/doctor/{doctor_id}/patient/{patient_id}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedCardDoctorDoctorIDPatientPatientIDPatchOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [4]string
+	pathParts[0] = "/med/card/doctor/"
+	{
+		// Encode "doctor_id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "doctor_id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.DoctorID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/patient/"
+	{
+		// Encode "patient_id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "patient_id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.PatientID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PATCH", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeMedCardDoctorDoctorIDPatientPatientIDPatchRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeMedCardDoctorDoctorIDPatientPatientIDPatchResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// MedCardPost invokes POST /med/card operation.
+//
+// Создать карту пациента.
+//
+// POST /med/card
+func (c *Client) MedCardPost(ctx context.Context, request *Card) (MedCardPostRes, error) {
+	res, err := c.sendMedCardPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendMedCardPost(ctx context.Context, request *Card) (res MedCardPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/med/card"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedCardPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/med/card"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeMedCardPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeMedCardPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// MedDoctorIDGet invokes GET /med/doctor/{id} operation.
+//
+// Получить врача.
+//
+// GET /med/doctor/{id}
+func (c *Client) MedDoctorIDGet(ctx context.Context, params MedDoctorIDGetParams) (MedDoctorIDGetRes, error) {
+	res, err := c.sendMedDoctorIDGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendMedDoctorIDGet(ctx context.Context, params MedDoctorIDGetParams) (res MedDoctorIDGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/med/doctor/{id}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedDoctorIDGetOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/med/doctor/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeMedDoctorIDGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// MedDoctorPost invokes POST /med/doctor operation.
+//
+// Зарегистрировать врача.
+//
+// POST /med/doctor
+func (c *Client) MedDoctorPost(ctx context.Context, request *MedDoctorPostReq) (MedDoctorPostRes, error) {
+	res, err := c.sendMedDoctorPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendMedDoctorPost(ctx context.Context, request *MedDoctorPostReq) (res MedDoctorPostRes, err error) {
+	// Validate request before sending.
+	if err := func() error {
+		if err := request.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return res, errors.Wrap(err, "validate")
+	}
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/med/doctor"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedDoctorPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/med/doctor"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeMedDoctorPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeMedDoctorPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// MedPatientIDGet invokes GET /med/patient/{id} operation.
+//
+// Получить пациента.
+//
+// GET /med/patient/{id}
+func (c *Client) MedPatientIDGet(ctx context.Context, params MedPatientIDGetParams) (MedPatientIDGetRes, error) {
+	res, err := c.sendMedPatientIDGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendMedPatientIDGet(ctx context.Context, params MedPatientIDGetParams) (res MedPatientIDGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/med/patient/{id}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedPatientIDGetOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/med/patient/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeMedPatientIDGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// MedPatientIDPatch invokes PATCH /med/patient/{id} operation.
+//
+// Обновить пациента.
+//
+// PATCH /med/patient/{id}
+func (c *Client) MedPatientIDPatch(ctx context.Context, request *MedPatientIDPatchReq, params MedPatientIDPatchParams) (MedPatientIDPatchRes, error) {
+	res, err := c.sendMedPatientIDPatch(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendMedPatientIDPatch(ctx context.Context, request *MedPatientIDPatchReq, params MedPatientIDPatchParams) (res MedPatientIDPatchRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/med/patient/{id}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedPatientIDPatchOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/med/patient/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PATCH", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeMedPatientIDPatchRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeMedPatientIDPatchResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// MedPatientPost invokes POST /med/patient operation.
+//
+// Зарегистрировать пациента.
+//
+// POST /med/patient
+func (c *Client) MedPatientPost(ctx context.Context, request *MedPatientPostReq) (MedPatientPostRes, error) {
+	res, err := c.sendMedPatientPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendMedPatientPost(ctx context.Context, request *MedPatientPostReq) (res MedPatientPostRes, err error) {
+	// Validate request before sending.
+	if err := func() error {
+		if err := request.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return res, errors.Wrap(err, "validate")
+	}
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/med/patient"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedPatientPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/med/patient"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeMedPatientPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeMedPatientPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// MedPatientsDoctorIDGet invokes GET /med/patients/{doctor_id} operation.
+//
+// Получить пациентов врача.
+//
+// GET /med/patients/{doctor_id}
+func (c *Client) MedPatientsDoctorIDGet(ctx context.Context, params MedPatientsDoctorIDGetParams) (MedPatientsDoctorIDGetRes, error) {
+	res, err := c.sendMedPatientsDoctorIDGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendMedPatientsDoctorIDGet(ctx context.Context, params MedPatientsDoctorIDGetParams) (res MedPatientsDoctorIDGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/med/patients/{doctor_id}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedPatientsDoctorIDGetOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/med/patients/"
+	{
+		// Encode "doctor_id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "doctor_id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.DoctorID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeMedPatientsDoctorIDGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
 }
 
 // UziDevicePost invokes POST /uzi/device operation.
@@ -331,6 +1215,95 @@ func (c *Client) sendUziDevicesGet(ctx context.Context) (res UziDevicesGetRes, e
 
 	stage = "DecodeResponse"
 	result, err := decodeUziDevicesGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// UziIDDelete invokes DELETE /uzi/{id} operation.
+//
+// Удалить узи.
+//
+// DELETE /uzi/{id}
+func (c *Client) UziIDDelete(ctx context.Context, params UziIDDeleteParams) (UziIDDeleteRes, error) {
+	res, err := c.sendUziIDDelete(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendUziIDDelete(ctx context.Context, params UziIDDeleteParams) (res UziIDDeleteRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/uzi/{id}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, UziIDDeleteOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/uzi/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "DELETE", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeUziIDDeleteResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -792,6 +1765,108 @@ func (c *Client) sendUziIDNodesGet(ctx context.Context, params UziIDNodesGetPara
 
 	stage = "DecodeResponse"
 	result, err := decodeUziIDNodesGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// UziIDNodesSegmentsPost invokes POST /uzi/{id}/nodes-segments operation.
+//
+// Добавить узел с сегментами.
+//
+// POST /uzi/{id}/nodes-segments
+func (c *Client) UziIDNodesSegmentsPost(ctx context.Context, request *UziIDNodesSegmentsPostReq, params UziIDNodesSegmentsPostParams) (UziIDNodesSegmentsPostRes, error) {
+	res, err := c.sendUziIDNodesSegmentsPost(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendUziIDNodesSegmentsPost(ctx context.Context, request *UziIDNodesSegmentsPostReq, params UziIDNodesSegmentsPostParams) (res UziIDNodesSegmentsPostRes, err error) {
+	// Validate request before sending.
+	if err := func() error {
+		if err := request.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return res, errors.Wrap(err, "validate")
+	}
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/uzi/{id}/nodes-segments"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, UziIDNodesSegmentsPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/uzi/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/nodes-segments"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeUziIDNodesSegmentsPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeUziIDNodesSegmentsPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -1270,89 +2345,6 @@ func (c *Client) sendUziNodesIDSegmentsGet(ctx context.Context, params UziNodesI
 	return result, nil
 }
 
-// UziNodesSegmentsPost invokes POST /uzi/nodes-segments operation.
-//
-// Добавить узел с сегментами.
-//
-// POST /uzi/nodes-segments
-func (c *Client) UziNodesSegmentsPost(ctx context.Context, request *UziNodesSegmentsPostReq) (UziNodesSegmentsPostRes, error) {
-	res, err := c.sendUziNodesSegmentsPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendUziNodesSegmentsPost(ctx context.Context, request *UziNodesSegmentsPostReq) (res UziNodesSegmentsPostRes, err error) {
-	// Validate request before sending.
-	if err := func() error {
-		if err := request.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return res, errors.Wrap(err, "validate")
-	}
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/uzi/nodes-segments"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, UziNodesSegmentsPostOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/uzi/nodes-segments"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeUziNodesSegmentsPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeUziNodesSegmentsPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // UziPost invokes POST /uzi operation.
 //
 // Загрузить узи на обработку.
@@ -1364,6 +2356,15 @@ func (c *Client) UziPost(ctx context.Context, request *UziPostReq) (UziPostRes, 
 }
 
 func (c *Client) sendUziPost(ctx context.Context, request *UziPostReq) (res UziPostRes, err error) {
+	// Validate request before sending.
+	if err := func() error {
+		if err := request.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return res, errors.Wrap(err, "validate")
+	}
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/uzi"),
@@ -1700,20 +2701,20 @@ func (c *Client) sendUziSegmentPost(ctx context.Context, request *UziSegmentPost
 	return result, nil
 }
 
-// UzisExternalIDGet invokes GET /uzis/{external_id} operation.
+// UzisAuthorAuthorIDGet invokes GET /uzis/author/{author_id} operation.
 //
-// Получить узи по внешнему id.
+// Получить узи по id автора.
 //
-// GET /uzis/{external_id}
-func (c *Client) UzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (UzisExternalIDGetRes, error) {
-	res, err := c.sendUzisExternalIDGet(ctx, params)
+// GET /uzis/author/{author_id}
+func (c *Client) UzisAuthorAuthorIDGet(ctx context.Context, params UzisAuthorAuthorIDGetParams) (UzisAuthorAuthorIDGetRes, error) {
+	res, err := c.sendUzisAuthorAuthorIDGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendUzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (res UzisExternalIDGetRes, err error) {
+func (c *Client) sendUzisAuthorAuthorIDGet(ctx context.Context, params UzisAuthorAuthorIDGetParams) (res UzisAuthorAuthorIDGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/uzis/{external_id}"),
+		semconv.HTTPRouteKey.String("/uzis/author/{author_id}"),
 	}
 
 	// Run stopwatch.
@@ -1728,7 +2729,7 @@ func (c *Client) sendUzisExternalIDGet(ctx context.Context, params UzisExternalI
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, UzisExternalIDGetOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, UzisAuthorAuthorIDGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1746,7 +2747,96 @@ func (c *Client) sendUzisExternalIDGet(ctx context.Context, params UzisExternalI
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [2]string
-	pathParts[0] = "/uzis/"
+	pathParts[0] = "/uzis/author/"
+	{
+		// Encode "author_id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "author_id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.AuthorID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeUzisAuthorAuthorIDGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// UzisExternalExternalIDGet invokes GET /uzis/external/{external_id} operation.
+//
+// Получить узи по внешнему id.
+//
+// GET /uzis/external/{external_id}
+func (c *Client) UzisExternalExternalIDGet(ctx context.Context, params UzisExternalExternalIDGetParams) (UzisExternalExternalIDGetRes, error) {
+	res, err := c.sendUzisExternalExternalIDGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendUzisExternalExternalIDGet(ctx context.Context, params UzisExternalExternalIDGetParams) (res UzisExternalExternalIDGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/uzis/external/{external_id}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, UzisExternalExternalIDGetOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/uzis/external/"
 	{
 		// Encode "external_id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -1781,7 +2871,7 @@ func (c *Client) sendUzisExternalIDGet(ctx context.Context, params UzisExternalI
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeUzisExternalIDGetResponse(resp)
+	result, err := decodeUzisExternalExternalIDGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

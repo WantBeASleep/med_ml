@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: proto/grpc/clients/service.proto
+// source: proto/grpc/clients/uzi.proto
 
 package uzi
 
@@ -25,9 +25,11 @@ const (
 	UziSrv_CreateUzi_FullMethodName                     = "/UziSrv/createUzi"
 	UziSrv_GetUziById_FullMethodName                    = "/UziSrv/getUziById"
 	UziSrv_GetUzisByExternalId_FullMethodName           = "/UziSrv/getUzisByExternalId"
+	UziSrv_GetUzisByAuthor_FullMethodName               = "/UziSrv/getUzisByAuthor"
 	UziSrv_GetEchographicByUziId_FullMethodName         = "/UziSrv/getEchographicByUziId"
 	UziSrv_UpdateUzi_FullMethodName                     = "/UziSrv/updateUzi"
 	UziSrv_UpdateEchographic_FullMethodName             = "/UziSrv/updateEchographic"
+	UziSrv_DeleteUzi_FullMethodName                     = "/UziSrv/deleteUzi"
 	UziSrv_GetImagesByUziId_FullMethodName              = "/UziSrv/getImagesByUziId"
 	UziSrv_GetNodesByUziId_FullMethodName               = "/UziSrv/getNodesByUziId"
 	UziSrv_UpdateNode_FullMethodName                    = "/UziSrv/updateNode"
@@ -51,9 +53,11 @@ type UziSrvClient interface {
 	CreateUzi(ctx context.Context, in *CreateUziIn, opts ...grpc.CallOption) (*CreateUziOut, error)
 	GetUziById(ctx context.Context, in *GetUziByIdIn, opts ...grpc.CallOption) (*GetUziByIdOut, error)
 	GetUzisByExternalId(ctx context.Context, in *GetUzisByExternalIdIn, opts ...grpc.CallOption) (*GetUzisByExternalIdOut, error)
+	GetUzisByAuthor(ctx context.Context, in *GetUzisByAuthorIn, opts ...grpc.CallOption) (*GetUzisByAuthorOut, error)
 	GetEchographicByUziId(ctx context.Context, in *GetEchographicByUziIdIn, opts ...grpc.CallOption) (*GetEchographicByUziIdOut, error)
 	UpdateUzi(ctx context.Context, in *UpdateUziIn, opts ...grpc.CallOption) (*UpdateUziOut, error)
 	UpdateEchographic(ctx context.Context, in *UpdateEchographicIn, opts ...grpc.CallOption) (*UpdateEchographicOut, error)
+	DeleteUzi(ctx context.Context, in *DeleteUziIn, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// IMAGE
 	GetImagesByUziId(ctx context.Context, in *GetImagesByUziIdIn, opts ...grpc.CallOption) (*GetImagesByUziIdOut, error)
 	// NODE
@@ -129,6 +133,16 @@ func (c *uziSrvClient) GetUzisByExternalId(ctx context.Context, in *GetUzisByExt
 	return out, nil
 }
 
+func (c *uziSrvClient) GetUzisByAuthor(ctx context.Context, in *GetUzisByAuthorIn, opts ...grpc.CallOption) (*GetUzisByAuthorOut, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUzisByAuthorOut)
+	err := c.cc.Invoke(ctx, UziSrv_GetUzisByAuthor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *uziSrvClient) GetEchographicByUziId(ctx context.Context, in *GetEchographicByUziIdIn, opts ...grpc.CallOption) (*GetEchographicByUziIdOut, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetEchographicByUziIdOut)
@@ -153,6 +167,16 @@ func (c *uziSrvClient) UpdateEchographic(ctx context.Context, in *UpdateEchograp
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateEchographicOut)
 	err := c.cc.Invoke(ctx, UziSrv_UpdateEchographic_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *uziSrvClient) DeleteUzi(ctx context.Context, in *DeleteUziIn, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, UziSrv_DeleteUzi_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -270,9 +294,11 @@ type UziSrvServer interface {
 	CreateUzi(context.Context, *CreateUziIn) (*CreateUziOut, error)
 	GetUziById(context.Context, *GetUziByIdIn) (*GetUziByIdOut, error)
 	GetUzisByExternalId(context.Context, *GetUzisByExternalIdIn) (*GetUzisByExternalIdOut, error)
+	GetUzisByAuthor(context.Context, *GetUzisByAuthorIn) (*GetUzisByAuthorOut, error)
 	GetEchographicByUziId(context.Context, *GetEchographicByUziIdIn) (*GetEchographicByUziIdOut, error)
 	UpdateUzi(context.Context, *UpdateUziIn) (*UpdateUziOut, error)
 	UpdateEchographic(context.Context, *UpdateEchographicIn) (*UpdateEchographicOut, error)
+	DeleteUzi(context.Context, *DeleteUziIn) (*emptypb.Empty, error)
 	// IMAGE
 	GetImagesByUziId(context.Context, *GetImagesByUziIdIn) (*GetImagesByUziIdOut, error)
 	// NODE
@@ -313,6 +339,9 @@ func (UnimplementedUziSrvServer) GetUziById(context.Context, *GetUziByIdIn) (*Ge
 func (UnimplementedUziSrvServer) GetUzisByExternalId(context.Context, *GetUzisByExternalIdIn) (*GetUzisByExternalIdOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUzisByExternalId not implemented")
 }
+func (UnimplementedUziSrvServer) GetUzisByAuthor(context.Context, *GetUzisByAuthorIn) (*GetUzisByAuthorOut, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUzisByAuthor not implemented")
+}
 func (UnimplementedUziSrvServer) GetEchographicByUziId(context.Context, *GetEchographicByUziIdIn) (*GetEchographicByUziIdOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEchographicByUziId not implemented")
 }
@@ -321,6 +350,9 @@ func (UnimplementedUziSrvServer) UpdateUzi(context.Context, *UpdateUziIn) (*Upda
 }
 func (UnimplementedUziSrvServer) UpdateEchographic(context.Context, *UpdateEchographicIn) (*UpdateEchographicOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateEchographic not implemented")
+}
+func (UnimplementedUziSrvServer) DeleteUzi(context.Context, *DeleteUziIn) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUzi not implemented")
 }
 func (UnimplementedUziSrvServer) GetImagesByUziId(context.Context, *GetImagesByUziIdIn) (*GetImagesByUziIdOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetImagesByUziId not implemented")
@@ -463,6 +495,24 @@ func _UziSrv_GetUzisByExternalId_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UziSrv_GetUzisByAuthor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUzisByAuthorIn)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UziSrvServer).GetUzisByAuthor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UziSrv_GetUzisByAuthor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UziSrvServer).GetUzisByAuthor(ctx, req.(*GetUzisByAuthorIn))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UziSrv_GetEchographicByUziId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetEchographicByUziIdIn)
 	if err := dec(in); err != nil {
@@ -513,6 +563,24 @@ func _UziSrv_UpdateEchographic_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UziSrvServer).UpdateEchographic(ctx, req.(*UpdateEchographicIn))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UziSrv_DeleteUzi_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteUziIn)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UziSrvServer).DeleteUzi(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UziSrv_DeleteUzi_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UziSrvServer).DeleteUzi(ctx, req.(*DeleteUziIn))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -725,6 +793,10 @@ var UziSrv_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UziSrv_GetUzisByExternalId_Handler,
 		},
 		{
+			MethodName: "getUzisByAuthor",
+			Handler:    _UziSrv_GetUzisByAuthor_Handler,
+		},
+		{
 			MethodName: "getEchographicByUziId",
 			Handler:    _UziSrv_GetEchographicByUziId_Handler,
 		},
@@ -735,6 +807,10 @@ var UziSrv_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "updateEchographic",
 			Handler:    _UziSrv_UpdateEchographic_Handler,
+		},
+		{
+			MethodName: "deleteUzi",
+			Handler:    _UziSrv_DeleteUzi_Handler,
 		},
 		{
 			MethodName: "getImagesByUziId",
@@ -778,5 +854,5 @@ var UziSrv_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/grpc/clients/service.proto",
+	Metadata: "proto/grpc/clients/uzi.proto",
 }

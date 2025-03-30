@@ -40,7 +40,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.notFound(w, r)
 		return
 	}
-	args := [1]string{}
+	args := [2]string{}
 
 	// Static code generated router with unwrapped path search.
 	switch {
@@ -49,28 +49,21 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/uzi"
+		case '/': // Prefix: "/"
 
-			if l := len("/uzi"); len(elem) >= l && elem[0:l] == "/uzi" {
+			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
 			if len(elem) == 0 {
-				switch r.Method {
-				case "POST":
-					s.handleUziPostRequest([0]string{}, elemIsEscaped, w, r)
-				default:
-					s.notAllowed(w, r, "POST")
-				}
-
-				return
+				break
 			}
 			switch elem[0] {
-			case '/': // Prefix: "/"
+			case 'm': // Prefix: "med/"
 
-				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+				if l := len("med/"); len(elem) >= l && elem[0:l] == "med/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -80,9 +73,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'd': // Prefix: "device"
-					origElem := elem
-					if l := len("device"); len(elem) >= l && elem[0:l] == "device" {
+				case 'c': // Prefix: "card"
+
+					if l := len("card"); len(elem) >= l && elem[0:l] == "card" {
 						elem = elem[l:]
 					} else {
 						break
@@ -91,7 +84,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						switch r.Method {
 						case "POST":
-							s.handleUziDevicePostRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleMedCardPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "POST")
 						}
@@ -99,63 +92,109 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					switch elem[0] {
-					case 's': // Prefix: "s"
+					case '/': // Prefix: "/doctor/"
 
-						if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
+						if l := len("/doctor/"); len(elem) >= l && elem[0:l] == "/doctor/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "doctor_id"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[0] = elem[:idx]
+						elem = elem[idx:]
+
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleUziDevicesGetRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET")
+							break
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/patient/"
+
+							if l := len("/patient/"); len(elem) >= l && elem[0:l] == "/patient/" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							// Param: "patient_id"
+							// Leaf parameter, slashes are prohibited
+							idx := strings.IndexByte(elem, '/')
+							if idx >= 0 {
+								break
+							}
+							args[1] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleMedCardDoctorDoctorIDPatientPatientIDGetRequest([2]string{
+										args[0],
+										args[1],
+									}, elemIsEscaped, w, r)
+								case "PATCH":
+									s.handleMedCardDoctorDoctorIDPatientPatientIDPatchRequest([2]string{
+										args[0],
+										args[1],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET,PATCH")
+								}
+
+								return
+							}
+
 						}
 
 					}
 
-					elem = origElem
-				case 'i': // Prefix: "image/"
-					origElem := elem
-					if l := len("image/"); len(elem) >= l && elem[0:l] == "image/" {
+				case 'd': // Prefix: "doctor"
+
+					if l := len("doctor"); len(elem) >= l && elem[0:l] == "doctor" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "id"
-					// Match until "/"
-					idx := strings.IndexByte(elem, '/')
-					if idx < 0 {
-						idx = len(elem)
-					}
-					args[0] = elem[:idx]
-					elem = elem[idx:]
-
 					if len(elem) == 0 {
-						break
+						switch r.Method {
+						case "POST":
+							s.handleMedDoctorPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/nodes-segments"
+					case '/': // Prefix: "/"
 
-						if l := len("/nodes-segments"); len(elem) >= l && elem[0:l] == "/nodes-segments" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
 						if len(elem) == 0 {
 							// Leaf node.
 							switch r.Method {
 							case "GET":
-								s.handleUziImageIDNodesSegmentsGetRequest([1]string{
+								s.handleMedDoctorIDGetRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -167,10 +206,117 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					}
 
-					elem = origElem
-				case 'n': // Prefix: "nodes"
-					origElem := elem
-					if l := len("nodes"); len(elem) >= l && elem[0:l] == "nodes" {
+				case 'p': // Prefix: "patient"
+
+					if l := len("patient"); len(elem) >= l && elem[0:l] == "patient" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "POST":
+							s.handleMedPatientPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleMedPatientIDGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "PATCH":
+								s.handleMedPatientIDPatchRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,PATCH")
+							}
+
+							return
+						}
+
+					case 's': // Prefix: "s/"
+
+						if l := len("s/"); len(elem) >= l && elem[0:l] == "s/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "doctor_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleMedPatientsDoctorIDGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+					}
+
+				}
+
+			case 'u': // Prefix: "uzi"
+
+				if l := len("uzi"); len(elem) >= l && elem[0:l] == "uzi" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "POST":
+						s.handleUziPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -180,29 +326,97 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case '-': // Prefix: "-segments"
-
-						if l := len("-segments"); len(elem) >= l && elem[0:l] == "-segments" {
+					case 'd': // Prefix: "device"
+						origElem := elem
+						if l := len("device"); len(elem) >= l && elem[0:l] == "device" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
 							switch r.Method {
 							case "POST":
-								s.handleUziNodesSegmentsPostRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleUziDevicePostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "POST")
 							}
 
 							return
 						}
+						switch elem[0] {
+						case 's': // Prefix: "s"
 
-					case '/': // Prefix: "/"
+							if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
+								elem = elem[l:]
+							} else {
+								break
+							}
 
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleUziDevicesGetRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+						}
+
+						elem = origElem
+					case 'i': // Prefix: "image/"
+						origElem := elem
+						if l := len("image/"); len(elem) >= l && elem[0:l] == "image/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "id"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[0] = elem[:idx]
+						elem = elem[idx:]
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/nodes-segments"
+
+							if l := len("/nodes-segments"); len(elem) >= l && elem[0:l] == "/nodes-segments" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleUziImageIDNodesSegmentsGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+						}
+
+						elem = origElem
+					case 'n': // Prefix: "nodes/"
+						origElem := elem
+						if l := len("nodes/"); len(elem) >= l && elem[0:l] == "nodes/" {
 							elem = elem[l:]
 						} else {
 							break
@@ -258,23 +472,90 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						}
 
-					}
+						elem = origElem
+					case 's': // Prefix: "segment"
+						origElem := elem
+						if l := len("segment"); len(elem) >= l && elem[0:l] == "segment" {
+							elem = elem[l:]
+						} else {
+							break
+						}
 
-					elem = origElem
-				case 's': // Prefix: "segment"
-					origElem := elem
-					if l := len("segment"); len(elem) >= l && elem[0:l] == "segment" {
-						elem = elem[l:]
-					} else {
-						break
+						if len(elem) == 0 {
+							switch r.Method {
+							case "POST":
+								s.handleUziSegmentPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "id"
+							// Leaf parameter, slashes are prohibited
+							idx := strings.IndexByte(elem, '/')
+							if idx >= 0 {
+								break
+							}
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "DELETE":
+									s.handleUziSegmentIDDeleteRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "PATCH":
+									s.handleUziSegmentIDPatchRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "DELETE,PATCH")
+								}
+
+								return
+							}
+
+						}
+
+						elem = origElem
 					}
+					// Param: "id"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
 
 					if len(elem) == 0 {
 						switch r.Method {
-						case "POST":
-							s.handleUziSegmentPostRequest([0]string{}, elemIsEscaped, w, r)
+						case "DELETE":
+							s.handleUziIDDeleteRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleUziIDGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						case "PATCH":
+							s.handleUziIDPatchRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
 						}
 
 						return
@@ -288,7 +569,128 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 
-						// Param: "id"
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "echographics"
+
+							if l := len("echographics"); len(elem) >= l && elem[0:l] == "echographics" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleUziIDEchographicsGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "PATCH":
+									s.handleUziIDEchographicsPatchRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET,PATCH")
+								}
+
+								return
+							}
+
+						case 'i': // Prefix: "images"
+
+							if l := len("images"); len(elem) >= l && elem[0:l] == "images" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleUziIDImagesGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+						case 'n': // Prefix: "nodes"
+
+							if l := len("nodes"); len(elem) >= l && elem[0:l] == "nodes" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch r.Method {
+								case "GET":
+									s.handleUziIDNodesGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+							switch elem[0] {
+							case '-': // Prefix: "-segments"
+
+								if l := len("-segments"); len(elem) >= l && elem[0:l] == "-segments" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleUziIDNodesSegmentsPostRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+							}
+
+						}
+
+					}
+
+				case 's': // Prefix: "s/"
+
+					if l := len("s/"); len(elem) >= l && elem[0:l] == "s/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "author/"
+
+						if l := len("author/"); len(elem) >= l && elem[0:l] == "author/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "author_id"
 						// Leaf parameter, slashes are prohibited
 						idx := strings.IndexByte(elem, '/')
 						if idx >= 0 {
@@ -300,102 +702,8 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						if len(elem) == 0 {
 							// Leaf node.
 							switch r.Method {
-							case "DELETE":
-								s.handleUziSegmentIDDeleteRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							case "PATCH":
-								s.handleUziSegmentIDPatchRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "DELETE,PATCH")
-							}
-
-							return
-						}
-
-					}
-
-					elem = origElem
-				}
-				// Param: "id"
-				// Match until "/"
-				idx := strings.IndexByte(elem, '/')
-				if idx < 0 {
-					idx = len(elem)
-				}
-				args[0] = elem[:idx]
-				elem = elem[idx:]
-
-				if len(elem) == 0 {
-					switch r.Method {
-					case "GET":
-						s.handleUziIDGetRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
-					case "PATCH":
-						s.handleUziIDPatchRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET,PATCH")
-					}
-
-					return
-				}
-				switch elem[0] {
-				case '/': // Prefix: "/"
-
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'e': // Prefix: "echographics"
-
-						if l := len("echographics"); len(elem) >= l && elem[0:l] == "echographics" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
 							case "GET":
-								s.handleUziIDEchographicsGetRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							case "PATCH":
-								s.handleUziIDEchographicsPatchRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET,PATCH")
-							}
-
-							return
-						}
-
-					case 'i': // Prefix: "images"
-
-						if l := len("images"); len(elem) >= l && elem[0:l] == "images" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleUziIDImagesGetRequest([1]string{
+								s.handleUzisAuthorAuthorIDGetRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -405,19 +713,28 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							return
 						}
 
-					case 'n': // Prefix: "nodes"
+					case 'e': // Prefix: "external/"
 
-						if l := len("nodes"); len(elem) >= l && elem[0:l] == "nodes" {
+						if l := len("external/"); len(elem) >= l && elem[0:l] == "external/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "external_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
 						if len(elem) == 0 {
 							// Leaf node.
 							switch r.Method {
 							case "GET":
-								s.handleUziIDNodesGetRequest([1]string{
+								s.handleUzisExternalExternalIDGetRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -429,37 +746,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					}
 
-				}
-
-			case 's': // Prefix: "s/"
-
-				if l := len("s/"); len(elem) >= l && elem[0:l] == "s/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "external_id"
-				// Leaf parameter, slashes are prohibited
-				idx := strings.IndexByte(elem, '/')
-				if idx >= 0 {
-					break
-				}
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "GET":
-						s.handleUzisExternalIDGetRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
-					}
-
-					return
 				}
 
 			}
@@ -476,7 +762,7 @@ type Route struct {
 	operationID string
 	pathPattern string
 	count       int
-	args        [1]string
+	args        [2]string
 }
 
 // Name returns ogen operation name.
@@ -544,32 +830,21 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/uzi"
+		case '/': // Prefix: "/"
 
-			if l := len("/uzi"); len(elem) >= l && elem[0:l] == "/uzi" {
+			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
 			if len(elem) == 0 {
-				switch method {
-				case "POST":
-					r.name = UziPostOperation
-					r.summary = "загрузить узи на обработку"
-					r.operationID = ""
-					r.pathPattern = "/uzi"
-					r.args = args
-					r.count = 0
-					return r, true
-				default:
-					return
-				}
+				break
 			}
 			switch elem[0] {
-			case '/': // Prefix: "/"
+			case 'm': // Prefix: "med/"
 
-				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+				if l := len("med/"); len(elem) >= l && elem[0:l] == "med/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -579,9 +854,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'd': // Prefix: "device"
-					origElem := elem
-					if l := len("device"); len(elem) >= l && elem[0:l] == "device" {
+				case 'c': // Prefix: "card"
+
+					if l := len("card"); len(elem) >= l && elem[0:l] == "card" {
 						elem = elem[l:]
 					} else {
 						break
@@ -590,10 +865,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "POST":
-							r.name = UziDevicePostOperation
-							r.summary = "добавить uzi аппарат"
+							r.name = MedCardPostOperation
+							r.summary = "создать карту пациента"
 							r.operationID = ""
-							r.pathPattern = "/uzi/device"
+							r.pathPattern = "/med/card"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -602,70 +877,120 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 					}
 					switch elem[0] {
-					case 's': // Prefix: "s"
+					case '/': // Prefix: "/doctor/"
 
-						if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
+						if l := len("/doctor/"); len(elem) >= l && elem[0:l] == "/doctor/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "doctor_id"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[0] = elem[:idx]
+						elem = elem[idx:]
+
 						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = UziDevicesGetOperation
-								r.summary = "получит список uzi апппапапратов"
-								r.operationID = ""
-								r.pathPattern = "/uzi/devices"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/patient/"
+
+							if l := len("/patient/"); len(elem) >= l && elem[0:l] == "/patient/" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							// Param: "patient_id"
+							// Leaf parameter, slashes are prohibited
+							idx := strings.IndexByte(elem, '/')
+							if idx >= 0 {
+								break
+							}
+							args[1] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = MedCardDoctorDoctorIDPatientPatientIDGetOperation
+									r.summary = "получить карту пациента"
+									r.operationID = ""
+									r.pathPattern = "/med/card/doctor/{doctor_id}/patient/{patient_id}"
+									r.args = args
+									r.count = 2
+									return r, true
+								case "PATCH":
+									r.name = MedCardDoctorDoctorIDPatientPatientIDPatchOperation
+									r.summary = "обновить карту пациента"
+									r.operationID = ""
+									r.pathPattern = "/med/card/doctor/{doctor_id}/patient/{patient_id}"
+									r.args = args
+									r.count = 2
+									return r, true
+								default:
+									return
+								}
+							}
+
 						}
 
 					}
 
-					elem = origElem
-				case 'i': // Prefix: "image/"
-					origElem := elem
-					if l := len("image/"); len(elem) >= l && elem[0:l] == "image/" {
+				case 'd': // Prefix: "doctor"
+
+					if l := len("doctor"); len(elem) >= l && elem[0:l] == "doctor" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "id"
-					// Match until "/"
-					idx := strings.IndexByte(elem, '/')
-					if idx < 0 {
-						idx = len(elem)
-					}
-					args[0] = elem[:idx]
-					elem = elem[idx:]
-
 					if len(elem) == 0 {
-						break
+						switch method {
+						case "POST":
+							r.name = MedDoctorPostOperation
+							r.summary = "зарегистрировать врача"
+							r.operationID = ""
+							r.pathPattern = "/med/doctor"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/nodes-segments"
+					case '/': // Prefix: "/"
 
-						if l := len("/nodes-segments"); len(elem) >= l && elem[0:l] == "/nodes-segments" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
 						if len(elem) == 0 {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = UziImageIDNodesSegmentsGetOperation
-								r.summary = "получит узлы и сегменты на указанном изображении"
+								r.name = MedDoctorIDGetOperation
+								r.summary = "получить врача"
 								r.operationID = ""
-								r.pathPattern = "/uzi/image/{id}/nodes-segments"
+								r.pathPattern = "/med/doctor/{id}"
 								r.args = args
 								r.count = 1
 								return r, true
@@ -676,10 +1001,133 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 					}
 
-					elem = origElem
-				case 'n': // Prefix: "nodes"
-					origElem := elem
-					if l := len("nodes"); len(elem) >= l && elem[0:l] == "nodes" {
+				case 'p': // Prefix: "patient"
+
+					if l := len("patient"); len(elem) >= l && elem[0:l] == "patient" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "POST":
+							r.name = MedPatientPostOperation
+							r.summary = "зарегистрировать пациента"
+							r.operationID = ""
+							r.pathPattern = "/med/patient"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = MedPatientIDGetOperation
+								r.summary = "получить пациента"
+								r.operationID = ""
+								r.pathPattern = "/med/patient/{id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "PATCH":
+								r.name = MedPatientIDPatchOperation
+								r.summary = "обновить пациента"
+								r.operationID = ""
+								r.pathPattern = "/med/patient/{id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 's': // Prefix: "s/"
+
+						if l := len("s/"); len(elem) >= l && elem[0:l] == "s/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "doctor_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = MedPatientsDoctorIDGetOperation
+								r.summary = "получить пациентов врача"
+								r.operationID = ""
+								r.pathPattern = "/med/patients/{doctor_id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+				}
+
+			case 'u': // Prefix: "uzi"
+
+				if l := len("uzi"); len(elem) >= l && elem[0:l] == "uzi" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "POST":
+						r.name = UziPostOperation
+						r.summary = "загрузить узи на обработку"
+						r.operationID = ""
+						r.pathPattern = "/uzi"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -689,22 +1137,21 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case '-': // Prefix: "-segments"
-
-						if l := len("-segments"); len(elem) >= l && elem[0:l] == "-segments" {
+					case 'd': // Prefix: "device"
+						origElem := elem
+						if l := len("device"); len(elem) >= l && elem[0:l] == "device" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
 							switch method {
 							case "POST":
-								r.name = UziNodesSegmentsPostOperation
-								r.summary = "добавить узел с сегментами"
+								r.name = UziDevicePostOperation
+								r.summary = "добавить uzi аппарат"
 								r.operationID = ""
-								r.pathPattern = "/uzi/nodes-segments"
+								r.pathPattern = "/uzi/device"
 								r.args = args
 								r.count = 0
 								return r, true
@@ -712,10 +1159,85 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								return
 							}
 						}
+						switch elem[0] {
+						case 's': // Prefix: "s"
 
-					case '/': // Prefix: "/"
+							if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
+								elem = elem[l:]
+							} else {
+								break
+							}
 
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = UziDevicesGetOperation
+									r.summary = "получит список uzi апппапапратов"
+									r.operationID = ""
+									r.pathPattern = "/uzi/devices"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+						}
+
+						elem = origElem
+					case 'i': // Prefix: "image/"
+						origElem := elem
+						if l := len("image/"); len(elem) >= l && elem[0:l] == "image/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "id"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[0] = elem[:idx]
+						elem = elem[idx:]
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/nodes-segments"
+
+							if l := len("/nodes-segments"); len(elem) >= l && elem[0:l] == "/nodes-segments" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = UziImageIDNodesSegmentsGetOperation
+									r.summary = "получит узлы и сегменты на указанном изображении"
+									r.operationID = ""
+									r.pathPattern = "/uzi/image/{id}/nodes-segments"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+						}
+
+						elem = origElem
+					case 'n': // Prefix: "nodes/"
+						origElem := elem
+						if l := len("nodes/"); len(elem) >= l && elem[0:l] == "nodes/" {
 							elem = elem[l:]
 						} else {
 							break
@@ -779,26 +1301,109 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 						}
 
-					}
+						elem = origElem
+					case 's': // Prefix: "segment"
+						origElem := elem
+						if l := len("segment"); len(elem) >= l && elem[0:l] == "segment" {
+							elem = elem[l:]
+						} else {
+							break
+						}
 
-					elem = origElem
-				case 's': // Prefix: "segment"
-					origElem := elem
-					if l := len("segment"); len(elem) >= l && elem[0:l] == "segment" {
-						elem = elem[l:]
-					} else {
-						break
+						if len(elem) == 0 {
+							switch method {
+							case "POST":
+								r.name = UziSegmentPostOperation
+								r.summary = "добавить новый сегмент"
+								r.operationID = ""
+								r.pathPattern = "/uzi/segment"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "id"
+							// Leaf parameter, slashes are prohibited
+							idx := strings.IndexByte(elem, '/')
+							if idx >= 0 {
+								break
+							}
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "DELETE":
+									r.name = UziSegmentIDDeleteOperation
+									r.summary = "удалить сегмент"
+									r.operationID = ""
+									r.pathPattern = "/uzi/segment/{id}"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "PATCH":
+									r.name = UziSegmentIDPatchOperation
+									r.summary = "обновить сегмент"
+									r.operationID = ""
+									r.pathPattern = "/uzi/segment/{id}"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+						}
+
+						elem = origElem
 					}
+					// Param: "id"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
 
 					if len(elem) == 0 {
 						switch method {
-						case "POST":
-							r.name = UziSegmentPostOperation
-							r.summary = "добавить новый сегмент"
+						case "DELETE":
+							r.name = UziIDDeleteOperation
+							r.summary = "удалить узи"
 							r.operationID = ""
-							r.pathPattern = "/uzi/segment"
+							r.pathPattern = "/uzi/{id}"
 							r.args = args
-							r.count = 0
+							r.count = 1
+							return r, true
+						case "GET":
+							r.name = UziIDGetOperation
+							r.summary = "получить узи"
+							r.operationID = ""
+							r.pathPattern = "/uzi/{id}"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							r.name = UziIDPatchOperation
+							r.summary = "обновить узи"
+							r.operationID = ""
+							r.pathPattern = "/uzi/{id}"
+							r.args = args
+							r.count = 1
 							return r, true
 						default:
 							return
@@ -813,7 +1418,140 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 
-						// Param: "id"
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "echographics"
+
+							if l := len("echographics"); len(elem) >= l && elem[0:l] == "echographics" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = UziIDEchographicsGetOperation
+									r.summary = "получить эхографику uzi"
+									r.operationID = ""
+									r.pathPattern = "/uzi/{id}/echographics"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "PATCH":
+									r.name = UziIDEchographicsPatchOperation
+									r.summary = "обновить эхографику"
+									r.operationID = ""
+									r.pathPattern = "/uzi/{id}/echographics"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+						case 'i': // Prefix: "images"
+
+							if l := len("images"); len(elem) >= l && elem[0:l] == "images" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = UziIDImagesGetOperation
+									r.summary = "получает списк изображений uzi"
+									r.operationID = ""
+									r.pathPattern = "/uzi/{id}/images"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+						case 'n': // Prefix: "nodes"
+
+							if l := len("nodes"); len(elem) >= l && elem[0:l] == "nodes" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "GET":
+									r.name = UziIDNodesGetOperation
+									r.summary = "получить все узлы узи"
+									r.operationID = ""
+									r.pathPattern = "/uzi/{id}/nodes"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+							switch elem[0] {
+							case '-': // Prefix: "-segments"
+
+								if l := len("-segments"); len(elem) >= l && elem[0:l] == "-segments" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "POST":
+										r.name = UziIDNodesSegmentsPostOperation
+										r.summary = "добавить узел с сегментами"
+										r.operationID = ""
+										r.pathPattern = "/uzi/{id}/nodes-segments"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+				case 's': // Prefix: "s/"
+
+					if l := len("s/"); len(elem) >= l && elem[0:l] == "s/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "author/"
+
+						if l := len("author/"); len(elem) >= l && elem[0:l] == "author/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "author_id"
 						// Leaf parameter, slashes are prohibited
 						idx := strings.IndexByte(elem, '/')
 						if idx >= 0 {
@@ -825,19 +1563,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							// Leaf node.
 							switch method {
-							case "DELETE":
-								r.name = UziSegmentIDDeleteOperation
-								r.summary = "удалить сегмент"
+							case "GET":
+								r.name = UzisAuthorAuthorIDGetOperation
+								r.summary = "получить узи по id автора"
 								r.operationID = ""
-								r.pathPattern = "/uzi/segment/{id}"
-								r.args = args
-								r.count = 1
-								return r, true
-							case "PATCH":
-								r.name = UziSegmentIDPatchOperation
-								r.summary = "обновить сегмент"
-								r.operationID = ""
-								r.pathPattern = "/uzi/segment/{id}"
+								r.pathPattern = "/uzis/author/{author_id}"
 								r.args = args
 								r.count = 1
 								return r, true
@@ -846,126 +1576,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 						}
 
-					}
+					case 'e': // Prefix: "external/"
 
-					elem = origElem
-				}
-				// Param: "id"
-				// Match until "/"
-				idx := strings.IndexByte(elem, '/')
-				if idx < 0 {
-					idx = len(elem)
-				}
-				args[0] = elem[:idx]
-				elem = elem[idx:]
-
-				if len(elem) == 0 {
-					switch method {
-					case "GET":
-						r.name = UziIDGetOperation
-						r.summary = "получить узи"
-						r.operationID = ""
-						r.pathPattern = "/uzi/{id}"
-						r.args = args
-						r.count = 1
-						return r, true
-					case "PATCH":
-						r.name = UziIDPatchOperation
-						r.summary = "обновить узи"
-						r.operationID = ""
-						r.pathPattern = "/uzi/{id}"
-						r.args = args
-						r.count = 1
-						return r, true
-					default:
-						return
-					}
-				}
-				switch elem[0] {
-				case '/': // Prefix: "/"
-
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'e': // Prefix: "echographics"
-
-						if l := len("echographics"); len(elem) >= l && elem[0:l] == "echographics" {
+						if l := len("external/"); len(elem) >= l && elem[0:l] == "external/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = UziIDEchographicsGetOperation
-								r.summary = "получить эхографику uzi"
-								r.operationID = ""
-								r.pathPattern = "/uzi/{id}/echographics"
-								r.args = args
-								r.count = 1
-								return r, true
-							case "PATCH":
-								r.name = UziIDEchographicsPatchOperation
-								r.summary = "обновить эхографику"
-								r.operationID = ""
-								r.pathPattern = "/uzi/{id}/echographics"
-								r.args = args
-								r.count = 1
-								return r, true
-							default:
-								return
-							}
-						}
-
-					case 'i': // Prefix: "images"
-
-						if l := len("images"); len(elem) >= l && elem[0:l] == "images" {
-							elem = elem[l:]
-						} else {
+						// Param: "external_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
 							break
 						}
+						args[0] = elem
+						elem = ""
 
 						if len(elem) == 0 {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = UziIDImagesGetOperation
-								r.summary = "получает списк изображений uzi"
+								r.name = UzisExternalExternalIDGetOperation
+								r.summary = "получить узи по внешнему id"
 								r.operationID = ""
-								r.pathPattern = "/uzi/{id}/images"
-								r.args = args
-								r.count = 1
-								return r, true
-							default:
-								return
-							}
-						}
-
-					case 'n': // Prefix: "nodes"
-
-						if l := len("nodes"); len(elem) >= l && elem[0:l] == "nodes" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = UziIDNodesGetOperation
-								r.summary = "получить все узлы узи"
-								r.operationID = ""
-								r.pathPattern = "/uzi/{id}/nodes"
+								r.pathPattern = "/uzis/external/{external_id}"
 								r.args = args
 								r.count = 1
 								return r, true
@@ -976,39 +1611,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 					}
 
-				}
-
-			case 's': // Prefix: "s/"
-
-				if l := len("s/"); len(elem) >= l && elem[0:l] == "s/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "external_id"
-				// Leaf parameter, slashes are prohibited
-				idx := strings.IndexByte(elem, '/')
-				if idx >= 0 {
-					break
-				}
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "GET":
-						r.name = UzisExternalIDGetOperation
-						r.summary = "получить узи по внешнему id"
-						r.operationID = ""
-						r.pathPattern = "/uzis/{external_id}"
-						r.args = args
-						r.count = 1
-						return r, true
-					default:
-						return
-					}
 				}
 
 			}

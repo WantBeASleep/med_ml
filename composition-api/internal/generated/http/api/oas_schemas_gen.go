@@ -16,6 +16,51 @@ func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
+// Карта пациента.
+// Ref: #/components/schemas/card
+type Card struct {
+	// Id пациента.
+	PatientID uuid.UUID `json:"patient_id"`
+	// Id врача.
+	DoctorID uuid.UUID `json:"doctor_id"`
+	// Диагноз.
+	Diagnosis NilString `json:"diagnosis"`
+}
+
+// GetPatientID returns the value of PatientID.
+func (s *Card) GetPatientID() uuid.UUID {
+	return s.PatientID
+}
+
+// GetDoctorID returns the value of DoctorID.
+func (s *Card) GetDoctorID() uuid.UUID {
+	return s.DoctorID
+}
+
+// GetDiagnosis returns the value of Diagnosis.
+func (s *Card) GetDiagnosis() NilString {
+	return s.Diagnosis
+}
+
+// SetPatientID sets the value of PatientID.
+func (s *Card) SetPatientID(val uuid.UUID) {
+	s.PatientID = val
+}
+
+// SetDoctorID sets the value of DoctorID.
+func (s *Card) SetDoctorID(val uuid.UUID) {
+	s.DoctorID = val
+}
+
+// SetDiagnosis sets the value of Diagnosis.
+func (s *Card) SetDiagnosis(val NilString) {
+	s.Diagnosis = val
+}
+
+func (*Card) medCardDoctorDoctorIDPatientPatientIDGetRes()   {}
+func (*Card) medCardDoctorDoctorIDPatientPatientIDPatchRes() {}
+func (*Card) medCardPostRes()                                {}
+
 type Contor []ContorItem
 
 type ContorItem struct {
@@ -73,6 +118,73 @@ func (s *Device) SetID(val int) {
 func (s *Device) SetName(val string) {
 	s.Name = val
 }
+
+// Врач.
+// Ref: #/components/schemas/doctor
+type Doctor struct {
+	// Id врача.
+	ID uuid.UUID `json:"id"`
+	// Полное имя врача.
+	Fullname string `json:"fullname"`
+	// Организация врача.
+	Org string `json:"org"`
+	// Работа врача.
+	Job string `json:"job"`
+	// Описание врача (раб. стаж).
+	Description NilString `json:"description"`
+}
+
+// GetID returns the value of ID.
+func (s *Doctor) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetFullname returns the value of Fullname.
+func (s *Doctor) GetFullname() string {
+	return s.Fullname
+}
+
+// GetOrg returns the value of Org.
+func (s *Doctor) GetOrg() string {
+	return s.Org
+}
+
+// GetJob returns the value of Job.
+func (s *Doctor) GetJob() string {
+	return s.Job
+}
+
+// GetDescription returns the value of Description.
+func (s *Doctor) GetDescription() NilString {
+	return s.Description
+}
+
+// SetID sets the value of ID.
+func (s *Doctor) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetFullname sets the value of Fullname.
+func (s *Doctor) SetFullname(val string) {
+	s.Fullname = val
+}
+
+// SetOrg sets the value of Org.
+func (s *Doctor) SetOrg(val string) {
+	s.Org = val
+}
+
+// SetJob sets the value of Job.
+func (s *Doctor) SetJob(val string) {
+	s.Job = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Doctor) SetDescription(val NilString) {
+	s.Description = val
+}
+
+func (*Doctor) medDoctorIDGetRes() {}
 
 // Эхографическая информация.
 // Ref: #/components/schemas/echographics
@@ -363,24 +475,35 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
-func (*ErrorStatusCode) uziDevicePostRes()              {}
-func (*ErrorStatusCode) uziDevicesGetRes()              {}
-func (*ErrorStatusCode) uziIDEchographicsGetRes()       {}
-func (*ErrorStatusCode) uziIDEchographicsPatchRes()     {}
-func (*ErrorStatusCode) uziIDGetRes()                   {}
-func (*ErrorStatusCode) uziIDImagesGetRes()             {}
-func (*ErrorStatusCode) uziIDNodesGetRes()              {}
-func (*ErrorStatusCode) uziIDPatchRes()                 {}
-func (*ErrorStatusCode) uziImageIDNodesSegmentsGetRes() {}
-func (*ErrorStatusCode) uziNodesIDDeleteRes()           {}
-func (*ErrorStatusCode) uziNodesIDPatchRes()            {}
-func (*ErrorStatusCode) uziNodesIDSegmentsGetRes()      {}
-func (*ErrorStatusCode) uziNodesSegmentsPostRes()       {}
-func (*ErrorStatusCode) uziPostRes()                    {}
-func (*ErrorStatusCode) uziSegmentIDDeleteRes()         {}
-func (*ErrorStatusCode) uziSegmentIDPatchRes()          {}
-func (*ErrorStatusCode) uziSegmentPostRes()             {}
-func (*ErrorStatusCode) uzisExternalIDGetRes()          {}
+func (*ErrorStatusCode) medCardDoctorDoctorIDPatientPatientIDGetRes()   {}
+func (*ErrorStatusCode) medCardDoctorDoctorIDPatientPatientIDPatchRes() {}
+func (*ErrorStatusCode) medCardPostRes()                                {}
+func (*ErrorStatusCode) medDoctorIDGetRes()                             {}
+func (*ErrorStatusCode) medDoctorPostRes()                              {}
+func (*ErrorStatusCode) medPatientIDGetRes()                            {}
+func (*ErrorStatusCode) medPatientIDPatchRes()                          {}
+func (*ErrorStatusCode) medPatientPostRes()                             {}
+func (*ErrorStatusCode) medPatientsDoctorIDGetRes()                     {}
+func (*ErrorStatusCode) uziDevicePostRes()                              {}
+func (*ErrorStatusCode) uziDevicesGetRes()                              {}
+func (*ErrorStatusCode) uziIDDeleteRes()                                {}
+func (*ErrorStatusCode) uziIDEchographicsGetRes()                       {}
+func (*ErrorStatusCode) uziIDEchographicsPatchRes()                     {}
+func (*ErrorStatusCode) uziIDGetRes()                                   {}
+func (*ErrorStatusCode) uziIDImagesGetRes()                             {}
+func (*ErrorStatusCode) uziIDNodesGetRes()                              {}
+func (*ErrorStatusCode) uziIDNodesSegmentsPostRes()                     {}
+func (*ErrorStatusCode) uziIDPatchRes()                                 {}
+func (*ErrorStatusCode) uziImageIDNodesSegmentsGetRes()                 {}
+func (*ErrorStatusCode) uziNodesIDDeleteRes()                           {}
+func (*ErrorStatusCode) uziNodesIDPatchRes()                            {}
+func (*ErrorStatusCode) uziNodesIDSegmentsGetRes()                      {}
+func (*ErrorStatusCode) uziPostRes()                                    {}
+func (*ErrorStatusCode) uziSegmentIDDeleteRes()                         {}
+func (*ErrorStatusCode) uziSegmentIDPatchRes()                          {}
+func (*ErrorStatusCode) uziSegmentPostRes()                             {}
+func (*ErrorStatusCode) uzisAuthorAuthorIDGetRes()                      {}
+func (*ErrorStatusCode) uzisExternalExternalIDGetRes()                  {}
 
 // Изображение.
 // Ref: #/components/schemas/image
@@ -423,21 +546,325 @@ func (s *Image) SetPage(val int) {
 	s.Page = val
 }
 
+type MedCardDoctorDoctorIDPatientPatientIDPatchReq struct {
+	// Диагноз пациента.
+	Diagnosis string `json:"diagnosis"`
+}
+
+// GetDiagnosis returns the value of Diagnosis.
+func (s *MedCardDoctorDoctorIDPatientPatientIDPatchReq) GetDiagnosis() string {
+	return s.Diagnosis
+}
+
+// SetDiagnosis sets the value of Diagnosis.
+func (s *MedCardDoctorDoctorIDPatientPatientIDPatchReq) SetDiagnosis(val string) {
+	s.Diagnosis = val
+}
+
+type MedDoctorPostReq struct {
+	// Email врача.
+	Email string `json:"email"`
+	// Пароль врача.
+	Password string `json:"password"`
+	// Полное имя врача.
+	Fullname string `json:"fullname"`
+	// Организация врача.
+	Org string `json:"org"`
+	// Работа врача.
+	Job string `json:"job"`
+	// Описание врача (раб. стаж).
+	Description OptString `json:"description"`
+}
+
+// GetEmail returns the value of Email.
+func (s *MedDoctorPostReq) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *MedDoctorPostReq) GetPassword() string {
+	return s.Password
+}
+
+// GetFullname returns the value of Fullname.
+func (s *MedDoctorPostReq) GetFullname() string {
+	return s.Fullname
+}
+
+// GetOrg returns the value of Org.
+func (s *MedDoctorPostReq) GetOrg() string {
+	return s.Org
+}
+
+// GetJob returns the value of Job.
+func (s *MedDoctorPostReq) GetJob() string {
+	return s.Job
+}
+
+// GetDescription returns the value of Description.
+func (s *MedDoctorPostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// SetEmail sets the value of Email.
+func (s *MedDoctorPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *MedDoctorPostReq) SetPassword(val string) {
+	s.Password = val
+}
+
+// SetFullname sets the value of Fullname.
+func (s *MedDoctorPostReq) SetFullname(val string) {
+	s.Fullname = val
+}
+
+// SetOrg sets the value of Org.
+func (s *MedDoctorPostReq) SetOrg(val string) {
+	s.Org = val
+}
+
+// SetJob sets the value of Job.
+func (s *MedDoctorPostReq) SetJob(val string) {
+	s.Job = val
+}
+
+// SetDescription sets the value of Description.
+func (s *MedDoctorPostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+type MedPatientIDPatchReq struct {
+	// Признак того, что пациент активен.
+	Active OptBool `json:"active"`
+	// Признак того, что пациент имеет злокачественную
+	// опухоль.
+	Malignancy OptBool `json:"malignancy"`
+	// Дата последнего узи.
+	LastUziDate OptDate `json:"last_uzi_date"`
+}
+
+// GetActive returns the value of Active.
+func (s *MedPatientIDPatchReq) GetActive() OptBool {
+	return s.Active
+}
+
+// GetMalignancy returns the value of Malignancy.
+func (s *MedPatientIDPatchReq) GetMalignancy() OptBool {
+	return s.Malignancy
+}
+
+// GetLastUziDate returns the value of LastUziDate.
+func (s *MedPatientIDPatchReq) GetLastUziDate() OptDate {
+	return s.LastUziDate
+}
+
+// SetActive sets the value of Active.
+func (s *MedPatientIDPatchReq) SetActive(val OptBool) {
+	s.Active = val
+}
+
+// SetMalignancy sets the value of Malignancy.
+func (s *MedPatientIDPatchReq) SetMalignancy(val OptBool) {
+	s.Malignancy = val
+}
+
+// SetLastUziDate sets the value of LastUziDate.
+func (s *MedPatientIDPatchReq) SetLastUziDate(val OptDate) {
+	s.LastUziDate = val
+}
+
+type MedPatientPostReq struct {
+	// Полное имя пациента.
+	Fullname string `json:"fullname"`
+	// Email пациента.
+	Email string `json:"email"`
+	// Полис пациента.
+	Policy string `json:"policy"`
+	// Признак того, что пациент активен.
+	Active bool `json:"active"`
+	// Признак того, что пациент имеет злокачественную
+	// опухоль.
+	Malignancy bool `json:"malignancy"`
+	// Дата рождения пациента в RFC3339.
+	BirthDate time.Time `json:"birth_date"`
+}
+
+// GetFullname returns the value of Fullname.
+func (s *MedPatientPostReq) GetFullname() string {
+	return s.Fullname
+}
+
+// GetEmail returns the value of Email.
+func (s *MedPatientPostReq) GetEmail() string {
+	return s.Email
+}
+
+// GetPolicy returns the value of Policy.
+func (s *MedPatientPostReq) GetPolicy() string {
+	return s.Policy
+}
+
+// GetActive returns the value of Active.
+func (s *MedPatientPostReq) GetActive() bool {
+	return s.Active
+}
+
+// GetMalignancy returns the value of Malignancy.
+func (s *MedPatientPostReq) GetMalignancy() bool {
+	return s.Malignancy
+}
+
+// GetBirthDate returns the value of BirthDate.
+func (s *MedPatientPostReq) GetBirthDate() time.Time {
+	return s.BirthDate
+}
+
+// SetFullname sets the value of Fullname.
+func (s *MedPatientPostReq) SetFullname(val string) {
+	s.Fullname = val
+}
+
+// SetEmail sets the value of Email.
+func (s *MedPatientPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPolicy sets the value of Policy.
+func (s *MedPatientPostReq) SetPolicy(val string) {
+	s.Policy = val
+}
+
+// SetActive sets the value of Active.
+func (s *MedPatientPostReq) SetActive(val bool) {
+	s.Active = val
+}
+
+// SetMalignancy sets the value of Malignancy.
+func (s *MedPatientPostReq) SetMalignancy(val bool) {
+	s.Malignancy = val
+}
+
+// SetBirthDate sets the value of BirthDate.
+func (s *MedPatientPostReq) SetBirthDate(val time.Time) {
+	s.BirthDate = val
+}
+
+type MedPatientsDoctorIDGetOKApplicationJSON []Patient
+
+func (*MedPatientsDoctorIDGetOKApplicationJSON) medPatientsDoctorIDGetRes() {}
+
+// NewNilDate returns new NilDate with value set to v.
+func NewNilDate(v time.Time) NilDate {
+	return NilDate{
+		Value: v,
+	}
+}
+
+// NilDate is nullable time.Time.
+type NilDate struct {
+	Value time.Time
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilDate) SetTo(v time.Time) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilDate) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilDate) SetToNull() {
+	o.Null = true
+	var v time.Time
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilDate) Get() (v time.Time, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilDate) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewNilString returns new NilString with value set to v.
+func NewNilString(v string) NilString {
+	return NilString{
+		Value: v,
+	}
+}
+
+// NilString is nullable string.
+type NilString struct {
+	Value string
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilString) SetTo(v string) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilString) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilString) SetToNull() {
+	o.Null = true
+	var v string
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilString) Get() (v string, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // Узел.
 // Ref: #/components/schemas/node
 type Node struct {
 	// Id узла.
 	ID uuid.UUID `json:"id"`
-	// Признак того, что узел был обработан нейронкой.
+	// Признак того, что узел был создан нейронкой.
 	Ai bool `json:"ai"`
 	// Id узи, к которому относится узел.
 	UziID uuid.UUID `json:"uzi_id"`
+	// Валидация нейроночного узла врачем.
+	Validation OptNilNodeValidation `json:"validation"`
 	// Вероятность наличия опухоли в 23-й группе.
 	Tirads23 float64 `json:"tirads_23"`
 	// Вероятность наличия опухоли в 4-й группе.
 	Tirads4 float64 `json:"tirads_4"`
 	// Вероятность наличия опухоли в 5-й группе.
 	Tirads5 float64 `json:"tirads_5"`
+	// Описание узла.
+	Description OptString `json:"description"`
 }
 
 // GetID returns the value of ID.
@@ -455,6 +882,11 @@ func (s *Node) GetUziID() uuid.UUID {
 	return s.UziID
 }
 
+// GetValidation returns the value of Validation.
+func (s *Node) GetValidation() OptNilNodeValidation {
+	return s.Validation
+}
+
 // GetTirads23 returns the value of Tirads23.
 func (s *Node) GetTirads23() float64 {
 	return s.Tirads23
@@ -468,6 +900,11 @@ func (s *Node) GetTirads4() float64 {
 // GetTirads5 returns the value of Tirads5.
 func (s *Node) GetTirads5() float64 {
 	return s.Tirads5
+}
+
+// GetDescription returns the value of Description.
+func (s *Node) GetDescription() OptString {
+	return s.Description
 }
 
 // SetID sets the value of ID.
@@ -485,6 +922,11 @@ func (s *Node) SetUziID(val uuid.UUID) {
 	s.UziID = val
 }
 
+// SetValidation sets the value of Validation.
+func (s *Node) SetValidation(val OptNilNodeValidation) {
+	s.Validation = val
+}
+
 // SetTirads23 sets the value of Tirads23.
 func (s *Node) SetTirads23(val float64) {
 	s.Tirads23 = val
@@ -500,7 +942,54 @@ func (s *Node) SetTirads5(val float64) {
 	s.Tirads5 = val
 }
 
+// SetDescription sets the value of Description.
+func (s *Node) SetDescription(val OptString) {
+	s.Description = val
+}
+
 func (*Node) uziNodesIDPatchRes() {}
+
+// Валидация нейроночного узла врачем.
+type NodeValidation string
+
+const (
+	NodeValidationInvalid NodeValidation = "invalid"
+	NodeValidationValid   NodeValidation = "valid"
+)
+
+// AllValues returns all NodeValidation values.
+func (NodeValidation) AllValues() []NodeValidation {
+	return []NodeValidation{
+		NodeValidationInvalid,
+		NodeValidationValid,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s NodeValidation) MarshalText() ([]byte, error) {
+	switch s {
+	case NodeValidationInvalid:
+		return []byte(s), nil
+	case NodeValidationValid:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *NodeValidation) UnmarshalText(data []byte) error {
+	switch NodeValidation(data) {
+	case NodeValidationInvalid:
+		*s = NodeValidationInvalid
+		return nil
+	case NodeValidationValid:
+		*s = NodeValidationValid
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 // NewOptBool returns new OptBool with value set to v.
 func NewOptBool(v bool) OptBool {
@@ -542,6 +1031,52 @@ func (o OptBool) Get() (v bool, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDate returns new OptDate with value set to v.
+func NewOptDate(v time.Time) OptDate {
+	return OptDate{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDate is optional time.Time.
+type OptDate struct {
+	Value time.Time
+	Set   bool
+}
+
+// IsSet returns true if OptDate was set.
+func (o OptDate) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDate) Reset() {
+	var v time.Time
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDate) SetTo(v time.Time) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDate) Get() (v time.Time, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDate) Or(d time.Time) time.Time {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -594,6 +1129,132 @@ func (o OptFloat64) Or(d float64) float64 {
 	return d
 }
 
+// NewOptNilNodeValidation returns new OptNilNodeValidation with value set to v.
+func NewOptNilNodeValidation(v NodeValidation) OptNilNodeValidation {
+	return OptNilNodeValidation{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptNilNodeValidation is optional nullable NodeValidation.
+type OptNilNodeValidation struct {
+	Value NodeValidation
+	Set   bool
+	Null  bool
+}
+
+// IsSet returns true if OptNilNodeValidation was set.
+func (o OptNilNodeValidation) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptNilNodeValidation) Reset() {
+	var v NodeValidation
+	o.Value = v
+	o.Set = false
+	o.Null = false
+}
+
+// SetTo sets value to v.
+func (o *OptNilNodeValidation) SetTo(v NodeValidation) {
+	o.Set = true
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o OptNilNodeValidation) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *OptNilNodeValidation) SetToNull() {
+	o.Set = true
+	o.Null = true
+	var v NodeValidation
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptNilNodeValidation) Get() (v NodeValidation, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptNilNodeValidation) Or(d NodeValidation) NodeValidation {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptNilUziNodesIDPatchReqValidation returns new OptNilUziNodesIDPatchReqValidation with value set to v.
+func NewOptNilUziNodesIDPatchReqValidation(v UziNodesIDPatchReqValidation) OptNilUziNodesIDPatchReqValidation {
+	return OptNilUziNodesIDPatchReqValidation{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptNilUziNodesIDPatchReqValidation is optional nullable UziNodesIDPatchReqValidation.
+type OptNilUziNodesIDPatchReqValidation struct {
+	Value UziNodesIDPatchReqValidation
+	Set   bool
+	Null  bool
+}
+
+// IsSet returns true if OptNilUziNodesIDPatchReqValidation was set.
+func (o OptNilUziNodesIDPatchReqValidation) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptNilUziNodesIDPatchReqValidation) Reset() {
+	var v UziNodesIDPatchReqValidation
+	o.Value = v
+	o.Set = false
+	o.Null = false
+}
+
+// SetTo sets value to v.
+func (o *OptNilUziNodesIDPatchReqValidation) SetTo(v UziNodesIDPatchReqValidation) {
+	o.Set = true
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o OptNilUziNodesIDPatchReqValidation) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *OptNilUziNodesIDPatchReqValidation) SetToNull() {
+	o.Set = true
+	o.Null = true
+	var v UziNodesIDPatchReqValidation
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptNilUziNodesIDPatchReqValidation) Get() (v UziNodesIDPatchReqValidation, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptNilUziNodesIDPatchReqValidation) Or(d UziNodesIDPatchReqValidation) UziNodesIDPatchReqValidation {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -640,6 +1301,157 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
+// NewOptUziIDPatchReqProjection returns new OptUziIDPatchReqProjection with value set to v.
+func NewOptUziIDPatchReqProjection(v UziIDPatchReqProjection) OptUziIDPatchReqProjection {
+	return OptUziIDPatchReqProjection{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUziIDPatchReqProjection is optional UziIDPatchReqProjection.
+type OptUziIDPatchReqProjection struct {
+	Value UziIDPatchReqProjection
+	Set   bool
+}
+
+// IsSet returns true if OptUziIDPatchReqProjection was set.
+func (o OptUziIDPatchReqProjection) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUziIDPatchReqProjection) Reset() {
+	var v UziIDPatchReqProjection
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUziIDPatchReqProjection) SetTo(v UziIDPatchReqProjection) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUziIDPatchReqProjection) Get() (v UziIDPatchReqProjection, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUziIDPatchReqProjection) Or(d UziIDPatchReqProjection) UziIDPatchReqProjection {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// Пациент.
+// Ref: #/components/schemas/patient
+type Patient struct {
+	// Id пациента.
+	ID uuid.UUID `json:"id"`
+	// Полное имя пациента.
+	Fullname string `json:"fullname"`
+	// Email пациента.
+	Email string `json:"email"`
+	// Полис пациента.
+	Policy string `json:"policy"`
+	// Признак того, что пациент активен.
+	Active bool `json:"active"`
+	// Признак того, что пациент имеет злокачественную
+	// опухоль.
+	Malignancy bool `json:"malignancy"`
+	// Дата рождения пациента.
+	BirthDate time.Time `json:"birth_date"`
+	// Дата последнего узи.
+	LastUziDate NilDate `json:"last_uzi_date"`
+}
+
+// GetID returns the value of ID.
+func (s *Patient) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetFullname returns the value of Fullname.
+func (s *Patient) GetFullname() string {
+	return s.Fullname
+}
+
+// GetEmail returns the value of Email.
+func (s *Patient) GetEmail() string {
+	return s.Email
+}
+
+// GetPolicy returns the value of Policy.
+func (s *Patient) GetPolicy() string {
+	return s.Policy
+}
+
+// GetActive returns the value of Active.
+func (s *Patient) GetActive() bool {
+	return s.Active
+}
+
+// GetMalignancy returns the value of Malignancy.
+func (s *Patient) GetMalignancy() bool {
+	return s.Malignancy
+}
+
+// GetBirthDate returns the value of BirthDate.
+func (s *Patient) GetBirthDate() time.Time {
+	return s.BirthDate
+}
+
+// GetLastUziDate returns the value of LastUziDate.
+func (s *Patient) GetLastUziDate() NilDate {
+	return s.LastUziDate
+}
+
+// SetID sets the value of ID.
+func (s *Patient) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetFullname sets the value of Fullname.
+func (s *Patient) SetFullname(val string) {
+	s.Fullname = val
+}
+
+// SetEmail sets the value of Email.
+func (s *Patient) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPolicy sets the value of Policy.
+func (s *Patient) SetPolicy(val string) {
+	s.Policy = val
+}
+
+// SetActive sets the value of Active.
+func (s *Patient) SetActive(val bool) {
+	s.Active = val
+}
+
+// SetMalignancy sets the value of Malignancy.
+func (s *Patient) SetMalignancy(val bool) {
+	s.Malignancy = val
+}
+
+// SetBirthDate sets the value of BirthDate.
+func (s *Patient) SetBirthDate(val time.Time) {
+	s.BirthDate = val
+}
+
+// SetLastUziDate sets the value of LastUziDate.
+func (s *Patient) SetLastUziDate(val NilDate) {
+	s.LastUziDate = val
+}
+
+func (*Patient) medPatientIDGetRes()   {}
+func (*Patient) medPatientIDPatchRes() {}
+
 // Сегмент узла на изображении.
 // Ref: #/components/schemas/segment
 type Segment struct {
@@ -651,6 +1463,8 @@ type Segment struct {
 	NodeID uuid.UUID `json:"node_id"`
 	// Контур сегмента.
 	Contor Contor `json:"contor"`
+	// Признак того, что сегмент был создан нейронкой.
+	Ai bool `json:"ai"`
 	// Вероятность наличия опухоли в 23-й группе.
 	Tirads23 float64 `json:"tirads_23"`
 	// Вероятность наличия опухоли в 4-й группе.
@@ -677,6 +1491,11 @@ func (s *Segment) GetNodeID() uuid.UUID {
 // GetContor returns the value of Contor.
 func (s *Segment) GetContor() Contor {
 	return s.Contor
+}
+
+// GetAi returns the value of Ai.
+func (s *Segment) GetAi() bool {
+	return s.Ai
 }
 
 // GetTirads23 returns the value of Tirads23.
@@ -714,6 +1533,11 @@ func (s *Segment) SetContor(val Contor) {
 	s.Contor = val
 }
 
+// SetAi sets the value of Ai.
+func (s *Segment) SetAi(val bool) {
+	s.Ai = val
+}
+
 // SetTirads23 sets the value of Tirads23.
 func (s *Segment) SetTirads23(val float64) {
 	s.Tirads23 = val
@@ -747,6 +1571,8 @@ func (s *SimpleUuid) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
+func (*SimpleUuid) medDoctorPostRes()  {}
+func (*SimpleUuid) medPatientPostRes() {}
 func (*SimpleUuid) uziPostRes()        {}
 func (*SimpleUuid) uziSegmentPostRes() {}
 
@@ -756,11 +1582,13 @@ type Uzi struct {
 	// Id узи.
 	ID uuid.UUID `json:"id"`
 	// Проекция узи.
-	Projection string `json:"projection"`
+	Projection UziProjection `json:"projection"`
 	// Проверенно ли врачем.
 	Checked bool `json:"checked"`
 	// Id пациента/организации etc. Внешняя связсь.
 	ExternalID uuid.UUID `json:"external_id"`
+	// Id аккаунта, загрузившего узи.
+	AuthorID uuid.UUID `json:"author_id"`
 	// Id устройства.
 	DeviceID int `json:"device_id"`
 	// Статус узи **new** - новое узи **pending** - в обработке
@@ -776,7 +1604,7 @@ func (s *Uzi) GetID() uuid.UUID {
 }
 
 // GetProjection returns the value of Projection.
-func (s *Uzi) GetProjection() string {
+func (s *Uzi) GetProjection() UziProjection {
 	return s.Projection
 }
 
@@ -788,6 +1616,11 @@ func (s *Uzi) GetChecked() bool {
 // GetExternalID returns the value of ExternalID.
 func (s *Uzi) GetExternalID() uuid.UUID {
 	return s.ExternalID
+}
+
+// GetAuthorID returns the value of AuthorID.
+func (s *Uzi) GetAuthorID() uuid.UUID {
+	return s.AuthorID
 }
 
 // GetDeviceID returns the value of DeviceID.
@@ -811,7 +1644,7 @@ func (s *Uzi) SetID(val uuid.UUID) {
 }
 
 // SetProjection sets the value of Projection.
-func (s *Uzi) SetProjection(val string) {
+func (s *Uzi) SetProjection(val UziProjection) {
 	s.Projection = val
 }
 
@@ -823,6 +1656,11 @@ func (s *Uzi) SetChecked(val bool) {
 // SetExternalID sets the value of ExternalID.
 func (s *Uzi) SetExternalID(val uuid.UUID) {
 	s.ExternalID = val
+}
+
+// SetAuthorID sets the value of AuthorID.
+func (s *Uzi) SetAuthorID(val uuid.UUID) {
+	s.AuthorID = val
 }
 
 // SetDeviceID sets the value of DeviceID.
@@ -879,6 +1717,11 @@ type UziDevicesGetOKApplicationJSON []Device
 
 func (*UziDevicesGetOKApplicationJSON) uziDevicesGetRes() {}
 
+// UziIDDeleteOK is response for UziIDDelete operation.
+type UziIDDeleteOK struct{}
+
+func (*UziIDDeleteOK) uziIDDeleteRes() {}
+
 type UziIDImagesGetOKApplicationJSON []Image
 
 func (*UziIDImagesGetOKApplicationJSON) uziIDImagesGetRes() {}
@@ -887,15 +1730,173 @@ type UziIDNodesGetOKApplicationJSON []Node
 
 func (*UziIDNodesGetOKApplicationJSON) uziIDNodesGetRes() {}
 
+type UziIDNodesSegmentsPostOK struct {
+	NodeID     uuid.UUID   `json:"node_id"`
+	SegmentIds []uuid.UUID `json:"segment_ids"`
+}
+
+// GetNodeID returns the value of NodeID.
+func (s *UziIDNodesSegmentsPostOK) GetNodeID() uuid.UUID {
+	return s.NodeID
+}
+
+// GetSegmentIds returns the value of SegmentIds.
+func (s *UziIDNodesSegmentsPostOK) GetSegmentIds() []uuid.UUID {
+	return s.SegmentIds
+}
+
+// SetNodeID sets the value of NodeID.
+func (s *UziIDNodesSegmentsPostOK) SetNodeID(val uuid.UUID) {
+	s.NodeID = val
+}
+
+// SetSegmentIds sets the value of SegmentIds.
+func (s *UziIDNodesSegmentsPostOK) SetSegmentIds(val []uuid.UUID) {
+	s.SegmentIds = val
+}
+
+func (*UziIDNodesSegmentsPostOK) uziIDNodesSegmentsPostRes() {}
+
+type UziIDNodesSegmentsPostReq struct {
+	Node     UziIDNodesSegmentsPostReqNode           `json:"node"`
+	Segments []UziIDNodesSegmentsPostReqSegmentsItem `json:"segments"`
+}
+
+// GetNode returns the value of Node.
+func (s *UziIDNodesSegmentsPostReq) GetNode() UziIDNodesSegmentsPostReqNode {
+	return s.Node
+}
+
+// GetSegments returns the value of Segments.
+func (s *UziIDNodesSegmentsPostReq) GetSegments() []UziIDNodesSegmentsPostReqSegmentsItem {
+	return s.Segments
+}
+
+// SetNode sets the value of Node.
+func (s *UziIDNodesSegmentsPostReq) SetNode(val UziIDNodesSegmentsPostReqNode) {
+	s.Node = val
+}
+
+// SetSegments sets the value of Segments.
+func (s *UziIDNodesSegmentsPostReq) SetSegments(val []UziIDNodesSegmentsPostReqSegmentsItem) {
+	s.Segments = val
+}
+
+type UziIDNodesSegmentsPostReqNode struct {
+	Tirads23 float64 `json:"tirads_23"`
+	Tirads4  float64 `json:"tirads_4"`
+	Tirads5  float64 `json:"tirads_5"`
+	// Описание узла.
+	Description OptString `json:"description"`
+}
+
+// GetTirads23 returns the value of Tirads23.
+func (s *UziIDNodesSegmentsPostReqNode) GetTirads23() float64 {
+	return s.Tirads23
+}
+
+// GetTirads4 returns the value of Tirads4.
+func (s *UziIDNodesSegmentsPostReqNode) GetTirads4() float64 {
+	return s.Tirads4
+}
+
+// GetTirads5 returns the value of Tirads5.
+func (s *UziIDNodesSegmentsPostReqNode) GetTirads5() float64 {
+	return s.Tirads5
+}
+
+// GetDescription returns the value of Description.
+func (s *UziIDNodesSegmentsPostReqNode) GetDescription() OptString {
+	return s.Description
+}
+
+// SetTirads23 sets the value of Tirads23.
+func (s *UziIDNodesSegmentsPostReqNode) SetTirads23(val float64) {
+	s.Tirads23 = val
+}
+
+// SetTirads4 sets the value of Tirads4.
+func (s *UziIDNodesSegmentsPostReqNode) SetTirads4(val float64) {
+	s.Tirads4 = val
+}
+
+// SetTirads5 sets the value of Tirads5.
+func (s *UziIDNodesSegmentsPostReqNode) SetTirads5(val float64) {
+	s.Tirads5 = val
+}
+
+// SetDescription sets the value of Description.
+func (s *UziIDNodesSegmentsPostReqNode) SetDescription(val OptString) {
+	s.Description = val
+}
+
+type UziIDNodesSegmentsPostReqSegmentsItem struct {
+	ImageID  uuid.UUID `json:"image_id"`
+	Contor   Contor    `json:"contor"`
+	Tirads23 float64   `json:"tirads_23"`
+	Tirads4  float64   `json:"tirads_4"`
+	Tirads5  float64   `json:"tirads_5"`
+}
+
+// GetImageID returns the value of ImageID.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) GetImageID() uuid.UUID {
+	return s.ImageID
+}
+
+// GetContor returns the value of Contor.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) GetContor() Contor {
+	return s.Contor
+}
+
+// GetTirads23 returns the value of Tirads23.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) GetTirads23() float64 {
+	return s.Tirads23
+}
+
+// GetTirads4 returns the value of Tirads4.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) GetTirads4() float64 {
+	return s.Tirads4
+}
+
+// GetTirads5 returns the value of Tirads5.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) GetTirads5() float64 {
+	return s.Tirads5
+}
+
+// SetImageID sets the value of ImageID.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) SetImageID(val uuid.UUID) {
+	s.ImageID = val
+}
+
+// SetContor sets the value of Contor.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) SetContor(val Contor) {
+	s.Contor = val
+}
+
+// SetTirads23 sets the value of Tirads23.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) SetTirads23(val float64) {
+	s.Tirads23 = val
+}
+
+// SetTirads4 sets the value of Tirads4.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) SetTirads4(val float64) {
+	s.Tirads4 = val
+}
+
+// SetTirads5 sets the value of Tirads5.
+func (s *UziIDNodesSegmentsPostReqSegmentsItem) SetTirads5(val float64) {
+	s.Tirads5 = val
+}
+
 type UziIDPatchReq struct {
 	// Проекция узи.
-	Projection OptString `json:"projection"`
+	Projection OptUziIDPatchReqProjection `json:"projection"`
 	// Признак того, что узи проверено врачом.
 	Checked OptBool `json:"checked"`
 }
 
 // GetProjection returns the value of Projection.
-func (s *UziIDPatchReq) GetProjection() OptString {
+func (s *UziIDPatchReq) GetProjection() OptUziIDPatchReqProjection {
 	return s.Projection
 }
 
@@ -905,13 +1906,55 @@ func (s *UziIDPatchReq) GetChecked() OptBool {
 }
 
 // SetProjection sets the value of Projection.
-func (s *UziIDPatchReq) SetProjection(val OptString) {
+func (s *UziIDPatchReq) SetProjection(val OptUziIDPatchReqProjection) {
 	s.Projection = val
 }
 
 // SetChecked sets the value of Checked.
 func (s *UziIDPatchReq) SetChecked(val OptBool) {
 	s.Checked = val
+}
+
+// Проекция узи.
+type UziIDPatchReqProjection string
+
+const (
+	UziIDPatchReqProjectionCross UziIDPatchReqProjection = "cross"
+	UziIDPatchReqProjectionLong  UziIDPatchReqProjection = "long"
+)
+
+// AllValues returns all UziIDPatchReqProjection values.
+func (UziIDPatchReqProjection) AllValues() []UziIDPatchReqProjection {
+	return []UziIDPatchReqProjection{
+		UziIDPatchReqProjectionCross,
+		UziIDPatchReqProjectionLong,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UziIDPatchReqProjection) MarshalText() ([]byte, error) {
+	switch s {
+	case UziIDPatchReqProjectionCross:
+		return []byte(s), nil
+	case UziIDPatchReqProjectionLong:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UziIDPatchReqProjection) UnmarshalText(data []byte) error {
+	switch UziIDPatchReqProjection(data) {
+	case UziIDPatchReqProjectionCross:
+		*s = UziIDPatchReqProjectionCross
+		return nil
+	case UziIDPatchReqProjectionLong:
+		*s = UziIDPatchReqProjectionLong
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type UziImageIDNodesSegmentsGetOK struct {
@@ -947,9 +1990,15 @@ type UziNodesIDDeleteOK struct{}
 func (*UziNodesIDDeleteOK) uziNodesIDDeleteRes() {}
 
 type UziNodesIDPatchReq struct {
-	Tirads23 OptFloat64 `json:"tirads_23"`
-	Tirads4  OptFloat64 `json:"tirads_4"`
-	Tirads5  OptFloat64 `json:"tirads_5"`
+	Validation OptNilUziNodesIDPatchReqValidation `json:"validation"`
+	Tirads23   OptFloat64                         `json:"tirads_23"`
+	Tirads4    OptFloat64                         `json:"tirads_4"`
+	Tirads5    OptFloat64                         `json:"tirads_5"`
+}
+
+// GetValidation returns the value of Validation.
+func (s *UziNodesIDPatchReq) GetValidation() OptNilUziNodesIDPatchReqValidation {
+	return s.Validation
 }
 
 // GetTirads23 returns the value of Tirads23.
@@ -967,6 +2016,11 @@ func (s *UziNodesIDPatchReq) GetTirads5() OptFloat64 {
 	return s.Tirads5
 }
 
+// SetValidation sets the value of Validation.
+func (s *UziNodesIDPatchReq) SetValidation(val OptNilUziNodesIDPatchReqValidation) {
+	s.Validation = val
+}
+
 // SetTirads23 sets the value of Tirads23.
 func (s *UziNodesIDPatchReq) SetTirads23(val OptFloat64) {
 	s.Tirads23 = val
@@ -982,187 +2036,62 @@ func (s *UziNodesIDPatchReq) SetTirads5(val OptFloat64) {
 	s.Tirads5 = val
 }
 
+type UziNodesIDPatchReqValidation string
+
+const (
+	UziNodesIDPatchReqValidationInvalid UziNodesIDPatchReqValidation = "invalid"
+	UziNodesIDPatchReqValidationValid   UziNodesIDPatchReqValidation = "valid"
+)
+
+// AllValues returns all UziNodesIDPatchReqValidation values.
+func (UziNodesIDPatchReqValidation) AllValues() []UziNodesIDPatchReqValidation {
+	return []UziNodesIDPatchReqValidation{
+		UziNodesIDPatchReqValidationInvalid,
+		UziNodesIDPatchReqValidationValid,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UziNodesIDPatchReqValidation) MarshalText() ([]byte, error) {
+	switch s {
+	case UziNodesIDPatchReqValidationInvalid:
+		return []byte(s), nil
+	case UziNodesIDPatchReqValidationValid:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UziNodesIDPatchReqValidation) UnmarshalText(data []byte) error {
+	switch UziNodesIDPatchReqValidation(data) {
+	case UziNodesIDPatchReqValidationInvalid:
+		*s = UziNodesIDPatchReqValidationInvalid
+		return nil
+	case UziNodesIDPatchReqValidationValid:
+		*s = UziNodesIDPatchReqValidationValid
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type UziNodesIDSegmentsGetOKApplicationJSON []Segment
 
 func (*UziNodesIDSegmentsGetOKApplicationJSON) uziNodesIDSegmentsGetRes() {}
-
-type UziNodesSegmentsPostOK struct {
-	NodeID     uuid.UUID   `json:"node_id"`
-	SegmentIds []uuid.UUID `json:"segment_ids"`
-}
-
-// GetNodeID returns the value of NodeID.
-func (s *UziNodesSegmentsPostOK) GetNodeID() uuid.UUID {
-	return s.NodeID
-}
-
-// GetSegmentIds returns the value of SegmentIds.
-func (s *UziNodesSegmentsPostOK) GetSegmentIds() []uuid.UUID {
-	return s.SegmentIds
-}
-
-// SetNodeID sets the value of NodeID.
-func (s *UziNodesSegmentsPostOK) SetNodeID(val uuid.UUID) {
-	s.NodeID = val
-}
-
-// SetSegmentIds sets the value of SegmentIds.
-func (s *UziNodesSegmentsPostOK) SetSegmentIds(val []uuid.UUID) {
-	s.SegmentIds = val
-}
-
-func (*UziNodesSegmentsPostOK) uziNodesSegmentsPostRes() {}
-
-type UziNodesSegmentsPostReq struct {
-	Node     UziNodesSegmentsPostReqNode           `json:"node"`
-	Segments []UziNodesSegmentsPostReqSegmentsItem `json:"segments"`
-}
-
-// GetNode returns the value of Node.
-func (s *UziNodesSegmentsPostReq) GetNode() UziNodesSegmentsPostReqNode {
-	return s.Node
-}
-
-// GetSegments returns the value of Segments.
-func (s *UziNodesSegmentsPostReq) GetSegments() []UziNodesSegmentsPostReqSegmentsItem {
-	return s.Segments
-}
-
-// SetNode sets the value of Node.
-func (s *UziNodesSegmentsPostReq) SetNode(val UziNodesSegmentsPostReqNode) {
-	s.Node = val
-}
-
-// SetSegments sets the value of Segments.
-func (s *UziNodesSegmentsPostReq) SetSegments(val []UziNodesSegmentsPostReqSegmentsItem) {
-	s.Segments = val
-}
-
-type UziNodesSegmentsPostReqNode struct {
-	UziID    uuid.UUID `json:"uzi_id"`
-	Ai       bool      `json:"ai"`
-	Tirads23 float64   `json:"tirads_23"`
-	Tirads4  float64   `json:"tirads_4"`
-	Tirads5  float64   `json:"tirads_5"`
-}
-
-// GetUziID returns the value of UziID.
-func (s *UziNodesSegmentsPostReqNode) GetUziID() uuid.UUID {
-	return s.UziID
-}
-
-// GetAi returns the value of Ai.
-func (s *UziNodesSegmentsPostReqNode) GetAi() bool {
-	return s.Ai
-}
-
-// GetTirads23 returns the value of Tirads23.
-func (s *UziNodesSegmentsPostReqNode) GetTirads23() float64 {
-	return s.Tirads23
-}
-
-// GetTirads4 returns the value of Tirads4.
-func (s *UziNodesSegmentsPostReqNode) GetTirads4() float64 {
-	return s.Tirads4
-}
-
-// GetTirads5 returns the value of Tirads5.
-func (s *UziNodesSegmentsPostReqNode) GetTirads5() float64 {
-	return s.Tirads5
-}
-
-// SetUziID sets the value of UziID.
-func (s *UziNodesSegmentsPostReqNode) SetUziID(val uuid.UUID) {
-	s.UziID = val
-}
-
-// SetAi sets the value of Ai.
-func (s *UziNodesSegmentsPostReqNode) SetAi(val bool) {
-	s.Ai = val
-}
-
-// SetTirads23 sets the value of Tirads23.
-func (s *UziNodesSegmentsPostReqNode) SetTirads23(val float64) {
-	s.Tirads23 = val
-}
-
-// SetTirads4 sets the value of Tirads4.
-func (s *UziNodesSegmentsPostReqNode) SetTirads4(val float64) {
-	s.Tirads4 = val
-}
-
-// SetTirads5 sets the value of Tirads5.
-func (s *UziNodesSegmentsPostReqNode) SetTirads5(val float64) {
-	s.Tirads5 = val
-}
-
-type UziNodesSegmentsPostReqSegmentsItem struct {
-	ImageID  uuid.UUID `json:"image_id"`
-	Contor   Contor    `json:"contor"`
-	Tirads23 float64   `json:"tirads_23"`
-	Tirads4  float64   `json:"tirads_4"`
-	Tirads5  float64   `json:"tirads_5"`
-}
-
-// GetImageID returns the value of ImageID.
-func (s *UziNodesSegmentsPostReqSegmentsItem) GetImageID() uuid.UUID {
-	return s.ImageID
-}
-
-// GetContor returns the value of Contor.
-func (s *UziNodesSegmentsPostReqSegmentsItem) GetContor() Contor {
-	return s.Contor
-}
-
-// GetTirads23 returns the value of Tirads23.
-func (s *UziNodesSegmentsPostReqSegmentsItem) GetTirads23() float64 {
-	return s.Tirads23
-}
-
-// GetTirads4 returns the value of Tirads4.
-func (s *UziNodesSegmentsPostReqSegmentsItem) GetTirads4() float64 {
-	return s.Tirads4
-}
-
-// GetTirads5 returns the value of Tirads5.
-func (s *UziNodesSegmentsPostReqSegmentsItem) GetTirads5() float64 {
-	return s.Tirads5
-}
-
-// SetImageID sets the value of ImageID.
-func (s *UziNodesSegmentsPostReqSegmentsItem) SetImageID(val uuid.UUID) {
-	s.ImageID = val
-}
-
-// SetContor sets the value of Contor.
-func (s *UziNodesSegmentsPostReqSegmentsItem) SetContor(val Contor) {
-	s.Contor = val
-}
-
-// SetTirads23 sets the value of Tirads23.
-func (s *UziNodesSegmentsPostReqSegmentsItem) SetTirads23(val float64) {
-	s.Tirads23 = val
-}
-
-// SetTirads4 sets the value of Tirads4.
-func (s *UziNodesSegmentsPostReqSegmentsItem) SetTirads4(val float64) {
-	s.Tirads4 = val
-}
-
-// SetTirads5 sets the value of Tirads5.
-func (s *UziNodesSegmentsPostReqSegmentsItem) SetTirads5(val float64) {
-	s.Tirads5 = val
-}
 
 type UziPostReq struct {
 	// Файл узи. **обязательно с .tiff/.png**.
 	File ht.MultipartFile `json:"file"`
 	// Проекция узи.
-	Projection string `json:"projection"`
+	Projection UziPostReqProjection `json:"projection"`
 	// Внешний id пациента/организации etc.
 	ExternalID uuid.UUID `json:"external_id"`
 	// Id узи аппарата.
 	DeviceID int `json:"device_id"`
+	// Описание узи.
+	Description OptString `json:"description"`
 }
 
 // GetFile returns the value of File.
@@ -1171,7 +2100,7 @@ func (s *UziPostReq) GetFile() ht.MultipartFile {
 }
 
 // GetProjection returns the value of Projection.
-func (s *UziPostReq) GetProjection() string {
+func (s *UziPostReq) GetProjection() UziPostReqProjection {
 	return s.Projection
 }
 
@@ -1185,13 +2114,18 @@ func (s *UziPostReq) GetDeviceID() int {
 	return s.DeviceID
 }
 
+// GetDescription returns the value of Description.
+func (s *UziPostReq) GetDescription() OptString {
+	return s.Description
+}
+
 // SetFile sets the value of File.
 func (s *UziPostReq) SetFile(val ht.MultipartFile) {
 	s.File = val
 }
 
 // SetProjection sets the value of Projection.
-func (s *UziPostReq) SetProjection(val string) {
+func (s *UziPostReq) SetProjection(val UziPostReqProjection) {
 	s.Projection = val
 }
 
@@ -1205,15 +2139,110 @@ func (s *UziPostReq) SetDeviceID(val int) {
 	s.DeviceID = val
 }
 
+// SetDescription sets the value of Description.
+func (s *UziPostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// Проекция узи.
+type UziPostReqProjection string
+
+const (
+	UziPostReqProjectionCross UziPostReqProjection = "cross"
+	UziPostReqProjectionLong  UziPostReqProjection = "long"
+)
+
+// AllValues returns all UziPostReqProjection values.
+func (UziPostReqProjection) AllValues() []UziPostReqProjection {
+	return []UziPostReqProjection{
+		UziPostReqProjectionCross,
+		UziPostReqProjectionLong,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UziPostReqProjection) MarshalText() ([]byte, error) {
+	switch s {
+	case UziPostReqProjectionCross:
+		return []byte(s), nil
+	case UziPostReqProjectionLong:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UziPostReqProjection) UnmarshalText(data []byte) error {
+	switch UziPostReqProjection(data) {
+	case UziPostReqProjectionCross:
+		*s = UziPostReqProjectionCross
+		return nil
+	case UziPostReqProjectionLong:
+		*s = UziPostReqProjectionLong
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Проекция узи.
+type UziProjection string
+
+const (
+	UziProjectionCross UziProjection = "cross"
+	UziProjectionLong  UziProjection = "long"
+)
+
+// AllValues returns all UziProjection values.
+func (UziProjection) AllValues() []UziProjection {
+	return []UziProjection{
+		UziProjectionCross,
+		UziProjectionLong,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UziProjection) MarshalText() ([]byte, error) {
+	switch s {
+	case UziProjectionCross:
+		return []byte(s), nil
+	case UziProjectionLong:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UziProjection) UnmarshalText(data []byte) error {
+	switch UziProjection(data) {
+	case UziProjectionCross:
+		*s = UziProjectionCross
+		return nil
+	case UziProjectionLong:
+		*s = UziProjectionLong
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // UziSegmentIDDeleteOK is response for UziSegmentIDDelete operation.
 type UziSegmentIDDeleteOK struct{}
 
 func (*UziSegmentIDDeleteOK) uziSegmentIDDeleteRes() {}
 
 type UziSegmentIDPatchReq struct {
+	Contor   Contor     `json:"contor"`
 	Tirads23 OptFloat64 `json:"tirads_23"`
 	Tirads4  OptFloat64 `json:"tirads_4"`
 	Tirads5  OptFloat64 `json:"tirads_5"`
+}
+
+// GetContor returns the value of Contor.
+func (s *UziSegmentIDPatchReq) GetContor() Contor {
+	return s.Contor
 }
 
 // GetTirads23 returns the value of Tirads23.
@@ -1229,6 +2258,11 @@ func (s *UziSegmentIDPatchReq) GetTirads4() OptFloat64 {
 // GetTirads5 returns the value of Tirads5.
 func (s *UziSegmentIDPatchReq) GetTirads5() OptFloat64 {
 	return s.Tirads5
+}
+
+// SetContor sets the value of Contor.
+func (s *UziSegmentIDPatchReq) SetContor(val Contor) {
+	s.Contor = val
 }
 
 // SetTirads23 sets the value of Tirads23.
@@ -1365,6 +2399,10 @@ func (s *UziStatus) UnmarshalText(data []byte) error {
 	}
 }
 
-type UzisExternalIDGetOKApplicationJSON []Uzi
+type UzisAuthorAuthorIDGetOKApplicationJSON []Uzi
 
-func (*UzisExternalIDGetOKApplicationJSON) uzisExternalIDGetRes() {}
+func (*UzisAuthorAuthorIDGetOKApplicationJSON) uzisAuthorAuthorIDGetRes() {}
+
+type UzisExternalExternalIDGetOKApplicationJSON []Uzi
+
+func (*UzisExternalExternalIDGetOKApplicationJSON) uzisExternalExternalIDGetRes() {}

@@ -35,6 +35,7 @@ components:
         - projection
         - checked
         - external_id
+        - author_id
         - device_id
         - status
         - create_at
@@ -45,6 +46,9 @@ components:
           description: id узи
         projection:
           type: string
+          enum:
+            - cross
+            - long
           description: проекция узи
           maxLength: 255
         checked:
@@ -54,6 +58,10 @@ components:
           type: string
           format: uuid
           description: id пациента/организации etc. Внешняя связсь
+        author_id:
+          type: string
+          format: uuid
+          description: id аккаунта, загрузившего узи
         device_id:
           type: integer
           description: id устройства
@@ -74,9 +82,10 @@ components:
           description: дата создания в формате RFC3339
       example:
         id: "123e4567-e89b-12d3-a456-426614174000"
-        projection: "задняя крутая"
+        projection: "cross"
         checked: false
         external_id: "123e4567-e89b-12d3-a456-426614174000"
+        author_id: "123e4567-e89b-12d3-a456-426614174000"
         device_id: 1
         status: "pending"
         create_at: "2021-01-01T00:00:00Z" # RFC3339
@@ -191,11 +200,18 @@ components:
           description: id узла
         ai:
           type: boolean
-          description: признак того, что узел был обработан нейронкой
+          description: признак того, что узел был создан нейронкой
         uzi_id:
           type: string
           format: uuid
           description: id узи, к которому относится узел
+        validation:
+          type: string
+          enum:
+            - null
+            - invalid
+            - valid
+          description: валидация нейроночного узла врачем
         tirads_23:
           type: number
           maximum: 1.0
@@ -211,13 +227,18 @@ components:
           maximum: 1.0
           minimum: 0.0
           description: вероятность наличия опухоли в 5-й группе
+        description:
+          type: string
+          description: описание узла
       example:
         id: "123e4567-e89b-12d3-a456-426614174000"
         ai: false
         uzi_id: "123e4567-e89b-12d3-a456-426614174000"
+        validation: "invalid"
         tirads_23: 0.67
         tirads_4: 0.23
         tirads_5: 0.89
+        description: "узел явно неправильный"
 
     contor:
       type: array
@@ -250,6 +271,7 @@ components:
         - image_id
         - node_id
         - contor
+        - ai
         - tirads_23
         - tirads_4
         - tirads_5
@@ -269,6 +291,9 @@ components:
         contor:
           $ref: '#/components/schemas/contor'
           description: контур сегмента
+        ai:
+          type: boolean
+          description: признак того, что сегмент был создан нейронкой
         tirads_23:
           type: number
           maximum: 1.0
@@ -293,6 +318,7 @@ components:
             y: 100
           - x: 200
             y: 200
+        ai: false
         tirads_23: 0.45
         tirads_4: 0.78
         tirads_5: 0.12
@@ -320,7 +346,123 @@ components:
         id: "123e4567-e89b-12d3-a456-426614174000"
         uzi_id: "123e4567-e89b-12d3-a456-426614174000"
         page: 1
-    
+
+    doctor:
+      type: object
+      description: врач
+      required:
+        - id
+        - fullname
+        - org
+        - job
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: id врача
+        fullname:
+          type: string
+          maxLength: 255
+          description: полное имя врача
+        org:
+          type: string
+          maxLength: 255
+          description: организация врача
+        job:
+          type: string
+          maxLength: 255
+          description: работа врача
+        description:
+          type: string
+          nullable: true
+          description: описание врача (раб. стаж)
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        fullname: "Иван Иванов"
+        org: "Медицинский центр"
+        job: "Хирург"
+        description: "работает в медицинском центре с 2010 года"
+
+    patient:
+      type: object
+      description: пациент
+      required:
+        - id
+        - fullname
+        - email
+        - policy
+        - active
+        - malignancy
+        - birth_date
+        - last_uzi_date
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: id пациента
+        fullname:
+          type: string
+          maxLength: 255
+          description: полное имя пациента
+        email:
+          type: string
+          maxLength: 255
+          description: email пациента
+        policy:
+          type: string
+          maxLength: 255
+          description: полис пациента
+        active:
+          type: boolean
+          description: признак того, что пациент активен
+        malignancy: 
+          type: boolean
+          description: признак того, что пациент имеет злокачественную опухоль
+        birth_date:
+          type: string
+          format: date
+          description: дата рождения пациента
+        last_uzi_date:
+          type: string
+          format: date
+          nullable: true
+          description: дата последнего узи
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        fullname: "Иван Иванов"
+        email: "ivan@example.com"
+        policy: "1234567890"
+        active: true
+        malignancy: false
+        birth_date: "2021-01-01"
+        last_uzi_date: "2024-01-01"
+
+    card:
+      type: object
+      description: карта пациента
+      required:
+        - patient_id
+        - doctor_id
+        - diagnosis
+      properties:
+        patient_id:
+          type: string
+          format: uuid
+          description: id пациента
+        doctor_id:
+          type: string
+          format: uuid
+          description: id врача
+        diagnosis:
+          type: string
+          nullable: true
+          description: диагноз
+      example:
+        patient_id: "123e4567-e89b-12d3-a456-426614174000"
+        doctor_id: "123e4567-e89b-12d3-a456-426614174000"
+        diagnosis: "опухоль"
+
     simpleUuid:
       type: object
       description: uuid
@@ -358,6 +500,329 @@ components:
 
 # TODO: описать security после решения по авторизации
 paths:
+  /med/doctor:
+    post:
+      summary: зарегистрировать врача
+      tags:
+        - med
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullname
+                - org
+                - job
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  maxLength: 255
+                  format: email
+                  description: email врача
+                password:
+                  type: string
+                  maxLength: 255
+                  description: пароль врача
+                fullname:
+                  type: string
+                  maxLength: 255
+                  description: полное имя врача
+                org:
+                  type: string
+                  maxLength: 255
+                  description: организация врача
+                job:
+                  type: string
+                  maxLength: 255
+                  description: работа врача
+                description:
+                  type: string
+                  description: описание врача (раб. стаж)
+      responses:
+        '200':
+          description: врач зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/simpleUuid"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /med/doctor/{id}:
+    get:
+      summary: получить врача
+      tags:
+        - med
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id врача
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: врач
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/doctor"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+     
+  /med/patient:
+    post:
+      summary: зарегистрировать пациента
+      tags:
+        - med
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullname
+                - email
+                - policy
+                - active
+                - malignancy
+                - birth_date
+              properties:
+                fullname:
+                  type: string
+                  maxLength: 255
+                  description: полное имя пациента
+                email:
+                  type: string
+                  maxLength: 255
+                  format: email
+                  description: email пациента
+                policy:
+                  type: string
+                  maxLength: 255
+                  description: полис пациента
+                active:
+                  type: boolean
+                  description: признак того, что пациент активен
+                malignancy:
+                  type: boolean
+                  description: признак того, что пациент имеет злокачественную опухоль
+                birth_date:
+                  type: string
+                  format: date
+                  description: дата рождения пациента в RFC3339
+      responses:
+        '200':
+          description: пациент зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/simpleUuid"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /med/patient/{id}:
+    get:
+      summary: получить пациента
+      tags:
+        - med
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id пациента
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: пациент
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/patient"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+    patch:
+      summary: обновить пациента
+      tags:
+        - med
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id пациента
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                active:
+                  type: boolean
+                  description: признак того, что пациент активен
+                malignancy:
+                  type: boolean
+                  description: признак того, что пациент имеет злокачественную опухоль
+                last_uzi_date:
+                  type: string
+                  format: date
+                  description: дата последнего узи
+      responses:
+        '200':
+          description: пациент обновлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/patient"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /med/patients/{doctor_id}:
+    get:
+      summary: получить пациентов врача
+      tags:
+        - med
+      parameters:
+        - name: doctor_id
+          in: path
+          required: true
+          description: id врача
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: врач
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/patient'
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /med/card:
+    post:
+      summary: создать карту пациента
+      tags:
+        - med
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/card"
+      responses:
+        '200':
+          description: карта пациента создана
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/card"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+    
+  /med/card/doctor/{doctor_id}/patient/{patient_id}:
+    get:
+      summary: получить карту пациента
+      tags:
+        - med
+      parameters:
+        - name: doctor_id
+          in: path
+          required: true
+          description: id врача
+          schema:
+            type: string
+            format: uuid
+        - name: patient_id
+          in: path
+          required: true
+          description: id пациента
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: карта пациента
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/card"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+    patch:
+      summary: обновить карту пациента
+      tags:
+        - med
+      parameters:
+        - name: doctor_id
+          in: path
+          required: true
+          description: id врача
+          schema:
+            type: string
+            format: uuid
+        - name: patient_id
+          in: path
+          required: true
+          description: id пациента
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - diagnosis
+              properties:
+                diagnosis:
+                  type: string
+                  description: диагноз пациента
+      responses:
+        '200':
+          description: карта пациента обновлена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/card"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
   /uzi:
     post:
       summary: загрузить узи на обработку
@@ -376,6 +841,9 @@ paths:
                   description: файл узи. **обязательно с .tiff/.png**
                 projection:
                   type: string
+                  enum:
+                    - cross
+                    - long
                   description: проекция узи
                 external_id:
                   type: string
@@ -384,6 +852,9 @@ paths:
                 device_id:
                   type: integer
                   description: id узи аппарата
+                description:
+                  type: string
+                  description: описание узи
               required:
                 - file
                 - projection
@@ -447,13 +918,15 @@ paths:
               properties:
                 projection:
                   type: string
+                  enum:
+                    - cross
+                    - long
                   description: проекция узи
-                  maxLength: 255
                 checked:
                   type: boolean
                   description: признак того, что узи проверено врачом
               example:
-                projection: "52 улица"
+                projection: "cross"
                 checked: true
       responses:
         '200':
@@ -467,7 +940,27 @@ paths:
         default:
           $ref: "#/components/responses/error"
 
-  /uzis/{external_id}:
+    delete:
+      summary: удалить узи
+      tags:
+        - uzi
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id узи
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: узи удалено
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /uzis/external/{external_id}:
     get:
       summary: получить узи по внешнему id
       tags:
@@ -477,6 +970,33 @@ paths:
           in: path
           required: true
           description: внешний id пациента/организации etc.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: узи
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/uzi'
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+  
+  /uzis/author/{author_id}:
+    get:
+      summary: получить узи по id автора
+      tags:
+        - uzi
+      parameters:
+        - name: author_id
+          in: path
+          required: true
+          description: id аккаунта, загрузившего узи
           schema:
             type: string
             format: uuid
@@ -669,11 +1189,19 @@ paths:
         default:
           $ref: "#/components/responses/error"
 
-  /uzi/nodes-segments:
+  /uzi/{id}/nodes-segments:
     post:
       summary: добавить узел с сегментами
       tags:
         - uzi
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id узи
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -687,17 +1215,10 @@ paths:
                 node:
                   type: object
                   required:
-                    - uzi_id
-                    - ai
                     - tirads_23
                     - tirads_4
                     - tirads_5
                   properties:
-                    uzi_id:
-                      type: string
-                      format: uuid
-                    ai:
-                      type: boolean
                     tirads_23:
                       type: number
                       maximum: 1.0
@@ -710,6 +1231,9 @@ paths:
                       type: number
                       maximum: 1.0
                       minimum: 0.0
+                    description:
+                      type: string
+                      description: описание узла
                 segments:
                   type: array
                   items:
@@ -809,6 +1333,12 @@ paths:
             schema:
               type: object
               properties:
+                validation:
+                  type: string
+                  enum:
+                    - null
+                    - invalid
+                    - valid
                 tirads_23:
                   type: number
                   maximum: 1.0
@@ -822,6 +1352,7 @@ paths:
                   maximum: 1.0
                   minimum: 0.0
               example:
+                validation: "invalid"
                 tirads_23: 0.67
                 tirads_4: 0.23
                 tirads_5: 0.89
@@ -956,7 +1487,8 @@ paths:
             schema:
               type: object
               properties:
-                # TODO: добавить контур на обновление
+                contor:
+                  $ref: '#/components/schemas/contor'
                 tirads_23:
                   type: number
                   maximum: 1.0
@@ -970,6 +1502,11 @@ paths:
                   maximum: 1.0
                   minimum: 0.0
               example:
+                contor:
+                  - x: 100
+                    y: 100
+                  - x: 200
+                    y: 200
                 tirads_23: 0.67
                 tirads_4: 0.23
                 tirads_5: 0.89
