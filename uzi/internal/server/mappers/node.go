@@ -35,13 +35,14 @@ func NodeValidationToDomain(validation *pb.NodeValidation) *domain.NodeValidatio
 
 func NodeFromDomain(domain domain.Node) *pb.Node {
 	return &pb.Node{
-		Id:         domain.Id.String(),
-		Ai:         domain.Ai,
-		Validation: NodeValidationFromDomain(domain.Validation),
-		UziId:      domain.UziID.String(),
-		Tirads_23:  domain.Tirads23,
-		Tirads_4:   domain.Tirads4,
-		Tirads_5:   domain.Tirads5,
+		Id:          domain.Id.String(),
+		Ai:          domain.Ai,
+		Validation:  NodeValidationFromDomain(domain.Validation),
+		UziId:       domain.UziID.String(),
+		Tirads_23:   domain.Tirads23,
+		Tirads_4:    domain.Tirads4,
+		Tirads_5:    domain.Tirads5,
+		Description: domain.Description,
 	}
 }
 

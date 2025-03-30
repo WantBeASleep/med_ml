@@ -21,6 +21,7 @@ func (q *repo) GetUziByID(id uuid.UUID) (entity.Uzi, error) {
 			columnAuthor,
 			columnDeviceID,
 			columnStatus,
+			columnDescription,
 			columnCreateAt,
 		).
 		From(uziTable).
@@ -49,6 +50,7 @@ func (q *repo) GetUzisByExternalID(externalID uuid.UUID) ([]entity.Uzi, error) {
 			columnAuthor,
 			columnDeviceID,
 			columnStatus,
+			columnDescription,
 			columnCreateAt,
 		).
 		From(uziTable).
@@ -78,6 +80,7 @@ func (q *repo) GetUzisByAuthor(author uuid.UUID) ([]entity.Uzi, error) {
 			columnAuthor,
 			columnDeviceID,
 			columnStatus,
+			columnDescription,
 			columnCreateAt,
 		).
 		From(uziTable).
@@ -107,6 +110,7 @@ func (q *repo) CheckExist(id uuid.UUID) (bool, error) {
 			columnAuthor,
 			columnDeviceID,
 			columnStatus,
+			columnDescription,
 			columnCreateAt,
 		).
 		Prefix("SELECT EXISTS (").

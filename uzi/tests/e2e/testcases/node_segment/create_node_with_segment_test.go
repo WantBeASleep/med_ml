@@ -6,6 +6,7 @@ import (
 	"math"
 	"math/rand"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
 
 	pb "uzi/internal/generated/grpc/service"
@@ -21,10 +22,13 @@ func (suite *TestSuite) TestCreateNodeWithSegment_Success() {
 	).Do(suite.T().Context())
 	require.NoError(suite.T(), err)
 
+	description := gofakeit.Word()
+
 	node := &pb.CreateNodeWithSegmentsIn_Node{
-		Tirads_23: rand.Float64(),
-		Tirads_4:  rand.Float64(),
-		Tirads_5:  rand.Float64(),
+		Tirads_23:   rand.Float64(),
+		Tirads_4:    rand.Float64(),
+		Tirads_5:    rand.Float64(),
+		Description: &description,
 	}
 
 	segments := []*pb.CreateNodeWithSegmentsIn_Segment{
@@ -68,6 +72,8 @@ func (suite *TestSuite) TestCreateNodeWithSegment_Success() {
 	require.True(suite.T(), math.Abs(getResp.Nodes[0].Tirads_23-node.Tirads_23) < 0.0001)
 	require.True(suite.T(), math.Abs(getResp.Nodes[0].Tirads_4-node.Tirads_4) < 0.0001)
 	require.True(suite.T(), math.Abs(getResp.Nodes[0].Tirads_5-node.Tirads_5) < 0.0001)
+	require.NotNil(suite.T(), getResp.Nodes[0].Description)
+	require.Equal(suite.T(), description, *getResp.Nodes[0].Description)
 
 	require.Equal(suite.T(), len(getResp.Segments), 1)
 	require.Equal(suite.T(), getResp.Segments[0].Id, createResp.SegmentIds[0])

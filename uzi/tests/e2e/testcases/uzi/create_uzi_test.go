@@ -18,13 +18,15 @@ func (suite *TestSuite) TestCreateUzi_Success() {
 	projection := gofakeit.Word()
 	externalID := uuid.New()
 	author := uuid.New()
+	description := gofakeit.Word()
 	createResp, err := suite.deps.Adapter.CreateUzi(
 		suite.T().Context(),
 		&pb.CreateUziIn{
-			DeviceId:   int64(data.Device.Id),
-			Projection: projection,
-			ExternalId: externalID.String(),
-			Author:     author.String(),
+			DeviceId:    int64(data.Device.Id),
+			Projection:  projection,
+			ExternalId:  externalID.String(),
+			Author:      author.String(),
+			Description: &description,
 		},
 	)
 	require.NoError(suite.T(), err)
@@ -41,4 +43,5 @@ func (suite *TestSuite) TestCreateUzi_Success() {
 	require.Equal(suite.T(), author.String(), getResp.Uzi.Author)
 	require.Equal(suite.T(), pb.UziStatus_UZI_STATUS_NEW, getResp.Uzi.Status)
 	require.Equal(suite.T(), int64(data.Device.Id), getResp.Uzi.DeviceId)
+	require.Equal(suite.T(), description, *getResp.Uzi.Description)
 }

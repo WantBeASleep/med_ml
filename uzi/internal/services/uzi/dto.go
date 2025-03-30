@@ -7,10 +7,11 @@ import (
 )
 
 type CreateUziArg struct {
-	Projection string
-	ExternalID uuid.UUID
-	Author     uuid.UUID
-	DeviceID   int
+	Projection  string
+	ExternalID  uuid.UUID
+	Author      uuid.UUID
+	DeviceID    int
+	Description *string
 }
 
 type UpdateUziArg struct {

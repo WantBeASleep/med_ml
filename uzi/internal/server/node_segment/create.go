@@ -39,9 +39,10 @@ func (h *handler) CreateNodeWithSegments(ctx context.Context, in *pb.CreateNodeW
 	}
 
 	node := node_segment.CreateNodesWithSegmentsArgNode{
-		Tirads23: in.Node.Tirads_23,
-		Tirads4:  in.Node.Tirads_4,
-		Tirads5:  in.Node.Tirads_5,
+		Tirads23:    in.Node.Tirads_23,
+		Tirads4:     in.Node.Tirads_4,
+		Tirads5:     in.Node.Tirads_5,
+		Description: in.Node.Description,
 	}
 
 	ids, err := h.services.NodeSegment.CreateManualNodesWithSegments(ctx,

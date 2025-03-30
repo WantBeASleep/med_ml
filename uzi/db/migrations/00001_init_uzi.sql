@@ -11,14 +11,15 @@ COMMENT ON COLUMN device.name IS 'Название аппарата';
 
 CREATE TABLE uzi
 (
-    id          uuid            PRIMARY KEY,
-    projection  varchar(255)    NOT NULL,
-    checked     boolean         NOT NULL,
-    external_id uuid            NOT NULL,
-    author      uuid            NOT NULL,
-    device_id   integer         NOT NULL REFERENCES device (id),
-    "status"    varchar(255)    NOT NULL,
-    create_at   date            NOT NULL
+    id              uuid            PRIMARY KEY,
+    projection      varchar(255)    NOT NULL,
+    checked         boolean         NOT NULL,
+    external_id     uuid            NOT NULL,
+    author          uuid            NOT NULL,
+    device_id       integer         NOT NULL REFERENCES device (id),
+    "status"        varchar(255)    NOT NULL,
+    "description"   text,
+    create_at       date            NOT NULL
 );
 
 COMMENT ON TABLE uzi IS 'Хранилище описаний и характеристик узи';
@@ -26,6 +27,7 @@ COMMENT ON COLUMN uzi.projection IS 'Проекция в которой было
 COMMENT ON COLUMN uzi.external_id IS 'Внешний идентификатор узи';
 COMMENT ON COLUMN uzi.author IS 'ID автора узи';
 COMMENT ON COLUMN uzi.device_id IS 'Идентификатор узи аппарата на котором снято узи';
+COMMENT ON COLUMN uzi.description IS 'Описание узи от автора';
 COMMENT ON COLUMN uzi."status" IS 'Статус узи';
 
 CREATE TABLE image
@@ -44,7 +46,8 @@ CREATE TABLE node
     "validation"    varchar(255),
     tirads_23       real        NOT NULL,
     tirads_4        real        NOT NULL,
-    tirads_5        real        NOT NULL
+    tirads_5        real        NOT NULL,
+    "description"   text
 );
 
 COMMENT ON TABLE node IS 'Хранилище узлов в узи';

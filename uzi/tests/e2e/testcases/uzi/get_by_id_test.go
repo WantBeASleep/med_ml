@@ -25,4 +25,6 @@ func (suite *TestSuite) TestGetUziById_Success() {
 	require.Equal(suite.T(), data.Uzi.Author.String(), getResp.Uzi.Author)
 	require.Equal(suite.T(), pb.UziStatus_UZI_STATUS_NEW, getResp.Uzi.Status)
 	require.Equal(suite.T(), int64(data.Uzi.DeviceID), getResp.Uzi.DeviceId)
+	require.NotNil(suite.T(), getResp.Uzi.Description)
+	require.Equal(suite.T(), *data.Uzi.Description, *getResp.Uzi.Description)
 }

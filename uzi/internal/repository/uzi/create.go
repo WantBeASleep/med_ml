@@ -15,6 +15,7 @@ func (q *repo) InsertUzi(uzi entity.Uzi) error {
 			columnAuthor,
 			columnDeviceID,
 			columnStatus,
+			columnDescription,
 			columnCreateAt,
 		).
 		Values(
@@ -25,6 +26,7 @@ func (q *repo) InsertUzi(uzi entity.Uzi) error {
 			uzi.Author,
 			uzi.DeviceID,
 			uzi.Status,
+			uzi.Description,
 			uzi.CreateAt,
 		)
 

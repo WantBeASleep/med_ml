@@ -33,5 +33,6 @@ func (suite *TestSuite) TestGetNodesByUziId_Success() {
 		require.Equal(suite.T(), data.Nodes[i].Tirads23, node.Tirads_23)
 		require.Equal(suite.T(), data.Nodes[i].Tirads4, node.Tirads_4)
 		require.Equal(suite.T(), data.Nodes[i].Tirads5, node.Tirads_5)
+		require.Nil(suite.T(), node.Description)
 	}
 }

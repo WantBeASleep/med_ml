@@ -15,6 +15,7 @@ func (q *repo) InsertNodes(nodes ...entity.Node) error {
 			columnTirads23,
 			columnTirads4,
 			columnTirads5,
+			columnDescription,
 		)
 
 	for _, v := range nodes {
@@ -26,6 +27,7 @@ func (q *repo) InsertNodes(nodes ...entity.Node) error {
 			v.Tirads23,
 			v.Tirads4,
 			v.Tirads5,
+			v.Description,
 		)
 	}
 	_, err := q.Runner().Execx(q.Context(), query)

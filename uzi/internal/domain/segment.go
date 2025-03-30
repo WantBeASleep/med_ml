@@ -11,7 +11,7 @@ type Segment struct {
 	ImageID  uuid.UUID
 	NodeID   uuid.UUID
 	Contor   json.RawMessage
-	Ai bool
+	Ai       bool
 	Tirads23 float64
 	Tirads4  float64
 	Tirads5  float64

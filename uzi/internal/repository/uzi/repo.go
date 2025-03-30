@@ -10,14 +10,15 @@ import (
 const (
 	uziTable = "uzi"
 
-	columnID         = "id"
-	columnProjection = "projection"
-	columnChecked    = "checked"
-	columnExternalID = "external_id"
-	columnAuthor     = "author"
-	columnDeviceID   = "device_id"
-	columnStatus     = "status"
-	columnCreateAt   = "create_at"
+	columnID          = "id"
+	columnProjection  = "projection"
+	columnChecked     = "checked"
+	columnExternalID  = "external_id"
+	columnAuthor      = "author"
+	columnDeviceID    = "device_id"
+	columnStatus      = "status"
+	columnDescription = "description"
+	columnCreateAt    = "create_at"
 )
 
 type Repository interface {

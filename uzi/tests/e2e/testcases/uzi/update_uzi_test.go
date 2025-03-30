@@ -33,4 +33,6 @@ func (suite *TestSuite) TestUpdateUzi_Success() {
 	require.Equal(suite.T(), data.Uzi.Author.String(), resp.Uzi.Author)
 	require.Equal(suite.T(), pb.UziStatus_UZI_STATUS_NEW, resp.Uzi.Status)
 	require.Equal(suite.T(), int64(data.Uzi.DeviceID), resp.Uzi.DeviceId)
+	require.NotNil(suite.T(), resp.Uzi.Description)
+	require.Equal(suite.T(), *data.Uzi.Description, *resp.Uzi.Description)
 }

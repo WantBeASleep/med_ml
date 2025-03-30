@@ -20,14 +20,15 @@ func (s *service) CreateUzi(ctx context.Context, arg CreateUziArg) (uuid.UUID, e
 	defer func() { _ = s.dao.RollbackTx(ctx) }()
 
 	uzi := domain.Uzi{
-		Id:         uuid.New(),
-		Projection: arg.Projection,
-		Checked:    false,
-		ExternalID: arg.ExternalID,
-		Author:     arg.Author,
-		DeviceID:   arg.DeviceID,
-		Status:     domain.UziStatusNew,
-		CreateAt:   time.Now(),
+		Id:          uuid.New(),
+		Projection:  arg.Projection,
+		Checked:     false,
+		ExternalID:  arg.ExternalID,
+		Author:      arg.Author,
+		DeviceID:    arg.DeviceID,
+		Status:      domain.UziStatusNew,
+		Description: arg.Description,
+		CreateAt:    time.Now(),
 	}
 
 	if err := s.dao.NewUziQuery(ctx).InsertUzi(uziEntity.Uzi{}.FromDomain(uzi)); err != nil {

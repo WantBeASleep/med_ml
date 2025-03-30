@@ -106,12 +106,13 @@ func (s *service) createDomainNodeSegmentsFromArgs(
 	for _, NodeAndSeg := range arg {
 		nodeID := uuid.New()
 		nodes = append(nodes, domain.Node{
-			Id:       nodeID,
-			Ai:       ai,
-			UziID:    uziID,
-			Tirads23: NodeAndSeg.Node.Tirads23,
-			Tirads4:  NodeAndSeg.Node.Tirads4,
-			Tirads5:  NodeAndSeg.Node.Tirads5,
+			Id:          nodeID,
+			Ai:          ai,
+			UziID:       uziID,
+			Tirads23:    NodeAndSeg.Node.Tirads23,
+			Tirads4:     NodeAndSeg.Node.Tirads4,
+			Tirads5:     NodeAndSeg.Node.Tirads5,
+			Description: NodeAndSeg.Node.Description,
 		})
 
 		id := CreateNodesWithSegmentsID{NodeID: nodeID}

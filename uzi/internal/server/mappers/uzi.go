@@ -15,14 +15,15 @@ var uziStatusMap = map[domain.UziStatus]pb.UziStatus{
 
 func UziFromDomain(domain domain.Uzi) *pb.Uzi {
 	return &pb.Uzi{
-		Id:         domain.Id.String(),
-		Projection: domain.Projection,
-		Checked:    domain.Checked,
-		ExternalId: domain.ExternalID.String(),
-		Author:     domain.Author.String(),
-		DeviceId:   int64(domain.DeviceID),
-		Status:     uziStatusMap[domain.Status],
-		CreateAt:   domain.CreateAt.Format(time.RFC3339),
+		Id:          domain.Id.String(),
+		Projection:  domain.Projection,
+		Checked:     domain.Checked,
+		ExternalId:  domain.ExternalID.String(),
+		Author:      domain.Author.String(),
+		DeviceId:    int64(domain.DeviceID),
+		Status:      uziStatusMap[domain.Status],
+		Description: domain.Description,
+		CreateAt:    domain.CreateAt.Format(time.RFC3339),
 	}
 }
 

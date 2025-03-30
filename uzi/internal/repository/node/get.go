@@ -22,6 +22,7 @@ func (q *repo) GetNodeByID(id uuid.UUID) (entity.Node, error) {
 			columnTirads23,
 			columnTirads4,
 			columnTirads5,
+			columnDescription,
 		).
 		From(table).
 		Where(sq.Eq{
@@ -49,6 +50,7 @@ func (q *repo) GetNodesByImageID(id uuid.UUID) ([]entity.Node, error) {
 			fmt.Sprintf("%s.%s", table, columnTirads23),
 			fmt.Sprintf("%s.%s", table, columnTirads4),
 			fmt.Sprintf("%s.%s", table, columnTirads5),
+			fmt.Sprintf("%s.%s", table, columnDescription),
 		).
 		From(table). // TODO: вынести константы таблиц в отдельный пакет, тут пересечение с segment
 		InnerJoin("segment ON segment.node_id = node.id").
@@ -79,6 +81,7 @@ func (q *repo) GetNodesByUziID(id uuid.UUID) ([]entity.Node, error) {
 			columnTirads23,
 			columnTirads4,
 			columnTirads5,
+			columnDescription,
 		).
 		From(table).
 		Where(sq.Eq{

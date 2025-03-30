@@ -10,13 +10,14 @@ import (
 const (
 	table = "node"
 
-	columnID         = "id"
-	columnAI         = "ai"
-	columnUziID      = "uzi_id"
-	columnValidation = "validation"
-	columnTirads23   = "tirads_23"
-	columnTirads4    = "tirads_4"
-	columnTirads5    = "tirads_5"
+	columnID          = "id"
+	columnAI          = "ai"
+	columnUziID       = "uzi_id"
+	columnValidation  = "validation"
+	columnTirads23    = "tirads_23"
+	columnTirads4     = "tirads_4"
+	columnTirads5     = "tirads_5"
+	columnDescription = "description"
 )
 
 type Repository interface {

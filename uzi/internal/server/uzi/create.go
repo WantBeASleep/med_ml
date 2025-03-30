@@ -21,10 +21,11 @@ func (h *handler) CreateUzi(ctx context.Context, in *pb.CreateUziIn) (*pb.Create
 	}
 
 	id, err := h.services.Uzi.CreateUzi(ctx, uzi.CreateUziArg{
-		Projection: in.Projection,
-		ExternalID: uuid.MustParse(in.ExternalId),
-		Author:     uuid.MustParse(in.Author),
-		DeviceID:   int(in.DeviceId),
+		Projection:  in.Projection,
+		ExternalID:  uuid.MustParse(in.ExternalId),
+		Author:      uuid.MustParse(in.Author),
+		DeviceID:    int(in.DeviceId),
+		Description: in.Description,
 	})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())

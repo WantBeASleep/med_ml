@@ -79,7 +79,8 @@ message Uzi {
   string author = 600;
   int64 device_id = 700;
   UziStatus status = 800;
-  string create_at = 900;
+  optional string description = 900;
+  string create_at = 1000;
 }
 
 message Echographic {
@@ -109,6 +110,7 @@ message CreateUziIn {
   string external_id = 200;
   string author = 300;
   int64 device_id = 400;
+  optional string description = 500;
 }
 
 message CreateUziOut { string id = 100; }
@@ -172,6 +174,7 @@ message Node {
   double tirads_23 = 500;
   double tirads_4 = 600;
   double tirads_5 = 700;
+  optional string description = 800;
 }
 
 message GetNodesByUziIdIn{ string uzi_id = 100; };
@@ -234,6 +237,7 @@ message CreateNodeWithSegmentsIn {
     double tirads_23 = 200;
     double tirads_4 = 300;
     double tirads_5 = 400;
+    optional string description = 500;
   }
   message Segment {
     string image_id = 100;
