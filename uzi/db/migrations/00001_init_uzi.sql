@@ -33,7 +33,7 @@ COMMENT ON COLUMN uzi."status" IS 'Статус узи';
 CREATE TABLE image
 (
     id     uuid PRIMARY KEY,
-    uzi_id uuid    NOT NULL REFERENCES uzi (id),
+    uzi_id uuid    NOT NULL REFERENCES uzi (id) ON DELETE CASCADE,
     page   integer NOT NULL
 );
 
@@ -42,6 +42,7 @@ COMMENT ON TABLE image IS 'Хранилище кадров в узи';
 CREATE TABLE node
 (
     id              uuid        PRIMARY KEY,
+    uzi_id          uuid        NOT NULL REFERENCES uzi (id) ON DELETE CASCADE,
     ai              boolean     NOT NULL,
     "validation"    varchar(255),
     tirads_23       real        NOT NULL,
@@ -52,6 +53,7 @@ CREATE TABLE node
 
 COMMENT ON TABLE node IS 'Хранилище узлов в узи';
 COMMENT ON COLUMN node.ai IS 'Автор узла(нейронка ли)';
+COMMENT ON COLUMN node.uzi_id IS 'Идентификатор узи';
 COMMENT ON COLUMN node."validation" IS 'валидация узла специалистом (null, invalid, valid). Доступно только для нейроночных узлов';
 COMMENT ON COLUMN node.tirads_23 IS 'процент отношения к классу tirads_23';
 COMMENT ON COLUMN node.tirads_4 IS 'процент отношения к классу tirads_4';
@@ -60,8 +62,8 @@ COMMENT ON COLUMN node.tirads_5 IS 'процент отношения к кла�
 CREATE TABLE segment
 (
     id        uuid      PRIMARY KEY,
-    node_id   uuid      NOT NULL REFERENCES node (id),
-    image_id  uuid      NOT NULL REFERENCES image (id),
+    node_id   uuid      NOT NULL REFERENCES node (id) ON DELETE CASCADE,
+    image_id  uuid      NOT NULL REFERENCES image (id) ON DELETE CASCADE,
     contor    jsonb     NOT NULL,
     ai        boolean   NOT NULL,
     tirads_23 real      NOT NULL,

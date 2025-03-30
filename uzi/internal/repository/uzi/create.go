@@ -6,7 +6,7 @@ import (
 
 func (q *repo) InsertUzi(uzi entity.Uzi) error {
 	query := q.QueryBuilder().
-		Insert(uziTable).
+		Insert(table).
 		Columns(
 			columnID,
 			columnProjection,

@@ -5,6 +5,8 @@ import (
 
 	pb "uzi/internal/generated/grpc/service"
 	"uzi/internal/services"
+
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type UziHandler interface {
@@ -17,6 +19,8 @@ type UziHandler interface {
 
 	UpdateUzi(ctx context.Context, req *pb.UpdateUziIn) (*pb.UpdateUziOut, error)
 	UpdateEchographic(ctx context.Context, in *pb.UpdateEchographicIn) (*pb.UpdateEchographicOut, error)
+
+	DeleteUzi(ctx context.Context, req *pb.DeleteUziIn) (*emptypb.Empty, error)
 }
 
 type handler struct {

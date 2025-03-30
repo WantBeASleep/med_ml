@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	uziTable = "uzi"
+	table = "uzi"
 
 	columnID          = "id"
 	columnProjection  = "projection"
@@ -32,6 +32,8 @@ type Repository interface {
 
 	UpdateUzi(uzi entity.Uzi) error
 	UpdateUziStatus(id uuid.UUID, status string) error
+
+	DeleteUzi(id uuid.UUID) error
 }
 
 type repo struct {

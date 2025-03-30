@@ -17,6 +17,7 @@ service UziSrv {
   rpc getEchographicByUziId(GetEchographicByUziIdIn) returns (GetEchographicByUziIdOut);
   rpc updateUzi(UpdateUziIn) returns (UpdateUziOut);
   rpc updateEchographic(UpdateEchographicIn) returns (UpdateEchographicOut);
+  rpc deleteUzi(DeleteUziIn) returns (google.protobuf.Empty);
 
   // IMAGE
   rpc getImagesByUziId(GetImagesByUziIdIn) returns (GetImagesByUziIdOut);
@@ -150,6 +151,8 @@ message UpdateUziOut { Uzi uzi = 100; }
 message UpdateEchographicIn { Echographic echographic = 100; }
 
 message UpdateEchographicOut { Echographic echographic = 100; }
+
+message DeleteUziIn { string id = 100; }
 
 
 // IMAGE

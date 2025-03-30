@@ -19,6 +19,8 @@ type Service interface {
 
 	UpdateUzi(ctx context.Context, arg UpdateUziArg) (domain.Uzi, error)
 	UpdateEchographic(ctx context.Context, arg UpdateEchographicArg) (domain.Echographic, error)
+
+	DeleteUzi(ctx context.Context, id uuid.UUID) error
 }
 
 type service struct {

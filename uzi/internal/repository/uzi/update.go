@@ -9,7 +9,7 @@ import (
 
 func (q *repo) UpdateUzi(uzi entity.Uzi) error {
 	query := q.QueryBuilder().
-		Update(uziTable).
+		Update(table).
 		SetMap(sq.Eq{
 			columnProjection: uzi.Projection,
 			columnChecked:    uzi.Checked,
@@ -30,7 +30,7 @@ func (q *repo) UpdateUzi(uzi entity.Uzi) error {
 // TODO: статус должен быть enum
 func (q *repo) UpdateUziStatus(id uuid.UUID, status string) error {
 	query := q.QueryBuilder().
-		Update(uziTable).
+		Update(table).
 		SetMap(sq.Eq{
 			columnStatus: status,
 		}).

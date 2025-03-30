@@ -47,7 +47,7 @@ COMMENT ON COLUMN echographic.conclusion IS 'Заключение';
 ALTER TABLE echographic
     ADD CONSTRAINT fk_echographic_uzi
     FOREIGN KEY (id)
-    REFERENCES uzi (id);
+    REFERENCES uzi (id) ON DELETE CASCADE;
 -- +goose StatementEnd
 
 -- +goose Down
