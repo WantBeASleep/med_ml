@@ -16,18 +16,10 @@ import (
 
 	"auth/internal/repository"
 
-	loginsrv "auth/internal/services/login"
-	passwordsrv "auth/internal/services/password"
-	refreshsrv "auth/internal/services/refresh"
-	registersrv "auth/internal/services/register"
-	tokenizersrv "auth/internal/services/tokenizer"
+	"auth/internal/server"
+	"auth/internal/services"
 
 	pb "auth/internal/generated/grpc/service"
-	grpchandler "auth/internal/grpc"
-
-	loginhadnler "auth/internal/grpc/login"
-	refreshhadnler "auth/internal/grpc/refresh"
-	registerhadnler "auth/internal/grpc/register"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -52,12 +44,6 @@ func run() (exitCode int) {
 		return failExitCode
 	}
 
-	pubKey, privKey, err := cfg.ParseRsaKeys()
-	if err != nil {
-		slog.Error("parse rsa keys", "err", err)
-		return failExitCode
-	}
-
 	db, err := sqlx.Open("postgres", cfg.DB.Dsn)
 	if err != nil {
 		slog.Error("init db", "err", err)
@@ -72,27 +58,9 @@ func run() (exitCode int) {
 
 	dao := repository.NewRepository(db)
 
-	tokenizerSrv := tokenizersrv.New(
-		cfg.JWT.AccessTokenTime,
-		cfg.JWT.RefreshTokenTime,
-		privKey,
-		pubKey,
-	)
-	passwordSrv := passwordsrv.New()
+	services := services.New(dao, &cfg)
 
-	loginSrv := loginsrv.New(dao, passwordSrv, tokenizerSrv)
-	refreshSrv := refreshsrv.New(dao, tokenizerSrv)
-	registerSrv := registersrv.New(dao, passwordSrv)
-
-	loginHadnler := loginhadnler.New(loginSrv)
-	refreshHadnler := refreshhadnler.New(refreshSrv)
-	registerHadnler := registerhadnler.New(registerSrv)
-
-	handler := grpchandler.New(
-		loginHadnler,
-		refreshHadnler,
-		registerHadnler,
-	)
+	handler := server.New(services)
 
 	server := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
