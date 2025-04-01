@@ -30,7 +30,7 @@ func (s *service) Login(ctx context.Context, email, password string) (domain.Tok
 		return "", "", ErrWrongPassword
 	}
 
-	accessToken, refreshToken, err := s.tokenSrv.GenerateUserTokens(user.Id, *user.Role)
+	accessToken, refreshToken, err := s.tokenSrv.GenerateUserTokens(user.Id, user.Role)
 	if err != nil {
 		return "", "", fmt.Errorf("generate tokens: %w", err)
 	}

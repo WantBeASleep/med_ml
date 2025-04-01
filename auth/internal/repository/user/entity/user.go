@@ -15,16 +15,10 @@ type User struct {
 	Email        string         `db:"email"`
 	Password     sql.NullString `db:"password"`
 	RefreshToken sql.NullString `db:"refresh_token"`
-	Role         sql.NullString `db:"role"`
+	Role         string         `db:"role"`
 }
 
 func (e User) ToDomain() domain.User {
-	var role *domain.Role
-	if e.Role.Valid {
-		roleParsed, _ := domain.Role.Parse("", e.Role.String)
-		role = &roleParsed
-	}
-
 	var password *domain.Password
 	if e.Password.Valid {
 		passwordParsed, _ := domain.Password{}.Parse(e.Password.String)
@@ -42,17 +36,11 @@ func (e User) ToDomain() domain.User {
 		Email:        e.Email,
 		Password:     password,
 		RefreshToken: refreshToken,
-		Role:         role,
+		Role:         domain.Role(e.Role),
 	}
 }
 
 func (User) FromDomain(d domain.User) User {
-	var role *string
-	if d.Role != nil {
-		roleStr := d.Role.String()
-		role = &roleStr
-	}
-
 	var password *string
 	if d.Password != nil {
 		passwordStr := d.Password.String()
@@ -70,6 +58,6 @@ func (User) FromDomain(d domain.User) User {
 		Email:        d.Email,
 		Password:     gtc.String.PointerToSql(password),
 		RefreshToken: gtc.String.PointerToSql(refreshToken),
-		Role:         gtc.String.PointerToSql(role),
+		Role:         d.Role.String(),
 	}
 }

@@ -3,6 +3,7 @@ package flow
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	"auth/internal/domain"
 	pb "auth/internal/generated/grpc/service"
@@ -26,6 +27,7 @@ var RegisterUser flowfuncDepsInjector = func(deps *Deps) flowfunc {
 			Role:     mappers.RoleMap[role],
 		})
 		if err != nil {
+			slog.ErrorContext(ctx, "register user", slog.Any("err", err))
 			return FlowData{}, fmt.Errorf("register user: %w", err)
 		}
 

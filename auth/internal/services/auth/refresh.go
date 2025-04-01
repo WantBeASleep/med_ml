@@ -26,7 +26,7 @@ func (s *service) Refresh(ctx context.Context, refreshToken domain.Token) (domai
 		return "", "", errors.New("tokens not equal")
 	}
 
-	access, refresh, err := s.tokenSrv.GenerateUserTokens(user.Id, *user.Role)
+	access, refresh, err := s.tokenSrv.GenerateUserTokens(user.Id, user.Role)
 	if err != nil {
 		return "", "", fmt.Errorf("generate tokens pair: %w", err)
 	}

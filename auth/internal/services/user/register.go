@@ -17,19 +17,20 @@ func (s *service) RegisterUser(
 	password string,
 	role domain.Role,
 ) (uuid.UUID, error) {
-	return s.createUser(ctx, email, WithPassword(password), WithRole(role))
+	return s.createUser(ctx, email, role, WithPassword(password))
 }
 
 func (s *service) CreateUnRegisteredUser(
 	ctx context.Context,
 	email string,
 ) (uuid.UUID, error) {
-	return s.createUser(ctx, email, WithRole(domain.RolePatient))
+	return s.createUser(ctx, email, domain.RolePatient)
 }
 
 func (s *service) createUser(
 	ctx context.Context,
 	email string,
+	role domain.Role,
 	opts ...registerOption,
 ) (uuid.UUID, error) {
 	options := &registerOptions{}
@@ -39,7 +40,7 @@ func (s *service) createUser(
 
 	user := domain.User{
 		Email: email,
-		Role:  options.role,
+		Role:  role,
 	}
 
 	id := uuid.New()

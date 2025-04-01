@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	table              = "user"
+	table              = "\"user\""
 	columnID           = "id"
 	columnEmail        = "email"
 	columnPassword     = "password"

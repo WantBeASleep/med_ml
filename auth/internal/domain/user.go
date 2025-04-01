@@ -9,5 +9,5 @@ type User struct {
 	Email        string
 	Password     *Password
 	RefreshToken *Token
-	Role         *Role
+	Role         Role
 }
