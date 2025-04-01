@@ -1,6 +1,6 @@
 version: "3"
 
-dotenv: [".env.example"]
+dotenv: [".env"]
 
 tasks:
   bin-deps:

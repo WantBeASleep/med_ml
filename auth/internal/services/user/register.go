@@ -33,6 +33,9 @@ func (s *service) createUser(
 	role domain.Role,
 	opts ...registerOption,
 ) (uuid.UUID, error) {
+
+	// TODO: логика перерга юзера зареганого по лайте
+
 	options := &registerOptions{}
 	for _, opt := range opts {
 		opt(options)

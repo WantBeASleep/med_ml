@@ -6,10 +6,8 @@ type registerOptions struct {
 
 type registerOption func(*registerOptions)
 
-var (
-	WithPassword = func(password string) registerOption {
-		return func(o *registerOptions) {
-			o.password = &password
-		}
+var WithPassword = func(password string) registerOption {
+	return func(o *registerOptions) {
+		o.password = &password
 	}
-)
+}

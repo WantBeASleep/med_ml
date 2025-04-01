@@ -11,8 +11,8 @@ import (
 
 func (s *service) GenerateUserTokens(id uuid.UUID, role domain.Role) (domain.Token, domain.Token, error) {
 	claims := map[string]any{
-		"user_id": id.String(),
-		"role":    role.String(),
+		"id":   id.String(),
+		"role": role.String(),
 	}
 
 	accessToken, err := s.generateToken(claims, WithExpirationTime(time.Now().Add(s.accessLifeTime)))

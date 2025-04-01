@@ -10,8 +10,6 @@ import (
 
 var Login flowfuncDepsInjector = func(deps *Deps) flowfunc {
 	return func(ctx context.Context, data FlowData) (FlowData, error) {
-		data = FlowData{}
-
 		resp, err := deps.Adapter.Login(ctx, &pb.LoginIn{
 			Email:    data.RegisterUser.Email,
 			Password: data.RegisterUser.Password,

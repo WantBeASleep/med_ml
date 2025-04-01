@@ -15,8 +15,6 @@ import (
 
 var RegisterUser flowfuncDepsInjector = func(deps *Deps) flowfunc {
 	return func(ctx context.Context, data FlowData) (FlowData, error) {
-		data = FlowData{}
-
 		email := gofakeit.Email()
 		password := gofakeit.Password(true, true, true, true, false, 10)
 		role := domain.RoleDoctor

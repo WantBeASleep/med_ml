@@ -1,6 +1,8 @@
 package services
 
 import (
+	"log/slog"
+
 	"auth/internal/services/auth"
 	"auth/internal/services/password"
 	"auth/internal/services/token"
@@ -9,8 +11,6 @@ import (
 	"auth/internal/config"
 
 	"auth/internal/repository"
-
-	"log/slog"
 )
 
 type Services struct {

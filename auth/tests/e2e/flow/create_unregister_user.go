@@ -12,8 +12,6 @@ import (
 
 var CreateUnRegisterUser flowfuncDepsInjector = func(deps *Deps) flowfunc {
 	return func(ctx context.Context, data FlowData) (FlowData, error) {
-		data = FlowData{}
-
 		email := gofakeit.Email()
 
 		resp, err := deps.Adapter.CreateUnRegisteredUser(ctx, &pb.CreateUnRegisteredUserIn{Email: email})
