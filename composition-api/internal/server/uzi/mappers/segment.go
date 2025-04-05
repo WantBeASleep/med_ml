@@ -18,6 +18,7 @@ func (Segment) Domain(segment domain.Segment) (api.Segment, error) {
 		ImageID:  segment.ImageID,
 		NodeID:   segment.NodeID,
 		Contor:   contor,
+		Ai:       segment.Ai,
 		Tirads23: segment.Tirads23,
 		Tirads4:  segment.Tirads4,
 		Tirads5:  segment.Tirads5,
