@@ -16,15 +16,15 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// MedCardDoctorDoctorIDPatientPatientIDGetParams is parameters of GET /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
-type MedCardDoctorDoctorIDPatientPatientIDGetParams struct {
+// MedCardDoctorIDPatientIDGetParams is parameters of GET /med/card/{doctor_id}/{patient_id} operation.
+type MedCardDoctorIDPatientIDGetParams struct {
 	// Id врача.
 	DoctorID uuid.UUID
 	// Id пациента.
 	PatientID uuid.UUID
 }
 
-func unpackMedCardDoctorDoctorIDPatientPatientIDGetParams(packed middleware.Parameters) (params MedCardDoctorDoctorIDPatientPatientIDGetParams) {
+func unpackMedCardDoctorIDPatientIDGetParams(packed middleware.Parameters) (params MedCardDoctorIDPatientIDGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "doctor_id",
@@ -42,7 +42,7 @@ func unpackMedCardDoctorDoctorIDPatientPatientIDGetParams(packed middleware.Para
 	return params
 }
 
-func decodeMedCardDoctorDoctorIDPatientPatientIDGetParams(args [2]string, argsEscaped bool, r *http.Request) (params MedCardDoctorDoctorIDPatientPatientIDGetParams, _ error) {
+func decodeMedCardDoctorIDPatientIDGetParams(args [2]string, argsEscaped bool, r *http.Request) (params MedCardDoctorIDPatientIDGetParams, _ error) {
 	// Decode path: doctor_id.
 	if err := func() error {
 		param := args[0]
@@ -136,15 +136,15 @@ func decodeMedCardDoctorDoctorIDPatientPatientIDGetParams(args [2]string, argsEs
 	return params, nil
 }
 
-// MedCardDoctorDoctorIDPatientPatientIDPatchParams is parameters of PATCH /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
-type MedCardDoctorDoctorIDPatientPatientIDPatchParams struct {
+// MedCardDoctorIDPatientIDPatchParams is parameters of PATCH /med/card/{doctor_id}/{patient_id} operation.
+type MedCardDoctorIDPatientIDPatchParams struct {
 	// Id врача.
 	DoctorID uuid.UUID
 	// Id пациента.
 	PatientID uuid.UUID
 }
 
-func unpackMedCardDoctorDoctorIDPatientPatientIDPatchParams(packed middleware.Parameters) (params MedCardDoctorDoctorIDPatientPatientIDPatchParams) {
+func unpackMedCardDoctorIDPatientIDPatchParams(packed middleware.Parameters) (params MedCardDoctorIDPatientIDPatchParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "doctor_id",
@@ -162,7 +162,7 @@ func unpackMedCardDoctorDoctorIDPatientPatientIDPatchParams(packed middleware.Pa
 	return params
 }
 
-func decodeMedCardDoctorDoctorIDPatientPatientIDPatchParams(args [2]string, argsEscaped bool, r *http.Request) (params MedCardDoctorDoctorIDPatientPatientIDPatchParams, _ error) {
+func decodeMedCardDoctorIDPatientIDPatchParams(args [2]string, argsEscaped bool, r *http.Request) (params MedCardDoctorIDPatientIDPatchParams, _ error) {
 	// Decode path: doctor_id.
 	if err := func() error {
 		param := args[0]
@@ -274,6 +274,72 @@ func unpackMedDoctorIDGetParams(packed middleware.Parameters) (params MedDoctorI
 }
 
 func decodeMedDoctorIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params MedDoctorIDGetParams, _ error) {
+	// Decode path: id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// MedDoctorIDPatientsGetParams is parameters of GET /med/doctor/{id}/patients operation.
+type MedDoctorIDPatientsGetParams struct {
+	// Id врача.
+	ID uuid.UUID
+}
+
+func unpackMedDoctorIDPatientsGetParams(packed middleware.Parameters) (params MedDoctorIDPatientsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeMedDoctorIDPatientsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params MedDoctorIDPatientsGetParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
 		param := args[0]
@@ -447,72 +513,6 @@ func decodeMedPatientIDPatchParams(args [1]string, argsEscaped bool, r *http.Req
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "id",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// MedPatientsDoctorIDGetParams is parameters of GET /med/patients/{doctor_id} operation.
-type MedPatientsDoctorIDGetParams struct {
-	// Id врача.
-	DoctorID uuid.UUID
-}
-
-func unpackMedPatientsDoctorIDGetParams(packed middleware.Parameters) (params MedPatientsDoctorIDGetParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "doctor_id",
-			In:   "path",
-		}
-		params.DoctorID = packed[key].(uuid.UUID)
-	}
-	return params
-}
-
-func decodeMedPatientsDoctorIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params MedPatientsDoctorIDGetParams, _ error) {
-	// Decode path: doctor_id.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "doctor_id",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToUUID(val)
-				if err != nil {
-					return err
-				}
-
-				params.DoctorID = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "doctor_id",
 			In:   "path",
 			Err:  err,
 		}
@@ -1442,25 +1442,25 @@ func decodeUziSegmentIDPatchParams(args [1]string, argsEscaped bool, r *http.Req
 	return params, nil
 }
 
-// UzisAuthorAuthorIDGetParams is parameters of GET /uzis/author/{author_id} operation.
-type UzisAuthorAuthorIDGetParams struct {
+// UzisAuthorIDGetParams is parameters of GET /uzis/author/{id} operation.
+type UzisAuthorIDGetParams struct {
 	// Id аккаунта, загрузившего узи.
-	AuthorID uuid.UUID
+	ID uuid.UUID
 }
 
-func unpackUzisAuthorAuthorIDGetParams(packed middleware.Parameters) (params UzisAuthorAuthorIDGetParams) {
+func unpackUzisAuthorIDGetParams(packed middleware.Parameters) (params UzisAuthorIDGetParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "author_id",
+			Name: "id",
 			In:   "path",
 		}
-		params.AuthorID = packed[key].(uuid.UUID)
+		params.ID = packed[key].(uuid.UUID)
 	}
 	return params
 }
 
-func decodeUzisAuthorAuthorIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UzisAuthorAuthorIDGetParams, _ error) {
-	// Decode path: author_id.
+func decodeUzisAuthorIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UzisAuthorIDGetParams, _ error) {
+	// Decode path: id.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -1472,7 +1472,7 @@ func decodeUzisAuthorAuthorIDGetParams(args [1]string, argsEscaped bool, r *http
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "author_id",
+				Param:   "id",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -1489,7 +1489,7 @@ func decodeUzisAuthorAuthorIDGetParams(args [1]string, argsEscaped bool, r *http
 					return err
 				}
 
-				params.AuthorID = c
+				params.ID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1500,7 +1500,7 @@ func decodeUzisAuthorAuthorIDGetParams(args [1]string, argsEscaped bool, r *http
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "author_id",
+			Name: "id",
 			In:   "path",
 			Err:  err,
 		}
@@ -1508,25 +1508,25 @@ func decodeUzisAuthorAuthorIDGetParams(args [1]string, argsEscaped bool, r *http
 	return params, nil
 }
 
-// UzisExternalExternalIDGetParams is parameters of GET /uzis/external/{external_id} operation.
-type UzisExternalExternalIDGetParams struct {
+// UzisExternalIDGetParams is parameters of GET /uzis/external/{id} operation.
+type UzisExternalIDGetParams struct {
 	// Внешний id пациента/организации etc.
-	ExternalID uuid.UUID
+	ID uuid.UUID
 }
 
-func unpackUzisExternalExternalIDGetParams(packed middleware.Parameters) (params UzisExternalExternalIDGetParams) {
+func unpackUzisExternalIDGetParams(packed middleware.Parameters) (params UzisExternalIDGetParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "external_id",
+			Name: "id",
 			In:   "path",
 		}
-		params.ExternalID = packed[key].(uuid.UUID)
+		params.ID = packed[key].(uuid.UUID)
 	}
 	return params
 }
 
-func decodeUzisExternalExternalIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UzisExternalExternalIDGetParams, _ error) {
-	// Decode path: external_id.
+func decodeUzisExternalIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UzisExternalIDGetParams, _ error) {
+	// Decode path: id.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -1538,7 +1538,7 @@ func decodeUzisExternalExternalIDGetParams(args [1]string, argsEscaped bool, r *
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "external_id",
+				Param:   "id",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -1555,7 +1555,7 @@ func decodeUzisExternalExternalIDGetParams(args [1]string, argsEscaped bool, r *
 					return err
 				}
 
-				params.ExternalID = c
+				params.ID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1566,7 +1566,7 @@ func decodeUzisExternalExternalIDGetParams(args [1]string, argsEscaped bool, r *
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "external_id",
+			Name: "id",
 			In:   "path",
 			Err:  err,
 		}

@@ -10,7 +10,7 @@ import (
 )
 
 type Service interface {
-	CreatePatient(ctx context.Context, patient domain.Patient) (uuid.UUID, error)
+	InsertPatient(ctx context.Context, patient domain.Patient) error
 
 	GetPatient(ctx context.Context, id uuid.UUID) (domain.Patient, error)
 	GetPatientsByDoctorID(ctx context.Context, doctorID uuid.UUID) ([]domain.Patient, error)

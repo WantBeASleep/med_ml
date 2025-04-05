@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"auth/internal/domain"
-	uentity "auth/internal/repository/user/entity"
 )
 
 func (s *service) Refresh(ctx context.Context, refreshToken domain.Token) (domain.Token, domain.Token, error) {
@@ -31,8 +30,7 @@ func (s *service) Refresh(ctx context.Context, refreshToken domain.Token) (domai
 		return "", "", fmt.Errorf("generate tokens pair: %w", err)
 	}
 
-	user.RefreshToken = &refresh
-	if err := userRepo.UpdateUser(uentity.User{}.FromDomain(user)); err != nil {
+	if err := userRepo.UpdateUserRefreshToken(user.Id, refresh.String()); err != nil {
 		return "", "", fmt.Errorf("update user: %w", err)
 	}
 

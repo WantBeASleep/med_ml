@@ -233,16 +233,21 @@ func (s *Image) SetFake() {
 }
 
 // SetFake set fake values.
-func (s *MedCardDoctorDoctorIDPatientPatientIDPatchReq) SetFake() {
+func (s *LoginPostOK) SetFake() {
 	{
 		{
-			s.Diagnosis = "string"
+			s.AccessToken = "string"
+		}
+	}
+	{
+		{
+			s.RefreshToken = "string"
 		}
 	}
 }
 
 // SetFake set fake values.
-func (s *MedDoctorPostReq) SetFake() {
+func (s *LoginPostReq) SetFake() {
 	{
 		{
 			s.Email = "string"
@@ -253,26 +258,31 @@ func (s *MedDoctorPostReq) SetFake() {
 			s.Password = "string"
 		}
 	}
+}
+
+// SetFake set fake values.
+func (s *MedCardDoctorIDPatientIDPatchReq) SetFake() {
 	{
 		{
-			s.Fullname = "string"
+			s.Diagnosis = "string"
 		}
 	}
+}
+
+// SetFake set fake values.
+func (s *MedDoctorIDPatientsGetOKApplicationJSON) SetFake() {
+	var unwrapped []Patient
 	{
-		{
-			s.Org = "string"
+		unwrapped = nil
+		for i := 0; i < 0; i++ {
+			var elem Patient
+			{
+				elem.SetFake()
+			}
+			unwrapped = append(unwrapped, elem)
 		}
 	}
-	{
-		{
-			s.Job = "string"
-		}
-	}
-	{
-		{
-			s.Description.SetFake()
-		}
-	}
+	*s = MedDoctorIDPatientsGetOKApplicationJSON(unwrapped)
 }
 
 // SetFake set fake values.
@@ -285,11 +295,6 @@ func (s *MedPatientIDPatchReq) SetFake() {
 	{
 		{
 			s.Malignancy.SetFake()
-		}
-	}
-	{
-		{
-			s.LastUziDate.SetFake()
 		}
 	}
 }
@@ -326,32 +331,6 @@ func (s *MedPatientPostReq) SetFake() {
 			s.BirthDate = time.Now()
 		}
 	}
-}
-
-// SetFake set fake values.
-func (s *MedPatientsDoctorIDGetOKApplicationJSON) SetFake() {
-	var unwrapped []Patient
-	{
-		unwrapped = nil
-		for i := 0; i < 0; i++ {
-			var elem Patient
-			{
-				elem.SetFake()
-			}
-			unwrapped = append(unwrapped, elem)
-		}
-	}
-	*s = MedPatientsDoctorIDGetOKApplicationJSON(unwrapped)
-}
-
-// SetFake set fake values.
-func (s *NilDate) SetFake() {
-	s.Null = true
-}
-
-// SetFake set fake values.
-func (s *NilString) SetFake() {
-	s.Null = true
 }
 
 // SetFake set fake values.
@@ -500,6 +479,92 @@ func (s *Patient) SetFake() {
 	{
 		{
 			s.LastUziDate.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *RefreshPostOK) SetFake() {
+	{
+		{
+			s.AccessToken = "string"
+		}
+	}
+	{
+		{
+			s.RefreshToken = "string"
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *RefreshPostReq) SetFake() {
+	{
+		{
+			s.RefreshToken = "string"
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *RegDoctorPostReq) SetFake() {
+	{
+		{
+			s.Email = "string"
+		}
+	}
+	{
+		{
+			s.Password = "string"
+		}
+	}
+	{
+		{
+			s.Fullname = "string"
+		}
+	}
+	{
+		{
+			s.Org = "string"
+		}
+	}
+	{
+		{
+			s.Job = "string"
+		}
+	}
+	{
+		{
+			s.Description.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *RegPatientPostReq) SetFake() {
+	{
+		{
+			s.Fullname = "string"
+		}
+	}
+	{
+		{
+			s.Policy = "string"
+		}
+	}
+	{
+		{
+			s.BirthDate = time.Now()
+		}
+	}
+	{
+		{
+			s.Email = "string"
+		}
+	}
+	{
+		{
+			s.Password = "string"
 		}
 	}
 }
@@ -923,7 +988,7 @@ func (s *UziStatus) SetFake() {
 }
 
 // SetFake set fake values.
-func (s *UzisAuthorAuthorIDGetOKApplicationJSON) SetFake() {
+func (s *UzisAuthorIDGetOKApplicationJSON) SetFake() {
 	var unwrapped []Uzi
 	{
 		unwrapped = nil
@@ -935,11 +1000,11 @@ func (s *UzisAuthorAuthorIDGetOKApplicationJSON) SetFake() {
 			unwrapped = append(unwrapped, elem)
 		}
 	}
-	*s = UzisAuthorAuthorIDGetOKApplicationJSON(unwrapped)
+	*s = UzisAuthorIDGetOKApplicationJSON(unwrapped)
 }
 
 // SetFake set fake values.
-func (s *UzisExternalExternalIDGetOKApplicationJSON) SetFake() {
+func (s *UzisExternalIDGetOKApplicationJSON) SetFake() {
 	var unwrapped []Uzi
 	{
 		unwrapped = nil
@@ -951,5 +1016,5 @@ func (s *UzisExternalExternalIDGetOKApplicationJSON) SetFake() {
 			unwrapped = append(unwrapped, elem)
 		}
 	}
-	*s = UzisExternalExternalIDGetOKApplicationJSON(unwrapped)
+	*s = UzisExternalIDGetOKApplicationJSON(unwrapped)
 }

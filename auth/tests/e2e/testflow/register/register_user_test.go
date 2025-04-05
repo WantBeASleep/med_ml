@@ -49,5 +49,41 @@ func (suite *TestSuite) TestRegisterUser_UserAlreadyExists() {
 }
 
 func (suite *TestSuite) TestRegisterUser_UnRegisteredUser() {
+	data, err := flow.New(suite.deps, flow.CreateUnRegisterUser).Do(suite.T().Context())
+	require.NoError(suite.T(), err)
 
+	pass := "qwerty123"
+
+	_, err = suite.deps.Adapter.RegisterUser(suite.T().Context(), &pb.RegisterUserIn{
+		Email:    data.UnRegisterUser.Email,
+		Password: pass,
+		Role:     pb.Role_ROLE_PATIENT,
+	})
+	require.NoError(suite.T(), err)
+
+	_, err = suite.deps.Adapter.Login(suite.T().Context(), &pb.LoginIn{
+		Email:    data.UnRegisterUser.Email,
+		Password: pass,
+	})
+	require.NoError(suite.T(), err)
+}
+
+func (suite *TestSuite) TestRegisterUser_ReUnregisterUser() {
+	data, err := flow.New(suite.deps, flow.CreateUnRegisterUser).Do(suite.T().Context())
+	require.NoError(suite.T(), err)
+
+	_, err = suite.deps.Adapter.CreateUnRegisteredUser(suite.T().Context(), &pb.CreateUnRegisteredUserIn{
+		Email: data.UnRegisterUser.Email,
+	})
+	require.Error(suite.T(), err)
+}
+
+func (suite *TestSuite) TestRegisterUser_ReUnregisterUserOnRegisteredUser() {
+	data, err := flow.New(suite.deps, flow.RegisterUser).Do(suite.T().Context())
+	require.NoError(suite.T(), err)
+
+	_, err = suite.deps.Adapter.CreateUnRegisteredUser(suite.T().Context(), &pb.CreateUnRegisteredUserIn{
+		Email: data.RegisterUser.Email,
+	})
+	require.Error(suite.T(), err)
 }

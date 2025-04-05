@@ -16,6 +16,20 @@ func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
+type BearerAuth struct {
+	Token string
+}
+
+// GetToken returns the value of Token.
+func (s *BearerAuth) GetToken() string {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *BearerAuth) SetToken(val string) {
+	s.Token = val
+}
+
 // Карта пациента.
 // Ref: #/components/schemas/card
 type Card struct {
@@ -24,7 +38,7 @@ type Card struct {
 	// Id врача.
 	DoctorID uuid.UUID `json:"doctor_id"`
 	// Диагноз.
-	Diagnosis NilString `json:"diagnosis"`
+	Diagnosis OptString `json:"diagnosis"`
 }
 
 // GetPatientID returns the value of PatientID.
@@ -38,7 +52,7 @@ func (s *Card) GetDoctorID() uuid.UUID {
 }
 
 // GetDiagnosis returns the value of Diagnosis.
-func (s *Card) GetDiagnosis() NilString {
+func (s *Card) GetDiagnosis() OptString {
 	return s.Diagnosis
 }
 
@@ -53,13 +67,12 @@ func (s *Card) SetDoctorID(val uuid.UUID) {
 }
 
 // SetDiagnosis sets the value of Diagnosis.
-func (s *Card) SetDiagnosis(val NilString) {
+func (s *Card) SetDiagnosis(val OptString) {
 	s.Diagnosis = val
 }
 
-func (*Card) medCardDoctorDoctorIDPatientPatientIDGetRes()   {}
-func (*Card) medCardDoctorDoctorIDPatientPatientIDPatchRes() {}
-func (*Card) medCardPostRes()                                {}
+func (*Card) medCardDoctorIDPatientIDGetRes()   {}
+func (*Card) medCardDoctorIDPatientIDPatchRes() {}
 
 type Contor []ContorItem
 
@@ -131,7 +144,7 @@ type Doctor struct {
 	// Работа врача.
 	Job string `json:"job"`
 	// Описание врача (раб. стаж).
-	Description NilString `json:"description"`
+	Description OptString `json:"description"`
 }
 
 // GetID returns the value of ID.
@@ -155,7 +168,7 @@ func (s *Doctor) GetJob() string {
 }
 
 // GetDescription returns the value of Description.
-func (s *Doctor) GetDescription() NilString {
+func (s *Doctor) GetDescription() OptString {
 	return s.Description
 }
 
@@ -180,7 +193,7 @@ func (s *Doctor) SetJob(val string) {
 }
 
 // SetDescription sets the value of Description.
-func (s *Doctor) SetDescription(val NilString) {
+func (s *Doctor) SetDescription(val OptString) {
 	s.Description = val
 }
 
@@ -475,35 +488,38 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
-func (*ErrorStatusCode) medCardDoctorDoctorIDPatientPatientIDGetRes()   {}
-func (*ErrorStatusCode) medCardDoctorDoctorIDPatientPatientIDPatchRes() {}
-func (*ErrorStatusCode) medCardPostRes()                                {}
-func (*ErrorStatusCode) medDoctorIDGetRes()                             {}
-func (*ErrorStatusCode) medDoctorPostRes()                              {}
-func (*ErrorStatusCode) medPatientIDGetRes()                            {}
-func (*ErrorStatusCode) medPatientIDPatchRes()                          {}
-func (*ErrorStatusCode) medPatientPostRes()                             {}
-func (*ErrorStatusCode) medPatientsDoctorIDGetRes()                     {}
-func (*ErrorStatusCode) uziDevicePostRes()                              {}
-func (*ErrorStatusCode) uziDevicesGetRes()                              {}
-func (*ErrorStatusCode) uziIDDeleteRes()                                {}
-func (*ErrorStatusCode) uziIDEchographicsGetRes()                       {}
-func (*ErrorStatusCode) uziIDEchographicsPatchRes()                     {}
-func (*ErrorStatusCode) uziIDGetRes()                                   {}
-func (*ErrorStatusCode) uziIDImagesGetRes()                             {}
-func (*ErrorStatusCode) uziIDNodesGetRes()                              {}
-func (*ErrorStatusCode) uziIDNodesSegmentsPostRes()                     {}
-func (*ErrorStatusCode) uziIDPatchRes()                                 {}
-func (*ErrorStatusCode) uziImageIDNodesSegmentsGetRes()                 {}
-func (*ErrorStatusCode) uziNodesIDDeleteRes()                           {}
-func (*ErrorStatusCode) uziNodesIDPatchRes()                            {}
-func (*ErrorStatusCode) uziNodesIDSegmentsGetRes()                      {}
-func (*ErrorStatusCode) uziPostRes()                                    {}
-func (*ErrorStatusCode) uziSegmentIDDeleteRes()                         {}
-func (*ErrorStatusCode) uziSegmentIDPatchRes()                          {}
-func (*ErrorStatusCode) uziSegmentPostRes()                             {}
-func (*ErrorStatusCode) uzisAuthorAuthorIDGetRes()                      {}
-func (*ErrorStatusCode) uzisExternalExternalIDGetRes()                  {}
+func (*ErrorStatusCode) loginPostRes()                     {}
+func (*ErrorStatusCode) medCardDoctorIDPatientIDGetRes()   {}
+func (*ErrorStatusCode) medCardDoctorIDPatientIDPatchRes() {}
+func (*ErrorStatusCode) medCardPostRes()                   {}
+func (*ErrorStatusCode) medDoctorIDGetRes()                {}
+func (*ErrorStatusCode) medDoctorIDPatientsGetRes()        {}
+func (*ErrorStatusCode) medPatientIDGetRes()               {}
+func (*ErrorStatusCode) medPatientIDPatchRes()             {}
+func (*ErrorStatusCode) medPatientPostRes()                {}
+func (*ErrorStatusCode) refreshPostRes()                   {}
+func (*ErrorStatusCode) regDoctorPostRes()                 {}
+func (*ErrorStatusCode) regPatientPostRes()                {}
+func (*ErrorStatusCode) uziDevicePostRes()                 {}
+func (*ErrorStatusCode) uziDevicesGetRes()                 {}
+func (*ErrorStatusCode) uziIDDeleteRes()                   {}
+func (*ErrorStatusCode) uziIDEchographicsGetRes()          {}
+func (*ErrorStatusCode) uziIDEchographicsPatchRes()        {}
+func (*ErrorStatusCode) uziIDGetRes()                      {}
+func (*ErrorStatusCode) uziIDImagesGetRes()                {}
+func (*ErrorStatusCode) uziIDNodesGetRes()                 {}
+func (*ErrorStatusCode) uziIDNodesSegmentsPostRes()        {}
+func (*ErrorStatusCode) uziIDPatchRes()                    {}
+func (*ErrorStatusCode) uziImageIDNodesSegmentsGetRes()    {}
+func (*ErrorStatusCode) uziNodesIDDeleteRes()              {}
+func (*ErrorStatusCode) uziNodesIDPatchRes()               {}
+func (*ErrorStatusCode) uziNodesIDSegmentsGetRes()         {}
+func (*ErrorStatusCode) uziPostRes()                       {}
+func (*ErrorStatusCode) uziSegmentIDDeleteRes()            {}
+func (*ErrorStatusCode) uziSegmentIDPatchRes()             {}
+func (*ErrorStatusCode) uziSegmentPostRes()                {}
+func (*ErrorStatusCode) uzisAuthorIDGetRes()               {}
+func (*ErrorStatusCode) uzisExternalIDGetRes()             {}
 
 // Изображение.
 // Ref: #/components/schemas/image
@@ -546,95 +562,85 @@ func (s *Image) SetPage(val int) {
 	s.Page = val
 }
 
-type MedCardDoctorDoctorIDPatientPatientIDPatchReq struct {
+type LoginPostOK struct {
+	// Access токен.
+	AccessToken string `json:"access_token"`
+	// Refresh токен.
+	RefreshToken string `json:"refresh_token"`
+}
+
+// GetAccessToken returns the value of AccessToken.
+func (s *LoginPostOK) GetAccessToken() string {
+	return s.AccessToken
+}
+
+// GetRefreshToken returns the value of RefreshToken.
+func (s *LoginPostOK) GetRefreshToken() string {
+	return s.RefreshToken
+}
+
+// SetAccessToken sets the value of AccessToken.
+func (s *LoginPostOK) SetAccessToken(val string) {
+	s.AccessToken = val
+}
+
+// SetRefreshToken sets the value of RefreshToken.
+func (s *LoginPostOK) SetRefreshToken(val string) {
+	s.RefreshToken = val
+}
+
+func (*LoginPostOK) loginPostRes() {}
+
+type LoginPostReq struct {
+	// Email аккаунта.
+	Email string `json:"email"`
+	// Пароль аккаунта.
+	Password string `json:"password"`
+}
+
+// GetEmail returns the value of Email.
+func (s *LoginPostReq) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *LoginPostReq) GetPassword() string {
+	return s.Password
+}
+
+// SetEmail sets the value of Email.
+func (s *LoginPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *LoginPostReq) SetPassword(val string) {
+	s.Password = val
+}
+
+type MedCardDoctorIDPatientIDPatchReq struct {
 	// Диагноз пациента.
 	Diagnosis string `json:"diagnosis"`
 }
 
 // GetDiagnosis returns the value of Diagnosis.
-func (s *MedCardDoctorDoctorIDPatientPatientIDPatchReq) GetDiagnosis() string {
+func (s *MedCardDoctorIDPatientIDPatchReq) GetDiagnosis() string {
 	return s.Diagnosis
 }
 
 // SetDiagnosis sets the value of Diagnosis.
-func (s *MedCardDoctorDoctorIDPatientPatientIDPatchReq) SetDiagnosis(val string) {
+func (s *MedCardDoctorIDPatientIDPatchReq) SetDiagnosis(val string) {
 	s.Diagnosis = val
 }
 
-type MedDoctorPostReq struct {
-	// Email врача.
-	Email string `json:"email"`
-	// Пароль врача.
-	Password string `json:"password"`
-	// Полное имя врача.
-	Fullname string `json:"fullname"`
-	// Организация врача.
-	Org string `json:"org"`
-	// Работа врача.
-	Job string `json:"job"`
-	// Описание врача (раб. стаж).
-	Description OptString `json:"description"`
-}
+// MedCardPostOK is response for MedCardPost operation.
+type MedCardPostOK struct{}
 
-// GetEmail returns the value of Email.
-func (s *MedDoctorPostReq) GetEmail() string {
-	return s.Email
-}
+func (*MedCardPostOK) medCardPostRes() {}
 
-// GetPassword returns the value of Password.
-func (s *MedDoctorPostReq) GetPassword() string {
-	return s.Password
-}
+type MedDoctorIDPatientsGetOKApplicationJSON []Patient
 
-// GetFullname returns the value of Fullname.
-func (s *MedDoctorPostReq) GetFullname() string {
-	return s.Fullname
-}
-
-// GetOrg returns the value of Org.
-func (s *MedDoctorPostReq) GetOrg() string {
-	return s.Org
-}
-
-// GetJob returns the value of Job.
-func (s *MedDoctorPostReq) GetJob() string {
-	return s.Job
-}
-
-// GetDescription returns the value of Description.
-func (s *MedDoctorPostReq) GetDescription() OptString {
-	return s.Description
-}
-
-// SetEmail sets the value of Email.
-func (s *MedDoctorPostReq) SetEmail(val string) {
-	s.Email = val
-}
-
-// SetPassword sets the value of Password.
-func (s *MedDoctorPostReq) SetPassword(val string) {
-	s.Password = val
-}
-
-// SetFullname sets the value of Fullname.
-func (s *MedDoctorPostReq) SetFullname(val string) {
-	s.Fullname = val
-}
-
-// SetOrg sets the value of Org.
-func (s *MedDoctorPostReq) SetOrg(val string) {
-	s.Org = val
-}
-
-// SetJob sets the value of Job.
-func (s *MedDoctorPostReq) SetJob(val string) {
-	s.Job = val
-}
-
-// SetDescription sets the value of Description.
-func (s *MedDoctorPostReq) SetDescription(val OptString) {
-	s.Description = val
-}
+func (*MedDoctorIDPatientsGetOKApplicationJSON) medDoctorIDPatientsGetRes() {}
 
 type MedPatientIDPatchReq struct {
 	// Признак того, что пациент активен.
@@ -642,8 +648,6 @@ type MedPatientIDPatchReq struct {
 	// Признак того, что пациент имеет злокачественную
 	// опухоль.
 	Malignancy OptBool `json:"malignancy"`
-	// Дата последнего узи.
-	LastUziDate OptDate `json:"last_uzi_date"`
 }
 
 // GetActive returns the value of Active.
@@ -656,11 +660,6 @@ func (s *MedPatientIDPatchReq) GetMalignancy() OptBool {
 	return s.Malignancy
 }
 
-// GetLastUziDate returns the value of LastUziDate.
-func (s *MedPatientIDPatchReq) GetLastUziDate() OptDate {
-	return s.LastUziDate
-}
-
 // SetActive sets the value of Active.
 func (s *MedPatientIDPatchReq) SetActive(val OptBool) {
 	s.Active = val
@@ -669,11 +668,6 @@ func (s *MedPatientIDPatchReq) SetActive(val OptBool) {
 // SetMalignancy sets the value of Malignancy.
 func (s *MedPatientIDPatchReq) SetMalignancy(val OptBool) {
 	s.Malignancy = val
-}
-
-// SetLastUziDate sets the value of LastUziDate.
-func (s *MedPatientIDPatchReq) SetLastUziDate(val OptDate) {
-	s.LastUziDate = val
 }
 
 type MedPatientPostReq struct {
@@ -688,7 +682,7 @@ type MedPatientPostReq struct {
 	// Признак того, что пациент имеет злокачественную
 	// опухоль.
 	Malignancy bool `json:"malignancy"`
-	// Дата рождения пациента в RFC3339.
+	// Дата рождения пациента в формате ISO 8601.
 	BirthDate time.Time `json:"birth_date"`
 }
 
@@ -750,100 +744,6 @@ func (s *MedPatientPostReq) SetMalignancy(val bool) {
 // SetBirthDate sets the value of BirthDate.
 func (s *MedPatientPostReq) SetBirthDate(val time.Time) {
 	s.BirthDate = val
-}
-
-type MedPatientsDoctorIDGetOKApplicationJSON []Patient
-
-func (*MedPatientsDoctorIDGetOKApplicationJSON) medPatientsDoctorIDGetRes() {}
-
-// NewNilDate returns new NilDate with value set to v.
-func NewNilDate(v time.Time) NilDate {
-	return NilDate{
-		Value: v,
-	}
-}
-
-// NilDate is nullable time.Time.
-type NilDate struct {
-	Value time.Time
-	Null  bool
-}
-
-// SetTo sets value to v.
-func (o *NilDate) SetTo(v time.Time) {
-	o.Null = false
-	o.Value = v
-}
-
-// IsNull returns true if value is Null.
-func (o NilDate) IsNull() bool { return o.Null }
-
-// SetToNull sets value to null.
-func (o *NilDate) SetToNull() {
-	o.Null = true
-	var v time.Time
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o NilDate) Get() (v time.Time, ok bool) {
-	if o.Null {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o NilDate) Or(d time.Time) time.Time {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewNilString returns new NilString with value set to v.
-func NewNilString(v string) NilString {
-	return NilString{
-		Value: v,
-	}
-}
-
-// NilString is nullable string.
-type NilString struct {
-	Value string
-	Null  bool
-}
-
-// SetTo sets value to v.
-func (o *NilString) SetTo(v string) {
-	o.Null = false
-	o.Value = v
-}
-
-// IsNull returns true if value is Null.
-func (o NilString) IsNull() bool { return o.Null }
-
-// SetToNull sets value to null.
-func (o *NilString) SetToNull() {
-	o.Null = true
-	var v string
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o NilString) Get() (v string, ok bool) {
-	if o.Null {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o NilString) Or(d string) string {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
 }
 
 // Узел.
@@ -1366,7 +1266,7 @@ type Patient struct {
 	// Дата рождения пациента.
 	BirthDate time.Time `json:"birth_date"`
 	// Дата последнего узи.
-	LastUziDate NilDate `json:"last_uzi_date"`
+	LastUziDate OptDate `json:"last_uzi_date"`
 }
 
 // GetID returns the value of ID.
@@ -1405,7 +1305,7 @@ func (s *Patient) GetBirthDate() time.Time {
 }
 
 // GetLastUziDate returns the value of LastUziDate.
-func (s *Patient) GetLastUziDate() NilDate {
+func (s *Patient) GetLastUziDate() OptDate {
 	return s.LastUziDate
 }
 
@@ -1445,12 +1345,194 @@ func (s *Patient) SetBirthDate(val time.Time) {
 }
 
 // SetLastUziDate sets the value of LastUziDate.
-func (s *Patient) SetLastUziDate(val NilDate) {
+func (s *Patient) SetLastUziDate(val OptDate) {
 	s.LastUziDate = val
 }
 
 func (*Patient) medPatientIDGetRes()   {}
 func (*Patient) medPatientIDPatchRes() {}
+
+type RefreshPostOK struct {
+	// Access токен.
+	AccessToken string `json:"access_token"`
+	// Refresh токен.
+	RefreshToken string `json:"refresh_token"`
+}
+
+// GetAccessToken returns the value of AccessToken.
+func (s *RefreshPostOK) GetAccessToken() string {
+	return s.AccessToken
+}
+
+// GetRefreshToken returns the value of RefreshToken.
+func (s *RefreshPostOK) GetRefreshToken() string {
+	return s.RefreshToken
+}
+
+// SetAccessToken sets the value of AccessToken.
+func (s *RefreshPostOK) SetAccessToken(val string) {
+	s.AccessToken = val
+}
+
+// SetRefreshToken sets the value of RefreshToken.
+func (s *RefreshPostOK) SetRefreshToken(val string) {
+	s.RefreshToken = val
+}
+
+func (*RefreshPostOK) refreshPostRes() {}
+
+type RefreshPostReq struct {
+	// Refresh токен.
+	RefreshToken string `json:"refresh_token"`
+}
+
+// GetRefreshToken returns the value of RefreshToken.
+func (s *RefreshPostReq) GetRefreshToken() string {
+	return s.RefreshToken
+}
+
+// SetRefreshToken sets the value of RefreshToken.
+func (s *RefreshPostReq) SetRefreshToken(val string) {
+	s.RefreshToken = val
+}
+
+type RegDoctorPostReq struct {
+	// Email врача.
+	Email string `json:"email"`
+	// Пароль врача.
+	Password string `json:"password"`
+	// Полное имя врача.
+	Fullname string `json:"fullname"`
+	// Организация врача.
+	Org string `json:"org"`
+	// Работа врача.
+	Job string `json:"job"`
+	// Описание врача (раб. стаж).
+	Description OptString `json:"description"`
+}
+
+// GetEmail returns the value of Email.
+func (s *RegDoctorPostReq) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *RegDoctorPostReq) GetPassword() string {
+	return s.Password
+}
+
+// GetFullname returns the value of Fullname.
+func (s *RegDoctorPostReq) GetFullname() string {
+	return s.Fullname
+}
+
+// GetOrg returns the value of Org.
+func (s *RegDoctorPostReq) GetOrg() string {
+	return s.Org
+}
+
+// GetJob returns the value of Job.
+func (s *RegDoctorPostReq) GetJob() string {
+	return s.Job
+}
+
+// GetDescription returns the value of Description.
+func (s *RegDoctorPostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// SetEmail sets the value of Email.
+func (s *RegDoctorPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *RegDoctorPostReq) SetPassword(val string) {
+	s.Password = val
+}
+
+// SetFullname sets the value of Fullname.
+func (s *RegDoctorPostReq) SetFullname(val string) {
+	s.Fullname = val
+}
+
+// SetOrg sets the value of Org.
+func (s *RegDoctorPostReq) SetOrg(val string) {
+	s.Org = val
+}
+
+// SetJob sets the value of Job.
+func (s *RegDoctorPostReq) SetJob(val string) {
+	s.Job = val
+}
+
+// SetDescription sets the value of Description.
+func (s *RegDoctorPostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+type RegPatientPostReq struct {
+	// Полное имя пациента.
+	Fullname string `json:"fullname"`
+	// Полис пациента.
+	Policy string `json:"policy"`
+	// Дата рождения пациента.
+	BirthDate time.Time `json:"birth_date"`
+	// Email врача.
+	Email string `json:"email"`
+	// Пароль врача.
+	Password string `json:"password"`
+}
+
+// GetFullname returns the value of Fullname.
+func (s *RegPatientPostReq) GetFullname() string {
+	return s.Fullname
+}
+
+// GetPolicy returns the value of Policy.
+func (s *RegPatientPostReq) GetPolicy() string {
+	return s.Policy
+}
+
+// GetBirthDate returns the value of BirthDate.
+func (s *RegPatientPostReq) GetBirthDate() time.Time {
+	return s.BirthDate
+}
+
+// GetEmail returns the value of Email.
+func (s *RegPatientPostReq) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *RegPatientPostReq) GetPassword() string {
+	return s.Password
+}
+
+// SetFullname sets the value of Fullname.
+func (s *RegPatientPostReq) SetFullname(val string) {
+	s.Fullname = val
+}
+
+// SetPolicy sets the value of Policy.
+func (s *RegPatientPostReq) SetPolicy(val string) {
+	s.Policy = val
+}
+
+// SetBirthDate sets the value of BirthDate.
+func (s *RegPatientPostReq) SetBirthDate(val time.Time) {
+	s.BirthDate = val
+}
+
+// SetEmail sets the value of Email.
+func (s *RegPatientPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *RegPatientPostReq) SetPassword(val string) {
+	s.Password = val
+}
 
 // Сегмент узла на изображении.
 // Ref: #/components/schemas/segment
@@ -1571,8 +1653,9 @@ func (s *SimpleUuid) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
-func (*SimpleUuid) medDoctorPostRes()  {}
 func (*SimpleUuid) medPatientPostRes() {}
+func (*SimpleUuid) regDoctorPostRes()  {}
+func (*SimpleUuid) regPatientPostRes() {}
 func (*SimpleUuid) uziPostRes()        {}
 func (*SimpleUuid) uziSegmentPostRes() {}
 
@@ -2399,10 +2482,10 @@ func (s *UziStatus) UnmarshalText(data []byte) error {
 	}
 }
 
-type UzisAuthorAuthorIDGetOKApplicationJSON []Uzi
+type UzisAuthorIDGetOKApplicationJSON []Uzi
 
-func (*UzisAuthorAuthorIDGetOKApplicationJSON) uzisAuthorAuthorIDGetRes() {}
+func (*UzisAuthorIDGetOKApplicationJSON) uzisAuthorIDGetRes() {}
 
-type UzisExternalExternalIDGetOKApplicationJSON []Uzi
+type UzisExternalIDGetOKApplicationJSON []Uzi
 
-func (*UzisExternalExternalIDGetOKApplicationJSON) uzisExternalExternalIDGetRes() {}
+func (*UzisExternalIDGetOKApplicationJSON) uzisExternalIDGetRes() {}

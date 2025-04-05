@@ -15,24 +15,29 @@ var uziStatusMap = map[pb.UziStatus]domain.UziStatus{
 	pb.UziStatus_UZI_STATUS_COMPLETED: domain.UziStatusCompleted,
 }
 
-func Uzi(pb *pb.Uzi) domain.Uzi {
+var uziProjectionMap = map[pb.UziProjection]domain.UziProjection{
+	pb.UziProjection_UZI_PROJECTION_CROSS: domain.UziProjectionCross,
+	pb.UziProjection_UZI_PROJECTION_LONG:  domain.UziProjectionLong,
+}
+
+type Uzi struct{}
+
+func (m Uzi) Domain(pb *pb.Uzi) domain.Uzi {
 	createAt, _ := time.Parse(time.RFC3339, pb.CreateAt)
 
 	return domain.Uzi{
-		Id:         uuid.MustParse(pb.Id),
-		Projection: pb.Projection,
-		Checked:    pb.Checked,
-		ExternalID: uuid.MustParse(pb.ExternalId),
-		DeviceID:   int(pb.DeviceId),
-		Status:     uziStatusMap[pb.Status],
-		CreateAt:   createAt,
+		Id:          uuid.MustParse(pb.Id),
+		Projection:  uziProjectionMap[pb.Projection],
+		Checked:     pb.Checked,
+		ExternalID:  uuid.MustParse(pb.ExternalId),
+		Author:      uuid.MustParse(pb.Author),
+		DeviceID:    int(pb.DeviceId),
+		Status:      uziStatusMap[pb.Status],
+		Description: pb.Description,
+		CreateAt:    createAt,
 	}
 }
 
-func SliceUzi(pbs []*pb.Uzi) []domain.Uzi {
-	domains := make([]domain.Uzi, 0, len(pbs))
-	for _, pb := range pbs {
-		domains = append(domains, Uzi(pb))
-	}
-	return domains
+func (m Uzi) SliceDomain(pbs []*pb.Uzi) []domain.Uzi {
+	return slice(pbs, m)
 }

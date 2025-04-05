@@ -7,7 +7,9 @@ import (
 	pb "composition-api/internal/generated/grpc/clients/uzi"
 )
 
-func Image(pb *pb.Image) domain.Image {
+type Image struct{}
+
+func (m Image) Domain(pb *pb.Image) domain.Image {
 	return domain.Image{
 		Id:    uuid.MustParse(pb.Id),
 		UziID: uuid.MustParse(pb.UziId),
@@ -15,10 +17,6 @@ func Image(pb *pb.Image) domain.Image {
 	}
 }
 
-func SliceImage(pbs []*pb.Image) []domain.Image {
-	domains := make([]domain.Image, 0, len(pbs))
-	for _, pb := range pbs {
-		domains = append(domains, Image(pb))
-	}
-	return domains
+func (m Image) SliceDomain(pbs []*pb.Image) []domain.Image {
+	return slice(pbs, m)
 }

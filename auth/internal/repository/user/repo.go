@@ -23,7 +23,8 @@ type Repository interface {
 	GetUserByID(id uuid.UUID) (uentity.User, error)
 	GetUserByEmail(email string) (uentity.User, error)
 
-	UpdateUser(user uentity.User) error
+	UpdateUserPassword(id uuid.UUID, password string) error
+	UpdateUserRefreshToken(id uuid.UUID, refreshToken string) error
 }
 
 type repo struct {

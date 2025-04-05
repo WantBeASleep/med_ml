@@ -13,15 +13,20 @@ import (
 )
 
 func (h *handler) UziIDPatch(ctx context.Context, req *api.UziIDPatchReq, params api.UziIDPatchParams) (api.UziIDPatchRes, error) {
+	var projection *domain.UziProjection
+	if req.Projection.IsSet() {
+		projection = (*domain.UziProjection)(&req.Projection.Value)
+	}
+
 	uzi, err := h.services.UziService.Update(ctx, uziSrv.UpdateUziArg{
 		Id:         params.ID,
-		Projection: apimappers.FromOptString(req.Projection),
+		Projection: projection,
 		Checked:    apimappers.FromOptBool(req.Checked),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return pointer.To(mappers.Uzi(uzi)), nil
+	return pointer.To(mappers.Uzi{}.Domain(uzi)), nil
 }
 
 func (h *handler) UziIDEchographicsPatch(ctx context.Context, req *api.Echographics, params api.UziIDEchographicsPatchParams) (api.UziIDEchographicsPatchRes, error) {

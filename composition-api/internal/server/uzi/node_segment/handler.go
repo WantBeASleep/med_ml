@@ -8,7 +8,7 @@ import (
 )
 
 type NodeSegmentHandler interface {
-	UziNodesSegmentsPost(ctx context.Context, req *api.UziNodesSegmentsPostReq) (api.UziNodesSegmentsPostRes, error)
+	UziIDNodesSegmentsPost(ctx context.Context, req *api.UziIDNodesSegmentsPostReq, params api.UziIDNodesSegmentsPostParams) (api.UziIDNodesSegmentsPostRes, error)
 	UziImageIDNodesSegmentsGet(ctx context.Context, params api.UziImageIDNodesSegmentsGetParams) (api.UziImageIDNodesSegmentsGetRes, error)
 }
 

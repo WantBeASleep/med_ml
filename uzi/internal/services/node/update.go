@@ -9,9 +9,7 @@ import (
 	nodeEntity "uzi/internal/repository/node/entity"
 )
 
-var (
-	ErrAiNodeEdit = errors.New("unable to edit ai node")
-)
+var ErrAiNodeEdit = errors.New("unable to edit ai node")
 
 func (s *service) UpdateNode(ctx context.Context, arg UpdateNodeArg) (domain.Node, error) {
 	nodeQuery := s.dao.NewNodeQuery(ctx)

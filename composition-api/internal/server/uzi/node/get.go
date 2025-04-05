@@ -15,5 +15,5 @@ func (h *handler) UziIDNodesGet(ctx context.Context, params api.UziIDNodesGetPar
 		return nil, err
 	}
 
-	return pointer.To(api.UziIDNodesGetOKApplicationJSON(mappers.SliceNode(nodes))), nil
+	return pointer.To(api.UziIDNodesGetOKApplicationJSON(mappers.Node{}.SliceDomain(nodes))), nil
 }

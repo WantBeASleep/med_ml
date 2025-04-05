@@ -1,9 +1,10 @@
 package mappers
 
 import (
+	"time"
+
 	"med/internal/domain"
 	pb "med/internal/generated/grpc/service"
-	"time"
 
 	"github.com/AlekSi/pointer"
 )

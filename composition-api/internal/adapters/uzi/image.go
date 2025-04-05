@@ -16,5 +16,5 @@ func (a *adapter) GetImagesByUziId(ctx context.Context, id uuid.UUID) ([]domain.
 		return nil, err
 	}
 
-	return mappers.SliceImage(res.Images), nil
+	return mappers.Image{}.SliceDomain(res.Images), nil
 }

@@ -16,8 +16,22 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
-func encodeMedCardDoctorDoctorIDPatientPatientIDPatchRequest(
-	req *MedCardDoctorDoctorIDPatientPatientIDPatchReq,
+func encodeLoginPostRequest(
+	req *LoginPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeMedCardDoctorIDPatientIDPatchRequest(
+	req *MedCardDoctorIDPatientIDPatchReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -32,20 +46,6 @@ func encodeMedCardDoctorDoctorIDPatientPatientIDPatchRequest(
 
 func encodeMedCardPostRequest(
 	req *Card,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeMedDoctorPostRequest(
-	req *MedDoctorPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -74,6 +74,48 @@ func encodeMedPatientIDPatchRequest(
 
 func encodeMedPatientPostRequest(
 	req *MedPatientPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeRefreshPostRequest(
+	req *RefreshPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeRegDoctorPostRequest(
+	req *RegDoctorPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeRegPatientPostRequest(
+	req *RegPatientPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

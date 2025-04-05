@@ -13,9 +13,11 @@ import (
 
 func (s *service) Create(ctx context.Context, in CreateUziArg) (uuid.UUID, error) {
 	uziID, err := s.adapters.Uzi.CreateUzi(ctx, adapter.CreateUziIn{
-		Projection: in.Projection,
-		ExternalID: in.ExternalID.String(),
-		DeviceID:   in.DeviceID,
+		Projection:  in.Projection,
+		ExternalID:  in.ExternalID,
+		Author:      in.Author,
+		DeviceID:    in.DeviceID,
+		Description: in.Description,
 	})
 	if err != nil {
 		return uuid.UUID{}, fmt.Errorf("create uzi in microservice: %w", err)

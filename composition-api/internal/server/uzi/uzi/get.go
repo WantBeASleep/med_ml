@@ -15,16 +15,25 @@ func (h *handler) UziIDGet(ctx context.Context, params api.UziIDGetParams) (api.
 		return nil, err
 	}
 
-	return pointer.To(mappers.Uzi(uzi)), nil
+	return pointer.To(mappers.Uzi{}.Domain(uzi)), nil
 }
 
 func (h *handler) UzisExternalIDGet(ctx context.Context, params api.UzisExternalIDGetParams) (api.UzisExternalIDGetRes, error) {
-	uzis, err := h.services.UziService.GetByExternalID(ctx, params.ExternalID)
+	uzis, err := h.services.UziService.GetByExternalID(ctx, params.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return pointer.To(api.UzisExternalIDGetOKApplicationJSON(mappers.SliceUzi(uzis))), nil
+	return pointer.To(api.UzisExternalIDGetOKApplicationJSON(mappers.Uzi{}.SliceDomain(uzis))), nil
+}
+
+func (h *handler) UzisAuthorIDGet(ctx context.Context, params api.UzisAuthorIDGetParams) (api.UzisAuthorIDGetRes, error) {
+	uzis, err := h.services.UziService.GetByAuthor(ctx, params.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return pointer.To(api.UzisAuthorIDGetOKApplicationJSON(mappers.Uzi{}.SliceDomain(uzis))), nil
 }
 
 func (h *handler) UziIDEchographicsGet(ctx context.Context, params api.UziIDEchographicsGetParams) (api.UziIDEchographicsGetRes, error) {

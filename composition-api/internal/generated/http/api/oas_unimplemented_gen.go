@@ -13,21 +13,30 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// MedCardDoctorDoctorIDPatientPatientIDGet implements GET /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+// LoginPost implements POST /login operation.
 //
-// Получить карту пациента.
+// Авторизация.
 //
-// GET /med/card/doctor/{doctor_id}/patient/{patient_id}
-func (UnimplementedHandler) MedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Context, params MedCardDoctorDoctorIDPatientPatientIDGetParams) (r MedCardDoctorDoctorIDPatientPatientIDGetRes, _ error) {
+// POST /login
+func (UnimplementedHandler) LoginPost(ctx context.Context, req *LoginPostReq) (r LoginPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// MedCardDoctorDoctorIDPatientPatientIDPatch implements PATCH /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+// MedCardDoctorIDPatientIDGet implements GET /med/card/{doctor_id}/{patient_id} operation.
+//
+// Получить карту пациента.
+//
+// GET /med/card/{doctor_id}/{patient_id}
+func (UnimplementedHandler) MedCardDoctorIDPatientIDGet(ctx context.Context, params MedCardDoctorIDPatientIDGetParams) (r MedCardDoctorIDPatientIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// MedCardDoctorIDPatientIDPatch implements PATCH /med/card/{doctor_id}/{patient_id} operation.
 //
 // Обновить карту пациента.
 //
-// PATCH /med/card/doctor/{doctor_id}/patient/{patient_id}
-func (UnimplementedHandler) MedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Context, req *MedCardDoctorDoctorIDPatientPatientIDPatchReq, params MedCardDoctorDoctorIDPatientPatientIDPatchParams) (r MedCardDoctorDoctorIDPatientPatientIDPatchRes, _ error) {
+// PATCH /med/card/{doctor_id}/{patient_id}
+func (UnimplementedHandler) MedCardDoctorIDPatientIDPatch(ctx context.Context, req *MedCardDoctorIDPatientIDPatchReq, params MedCardDoctorIDPatientIDPatchParams) (r MedCardDoctorIDPatientIDPatchRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -49,12 +58,12 @@ func (UnimplementedHandler) MedDoctorIDGet(ctx context.Context, params MedDoctor
 	return r, ht.ErrNotImplemented
 }
 
-// MedDoctorPost implements POST /med/doctor operation.
+// MedDoctorIDPatientsGet implements GET /med/doctor/{id}/patients operation.
 //
-// Зарегистрировать врача.
+// Получить пациентов врача.
 //
-// POST /med/doctor
-func (UnimplementedHandler) MedDoctorPost(ctx context.Context, req *MedDoctorPostReq) (r MedDoctorPostRes, _ error) {
+// GET /med/doctor/{id}/patients
+func (UnimplementedHandler) MedDoctorIDPatientsGet(ctx context.Context, params MedDoctorIDPatientsGetParams) (r MedDoctorIDPatientsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -85,12 +94,32 @@ func (UnimplementedHandler) MedPatientPost(ctx context.Context, req *MedPatientP
 	return r, ht.ErrNotImplemented
 }
 
-// MedPatientsDoctorIDGet implements GET /med/patients/{doctor_id} operation.
+// RefreshPost implements POST /refresh operation.
 //
-// Получить пациентов врача.
+// Обновить access token.
 //
-// GET /med/patients/{doctor_id}
-func (UnimplementedHandler) MedPatientsDoctorIDGet(ctx context.Context, params MedPatientsDoctorIDGetParams) (r MedPatientsDoctorIDGetRes, _ error) {
+// POST /refresh
+func (UnimplementedHandler) RefreshPost(ctx context.Context, req *RefreshPostReq) (r RefreshPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// RegDoctorPost implements POST /reg/doctor operation.
+//
+// Зарегистрировать врача (как пользователя).
+//
+// POST /reg/doctor
+func (UnimplementedHandler) RegDoctorPost(ctx context.Context, req *RegDoctorPostReq) (r RegDoctorPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// RegPatientPost implements POST /reg/patient operation.
+//
+// Зарегистрировать пациента (как пользователя).
+// **Сделано под мобилки api**. Врачам регистрировать
+// пациентов через /med/patient.
+//
+// POST /reg/patient
+func (UnimplementedHandler) RegPatientPost(ctx context.Context, req *RegPatientPostReq) (r RegPatientPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -256,21 +285,21 @@ func (UnimplementedHandler) UziSegmentPost(ctx context.Context, req *UziSegmentP
 	return r, ht.ErrNotImplemented
 }
 
-// UzisAuthorAuthorIDGet implements GET /uzis/author/{author_id} operation.
+// UzisAuthorIDGet implements GET /uzis/author/{id} operation.
 //
 // Получить узи по id автора.
 //
-// GET /uzis/author/{author_id}
-func (UnimplementedHandler) UzisAuthorAuthorIDGet(ctx context.Context, params UzisAuthorAuthorIDGetParams) (r UzisAuthorAuthorIDGetRes, _ error) {
+// GET /uzis/author/{id}
+func (UnimplementedHandler) UzisAuthorIDGet(ctx context.Context, params UzisAuthorIDGetParams) (r UzisAuthorIDGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// UzisExternalExternalIDGet implements GET /uzis/external/{external_id} operation.
+// UzisExternalIDGet implements GET /uzis/external/{id} operation.
 //
 // Получить узи по внешнему id.
 //
-// GET /uzis/external/{external_id}
-func (UnimplementedHandler) UzisExternalExternalIDGet(ctx context.Context, params UzisExternalExternalIDGetParams) (r UzisExternalExternalIDGetRes, _ error) {
+// GET /uzis/external/{id}
+func (UnimplementedHandler) UzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (r UzisExternalIDGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

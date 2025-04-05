@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option go_package = "internal/generated/grpc/clients/auth";
+
+service AuthSrv {
+    rpc login(LoginIn) returns (LoginOut);
+    rpc refresh(RefreshIn) returns (RefreshOut);
+    
+    rpc registerUser(RegisterUserIn) returns (RegisterUserOut);
+    rpc createUnRegisteredUser(CreateUnRegisteredUserIn) returns (CreateUnRegisteredUserOut);
+}
+
+message LoginIn {
+    string email = 100;
+    string password = 200; 
+}
+
+message LoginOut {
+    string access_token = 100;
+    string refresh_token = 200;
+}
+
+message RefreshIn {
+    string refresh_token = 100;
+}
+
+message RefreshOut {
+    string access_token = 100;
+    string refresh_token = 200;
+}
+
+enum Role {
+    ROLE_DOCTOR = 0;
+    ROLE_PATIENT = 1;
+}
+
+message RegisterUserIn {
+  string email = 100;
+  string password = 200;
+  Role role = 300;
+}
+
+message RegisterUserOut {
+    string id = 100;
+}
+
+message CreateUnRegisteredUserIn {
+    string email = 100;
+}
+
+message CreateUnRegisteredUserOut {
+    string id = 100;
+}

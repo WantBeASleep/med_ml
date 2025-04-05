@@ -13,13 +13,13 @@ func (h *handler) UziImageIDNodesSegmentsGet(ctx context.Context, params api.Uzi
 		return nil, err
 	}
 
-	segmentsResp, err := mappers.SliceSegment(segments)
+	segmentsResp, err := mappers.Segment{}.SliceDomain(segments)
 	if err != nil {
 		return nil, err
 	}
 
 	return &api.UziImageIDNodesSegmentsGetOK{
-		Nodes:    mappers.SliceNode(nodes),
+		Nodes:    mappers.Node{}.SliceDomain(nodes),
 		Segments: segmentsResp,
 	}, nil
 }

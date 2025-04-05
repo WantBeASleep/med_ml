@@ -5,7 +5,9 @@ import (
 	api "composition-api/internal/generated/http/api"
 )
 
-func Segment(segment domain.Segment) (api.Segment, error) {
+type Segment struct{}
+
+func (Segment) Domain(segment domain.Segment) (api.Segment, error) {
 	contor, err := Contor(segment.Contor)
 	if err != nil {
 		return api.Segment{}, err
@@ -22,10 +24,10 @@ func Segment(segment domain.Segment) (api.Segment, error) {
 	}, nil
 }
 
-func SliceSegment(segments []domain.Segment) ([]api.Segment, error) {
+func (Segment) SliceDomain(segments []domain.Segment) ([]api.Segment, error) {
 	result := make([]api.Segment, 0, len(segments))
 	for _, segment := range segments {
-		segment, err := Segment(segment)
+		segment, err := Segment{}.Domain(segment)
 		if err != nil {
 			return nil, err
 		}

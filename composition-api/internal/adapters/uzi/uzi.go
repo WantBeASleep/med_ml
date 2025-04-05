@@ -10,11 +10,18 @@ import (
 	pb "composition-api/internal/generated/grpc/clients/uzi"
 )
 
+var uziProjectionMap = map[domain.UziProjection]pb.UziProjection{
+	domain.UziProjectionCross: pb.UziProjection_UZI_PROJECTION_CROSS,
+	domain.UziProjectionLong:  pb.UziProjection_UZI_PROJECTION_LONG,
+}
+
 func (a *adapter) CreateUzi(ctx context.Context, in CreateUziIn) (uuid.UUID, error) {
 	res, err := a.client.CreateUzi(ctx, &pb.CreateUziIn{
-		Projection: in.Projection,
-		ExternalId: in.ExternalID,
-		DeviceId:   int64(in.DeviceID),
+		Projection:  uziProjectionMap[in.Projection],
+		ExternalId:  in.ExternalID.String(),
+		Author:      in.Author.String(),
+		DeviceId:    int64(in.DeviceID),
+		Description: in.Description,
 	})
 	if err != nil {
 		return uuid.Nil, err
@@ -29,7 +36,7 @@ func (a *adapter) GetUziById(ctx context.Context, id uuid.UUID) (domain.Uzi, err
 		return domain.Uzi{}, err
 	}
 
-	return mappers.Uzi(res.Uzi), nil
+	return mappers.Uzi{}.Domain(res.Uzi), nil
 }
 
 func (a *adapter) GetUzisByExternalId(ctx context.Context, id uuid.UUID) ([]domain.Uzi, error) {
@@ -38,7 +45,16 @@ func (a *adapter) GetUzisByExternalId(ctx context.Context, id uuid.UUID) ([]doma
 		return nil, err
 	}
 
-	return mappers.SliceUzi(res.Uzis), nil
+	return mappers.Uzi{}.SliceDomain(res.Uzis), nil
+}
+
+func (a *adapter) GetUzisByAuthor(ctx context.Context, id uuid.UUID) ([]domain.Uzi, error) {
+	res, err := a.client.GetUzisByAuthor(ctx, &pb.GetUzisByAuthorIn{Author: id.String()})
+	if err != nil {
+		return nil, err
+	}
+
+	return mappers.Uzi{}.SliceDomain(res.Uzis), nil
 }
 
 func (a *adapter) GetEchographicByUziId(ctx context.Context, id uuid.UUID) (domain.Echographic, error) {
@@ -47,20 +63,20 @@ func (a *adapter) GetEchographicByUziId(ctx context.Context, id uuid.UUID) (doma
 		return domain.Echographic{}, err
 	}
 
-	return mappers.Echographic(res.Echographic), nil
+	return mappers.Echographic{}.Domain(res.Echographic), nil
 }
 
 func (a *adapter) UpdateUzi(ctx context.Context, in UpdateUziIn) (domain.Uzi, error) {
 	res, err := a.client.UpdateUzi(ctx, &pb.UpdateUziIn{
 		Id:         in.Id.String(),
-		Projection: in.Projection,
+		Projection: mappers.PointerFromMap(uziProjectionMap, in.Projection),
 		Checked:    in.Checked,
 	})
 	if err != nil {
 		return domain.Uzi{}, err
 	}
 
-	return mappers.Uzi(res.Uzi), nil
+	return mappers.Uzi{}.Domain(res.Uzi), nil
 }
 
 func (a *adapter) UpdateEchographic(ctx context.Context, in domain.Echographic) (domain.Echographic, error) {
@@ -91,5 +107,10 @@ func (a *adapter) UpdateEchographic(ctx context.Context, in domain.Echographic) 
 		return domain.Echographic{}, err
 	}
 
-	return mappers.Echographic(res.Echographic), nil
+	return mappers.Echographic{}.Domain(res.Echographic), nil
+}
+
+func (a *adapter) DeleteUzi(ctx context.Context, id uuid.UUID) error {
+	_, err := a.client.DeleteUzi(ctx, &pb.DeleteUziIn{Id: id.String()})
+	return err
 }

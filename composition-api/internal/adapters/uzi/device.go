@@ -25,5 +25,5 @@ func (a *adapter) GetDeviceList(ctx context.Context) ([]domain.Device, error) {
 		return nil, err
 	}
 
-	return mappers.SliceDevice(res.Devices), nil
+	return mappers.Device{}.SliceDomain(res.Devices), nil
 }

@@ -61,6 +61,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'l': // Prefix: "login"
+
+				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleLoginPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
+				}
+
 			case 'm': // Prefix: "med/"
 
 				if l := len("med/"); len(elem) >= l && elem[0:l] == "med/" {
@@ -92,9 +112,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/doctor/"
+					case '/': // Prefix: "/"
 
-						if l := len("/doctor/"); len(elem) >= l && elem[0:l] == "/doctor/" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
@@ -113,9 +133,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
-						case '/': // Prefix: "/patient/"
+						case '/': // Prefix: "/"
 
-							if l := len("/patient/"); len(elem) >= l && elem[0:l] == "/patient/" {
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
@@ -134,12 +154,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "GET":
-									s.handleMedCardDoctorDoctorIDPatientPatientIDGetRequest([2]string{
+									s.handleMedCardDoctorIDPatientIDGetRequest([2]string{
 										args[0],
 										args[1],
 									}, elemIsEscaped, w, r)
 								case "PATCH":
-									s.handleMedCardDoctorDoctorIDPatientPatientIDPatchRequest([2]string{
+									s.handleMedCardDoctorIDPatientIDPatchRequest([2]string{
 										args[0],
 										args[1],
 									}, elemIsEscaped, w, r)
@@ -154,47 +174,49 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					}
 
-				case 'd': // Prefix: "doctor"
+				case 'd': // Prefix: "doctor/"
 
-					if l := len("doctor"); len(elem) >= l && elem[0:l] == "doctor" {
+					if l := len("doctor/"); len(elem) >= l && elem[0:l] == "doctor/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "id"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
 					if len(elem) == 0 {
 						switch r.Method {
-						case "POST":
-							s.handleMedDoctorPostRequest([0]string{}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleMedDoctorIDGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, "GET")
 						}
 
 						return
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/"
+					case '/': // Prefix: "/patients"
 
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						if l := len("/patients"); len(elem) >= l && elem[0:l] == "/patients" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "id"
-						// Leaf parameter, slashes are prohibited
-						idx := strings.IndexByte(elem, '/')
-						if idx >= 0 {
-							break
-						}
-						args[0] = elem
-						elem = ""
-
 						if len(elem) == 0 {
 							// Leaf node.
 							switch r.Method {
 							case "GET":
-								s.handleMedDoctorIDGetRequest([1]string{
+								s.handleMedDoctorIDPatientsGetRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -260,32 +282,89 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							return
 						}
 
-					case 's': // Prefix: "s/"
+					}
 
-						if l := len("s/"); len(elem) >= l && elem[0:l] == "s/" {
+				}
+
+			case 'r': // Prefix: "re"
+
+				if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'f': // Prefix: "fresh"
+
+					if l := len("fresh"); len(elem) >= l && elem[0:l] == "fresh" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleRefreshPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+				case 'g': // Prefix: "g/"
+
+					if l := len("g/"); len(elem) >= l && elem[0:l] == "g/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'd': // Prefix: "doctor"
+
+						if l := len("doctor"); len(elem) >= l && elem[0:l] == "doctor" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "doctor_id"
-						// Leaf parameter, slashes are prohibited
-						idx := strings.IndexByte(elem, '/')
-						if idx >= 0 {
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleRegDoctorPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					case 'p': // Prefix: "patient"
+
+						if l := len("patient"); len(elem) >= l && elem[0:l] == "patient" {
+							elem = elem[l:]
+						} else {
 							break
 						}
-						args[0] = elem
-						elem = ""
 
 						if len(elem) == 0 {
 							// Leaf node.
 							switch r.Method {
-							case "GET":
-								s.handleMedPatientsDoctorIDGetRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleRegPatientPostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "GET")
+								s.notAllowed(w, r, "POST")
 							}
 
 							return
@@ -690,7 +769,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 
-						// Param: "author_id"
+						// Param: "id"
 						// Leaf parameter, slashes are prohibited
 						idx := strings.IndexByte(elem, '/')
 						if idx >= 0 {
@@ -703,7 +782,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "GET":
-								s.handleUzisAuthorAuthorIDGetRequest([1]string{
+								s.handleUzisAuthorIDGetRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -721,7 +800,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 
-						// Param: "external_id"
+						// Param: "id"
 						// Leaf parameter, slashes are prohibited
 						idx := strings.IndexByte(elem, '/')
 						if idx >= 0 {
@@ -734,7 +813,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "GET":
-								s.handleUzisExternalExternalIDGetRequest([1]string{
+								s.handleUzisExternalIDGetRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -842,6 +921,30 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'l': // Prefix: "login"
+
+				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = LoginPostOperation
+						r.summary = "авторизация"
+						r.operationID = ""
+						r.pathPattern = "/login"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
 			case 'm': // Prefix: "med/"
 
 				if l := len("med/"); len(elem) >= l && elem[0:l] == "med/" {
@@ -877,9 +980,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/doctor/"
+					case '/': // Prefix: "/"
 
-						if l := len("/doctor/"); len(elem) >= l && elem[0:l] == "/doctor/" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
@@ -898,9 +1001,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
-						case '/': // Prefix: "/patient/"
+						case '/': // Prefix: "/"
 
-							if l := len("/patient/"); len(elem) >= l && elem[0:l] == "/patient/" {
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
@@ -919,18 +1022,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "GET":
-									r.name = MedCardDoctorDoctorIDPatientPatientIDGetOperation
+									r.name = MedCardDoctorIDPatientIDGetOperation
 									r.summary = "получить карту пациента"
 									r.operationID = ""
-									r.pathPattern = "/med/card/doctor/{doctor_id}/patient/{patient_id}"
+									r.pathPattern = "/med/card/{doctor_id}/{patient_id}"
 									r.args = args
 									r.count = 2
 									return r, true
 								case "PATCH":
-									r.name = MedCardDoctorDoctorIDPatientPatientIDPatchOperation
+									r.name = MedCardDoctorIDPatientIDPatchOperation
 									r.summary = "обновить карту пациента"
 									r.operationID = ""
-									r.pathPattern = "/med/card/doctor/{doctor_id}/patient/{patient_id}"
+									r.pathPattern = "/med/card/{doctor_id}/{patient_id}"
 									r.args = args
 									r.count = 2
 									return r, true
@@ -943,54 +1046,54 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 					}
 
-				case 'd': // Prefix: "doctor"
+				case 'd': // Prefix: "doctor/"
 
-					if l := len("doctor"); len(elem) >= l && elem[0:l] == "doctor" {
+					if l := len("doctor/"); len(elem) >= l && elem[0:l] == "doctor/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "id"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
 					if len(elem) == 0 {
 						switch method {
-						case "POST":
-							r.name = MedDoctorPostOperation
-							r.summary = "зарегистрировать врача"
+						case "GET":
+							r.name = MedDoctorIDGetOperation
+							r.summary = "получить врача"
 							r.operationID = ""
-							r.pathPattern = "/med/doctor"
+							r.pathPattern = "/med/doctor/{id}"
 							r.args = args
-							r.count = 0
+							r.count = 1
 							return r, true
 						default:
 							return
 						}
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/"
+					case '/': // Prefix: "/patients"
 
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						if l := len("/patients"); len(elem) >= l && elem[0:l] == "/patients" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "id"
-						// Leaf parameter, slashes are prohibited
-						idx := strings.IndexByte(elem, '/')
-						if idx >= 0 {
-							break
-						}
-						args[0] = elem
-						elem = ""
-
 						if len(elem) == 0 {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = MedDoctorIDGetOperation
-								r.summary = "получить врача"
+								r.name = MedDoctorIDPatientsGetOperation
+								r.summary = "получить пациентов врача"
 								r.operationID = ""
-								r.pathPattern = "/med/doctor/{id}"
+								r.pathPattern = "/med/doctor/{id}/patients"
 								r.args = args
 								r.count = 1
 								return r, true
@@ -1065,33 +1168,100 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 						}
 
-					case 's': // Prefix: "s/"
+					}
 
-						if l := len("s/"); len(elem) >= l && elem[0:l] == "s/" {
+				}
+
+			case 'r': // Prefix: "re"
+
+				if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'f': // Prefix: "fresh"
+
+					if l := len("fresh"); len(elem) >= l && elem[0:l] == "fresh" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = RefreshPostOperation
+							r.summary = "обновить access token"
+							r.operationID = ""
+							r.pathPattern = "/refresh"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				case 'g': // Prefix: "g/"
+
+					if l := len("g/"); len(elem) >= l && elem[0:l] == "g/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'd': // Prefix: "doctor"
+
+						if l := len("doctor"); len(elem) >= l && elem[0:l] == "doctor" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "doctor_id"
-						// Leaf parameter, slashes are prohibited
-						idx := strings.IndexByte(elem, '/')
-						if idx >= 0 {
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = RegDoctorPostOperation
+								r.summary = "зарегистрировать врача (как пользователя)"
+								r.operationID = ""
+								r.pathPattern = "/reg/doctor"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'p': // Prefix: "patient"
+
+						if l := len("patient"); len(elem) >= l && elem[0:l] == "patient" {
+							elem = elem[l:]
+						} else {
 							break
 						}
-						args[0] = elem
-						elem = ""
 
 						if len(elem) == 0 {
 							// Leaf node.
 							switch method {
-							case "GET":
-								r.name = MedPatientsDoctorIDGetOperation
-								r.summary = "получить пациентов врача"
+							case "POST":
+								r.name = RegPatientPostOperation
+								r.summary = "зарегистрировать пациента (как пользователя). **Сделано под мобилки api**. Врачам регистрировать пациентов через /med/patient"
 								r.operationID = ""
-								r.pathPattern = "/med/patients/{doctor_id}"
+								r.pathPattern = "/reg/patient"
 								r.args = args
-								r.count = 1
+								r.count = 0
 								return r, true
 							default:
 								return
@@ -1551,7 +1721,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 
-						// Param: "author_id"
+						// Param: "id"
 						// Leaf parameter, slashes are prohibited
 						idx := strings.IndexByte(elem, '/')
 						if idx >= 0 {
@@ -1564,10 +1734,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = UzisAuthorAuthorIDGetOperation
+								r.name = UzisAuthorIDGetOperation
 								r.summary = "получить узи по id автора"
 								r.operationID = ""
-								r.pathPattern = "/uzis/author/{author_id}"
+								r.pathPattern = "/uzis/author/{id}"
 								r.args = args
 								r.count = 1
 								return r, true
@@ -1584,7 +1754,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 
-						// Param: "external_id"
+						// Param: "id"
 						// Leaf parameter, slashes are prohibited
 						idx := strings.IndexByte(elem, '/')
 						if idx >= 0 {
@@ -1597,10 +1767,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = UzisExternalExternalIDGetOperation
+								r.name = UzisExternalIDGetOperation
 								r.summary = "получить узи по внешнему id"
 								r.operationID = ""
-								r.pathPattern = "/uzis/external/{external_id}"
+								r.pathPattern = "/uzis/external/{id}"
 								r.args = args
 								r.count = 1
 								return r, true

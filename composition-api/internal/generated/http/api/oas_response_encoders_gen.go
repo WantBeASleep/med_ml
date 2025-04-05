@@ -13,7 +13,52 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeMedCardDoctorDoctorIDPatientPatientIDGetResponse(response MedCardDoctorDoctorIDPatientPatientIDGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeLoginPostResponse(response LoginPostRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *LoginPostOK:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *ErrorStatusCode:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		code := response.StatusCode
+		if code == 0 {
+			// Set default status code.
+			code = http.StatusOK
+		}
+		w.WriteHeader(code)
+		if st := http.StatusText(code); code >= http.StatusBadRequest {
+			span.SetStatus(codes.Error, st)
+		} else {
+			span.SetStatus(codes.Ok, st)
+		}
+
+		e := new(jx.Encoder)
+		response.Response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		if code >= http.StatusInternalServerError {
+			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
+		}
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeMedCardDoctorIDPatientIDGetResponse(response MedCardDoctorIDPatientIDGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *Card:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -58,7 +103,7 @@ func encodeMedCardDoctorDoctorIDPatientPatientIDGetResponse(response MedCardDoct
 	}
 }
 
-func encodeMedCardDoctorDoctorIDPatientPatientIDPatchResponse(response MedCardDoctorDoctorIDPatientPatientIDPatchRes, w http.ResponseWriter, span trace.Span) error {
+func encodeMedCardDoctorIDPatientIDPatchResponse(response MedCardDoctorIDPatientIDPatchRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *Card:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -105,16 +150,9 @@ func encodeMedCardDoctorDoctorIDPatientPatientIDPatchResponse(response MedCardDo
 
 func encodeMedCardPostResponse(response MedCardPostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *Card:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	case *MedCardPostOK:
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
 
 		return nil
 
@@ -201,9 +239,17 @@ func encodeMedDoctorIDGetResponse(response MedDoctorIDGetRes, w http.ResponseWri
 	}
 }
 
-func encodeMedDoctorPostResponse(response MedDoctorPostRes, w http.ResponseWriter, span trace.Span) error {
+func encodeMedDoctorIDPatientsGetResponse(response MedDoctorIDPatientsGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *SimpleUuid:
+	case *MedDoctorIDPatientsGetOKApplicationJSON:
+		if err := func() error {
+			if err := response.Validate(); err != nil {
+				return err
+			}
+			return nil
+		}(); err != nil {
+			return errors.Wrap(err, "validate")
+		}
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -397,17 +443,99 @@ func encodeMedPatientPostResponse(response MedPatientPostRes, w http.ResponseWri
 	}
 }
 
-func encodeMedPatientsDoctorIDGetResponse(response MedPatientsDoctorIDGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeRefreshPostResponse(response RefreshPostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *MedPatientsDoctorIDGetOKApplicationJSON:
-		if err := func() error {
-			if err := response.Validate(); err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return errors.Wrap(err, "validate")
+	case *RefreshPostOK:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
 		}
+
+		return nil
+
+	case *ErrorStatusCode:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		code := response.StatusCode
+		if code == 0 {
+			// Set default status code.
+			code = http.StatusOK
+		}
+		w.WriteHeader(code)
+		if st := http.StatusText(code); code >= http.StatusBadRequest {
+			span.SetStatus(codes.Error, st)
+		} else {
+			span.SetStatus(codes.Ok, st)
+		}
+
+		e := new(jx.Encoder)
+		response.Response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		if code >= http.StatusInternalServerError {
+			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
+		}
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeRegDoctorPostResponse(response RegDoctorPostRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *SimpleUuid:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *ErrorStatusCode:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		code := response.StatusCode
+		if code == 0 {
+			// Set default status code.
+			code = http.StatusOK
+		}
+		w.WriteHeader(code)
+		if st := http.StatusText(code); code >= http.StatusBadRequest {
+			span.SetStatus(codes.Error, st)
+		} else {
+			span.SetStatus(codes.Ok, st)
+		}
+
+		e := new(jx.Encoder)
+		response.Response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		if code >= http.StatusInternalServerError {
+			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
+		}
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeRegPatientPostResponse(response RegPatientPostRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *SimpleUuid:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -1335,9 +1463,9 @@ func encodeUziSegmentPostResponse(response UziSegmentPostRes, w http.ResponseWri
 	}
 }
 
-func encodeUzisAuthorAuthorIDGetResponse(response UzisAuthorAuthorIDGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeUzisAuthorIDGetResponse(response UzisAuthorIDGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *UzisAuthorAuthorIDGetOKApplicationJSON:
+	case *UzisAuthorIDGetOKApplicationJSON:
 		if err := func() error {
 			if err := response.Validate(); err != nil {
 				return err
@@ -1388,9 +1516,9 @@ func encodeUzisAuthorAuthorIDGetResponse(response UzisAuthorAuthorIDGetRes, w ht
 	}
 }
 
-func encodeUzisExternalExternalIDGetResponse(response UzisExternalExternalIDGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeUzisExternalIDGetResponse(response UzisExternalIDGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *UzisExternalExternalIDGetOKApplicationJSON:
+	case *UzisExternalIDGetOKApplicationJSON:
 		if err := func() error {
 			if err := response.Validate(); err != nil {
 				return err

@@ -5,19 +5,31 @@ import (
 	"fmt"
 
 	api "composition-api/internal/generated/http/api"
+	"composition-api/internal/server/auth"
+	"composition-api/internal/server/med"
+	"composition-api/internal/server/register"
 	"composition-api/internal/server/uzi"
 	services "composition-api/internal/services"
 )
 
 type server struct {
+	auth.AuthRoute
 	uzi.UziRoute
+	med.MedRoute
+	register.RegisterRoute
 }
 
 func New(services *services.Services) api.Handler {
 	uziRoute := uzi.NewUziRoute(services)
+	authRoute := auth.NewAuthRoute(services)
+	medRoute := med.NewMedRoute(services)
+	registerRoute := register.NewRegisterRoute(services)
 
 	return &server{
-		UziRoute: uziRoute,
+		UziRoute:      uziRoute,
+		AuthRoute:     authRoute,
+		MedRoute:      medRoute,
+		RegisterRoute: registerRoute,
 	}
 }
 

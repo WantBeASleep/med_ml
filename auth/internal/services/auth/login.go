@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"auth/internal/domain"
-	uentity "auth/internal/repository/user/entity"
 )
 
 var (
@@ -35,8 +34,7 @@ func (s *service) Login(ctx context.Context, email, password string) (domain.Tok
 		return "", "", fmt.Errorf("generate tokens: %w", err)
 	}
 
-	user.RefreshToken = &refreshToken
-	if err := userRepo.UpdateUser(uentity.User{}.FromDomain(user)); err != nil {
+	if err := userRepo.UpdateUserRefreshToken(user.Id, refreshToken.String()); err != nil {
 		return "", "", fmt.Errorf("update user: %w", err)
 	}
 

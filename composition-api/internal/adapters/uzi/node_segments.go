@@ -11,14 +11,15 @@ import (
 )
 
 func (a *adapter) CreateNodeWithSegments(ctx context.Context, in CreateNodeWithSegmentsIn) (uuid.UUID, []uuid.UUID, error) {
-	req := &pb.CreateNodeWithSegmentsIn{
-		Node: &pb.CreateNodeWithSegmentsIn_Node{
-			UziId:     in.Node.UziID.String(),
-			Ai:        in.Node.Ai,
-			Tirads_23: in.Node.Tirads_23,
-			Tirads_4:  in.Node.Tirads_4,
-			Tirads_5:  in.Node.Tirads_5,
-		},
+	req := &pb.CreateNodeWithSegmentsIn{}
+
+	req.UziId = in.UziID.String()
+
+	req.Node = &pb.CreateNodeWithSegmentsIn_Node{
+		Tirads_23:   in.Node.Tirads_23,
+		Tirads_4:    in.Node.Tirads_4,
+		Tirads_5:    in.Node.Tirads_5,
+		Description: in.Node.Description,
 	}
 
 	for _, segment := range in.Segments {
@@ -50,8 +51,8 @@ func (a *adapter) GetNodesWithSegmentsByImageId(ctx context.Context, id uuid.UUI
 		return nil, nil, err
 	}
 
-	nodes := mappers.SliceNode(res.Nodes)
-	segments := mappers.SliceSegment(res.Segments)
+	nodes := mappers.Node{}.SliceDomain(res.Nodes)
+	segments := mappers.Segment{}.SliceDomain(res.Segments)
 
 	return nodes, segments, nil
 }

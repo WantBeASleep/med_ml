@@ -1,11 +1,15 @@
 package segment
 
-import "github.com/google/uuid"
+import (
+	"encoding/json"
+
+	"github.com/google/uuid"
+)
 
 type CreateSegmentArg struct {
 	ImageID   uuid.UUID
 	NodeID    uuid.UUID
-	Contor    []byte
+	Contor    json.RawMessage
 	Tirads_23 float64
 	Tirads_4  float64
 	Tirads_5  float64
@@ -13,6 +17,7 @@ type CreateSegmentArg struct {
 
 type UpdateSegmentArg struct {
 	Id        uuid.UUID
+	Contor    json.RawMessage
 	Tirads_23 *float64
 	Tirads_4  *float64
 	Tirads_5  *float64

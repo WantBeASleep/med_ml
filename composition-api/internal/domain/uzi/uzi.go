@@ -7,11 +7,13 @@ import (
 )
 
 type Uzi struct {
-	Id         uuid.UUID
-	Projection string
-	Checked    bool
-	ExternalID uuid.UUID
-	DeviceID   int
-	Status     UziStatus
-	CreateAt   time.Time
+	Id          uuid.UUID
+	Projection  UziProjection
+	Checked     bool
+	ExternalID  uuid.UUID
+	Author      uuid.UUID
+	DeviceID    int
+	Status      UziStatus
+	Description *string
+	CreateAt    time.Time
 }

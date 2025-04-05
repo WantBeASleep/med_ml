@@ -19,6 +19,7 @@ import (
 	api "composition-api/internal/generated/http/api"
 	"composition-api/internal/repository"
 	"composition-api/internal/server"
+	"composition-api/internal/server/security"
 	"composition-api/internal/services"
 )
 
@@ -49,8 +50,24 @@ func run() (exitCode int) {
 		slog.Error("init uziConn", slog.Any("err", err))
 		return failExitCode
 	}
+	authConn, err := grpc.NewClient(
+		cfg.Adapters.AuthUrl,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		slog.Error("init authConn", slog.Any("err", err))
+		return failExitCode
+	}
+	medConn, err := grpc.NewClient(
+		cfg.Adapters.MedUrl,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		slog.Error("init medConn", slog.Any("err", err))
+		return failExitCode
+	}
 
-	adapters := adapters.NewAdapters(uziConn)
+	adapters := adapters.NewAdapters(uziConn, authConn, medConn)
 
 	// infra
 	s3Client, err := minio.New(cfg.S3.Endpoint, &minio.Options{
@@ -78,7 +95,10 @@ func run() (exitCode int) {
 	// server
 	handlers := server.New(services)
 
-	server, err := api.NewServer(handlers)
+	// security
+	security := security.New(&cfg)
+
+	server, err := api.NewServer(handlers, security)
 	if err != nil {
 		slog.Error("init server", slog.Any("err", err))
 		return failExitCode

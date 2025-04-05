@@ -24,6 +24,14 @@ func (s *service) GetByExternalID(ctx context.Context, externalID uuid.UUID) ([]
 	return uzis, nil
 }
 
+func (s *service) GetByAuthor(ctx context.Context, author uuid.UUID) ([]domain.Uzi, error) {
+	uzis, err := s.adapters.Uzi.GetUzisByAuthor(ctx, author)
+	if err != nil {
+		return nil, err
+	}
+	return uzis, nil
+}
+
 func (s *service) GetEchographicsByID(ctx context.Context, id uuid.UUID) (domain.Echographic, error) {
 	echographics, err := s.adapters.Uzi.GetEchographicByUziId(ctx, id)
 	if err != nil {

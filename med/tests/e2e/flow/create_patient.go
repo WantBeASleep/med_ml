@@ -14,6 +14,7 @@ import (
 
 var CreatePatient flowfuncDepsInjector = func(deps *Deps) flowfunc {
 	return func(ctx context.Context, data FlowData) (FlowData, error) {
+		id := uuid.New()
 		fullname := gofakeit.Name()
 		email := gofakeit.Email()
 		policy := gofakeit.MinecraftAnimal()
@@ -21,9 +22,10 @@ var CreatePatient flowfuncDepsInjector = func(deps *Deps) flowfunc {
 		malignancy := gofakeit.Bool()
 		birthDate := gofakeit.Date().Round(0)
 
-		resp, err := deps.Adapter.CreatePatient(
+		_, err := deps.Adapter.CreatePatient(
 			ctx,
 			&pb.CreatePatientIn{
+				Id:         id.String(),
 				Fullname:   fullname,
 				Email:      email,
 				Policy:     policy,
@@ -37,7 +39,7 @@ var CreatePatient flowfuncDepsInjector = func(deps *Deps) flowfunc {
 		}
 
 		data.Patient = domain.Patient{
-			Id:         uuid.MustParse(resp.Id),
+			Id:         id,
 			FullName:   fullname,
 			Email:      email,
 			Policy:     policy,

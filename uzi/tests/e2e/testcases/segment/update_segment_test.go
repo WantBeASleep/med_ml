@@ -71,7 +71,6 @@ func (suite *TestSuite) TestUpdateSegment_Success() {
 	require.True(suite.T(), math.Abs(tirads23-updateResp.Segment.Tirads_23) < 0.0001)
 	require.True(suite.T(), math.Abs(tirads4-updateResp.Segment.Tirads_4) < 0.0001)
 	require.True(suite.T(), math.Abs(tirads5-updateResp.Segment.Tirads_5) < 0.0001)
-
 }
 
 func (suite *TestSuite) TestUpdateSegment_AIUpdateNotAllowed() {

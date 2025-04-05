@@ -4,7 +4,7 @@ info:
   description: API для сервера med_ml
   version: "v0.0.1"
 servers:
-  - url: http://localhost:8080/api/v1
+  - url: http://localhost:8080
     description: Local development server
 
 components:
@@ -232,7 +232,7 @@ components:
           description: описание узла
       example:
         id: "123e4567-e89b-12d3-a456-426614174000"
-        ai: false
+        ai: true
         uzi_id: "123e4567-e89b-12d3-a456-426614174000"
         validation: "invalid"
         tirads_23: 0.67
@@ -355,7 +355,6 @@ components:
         - fullname
         - org
         - job
-        - description
       properties:
         id:
           type: string
@@ -375,7 +374,6 @@ components:
           description: работа врача
         description:
           type: string
-          nullable: true
           description: описание врача (раб. стаж)
       example:
         id: "123e4567-e89b-12d3-a456-426614174000"
@@ -395,7 +393,6 @@ components:
         - active
         - malignancy
         - birth_date
-        - last_uzi_date
       properties:
         id:
           type: string
@@ -426,7 +423,6 @@ components:
         last_uzi_date:
           type: string
           format: date
-          nullable: true
           description: дата последнего узи
       example:
         id: "123e4567-e89b-12d3-a456-426614174000"
@@ -444,7 +440,6 @@ components:
       required:
         - patient_id
         - doctor_id
-        - diagnosis
       properties:
         patient_id:
           type: string
@@ -456,7 +451,6 @@ components:
           description: id врача
         diagnosis:
           type: string
-          nullable: true
           description: диагноз
       example:
         patient_id: "123e4567-e89b-12d3-a456-426614174000"
@@ -488,7 +482,6 @@ components:
         - code
         - message
 
-# TODO: описать для auth
   responses:
     error:
       description: Ошибка
@@ -497,14 +490,113 @@ components:
           schema:
             $ref: "#/components/schemas/error"
 
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
-# TODO: описать security после решения по авторизации
 paths:
-  /med/doctor:
+  /login:
     post:
-      summary: зарегистрировать врача
+      summary: авторизация
       tags:
-        - med
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email 
+                - password
+              properties:
+                email:
+                  type: string
+                  maxLength: 255
+                  format: email
+                  description: email аккаунта
+                password:
+                  type: string
+                  maxLength: 255
+                  description: пароль аккаунта
+              example:
+                email: "test@test.com"
+                password: "qwerty123"
+      responses:
+        '200':
+          description: авторизация прошла успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - access_token
+                  - refresh_token
+                properties:
+                  access_token:
+                    type: string
+                    format: jwt
+                    description: access токен
+                  refresh_token:
+                    type: string
+                    format: jwt
+                    description: refresh токен
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /refresh:
+    post:
+      summary: обновить access token
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+                  format: jwt
+                  description: refresh токен
+              example:
+                refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+      responses:
+        '200':
+          description: новая пара access и refresh токенов
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - access_token
+                  - refresh_token
+                properties:
+                  access_token:
+                    type: string
+                    format: jwt
+                    description: access токен
+                  refresh_token:
+                    type: string
+                    format: jwt
+                    description: refresh токен
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /reg/doctor:
+    post:
+      summary: зарегистрировать врача (как пользователя)
+      tags:
+        - reg
       requestBody:
         required: true
         content:
@@ -542,9 +634,73 @@ paths:
                 description:
                   type: string
                   description: описание врача (раб. стаж)
+              example:
+                fullname: "Иван Иванов"
+                org: "Медицинский центр"
+                job: "Хирург"
+                email: "test@test.com"
+                password: "qwerty123"
+                description: "работает в медицинском центре с 2010 года"
       responses:
         '200':
           description: врач зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/simpleUuid"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /reg/patient:
+    post:
+      summary: зарегистрировать пациента (как пользователя). **Сделано под мобилки api**. Врачам регистрировать пациентов через /med/patient
+      tags:
+        - reg
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullname
+                - policy
+                - birth_date
+                - email
+                - password
+              properties:
+                fullname:
+                  type: string
+                  maxLength: 255
+                  description: полное имя пациента
+                policy:
+                  type: string
+                  maxLength: 255
+                  description: полис пациента
+                birth_date:
+                  type: string
+                  format: date
+                  description: дата рождения пациента
+                email:
+                  type: string
+                  maxLength: 255
+                  format: email
+                  description: email врача
+                password:
+                  type: string
+                  maxLength: 255
+                  description: пароль врача
+              example:
+                fullname: "Иван Иванов"
+                policy: "1234567890"
+                birth_date: "2021-01-01"
+                email: "test@test.com"
+                password: "qwerty123"
+      responses:
+        '200':
+          description: пациент зарегистрирован
           content:
             application/json:
               schema:
@@ -559,6 +715,8 @@ paths:
       summary: получить врача
       tags:
         - med
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -584,6 +742,8 @@ paths:
       summary: зарегистрировать пациента
       tags:
         - med
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -620,7 +780,7 @@ paths:
                 birth_date:
                   type: string
                   format: date
-                  description: дата рождения пациента в RFC3339
+                  description: дата рождения пациента в формате ISO 8601
       responses:
         '200':
           description: пациент зарегистрирован
@@ -638,6 +798,8 @@ paths:
       summary: получить пациента
       tags:
         - med
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -662,6 +824,8 @@ paths:
       summary: обновить пациента
       tags:
         - med
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -683,10 +847,6 @@ paths:
                 malignancy:
                   type: boolean
                   description: признак того, что пациент имеет злокачественную опухоль
-                last_uzi_date:
-                  type: string
-                  format: date
-                  description: дата последнего узи
       responses:
         '200':
           description: пациент обновлен
@@ -699,13 +859,15 @@ paths:
         default:
           $ref: "#/components/responses/error"
 
-  /med/patients/{doctor_id}:
+  /med/doctor/{id}/patients:
     get:
       summary: получить пациентов врача
       tags:
         - med
+      security:
+        - bearerAuth: []
       parameters:
-        - name: doctor_id
+        - name: id
           in: path
           required: true
           description: id врача
@@ -731,6 +893,8 @@ paths:
       summary: создать карту пациента
       tags:
         - med
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -740,20 +904,18 @@ paths:
       responses:
         '200':
           description: карта пациента создана
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/card"
         '500':
           $ref: "#/components/responses/error"
         default:
           $ref: "#/components/responses/error"
     
-  /med/card/doctor/{doctor_id}/patient/{patient_id}:
+  /med/card/{doctor_id}/{patient_id}:
     get:
       summary: получить карту пациента
       tags:
         - med
+      security:
+        - bearerAuth: []
       parameters:
         - name: doctor_id
           in: path
@@ -762,7 +924,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: patient_id
+        - name: patient_id  
           in: path
           required: true
           description: id пациента
@@ -785,6 +947,8 @@ paths:
       summary: обновить карту пациента
       tags:
         - med
+      security:
+        - bearerAuth: []
       parameters:
         - name: doctor_id
           in: path
@@ -793,7 +957,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: patient_id
+        - name: patient_id  
           in: path
           required: true
           description: id пациента
@@ -828,6 +992,8 @@ paths:
       summary: загрузить узи на обработку
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -877,6 +1043,8 @@ paths:
       summary: получить узи
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -901,6 +1069,8 @@ paths:
       summary: обновить узи
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -944,6 +1114,8 @@ paths:
       summary: удалить узи
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -960,13 +1132,15 @@ paths:
         default:
           $ref: "#/components/responses/error"
 
-  /uzis/external/{external_id}:
+  /uzis/external/{id}:
     get:
       summary: получить узи по внешнему id
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
-        - name: external_id
+        - name: id
           in: path
           required: true
           description: внешний id пациента/организации etc.
@@ -987,13 +1161,15 @@ paths:
         default:
           $ref: "#/components/responses/error"
   
-  /uzis/author/{author_id}:
+  /uzis/author/{id}:
     get:
       summary: получить узи по id автора
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
-        - name: author_id
+        - name: id
           in: path
           required: true
           description: id аккаунта, загрузившего узи
@@ -1019,6 +1195,8 @@ paths:
       summary: получить эхографику uzi
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1043,6 +1221,8 @@ paths:
       summary: обновить эхографику
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1074,6 +1254,8 @@ paths:
       summary: добавить uzi аппарат
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1114,6 +1296,8 @@ paths:
       summary: получит список uzi апппапапратов
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: uzi аппараты
@@ -1133,6 +1317,8 @@ paths:
       summary: получает списк изображений uzi
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1160,6 +1346,8 @@ paths:
       summary: получит узлы и сегменты на указанном изображении
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1194,6 +1382,8 @@ paths:
       summary: добавить узел с сегментами
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1291,6 +1481,8 @@ paths:
       summary: получить все узлы узи
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1318,6 +1510,8 @@ paths:
       summary: обновить узел
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1374,6 +1568,8 @@ paths:
       description: сегменты узла будут также удалены
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1394,6 +1590,8 @@ paths:
       summary: получить сегменты узла
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1421,6 +1619,8 @@ paths:
       summary: добавить новый сегмент
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1472,6 +1672,8 @@ paths:
       summary: обновить сегмент
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -1527,6 +1729,8 @@ paths:
       description: если у узла не останется сегментов, он будет **удален**
       tags:
         - uzi
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path

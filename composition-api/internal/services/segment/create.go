@@ -10,8 +10,8 @@ import (
 
 func (s *service) Create(ctx context.Context, arg CreateSegmentArg) (uuid.UUID, error) {
 	id, err := s.adapters.Uzi.CreateSegment(ctx, adapter.CreateSegmentIn{
-		ImageID:   arg.ImageID.String(),
-		NodeID:    arg.NodeID.String(),
+		ImageID:   arg.ImageID,
+		NodeID:    arg.NodeID,
 		Contor:    arg.Contor,
 		Tirads_23: arg.Tirads_23,
 		Tirads_4:  arg.Tirads_4,

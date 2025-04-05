@@ -1,6 +1,8 @@
 package mappers
 
 import (
+	"time"
+
 	api "composition-api/internal/generated/http/api"
 )
 
@@ -35,6 +37,18 @@ func ToOptBool(value *bool) api.OptBool {
 		}
 	}
 	return api.OptBool{
+		Value: *value,
+		Set:   true,
+	}
+}
+
+func ToOptDate(value *time.Time) api.OptDate {
+	if value == nil {
+		return api.OptDate{
+			Set: false,
+		}
+	}
+	return api.OptDate{
 		Value: *value,
 		Set:   true,
 	}

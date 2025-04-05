@@ -7,7 +7,9 @@ import (
 	pb "composition-api/internal/generated/grpc/clients/uzi"
 )
 
-func Echographic(pb *pb.Echographic) domain.Echographic {
+type Echographic struct{}
+
+func (m Echographic) Domain(pb *pb.Echographic) domain.Echographic {
 	return domain.Echographic{
 		Id:              uuid.MustParse(pb.Id),
 		Contors:         pb.Contors,
@@ -31,10 +33,6 @@ func Echographic(pb *pb.Echographic) domain.Echographic {
 	}
 }
 
-func SliceEchographic(pbs []*pb.Echographic) []domain.Echographic {
-	domains := make([]domain.Echographic, 0, len(pbs))
-	for _, pb := range pbs {
-		domains = append(domains, Echographic(pb))
-	}
-	return domains
+func (m Echographic) SliceDomain(pbs []*pb.Echographic) []domain.Echographic {
+	return slice(pbs, m)
 }

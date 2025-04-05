@@ -7,12 +7,13 @@
 package service
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 const (
@@ -332,6 +333,7 @@ func (x *Patient) GetLastUziDate() string {
 
 type CreatePatientIn struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,100,opt,name=id,proto3" json:"id,omitempty"`
 	Fullname      string                 `protobuf:"bytes,200,opt,name=fullname,proto3" json:"fullname,omitempty"`
 	Email         string                 `protobuf:"bytes,300,opt,name=email,proto3" json:"email,omitempty"`
 	Policy        string                 `protobuf:"bytes,400,opt,name=policy,proto3" json:"policy,omitempty"`
@@ -370,6 +372,13 @@ func (x *CreatePatientIn) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreatePatientIn.ProtoReflect.Descriptor instead.
 func (*CreatePatientIn) Descriptor() ([]byte, []int) {
 	return file_proto_grpc_service_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *CreatePatientIn) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
 }
 
 func (x *CreatePatientIn) GetFullname() string {
@@ -414,50 +423,6 @@ func (x *CreatePatientIn) GetBirthDate() string {
 	return ""
 }
 
-type CreatePatientOut struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,100,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CreatePatientOut) Reset() {
-	*x = CreatePatientOut{}
-	mi := &file_proto_grpc_service_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CreatePatientOut) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreatePatientOut) ProtoMessage() {}
-
-func (x *CreatePatientOut) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreatePatientOut.ProtoReflect.Descriptor instead.
-func (*CreatePatientOut) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *CreatePatientOut) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
 type GetPatientIn struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,100,opt,name=id,proto3" json:"id,omitempty"`
@@ -467,7 +432,7 @@ type GetPatientIn struct {
 
 func (x *GetPatientIn) Reset() {
 	*x = GetPatientIn{}
-	mi := &file_proto_grpc_service_proto_msgTypes[7]
+	mi := &file_proto_grpc_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -479,7 +444,7 @@ func (x *GetPatientIn) String() string {
 func (*GetPatientIn) ProtoMessage() {}
 
 func (x *GetPatientIn) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[7]
+	mi := &file_proto_grpc_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -492,7 +457,7 @@ func (x *GetPatientIn) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPatientIn.ProtoReflect.Descriptor instead.
 func (*GetPatientIn) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{7}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetPatientIn) GetId() string {
@@ -511,7 +476,7 @@ type GetPatientOut struct {
 
 func (x *GetPatientOut) Reset() {
 	*x = GetPatientOut{}
-	mi := &file_proto_grpc_service_proto_msgTypes[8]
+	mi := &file_proto_grpc_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -523,7 +488,7 @@ func (x *GetPatientOut) String() string {
 func (*GetPatientOut) ProtoMessage() {}
 
 func (x *GetPatientOut) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[8]
+	mi := &file_proto_grpc_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -536,7 +501,7 @@ func (x *GetPatientOut) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPatientOut.ProtoReflect.Descriptor instead.
 func (*GetPatientOut) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{8}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetPatientOut) GetPatient() *Patient {
@@ -555,7 +520,7 @@ type GetPatientsByDoctorIDIn struct {
 
 func (x *GetPatientsByDoctorIDIn) Reset() {
 	*x = GetPatientsByDoctorIDIn{}
-	mi := &file_proto_grpc_service_proto_msgTypes[9]
+	mi := &file_proto_grpc_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -567,7 +532,7 @@ func (x *GetPatientsByDoctorIDIn) String() string {
 func (*GetPatientsByDoctorIDIn) ProtoMessage() {}
 
 func (x *GetPatientsByDoctorIDIn) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[9]
+	mi := &file_proto_grpc_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -580,7 +545,7 @@ func (x *GetPatientsByDoctorIDIn) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPatientsByDoctorIDIn.ProtoReflect.Descriptor instead.
 func (*GetPatientsByDoctorIDIn) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{9}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetPatientsByDoctorIDIn) GetId() string {
@@ -599,7 +564,7 @@ type GetPatientsByDoctorIDOut struct {
 
 func (x *GetPatientsByDoctorIDOut) Reset() {
 	*x = GetPatientsByDoctorIDOut{}
-	mi := &file_proto_grpc_service_proto_msgTypes[10]
+	mi := &file_proto_grpc_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -611,7 +576,7 @@ func (x *GetPatientsByDoctorIDOut) String() string {
 func (*GetPatientsByDoctorIDOut) ProtoMessage() {}
 
 func (x *GetPatientsByDoctorIDOut) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[10]
+	mi := &file_proto_grpc_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -624,7 +589,7 @@ func (x *GetPatientsByDoctorIDOut) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPatientsByDoctorIDOut.ProtoReflect.Descriptor instead.
 func (*GetPatientsByDoctorIDOut) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{10}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetPatientsByDoctorIDOut) GetPatients() []*Patient {
@@ -646,7 +611,7 @@ type UpdatePatientIn struct {
 
 func (x *UpdatePatientIn) Reset() {
 	*x = UpdatePatientIn{}
-	mi := &file_proto_grpc_service_proto_msgTypes[11]
+	mi := &file_proto_grpc_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -658,7 +623,7 @@ func (x *UpdatePatientIn) String() string {
 func (*UpdatePatientIn) ProtoMessage() {}
 
 func (x *UpdatePatientIn) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[11]
+	mi := &file_proto_grpc_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -671,7 +636,7 @@ func (x *UpdatePatientIn) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePatientIn.ProtoReflect.Descriptor instead.
 func (*UpdatePatientIn) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{11}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpdatePatientIn) GetId() string {
@@ -711,7 +676,7 @@ type UpdatePatientOut struct {
 
 func (x *UpdatePatientOut) Reset() {
 	*x = UpdatePatientOut{}
-	mi := &file_proto_grpc_service_proto_msgTypes[12]
+	mi := &file_proto_grpc_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -723,7 +688,7 @@ func (x *UpdatePatientOut) String() string {
 func (*UpdatePatientOut) ProtoMessage() {}
 
 func (x *UpdatePatientOut) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[12]
+	mi := &file_proto_grpc_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -736,7 +701,7 @@ func (x *UpdatePatientOut) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePatientOut.ProtoReflect.Descriptor instead.
 func (*UpdatePatientOut) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{12}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpdatePatientOut) GetPatient() *Patient {
@@ -757,7 +722,7 @@ type Card struct {
 
 func (x *Card) Reset() {
 	*x = Card{}
-	mi := &file_proto_grpc_service_proto_msgTypes[13]
+	mi := &file_proto_grpc_service_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -769,7 +734,7 @@ func (x *Card) String() string {
 func (*Card) ProtoMessage() {}
 
 func (x *Card) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[13]
+	mi := &file_proto_grpc_service_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -782,7 +747,7 @@ func (x *Card) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Card.ProtoReflect.Descriptor instead.
 func (*Card) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{13}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Card) GetDoctorId() string {
@@ -815,7 +780,7 @@ type CreateCardIn struct {
 
 func (x *CreateCardIn) Reset() {
 	*x = CreateCardIn{}
-	mi := &file_proto_grpc_service_proto_msgTypes[14]
+	mi := &file_proto_grpc_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -827,7 +792,7 @@ func (x *CreateCardIn) String() string {
 func (*CreateCardIn) ProtoMessage() {}
 
 func (x *CreateCardIn) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[14]
+	mi := &file_proto_grpc_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -840,7 +805,7 @@ func (x *CreateCardIn) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCardIn.ProtoReflect.Descriptor instead.
 func (*CreateCardIn) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{14}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CreateCardIn) GetCard() *Card {
@@ -859,7 +824,7 @@ type CreateCardOut struct {
 
 func (x *CreateCardOut) Reset() {
 	*x = CreateCardOut{}
-	mi := &file_proto_grpc_service_proto_msgTypes[15]
+	mi := &file_proto_grpc_service_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -871,7 +836,7 @@ func (x *CreateCardOut) String() string {
 func (*CreateCardOut) ProtoMessage() {}
 
 func (x *CreateCardOut) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[15]
+	mi := &file_proto_grpc_service_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -884,7 +849,7 @@ func (x *CreateCardOut) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCardOut.ProtoReflect.Descriptor instead.
 func (*CreateCardOut) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{15}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CreateCardOut) GetCard() *Card {
@@ -904,7 +869,7 @@ type GetCardIn struct {
 
 func (x *GetCardIn) Reset() {
 	*x = GetCardIn{}
-	mi := &file_proto_grpc_service_proto_msgTypes[16]
+	mi := &file_proto_grpc_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -916,7 +881,7 @@ func (x *GetCardIn) String() string {
 func (*GetCardIn) ProtoMessage() {}
 
 func (x *GetCardIn) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[16]
+	mi := &file_proto_grpc_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -929,7 +894,7 @@ func (x *GetCardIn) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCardIn.ProtoReflect.Descriptor instead.
 func (*GetCardIn) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{16}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetCardIn) GetDoctorId() string {
@@ -955,7 +920,7 @@ type GetCardOut struct {
 
 func (x *GetCardOut) Reset() {
 	*x = GetCardOut{}
-	mi := &file_proto_grpc_service_proto_msgTypes[17]
+	mi := &file_proto_grpc_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -967,7 +932,7 @@ func (x *GetCardOut) String() string {
 func (*GetCardOut) ProtoMessage() {}
 
 func (x *GetCardOut) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[17]
+	mi := &file_proto_grpc_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -980,7 +945,7 @@ func (x *GetCardOut) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCardOut.ProtoReflect.Descriptor instead.
 func (*GetCardOut) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{17}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetCardOut) GetCard() *Card {
@@ -999,7 +964,7 @@ type UpdateCardIn struct {
 
 func (x *UpdateCardIn) Reset() {
 	*x = UpdateCardIn{}
-	mi := &file_proto_grpc_service_proto_msgTypes[18]
+	mi := &file_proto_grpc_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1011,7 +976,7 @@ func (x *UpdateCardIn) String() string {
 func (*UpdateCardIn) ProtoMessage() {}
 
 func (x *UpdateCardIn) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[18]
+	mi := &file_proto_grpc_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1024,7 +989,7 @@ func (x *UpdateCardIn) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCardIn.ProtoReflect.Descriptor instead.
 func (*UpdateCardIn) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{18}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *UpdateCardIn) GetCard() *Card {
@@ -1043,7 +1008,7 @@ type UpdateCardOut struct {
 
 func (x *UpdateCardOut) Reset() {
 	*x = UpdateCardOut{}
-	mi := &file_proto_grpc_service_proto_msgTypes[19]
+	mi := &file_proto_grpc_service_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1055,7 +1020,7 @@ func (x *UpdateCardOut) String() string {
 func (*UpdateCardOut) ProtoMessage() {}
 
 func (x *UpdateCardOut) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_grpc_service_proto_msgTypes[19]
+	mi := &file_proto_grpc_service_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1068,7 +1033,7 @@ func (x *UpdateCardOut) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCardOut.ProtoReflect.Descriptor instead.
 func (*UpdateCardOut) Descriptor() ([]byte, []int) {
-	return file_proto_grpc_service_proto_rawDescGZIP(), []int{19}
+	return file_proto_grpc_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *UpdateCardOut) GetCard() *Card {
@@ -1108,8 +1073,9 @@ const file_proto_grpc_service_proto_rawDesc = "" +
 	"\n" +
 	"birth_date\x18\xbc\x05 \x01(\tR\tbirthDate\x12(\n" +
 	"\rlast_uzi_date\x18\xa0\x06 \x01(\tH\x00R\vlastUziDate\x88\x01\x01B\x10\n" +
-	"\x0e_last_uzi_date\"\xb8\x01\n" +
-	"\x0fCreatePatientIn\x12\x1b\n" +
+	"\x0e_last_uzi_date\"\xc8\x01\n" +
+	"\x0fCreatePatientIn\x12\x0e\n" +
+	"\x02id\x18d \x01(\tR\x02id\x12\x1b\n" +
 	"\bfullname\x18\xc8\x01 \x01(\tR\bfullname\x12\x15\n" +
 	"\x05email\x18\xac\x02 \x01(\tR\x05email\x12\x17\n" +
 	"\x06policy\x18\x90\x03 \x01(\tR\x06policy\x12\x17\n" +
@@ -1118,9 +1084,7 @@ const file_proto_grpc_service_proto_rawDesc = "" +
 	"malignancy\x18\xd8\x04 \x01(\bR\n" +
 	"malignancy\x12\x1e\n" +
 	"\n" +
-	"birth_date\x18\xbc\x05 \x01(\tR\tbirthDate\"\"\n" +
-	"\x10CreatePatientOut\x12\x0e\n" +
-	"\x02id\x18d \x01(\tR\x02id\"\x1e\n" +
+	"birth_date\x18\xbc\x05 \x01(\tR\tbirthDate\"\x1e\n" +
 	"\fGetPatientIn\x12\x0e\n" +
 	"\x02id\x18d \x01(\tR\x02id\"3\n" +
 	"\rGetPatientOut\x12\"\n" +
@@ -1162,11 +1126,11 @@ const file_proto_grpc_service_proto_rawDesc = "" +
 	"\fUpdateCardIn\x12\x19\n" +
 	"\x04card\x18d \x01(\v2\x05.CardR\x04card\"*\n" +
 	"\rUpdateCardOut\x12\x19\n" +
-	"\x04card\x18d \x01(\v2\x05.CardR\x04card2\xdc\x03\n" +
+	"\x04card\x18d \x01(\v2\x05.CardR\x04card2\xe1\x03\n" +
 	"\x06MedSrv\x12;\n" +
 	"\x0eregisterDoctor\x12\x11.RegisterDoctorIn\x1a\x16.google.protobuf.Empty\x12(\n" +
-	"\tgetDoctor\x12\f.GetDoctorIn\x1a\r.GetDoctorOut\x124\n" +
-	"\rcreatePatient\x12\x10.CreatePatientIn\x1a\x11.CreatePatientOut\x12+\n" +
+	"\tgetDoctor\x12\f.GetDoctorIn\x1a\r.GetDoctorOut\x129\n" +
+	"\rcreatePatient\x12\x10.CreatePatientIn\x1a\x16.google.protobuf.Empty\x12+\n" +
 	"\n" +
 	"getPatient\x12\r.GetPatientIn\x1a\x0e.GetPatientOut\x12L\n" +
 	"\x15getPatientsByDoctorID\x12\x18.GetPatientsByDoctorIDIn\x1a\x19.GetPatientsByDoctorIDOut\x124\n" +
@@ -1190,7 +1154,7 @@ func file_proto_grpc_service_proto_rawDescGZIP() []byte {
 	return file_proto_grpc_service_proto_rawDescData
 }
 
-var file_proto_grpc_service_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_proto_grpc_service_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_proto_grpc_service_proto_goTypes = []any{
 	(*Doctor)(nil),                   // 0: Doctor
 	(*RegisterDoctorIn)(nil),         // 1: RegisterDoctorIn
@@ -1198,21 +1162,20 @@ var file_proto_grpc_service_proto_goTypes = []any{
 	(*GetDoctorOut)(nil),             // 3: GetDoctorOut
 	(*Patient)(nil),                  // 4: Patient
 	(*CreatePatientIn)(nil),          // 5: CreatePatientIn
-	(*CreatePatientOut)(nil),         // 6: CreatePatientOut
-	(*GetPatientIn)(nil),             // 7: GetPatientIn
-	(*GetPatientOut)(nil),            // 8: GetPatientOut
-	(*GetPatientsByDoctorIDIn)(nil),  // 9: GetPatientsByDoctorIDIn
-	(*GetPatientsByDoctorIDOut)(nil), // 10: GetPatientsByDoctorIDOut
-	(*UpdatePatientIn)(nil),          // 11: UpdatePatientIn
-	(*UpdatePatientOut)(nil),         // 12: UpdatePatientOut
-	(*Card)(nil),                     // 13: Card
-	(*CreateCardIn)(nil),             // 14: CreateCardIn
-	(*CreateCardOut)(nil),            // 15: CreateCardOut
-	(*GetCardIn)(nil),                // 16: GetCardIn
-	(*GetCardOut)(nil),               // 17: GetCardOut
-	(*UpdateCardIn)(nil),             // 18: UpdateCardIn
-	(*UpdateCardOut)(nil),            // 19: UpdateCardOut
-	(*emptypb.Empty)(nil),            // 20: google.protobuf.Empty
+	(*GetPatientIn)(nil),             // 6: GetPatientIn
+	(*GetPatientOut)(nil),            // 7: GetPatientOut
+	(*GetPatientsByDoctorIDIn)(nil),  // 8: GetPatientsByDoctorIDIn
+	(*GetPatientsByDoctorIDOut)(nil), // 9: GetPatientsByDoctorIDOut
+	(*UpdatePatientIn)(nil),          // 10: UpdatePatientIn
+	(*UpdatePatientOut)(nil),         // 11: UpdatePatientOut
+	(*Card)(nil),                     // 12: Card
+	(*CreateCardIn)(nil),             // 13: CreateCardIn
+	(*CreateCardOut)(nil),            // 14: CreateCardOut
+	(*GetCardIn)(nil),                // 15: GetCardIn
+	(*GetCardOut)(nil),               // 16: GetCardOut
+	(*UpdateCardIn)(nil),             // 17: UpdateCardIn
+	(*UpdateCardOut)(nil),            // 18: UpdateCardOut
+	(*emptypb.Empty)(nil),            // 19: google.protobuf.Empty
 }
 var file_proto_grpc_service_proto_depIdxs = []int32{
 	0,  // 0: RegisterDoctorIn.doctor:type_name -> Doctor
@@ -1220,29 +1183,29 @@ var file_proto_grpc_service_proto_depIdxs = []int32{
 	4,  // 2: GetPatientOut.patient:type_name -> Patient
 	4,  // 3: GetPatientsByDoctorIDOut.patients:type_name -> Patient
 	4,  // 4: UpdatePatientOut.patient:type_name -> Patient
-	13, // 5: CreateCardIn.card:type_name -> Card
-	13, // 6: CreateCardOut.card:type_name -> Card
-	13, // 7: GetCardOut.card:type_name -> Card
-	13, // 8: UpdateCardIn.card:type_name -> Card
-	13, // 9: UpdateCardOut.card:type_name -> Card
+	12, // 5: CreateCardIn.card:type_name -> Card
+	12, // 6: CreateCardOut.card:type_name -> Card
+	12, // 7: GetCardOut.card:type_name -> Card
+	12, // 8: UpdateCardIn.card:type_name -> Card
+	12, // 9: UpdateCardOut.card:type_name -> Card
 	1,  // 10: MedSrv.registerDoctor:input_type -> RegisterDoctorIn
 	2,  // 11: MedSrv.getDoctor:input_type -> GetDoctorIn
 	5,  // 12: MedSrv.createPatient:input_type -> CreatePatientIn
-	7,  // 13: MedSrv.getPatient:input_type -> GetPatientIn
-	9,  // 14: MedSrv.getPatientsByDoctorID:input_type -> GetPatientsByDoctorIDIn
-	11, // 15: MedSrv.updatePatient:input_type -> UpdatePatientIn
-	14, // 16: MedSrv.createCard:input_type -> CreateCardIn
-	16, // 17: MedSrv.getCard:input_type -> GetCardIn
-	18, // 18: MedSrv.updateCard:input_type -> UpdateCardIn
-	20, // 19: MedSrv.registerDoctor:output_type -> google.protobuf.Empty
+	6,  // 13: MedSrv.getPatient:input_type -> GetPatientIn
+	8,  // 14: MedSrv.getPatientsByDoctorID:input_type -> GetPatientsByDoctorIDIn
+	10, // 15: MedSrv.updatePatient:input_type -> UpdatePatientIn
+	13, // 16: MedSrv.createCard:input_type -> CreateCardIn
+	15, // 17: MedSrv.getCard:input_type -> GetCardIn
+	17, // 18: MedSrv.updateCard:input_type -> UpdateCardIn
+	19, // 19: MedSrv.registerDoctor:output_type -> google.protobuf.Empty
 	3,  // 20: MedSrv.getDoctor:output_type -> GetDoctorOut
-	6,  // 21: MedSrv.createPatient:output_type -> CreatePatientOut
-	8,  // 22: MedSrv.getPatient:output_type -> GetPatientOut
-	10, // 23: MedSrv.getPatientsByDoctorID:output_type -> GetPatientsByDoctorIDOut
-	12, // 24: MedSrv.updatePatient:output_type -> UpdatePatientOut
-	20, // 25: MedSrv.createCard:output_type -> google.protobuf.Empty
-	17, // 26: MedSrv.getCard:output_type -> GetCardOut
-	19, // 27: MedSrv.updateCard:output_type -> UpdateCardOut
+	19, // 21: MedSrv.createPatient:output_type -> google.protobuf.Empty
+	7,  // 22: MedSrv.getPatient:output_type -> GetPatientOut
+	9,  // 23: MedSrv.getPatientsByDoctorID:output_type -> GetPatientsByDoctorIDOut
+	11, // 24: MedSrv.updatePatient:output_type -> UpdatePatientOut
+	19, // 25: MedSrv.createCard:output_type -> google.protobuf.Empty
+	16, // 26: MedSrv.getCard:output_type -> GetCardOut
+	18, // 27: MedSrv.updateCard:output_type -> UpdateCardOut
 	19, // [19:28] is the sub-list for method output_type
 	10, // [10:19] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
@@ -1257,15 +1220,15 @@ func file_proto_grpc_service_proto_init() {
 	}
 	file_proto_grpc_service_proto_msgTypes[0].OneofWrappers = []any{}
 	file_proto_grpc_service_proto_msgTypes[4].OneofWrappers = []any{}
-	file_proto_grpc_service_proto_msgTypes[11].OneofWrappers = []any{}
-	file_proto_grpc_service_proto_msgTypes[13].OneofWrappers = []any{}
+	file_proto_grpc_service_proto_msgTypes[10].OneofWrappers = []any{}
+	file_proto_grpc_service_proto_msgTypes[12].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_grpc_service_proto_rawDesc), len(file_proto_grpc_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

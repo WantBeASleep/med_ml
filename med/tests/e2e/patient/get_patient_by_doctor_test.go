@@ -3,10 +3,11 @@
 package patient_test
 
 import (
+	"time"
+
 	pb "med/internal/generated/grpc/service"
 	"med/tests/e2e/flow"
-	"time"
-	
+
 	"github.com/stretchr/testify/require"
 )
 

@@ -8,7 +8,7 @@ service MedSrv {
   rpc registerDoctor(RegisterDoctorIn) returns (google.protobuf.Empty);
   rpc getDoctor(GetDoctorIn) returns (GetDoctorOut);
 
-  rpc createPatient(CreatePatientIn) returns (CreatePatientOut);
+  rpc createPatient(CreatePatientIn) returns (google.protobuf.Empty);
   rpc getPatient(GetPatientIn) returns (GetPatientOut);
   rpc getPatientsByDoctorID(GetPatientsByDoctorIDIn) returns (GetPatientsByDoctorIDOut);
   rpc updatePatient(UpdatePatientIn) returns (UpdatePatientOut);
@@ -44,6 +44,7 @@ message Patient {
 }
 
 message CreatePatientIn {
+  string id = 100;
   string fullname = 200;
   string email = 300;
   string policy = 400;
@@ -51,8 +52,6 @@ message CreatePatientIn {
   bool malignancy = 600;
   string birth_date = 700; // RFC3339
 }
-
-message CreatePatientOut { string id = 100; }
 
 message GetPatientIn { string id = 100; }
 

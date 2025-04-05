@@ -7,17 +7,25 @@ import (
 	"med/internal/domain"
 	pb "med/internal/generated/grpc/service"
 
+	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-func (h *handler) CreatePatient(ctx context.Context, in *pb.CreatePatientIn) (*pb.CreatePatientOut, error) {
+func (h *handler) CreatePatient(ctx context.Context, in *pb.CreatePatientIn) (*empty.Empty, error) {
+	id, err := uuid.Parse(in.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Неверный формат id: %s", err.Error())
+	}
+
 	birthDate, err := time.Parse(time.RFC3339, in.BirthDate)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "Неверный формат даты рождения: %s", err.Error())
 	}
 
-	id, err := h.patientSrv.CreatePatient(ctx, domain.Patient{
+	err = h.patientSrv.InsertPatient(ctx, domain.Patient{
+		Id:         id,
 		FullName:   in.Fullname,
 		Email:      in.Email,
 		Policy:     in.Policy,
@@ -29,5 +37,5 @@ func (h *handler) CreatePatient(ctx context.Context, in *pb.CreatePatientIn) (*p
 		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
 	}
 
-	return &pb.CreatePatientOut{Id: id.String()}, nil
+	return &empty.Empty{}, nil
 }

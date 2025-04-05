@@ -257,8 +257,8 @@ func TestImage_Examples(t *testing.T) {
 		})
 	}
 }
-func TestMedCardDoctorDoctorIDPatientPatientIDPatchReq_EncodeDecode(t *testing.T) {
-	var typ MedCardDoctorDoctorIDPatientPatientIDPatchReq
+func TestLoginPostOK_EncodeDecode(t *testing.T) {
+	var typ LoginPostOK
 	typ.SetFake()
 
 	e := jx.Encoder{}
@@ -266,11 +266,11 @@ func TestMedCardDoctorDoctorIDPatientPatientIDPatchReq_EncodeDecode(t *testing.T
 	data := e.Bytes()
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
-	var typ2 MedCardDoctorDoctorIDPatientPatientIDPatchReq
+	var typ2 LoginPostOK
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
-func TestMedDoctorPostReq_EncodeDecode(t *testing.T) {
-	var typ MedDoctorPostReq
+func TestLoginPostReq_EncodeDecode(t *testing.T) {
+	var typ LoginPostReq
 	typ.SetFake()
 
 	e := jx.Encoder{}
@@ -278,7 +278,60 @@ func TestMedDoctorPostReq_EncodeDecode(t *testing.T) {
 	data := e.Bytes()
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
-	var typ2 MedDoctorPostReq
+	var typ2 LoginPostReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestLoginPostReq_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"email\":\"test@test.com\",\"password\":\"qwerty123\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ LoginPostReq
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 LoginPostReq
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestMedCardDoctorIDPatientIDPatchReq_EncodeDecode(t *testing.T) {
+	var typ MedCardDoctorIDPatientIDPatchReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 MedCardDoctorIDPatientIDPatchReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestMedDoctorIDPatientsGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ MedDoctorIDPatientsGetOKApplicationJSON
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 MedDoctorIDPatientsGetOKApplicationJSON
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
 func TestMedPatientIDPatchReq_EncodeDecode(t *testing.T) {
@@ -305,18 +358,6 @@ func TestMedPatientPostReq_EncodeDecode(t *testing.T) {
 	var typ2 MedPatientPostReq
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
-func TestMedPatientsDoctorIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
-	var typ MedPatientsDoctorIDGetOKApplicationJSON
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 MedPatientsDoctorIDGetOKApplicationJSON
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
 func TestNode_EncodeDecode(t *testing.T) {
 	var typ Node
 	typ.SetFake()
@@ -335,7 +376,7 @@ func TestNode_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"ai\":false,\"description\":\"узел явно неправильный\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"tirads_23\":0.67,\"tirads_4\":0.23,\"tirads_5\":0.89,\"uzi_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"validation\":\"invalid\"}"},
+		{Input: "{\"ai\":true,\"description\":\"узел явно неправильный\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"tirads_23\":0.67,\"tirads_4\":0.23,\"tirads_5\":0.89,\"uzi_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"validation\":\"invalid\"}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
@@ -407,6 +448,141 @@ func TestPatient_Examples(t *testing.T) {
 			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
 
 			var typ2 Patient
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestRefreshPostOK_EncodeDecode(t *testing.T) {
+	var typ RefreshPostOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 RefreshPostOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestRefreshPostReq_EncodeDecode(t *testing.T) {
+	var typ RefreshPostReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 RefreshPostReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestRefreshPostReq_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"refresh_token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ RefreshPostReq
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 RefreshPostReq
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestRegDoctorPostReq_EncodeDecode(t *testing.T) {
+	var typ RegDoctorPostReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 RegDoctorPostReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestRegDoctorPostReq_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"description\":\"работает в медицинском центре с 2010 года\",\"email\":\"test@test.com\",\"fullname\":\"Иван Иванов\",\"job\":\"Хирург\",\"org\":\"Медицинский центр\",\"password\":\"qwerty123\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ RegDoctorPostReq
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 RegDoctorPostReq
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestRegPatientPostReq_EncodeDecode(t *testing.T) {
+	var typ RegPatientPostReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 RegPatientPostReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestRegPatientPostReq_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"birth_date\":\"2021-01-01\",\"email\":\"test@test.com\",\"fullname\":\"Иван Иванов\",\"password\":\"qwerty123\",\"policy\":\"1234567890\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ RegPatientPostReq
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 RegPatientPostReq
 			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
 		})
 	}
@@ -907,8 +1083,8 @@ func TestUziStatus_EncodeDecode(t *testing.T) {
 	var typ2 UziStatus
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
-func TestUzisAuthorAuthorIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
-	var typ UzisAuthorAuthorIDGetOKApplicationJSON
+func TestUzisAuthorIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ UzisAuthorIDGetOKApplicationJSON
 	typ.SetFake()
 
 	e := jx.Encoder{}
@@ -916,11 +1092,11 @@ func TestUzisAuthorAuthorIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
 	data := e.Bytes()
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
-	var typ2 UzisAuthorAuthorIDGetOKApplicationJSON
+	var typ2 UzisAuthorIDGetOKApplicationJSON
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
-func TestUzisExternalExternalIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
-	var typ UzisExternalExternalIDGetOKApplicationJSON
+func TestUzisExternalIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ UzisExternalIDGetOKApplicationJSON
 	typ.SetFake()
 
 	e := jx.Encoder{}
@@ -928,6 +1104,6 @@ func TestUzisExternalExternalIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
 	data := e.Bytes()
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
-	var typ2 UzisExternalExternalIDGetOKApplicationJSON
+	var typ2 UzisExternalIDGetOKApplicationJSON
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }

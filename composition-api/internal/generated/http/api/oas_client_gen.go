@@ -17,6 +17,7 @@ import (
 
 	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
+	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/uri"
 )
 
@@ -27,18 +28,24 @@ func trimTrailingSlashes(u *url.URL) {
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
-	// MedCardDoctorDoctorIDPatientPatientIDGet invokes GET /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+	// LoginPost invokes POST /login operation.
+	//
+	// Авторизация.
+	//
+	// POST /login
+	LoginPost(ctx context.Context, request *LoginPostReq) (LoginPostRes, error)
+	// MedCardDoctorIDPatientIDGet invokes GET /med/card/{doctor_id}/{patient_id} operation.
 	//
 	// Получить карту пациента.
 	//
-	// GET /med/card/doctor/{doctor_id}/patient/{patient_id}
-	MedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Context, params MedCardDoctorDoctorIDPatientPatientIDGetParams) (MedCardDoctorDoctorIDPatientPatientIDGetRes, error)
-	// MedCardDoctorDoctorIDPatientPatientIDPatch invokes PATCH /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+	// GET /med/card/{doctor_id}/{patient_id}
+	MedCardDoctorIDPatientIDGet(ctx context.Context, params MedCardDoctorIDPatientIDGetParams) (MedCardDoctorIDPatientIDGetRes, error)
+	// MedCardDoctorIDPatientIDPatch invokes PATCH /med/card/{doctor_id}/{patient_id} operation.
 	//
 	// Обновить карту пациента.
 	//
-	// PATCH /med/card/doctor/{doctor_id}/patient/{patient_id}
-	MedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Context, request *MedCardDoctorDoctorIDPatientPatientIDPatchReq, params MedCardDoctorDoctorIDPatientPatientIDPatchParams) (MedCardDoctorDoctorIDPatientPatientIDPatchRes, error)
+	// PATCH /med/card/{doctor_id}/{patient_id}
+	MedCardDoctorIDPatientIDPatch(ctx context.Context, request *MedCardDoctorIDPatientIDPatchReq, params MedCardDoctorIDPatientIDPatchParams) (MedCardDoctorIDPatientIDPatchRes, error)
 	// MedCardPost invokes POST /med/card operation.
 	//
 	// Создать карту пациента.
@@ -51,12 +58,12 @@ type Invoker interface {
 	//
 	// GET /med/doctor/{id}
 	MedDoctorIDGet(ctx context.Context, params MedDoctorIDGetParams) (MedDoctorIDGetRes, error)
-	// MedDoctorPost invokes POST /med/doctor operation.
+	// MedDoctorIDPatientsGet invokes GET /med/doctor/{id}/patients operation.
 	//
-	// Зарегистрировать врача.
+	// Получить пациентов врача.
 	//
-	// POST /med/doctor
-	MedDoctorPost(ctx context.Context, request *MedDoctorPostReq) (MedDoctorPostRes, error)
+	// GET /med/doctor/{id}/patients
+	MedDoctorIDPatientsGet(ctx context.Context, params MedDoctorIDPatientsGetParams) (MedDoctorIDPatientsGetRes, error)
 	// MedPatientIDGet invokes GET /med/patient/{id} operation.
 	//
 	// Получить пациента.
@@ -75,12 +82,26 @@ type Invoker interface {
 	//
 	// POST /med/patient
 	MedPatientPost(ctx context.Context, request *MedPatientPostReq) (MedPatientPostRes, error)
-	// MedPatientsDoctorIDGet invokes GET /med/patients/{doctor_id} operation.
+	// RefreshPost invokes POST /refresh operation.
 	//
-	// Получить пациентов врача.
+	// Обновить access token.
 	//
-	// GET /med/patients/{doctor_id}
-	MedPatientsDoctorIDGet(ctx context.Context, params MedPatientsDoctorIDGetParams) (MedPatientsDoctorIDGetRes, error)
+	// POST /refresh
+	RefreshPost(ctx context.Context, request *RefreshPostReq) (RefreshPostRes, error)
+	// RegDoctorPost invokes POST /reg/doctor operation.
+	//
+	// Зарегистрировать врача (как пользователя).
+	//
+	// POST /reg/doctor
+	RegDoctorPost(ctx context.Context, request *RegDoctorPostReq) (RegDoctorPostRes, error)
+	// RegPatientPost invokes POST /reg/patient operation.
+	//
+	// Зарегистрировать пациента (как пользователя).
+	// **Сделано под мобилки api**. Врачам регистрировать
+	// пациентов через /med/patient.
+	//
+	// POST /reg/patient
+	RegPatientPost(ctx context.Context, request *RegPatientPostReq) (RegPatientPostRes, error)
 	// UziDevicePost invokes POST /uzi/device operation.
 	//
 	// Добавить uzi аппарат.
@@ -189,23 +210,24 @@ type Invoker interface {
 	//
 	// POST /uzi/segment
 	UziSegmentPost(ctx context.Context, request *UziSegmentPostReq) (UziSegmentPostRes, error)
-	// UzisAuthorAuthorIDGet invokes GET /uzis/author/{author_id} operation.
+	// UzisAuthorIDGet invokes GET /uzis/author/{id} operation.
 	//
 	// Получить узи по id автора.
 	//
-	// GET /uzis/author/{author_id}
-	UzisAuthorAuthorIDGet(ctx context.Context, params UzisAuthorAuthorIDGetParams) (UzisAuthorAuthorIDGetRes, error)
-	// UzisExternalExternalIDGet invokes GET /uzis/external/{external_id} operation.
+	// GET /uzis/author/{id}
+	UzisAuthorIDGet(ctx context.Context, params UzisAuthorIDGetParams) (UzisAuthorIDGetRes, error)
+	// UzisExternalIDGet invokes GET /uzis/external/{id} operation.
 	//
 	// Получить узи по внешнему id.
 	//
-	// GET /uzis/external/{external_id}
-	UzisExternalExternalIDGet(ctx context.Context, params UzisExternalExternalIDGetParams) (UzisExternalExternalIDGetRes, error)
+	// GET /uzis/external/{id}
+	UzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (UzisExternalIDGetRes, error)
 }
 
 // Client implements OAS client.
 type Client struct {
 	serverURL *url.URL
+	sec       SecuritySource
 	baseClient
 }
 type errorHandler interface {
@@ -218,7 +240,7 @@ var _ Handler = struct {
 }{}
 
 // NewClient initializes new Client defined by OAS.
-func NewClient(serverURL string, opts ...ClientOption) (*Client, error) {
+func NewClient(serverURL string, sec SecuritySource, opts ...ClientOption) (*Client, error) {
 	u, err := url.Parse(serverURL)
 	if err != nil {
 		return nil, err
@@ -231,6 +253,7 @@ func NewClient(serverURL string, opts ...ClientOption) (*Client, error) {
 	}
 	return &Client{
 		serverURL:  u,
+		sec:        sec,
 		baseClient: c,
 	}, nil
 }
@@ -250,20 +273,29 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 	return u
 }
 
-// MedCardDoctorDoctorIDPatientPatientIDGet invokes GET /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+// LoginPost invokes POST /login operation.
 //
-// Получить карту пациента.
+// Авторизация.
 //
-// GET /med/card/doctor/{doctor_id}/patient/{patient_id}
-func (c *Client) MedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Context, params MedCardDoctorDoctorIDPatientPatientIDGetParams) (MedCardDoctorDoctorIDPatientPatientIDGetRes, error) {
-	res, err := c.sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx, params)
+// POST /login
+func (c *Client) LoginPost(ctx context.Context, request *LoginPostReq) (LoginPostRes, error) {
+	res, err := c.sendLoginPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Context, params MedCardDoctorDoctorIDPatientPatientIDGetParams) (res MedCardDoctorDoctorIDPatientPatientIDGetRes, err error) {
+func (c *Client) sendLoginPost(ctx context.Context, request *LoginPostReq) (res LoginPostRes, err error) {
+	// Validate request before sending.
+	if err := func() error {
+		if err := request.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return res, errors.Wrap(err, "validate")
+	}
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/med/card/doctor/{doctor_id}/patient/{patient_id}"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/login"),
 	}
 
 	// Run stopwatch.
@@ -278,7 +310,81 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Contex
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, MedCardDoctorDoctorIDPatientPatientIDGetOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, LoginPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/login"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeLoginPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeLoginPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// MedCardDoctorIDPatientIDGet invokes GET /med/card/{doctor_id}/{patient_id} operation.
+//
+// Получить карту пациента.
+//
+// GET /med/card/{doctor_id}/{patient_id}
+func (c *Client) MedCardDoctorIDPatientIDGet(ctx context.Context, params MedCardDoctorIDPatientIDGetParams) (MedCardDoctorIDPatientIDGetRes, error) {
+	res, err := c.sendMedCardDoctorIDPatientIDGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendMedCardDoctorIDPatientIDGet(ctx context.Context, params MedCardDoctorIDPatientIDGetParams) (res MedCardDoctorIDPatientIDGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/med/card/{doctor_id}/{patient_id}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, MedCardDoctorIDPatientIDGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -296,7 +402,7 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Contex
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [4]string
-	pathParts[0] = "/med/card/doctor/"
+	pathParts[0] = "/med/card/"
 	{
 		// Encode "doctor_id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -315,7 +421,7 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Contex
 		}
 		pathParts[1] = encoded
 	}
-	pathParts[2] = "/patient/"
+	pathParts[2] = "/"
 	{
 		// Encode "patient_id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -342,6 +448,39 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Contex
 		return res, errors.Wrap(err, "create request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, MedCardDoctorIDPatientIDGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -350,7 +489,7 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Contex
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeMedCardDoctorDoctorIDPatientPatientIDGetResponse(resp)
+	result, err := decodeMedCardDoctorIDPatientIDGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -358,20 +497,20 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDGet(ctx context.Contex
 	return result, nil
 }
 
-// MedCardDoctorDoctorIDPatientPatientIDPatch invokes PATCH /med/card/doctor/{doctor_id}/patient/{patient_id} operation.
+// MedCardDoctorIDPatientIDPatch invokes PATCH /med/card/{doctor_id}/{patient_id} operation.
 //
 // Обновить карту пациента.
 //
-// PATCH /med/card/doctor/{doctor_id}/patient/{patient_id}
-func (c *Client) MedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Context, request *MedCardDoctorDoctorIDPatientPatientIDPatchReq, params MedCardDoctorDoctorIDPatientPatientIDPatchParams) (MedCardDoctorDoctorIDPatientPatientIDPatchRes, error) {
-	res, err := c.sendMedCardDoctorDoctorIDPatientPatientIDPatch(ctx, request, params)
+// PATCH /med/card/{doctor_id}/{patient_id}
+func (c *Client) MedCardDoctorIDPatientIDPatch(ctx context.Context, request *MedCardDoctorIDPatientIDPatchReq, params MedCardDoctorIDPatientIDPatchParams) (MedCardDoctorIDPatientIDPatchRes, error) {
+	res, err := c.sendMedCardDoctorIDPatientIDPatch(ctx, request, params)
 	return res, err
 }
 
-func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Context, request *MedCardDoctorDoctorIDPatientPatientIDPatchReq, params MedCardDoctorDoctorIDPatientPatientIDPatchParams) (res MedCardDoctorDoctorIDPatientPatientIDPatchRes, err error) {
+func (c *Client) sendMedCardDoctorIDPatientIDPatch(ctx context.Context, request *MedCardDoctorIDPatientIDPatchReq, params MedCardDoctorIDPatientIDPatchParams) (res MedCardDoctorIDPatientIDPatchRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("PATCH"),
-		semconv.HTTPRouteKey.String("/med/card/doctor/{doctor_id}/patient/{patient_id}"),
+		semconv.HTTPRouteKey.String("/med/card/{doctor_id}/{patient_id}"),
 	}
 
 	// Run stopwatch.
@@ -386,7 +525,7 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Cont
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, MedCardDoctorDoctorIDPatientPatientIDPatchOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, MedCardDoctorIDPatientIDPatchOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -404,7 +543,7 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Cont
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [4]string
-	pathParts[0] = "/med/card/doctor/"
+	pathParts[0] = "/med/card/"
 	{
 		// Encode "doctor_id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -423,7 +562,7 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Cont
 		}
 		pathParts[1] = encoded
 	}
-	pathParts[2] = "/patient/"
+	pathParts[2] = "/"
 	{
 		// Encode "patient_id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -449,8 +588,41 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Cont
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeMedCardDoctorDoctorIDPatientPatientIDPatchRequest(request, r); err != nil {
+	if err := encodeMedCardDoctorIDPatientIDPatchRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, MedCardDoctorIDPatientIDPatchOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -461,7 +633,7 @@ func (c *Client) sendMedCardDoctorDoctorIDPatientPatientIDPatch(ctx context.Cont
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeMedCardDoctorDoctorIDPatientPatientIDPatchResponse(resp)
+	result, err := decodeMedCardDoctorIDPatientIDPatchResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -525,6 +697,39 @@ func (c *Client) sendMedCardPost(ctx context.Context, request *Card) (res MedCar
 	}
 	if err := encodeMedCardPostRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, MedCardPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -616,6 +821,39 @@ func (c *Client) sendMedDoctorIDGet(ctx context.Context, params MedDoctorIDGetPa
 		return res, errors.Wrap(err, "create request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, MedDoctorIDGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -632,29 +870,20 @@ func (c *Client) sendMedDoctorIDGet(ctx context.Context, params MedDoctorIDGetPa
 	return result, nil
 }
 
-// MedDoctorPost invokes POST /med/doctor operation.
+// MedDoctorIDPatientsGet invokes GET /med/doctor/{id}/patients operation.
 //
-// Зарегистрировать врача.
+// Получить пациентов врача.
 //
-// POST /med/doctor
-func (c *Client) MedDoctorPost(ctx context.Context, request *MedDoctorPostReq) (MedDoctorPostRes, error) {
-	res, err := c.sendMedDoctorPost(ctx, request)
+// GET /med/doctor/{id}/patients
+func (c *Client) MedDoctorIDPatientsGet(ctx context.Context, params MedDoctorIDPatientsGetParams) (MedDoctorIDPatientsGetRes, error) {
+	res, err := c.sendMedDoctorIDPatientsGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendMedDoctorPost(ctx context.Context, request *MedDoctorPostReq) (res MedDoctorPostRes, err error) {
-	// Validate request before sending.
-	if err := func() error {
-		if err := request.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return res, errors.Wrap(err, "validate")
-	}
+func (c *Client) sendMedDoctorIDPatientsGet(ctx context.Context, params MedDoctorIDPatientsGetParams) (res MedDoctorIDPatientsGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/med/doctor"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/med/doctor/{id}/patients"),
 	}
 
 	// Run stopwatch.
@@ -669,7 +898,7 @@ func (c *Client) sendMedDoctorPost(ctx context.Context, request *MedDoctorPostRe
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, MedDoctorPostOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, MedDoctorIDPatientsGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -686,17 +915,66 @@ func (c *Client) sendMedDoctorPost(ctx context.Context, request *MedDoctorPostRe
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/med/doctor"
+	var pathParts [3]string
+	pathParts[0] = "/med/doctor/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.UUIDToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/patients"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeMedDoctorPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, MedDoctorIDPatientsGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -707,7 +985,7 @@ func (c *Client) sendMedDoctorPost(ctx context.Context, request *MedDoctorPostRe
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeMedDoctorPostResponse(resp)
+	result, err := decodeMedDoctorIDPatientsGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -786,6 +1064,39 @@ func (c *Client) sendMedPatientIDGet(ctx context.Context, params MedPatientIDGet
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, MedPatientIDGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -880,6 +1191,39 @@ func (c *Client) sendMedPatientIDPatch(ctx context.Context, request *MedPatientI
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, MedPatientIDPatchOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -963,6 +1307,39 @@ func (c *Client) sendMedPatientPost(ctx context.Context, request *MedPatientPost
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, MedPatientPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -979,20 +1356,20 @@ func (c *Client) sendMedPatientPost(ctx context.Context, request *MedPatientPost
 	return result, nil
 }
 
-// MedPatientsDoctorIDGet invokes GET /med/patients/{doctor_id} operation.
+// RefreshPost invokes POST /refresh operation.
 //
-// Получить пациентов врача.
+// Обновить access token.
 //
-// GET /med/patients/{doctor_id}
-func (c *Client) MedPatientsDoctorIDGet(ctx context.Context, params MedPatientsDoctorIDGetParams) (MedPatientsDoctorIDGetRes, error) {
-	res, err := c.sendMedPatientsDoctorIDGet(ctx, params)
+// POST /refresh
+func (c *Client) RefreshPost(ctx context.Context, request *RefreshPostReq) (RefreshPostRes, error) {
+	res, err := c.sendRefreshPost(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendMedPatientsDoctorIDGet(ctx context.Context, params MedPatientsDoctorIDGetParams) (res MedPatientsDoctorIDGetRes, err error) {
+func (c *Client) sendRefreshPost(ctx context.Context, request *RefreshPostReq) (res RefreshPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/med/patients/{doctor_id}"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/refresh"),
 	}
 
 	// Run stopwatch.
@@ -1007,7 +1384,7 @@ func (c *Client) sendMedPatientsDoctorIDGet(ctx context.Context, params MedPatie
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, MedPatientsDoctorIDGetOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, RefreshPostOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1024,32 +1401,17 @@ func (c *Client) sendMedPatientsDoctorIDGet(ctx context.Context, params MedPatie
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [2]string
-	pathParts[0] = "/med/patients/"
-	{
-		// Encode "doctor_id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "doctor_id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.UUIDToString(params.DoctorID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
+	var pathParts [1]string
+	pathParts[0] = "/refresh"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeRefreshPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
 	}
 
 	stage = "SendRequest"
@@ -1060,7 +1422,175 @@ func (c *Client) sendMedPatientsDoctorIDGet(ctx context.Context, params MedPatie
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeMedPatientsDoctorIDGetResponse(resp)
+	result, err := decodeRefreshPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// RegDoctorPost invokes POST /reg/doctor operation.
+//
+// Зарегистрировать врача (как пользователя).
+//
+// POST /reg/doctor
+func (c *Client) RegDoctorPost(ctx context.Context, request *RegDoctorPostReq) (RegDoctorPostRes, error) {
+	res, err := c.sendRegDoctorPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendRegDoctorPost(ctx context.Context, request *RegDoctorPostReq) (res RegDoctorPostRes, err error) {
+	// Validate request before sending.
+	if err := func() error {
+		if err := request.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return res, errors.Wrap(err, "validate")
+	}
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/reg/doctor"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, RegDoctorPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/reg/doctor"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeRegDoctorPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeRegDoctorPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// RegPatientPost invokes POST /reg/patient operation.
+//
+// Зарегистрировать пациента (как пользователя).
+// **Сделано под мобилки api**. Врачам регистрировать
+// пациентов через /med/patient.
+//
+// POST /reg/patient
+func (c *Client) RegPatientPost(ctx context.Context, request *RegPatientPostReq) (RegPatientPostRes, error) {
+	res, err := c.sendRegPatientPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendRegPatientPost(ctx context.Context, request *RegPatientPostReq) (res RegPatientPostRes, err error) {
+	// Validate request before sending.
+	if err := func() error {
+		if err := request.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return res, errors.Wrap(err, "validate")
+	}
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/reg/patient"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, RegPatientPostOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/reg/patient"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeRegPatientPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeRegPatientPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -1135,6 +1665,39 @@ func (c *Client) sendUziDevicePost(ctx context.Context, request *UziDevicePostRe
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziDevicePostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -1204,6 +1767,39 @@ func (c *Client) sendUziDevicesGet(ctx context.Context) (res UziDevicesGetRes, e
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziDevicesGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -1295,6 +1891,39 @@ func (c *Client) sendUziIDDelete(ctx context.Context, params UziIDDeleteParams) 
 		return res, errors.Wrap(err, "create request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziIDDeleteOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -1383,6 +2012,39 @@ func (c *Client) sendUziIDEchographicsGet(ctx context.Context, params UziIDEchog
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziIDEchographicsGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -1487,6 +2149,39 @@ func (c *Client) sendUziIDEchographicsPatch(ctx context.Context, request *Echogr
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziIDEchographicsPatchOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -1574,6 +2269,39 @@ func (c *Client) sendUziIDGet(ctx context.Context, params UziIDGetParams) (res U
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziIDGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -1666,6 +2394,39 @@ func (c *Client) sendUziIDImagesGet(ctx context.Context, params UziIDImagesGetPa
 		return res, errors.Wrap(err, "create request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziIDImagesGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -1754,6 +2515,39 @@ func (c *Client) sendUziIDNodesGet(ctx context.Context, params UziIDNodesGetPara
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziIDNodesGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -1858,6 +2652,39 @@ func (c *Client) sendUziIDNodesSegmentsPost(ctx context.Context, request *UziIDN
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziIDNodesSegmentsPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -1959,6 +2786,39 @@ func (c *Client) sendUziIDPatch(ctx context.Context, request *UziIDPatchReq, par
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziIDPatchOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -2049,6 +2909,39 @@ func (c *Client) sendUziImageIDNodesSegmentsGet(ctx context.Context, params UziI
 		return res, errors.Wrap(err, "create request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziImageIDNodesSegmentsGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -2136,6 +3029,39 @@ func (c *Client) sendUziNodesIDDelete(ctx context.Context, params UziNodesIDDele
 	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziNodesIDDeleteOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -2239,6 +3165,39 @@ func (c *Client) sendUziNodesIDPatch(ctx context.Context, request *UziNodesIDPat
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziNodesIDPatchOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -2329,6 +3288,39 @@ func (c *Client) sendUziNodesIDSegmentsGet(ctx context.Context, params UziNodesI
 		return res, errors.Wrap(err, "create request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziNodesIDSegmentsGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -2410,6 +3402,39 @@ func (c *Client) sendUziPost(ctx context.Context, request *UziPostReq) (res UziP
 	}
 	if err := encodeUziPostRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -2499,6 +3524,39 @@ func (c *Client) sendUziSegmentIDDelete(ctx context.Context, params UziSegmentID
 	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziSegmentIDDeleteOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -2602,6 +3660,39 @@ func (c *Client) sendUziSegmentIDPatch(ctx context.Context, request *UziSegmentI
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziSegmentIDPatchOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -2685,6 +3776,39 @@ func (c *Client) sendUziSegmentPost(ctx context.Context, request *UziSegmentPost
 		return res, errors.Wrap(err, "encode request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UziSegmentPostOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -2701,20 +3825,20 @@ func (c *Client) sendUziSegmentPost(ctx context.Context, request *UziSegmentPost
 	return result, nil
 }
 
-// UzisAuthorAuthorIDGet invokes GET /uzis/author/{author_id} operation.
+// UzisAuthorIDGet invokes GET /uzis/author/{id} operation.
 //
 // Получить узи по id автора.
 //
-// GET /uzis/author/{author_id}
-func (c *Client) UzisAuthorAuthorIDGet(ctx context.Context, params UzisAuthorAuthorIDGetParams) (UzisAuthorAuthorIDGetRes, error) {
-	res, err := c.sendUzisAuthorAuthorIDGet(ctx, params)
+// GET /uzis/author/{id}
+func (c *Client) UzisAuthorIDGet(ctx context.Context, params UzisAuthorIDGetParams) (UzisAuthorIDGetRes, error) {
+	res, err := c.sendUzisAuthorIDGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendUzisAuthorAuthorIDGet(ctx context.Context, params UzisAuthorAuthorIDGetParams) (res UzisAuthorAuthorIDGetRes, err error) {
+func (c *Client) sendUzisAuthorIDGet(ctx context.Context, params UzisAuthorIDGetParams) (res UzisAuthorIDGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/uzis/author/{author_id}"),
+		semconv.HTTPRouteKey.String("/uzis/author/{id}"),
 	}
 
 	// Run stopwatch.
@@ -2729,7 +3853,7 @@ func (c *Client) sendUzisAuthorAuthorIDGet(ctx context.Context, params UzisAutho
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, UzisAuthorAuthorIDGetOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, UzisAuthorIDGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2749,14 +3873,14 @@ func (c *Client) sendUzisAuthorAuthorIDGet(ctx context.Context, params UzisAutho
 	var pathParts [2]string
 	pathParts[0] = "/uzis/author/"
 	{
-		// Encode "author_id" parameter.
+		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "author_id",
+			Param:   "id",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.UUIDToString(params.AuthorID))
+			return e.EncodeValue(conv.UUIDToString(params.ID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2774,6 +3898,39 @@ func (c *Client) sendUzisAuthorAuthorIDGet(ctx context.Context, params UzisAutho
 		return res, errors.Wrap(err, "create request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UzisAuthorIDGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -2782,7 +3939,7 @@ func (c *Client) sendUzisAuthorAuthorIDGet(ctx context.Context, params UzisAutho
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeUzisAuthorAuthorIDGetResponse(resp)
+	result, err := decodeUzisAuthorIDGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -2790,20 +3947,20 @@ func (c *Client) sendUzisAuthorAuthorIDGet(ctx context.Context, params UzisAutho
 	return result, nil
 }
 
-// UzisExternalExternalIDGet invokes GET /uzis/external/{external_id} operation.
+// UzisExternalIDGet invokes GET /uzis/external/{id} operation.
 //
 // Получить узи по внешнему id.
 //
-// GET /uzis/external/{external_id}
-func (c *Client) UzisExternalExternalIDGet(ctx context.Context, params UzisExternalExternalIDGetParams) (UzisExternalExternalIDGetRes, error) {
-	res, err := c.sendUzisExternalExternalIDGet(ctx, params)
+// GET /uzis/external/{id}
+func (c *Client) UzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (UzisExternalIDGetRes, error) {
+	res, err := c.sendUzisExternalIDGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendUzisExternalExternalIDGet(ctx context.Context, params UzisExternalExternalIDGetParams) (res UzisExternalExternalIDGetRes, err error) {
+func (c *Client) sendUzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (res UzisExternalIDGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/uzis/external/{external_id}"),
+		semconv.HTTPRouteKey.String("/uzis/external/{id}"),
 	}
 
 	// Run stopwatch.
@@ -2818,7 +3975,7 @@ func (c *Client) sendUzisExternalExternalIDGet(ctx context.Context, params UzisE
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, UzisExternalExternalIDGetOperation,
+	ctx, span := c.cfg.Tracer.Start(ctx, UzisExternalIDGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2838,14 +3995,14 @@ func (c *Client) sendUzisExternalExternalIDGet(ctx context.Context, params UzisE
 	var pathParts [2]string
 	pathParts[0] = "/uzis/external/"
 	{
-		// Encode "external_id" parameter.
+		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "external_id",
+			Param:   "id",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.UUIDToString(params.ExternalID))
+			return e.EncodeValue(conv.UUIDToString(params.ID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2863,6 +4020,39 @@ func (c *Client) sendUzisExternalExternalIDGet(ctx context.Context, params UzisE
 		return res, errors.Wrap(err, "create request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, UzisExternalIDGetOperation, r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -2871,7 +4061,7 @@ func (c *Client) sendUzisExternalExternalIDGet(ctx context.Context, params UzisE
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeUzisExternalExternalIDGetResponse(resp)
+	result, err := decodeUzisExternalIDGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

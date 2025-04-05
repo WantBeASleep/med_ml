@@ -15,7 +15,7 @@ func (h *handler) UziNodesIDSegmentsGet(ctx context.Context, params api.UziNodes
 		return nil, err
 	}
 
-	response, err := mappers.SliceSegment(segments)
+	response, err := mappers.Segment{}.SliceDomain(segments)
 	if err != nil {
 		return nil, err
 	}

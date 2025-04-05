@@ -27,7 +27,6 @@ func (q *repo) UpdateUzi(uzi entity.Uzi) error {
 	return nil
 }
 
-// TODO: статус должен быть enum
 func (q *repo) UpdateUziStatus(id uuid.UUID, status string) error {
 	query := q.QueryBuilder().
 		Update(table).

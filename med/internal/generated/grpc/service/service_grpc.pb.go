@@ -8,6 +8,7 @@ package service
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -37,7 +38,7 @@ const (
 type MedSrvClient interface {
 	RegisterDoctor(ctx context.Context, in *RegisterDoctorIn, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetDoctor(ctx context.Context, in *GetDoctorIn, opts ...grpc.CallOption) (*GetDoctorOut, error)
-	CreatePatient(ctx context.Context, in *CreatePatientIn, opts ...grpc.CallOption) (*CreatePatientOut, error)
+	CreatePatient(ctx context.Context, in *CreatePatientIn, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetPatient(ctx context.Context, in *GetPatientIn, opts ...grpc.CallOption) (*GetPatientOut, error)
 	GetPatientsByDoctorID(ctx context.Context, in *GetPatientsByDoctorIDIn, opts ...grpc.CallOption) (*GetPatientsByDoctorIDOut, error)
 	UpdatePatient(ctx context.Context, in *UpdatePatientIn, opts ...grpc.CallOption) (*UpdatePatientOut, error)
@@ -74,9 +75,9 @@ func (c *medSrvClient) GetDoctor(ctx context.Context, in *GetDoctorIn, opts ...g
 	return out, nil
 }
 
-func (c *medSrvClient) CreatePatient(ctx context.Context, in *CreatePatientIn, opts ...grpc.CallOption) (*CreatePatientOut, error) {
+func (c *medSrvClient) CreatePatient(ctx context.Context, in *CreatePatientIn, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreatePatientOut)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, MedSrv_CreatePatient_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -150,7 +151,7 @@ func (c *medSrvClient) UpdateCard(ctx context.Context, in *UpdateCardIn, opts ..
 type MedSrvServer interface {
 	RegisterDoctor(context.Context, *RegisterDoctorIn) (*emptypb.Empty, error)
 	GetDoctor(context.Context, *GetDoctorIn) (*GetDoctorOut, error)
-	CreatePatient(context.Context, *CreatePatientIn) (*CreatePatientOut, error)
+	CreatePatient(context.Context, *CreatePatientIn) (*emptypb.Empty, error)
 	GetPatient(context.Context, *GetPatientIn) (*GetPatientOut, error)
 	GetPatientsByDoctorID(context.Context, *GetPatientsByDoctorIDIn) (*GetPatientsByDoctorIDOut, error)
 	UpdatePatient(context.Context, *UpdatePatientIn) (*UpdatePatientOut, error)
@@ -173,7 +174,7 @@ func (UnimplementedMedSrvServer) RegisterDoctor(context.Context, *RegisterDoctor
 func (UnimplementedMedSrvServer) GetDoctor(context.Context, *GetDoctorIn) (*GetDoctorOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDoctor not implemented")
 }
-func (UnimplementedMedSrvServer) CreatePatient(context.Context, *CreatePatientIn) (*CreatePatientOut, error) {
+func (UnimplementedMedSrvServer) CreatePatient(context.Context, *CreatePatientIn) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePatient not implemented")
 }
 func (UnimplementedMedSrvServer) GetPatient(context.Context, *GetPatientIn) (*GetPatientOut, error) {

@@ -17,9 +17,11 @@ type Adapter interface {
 	CreateUzi(ctx context.Context, in CreateUziIn) (uuid.UUID, error)
 	GetUziById(ctx context.Context, id uuid.UUID) (domain.Uzi, error)
 	GetUzisByExternalId(ctx context.Context, id uuid.UUID) ([]domain.Uzi, error)
+	GetUzisByAuthor(ctx context.Context, id uuid.UUID) ([]domain.Uzi, error)
 	GetEchographicByUziId(ctx context.Context, id uuid.UUID) (domain.Echographic, error)
 	UpdateUzi(ctx context.Context, in UpdateUziIn) (domain.Uzi, error)
 	UpdateEchographic(ctx context.Context, in domain.Echographic) (domain.Echographic, error)
+	DeleteUzi(ctx context.Context, id uuid.UUID) error
 	// IMAGE
 	GetImagesByUziId(ctx context.Context, id uuid.UUID) ([]domain.Image, error)
 	// NODE
