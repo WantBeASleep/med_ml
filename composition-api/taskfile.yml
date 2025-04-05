@@ -23,7 +23,7 @@ tasks:
           --experimental_allow_proto3_optional
           --go_out . --go-grpc_out .
           {{.ITEM}}
-      - go tool ogen -target internal/generated/http/api -config .ogen.yml -clean api/server.yml
+      - go tool ogen -target internal/generated/http/api -config .ogen.yml -clean cmd/service/server.yml
 
   style:
     cmds:

@@ -5,8 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"mime"
-	"path/filepath"
 
 	ht "github.com/ogen-go/ogen/http"
 
@@ -44,7 +42,7 @@ func (r *fileRepo) GetFile(ctx context.Context, path string) (io.ReadCloser, err
 
 func (r *fileRepo) LoadFile(ctx context.Context, path string, file ht.MultipartFile) error {
 	_, err := r.s3.PutObject(ctx, r.bucket, path, file.File, -1, minio.PutObjectOptions{
-		ContentType: mime.TypeByExtension(filepath.Ext(file.Name)),
+		ContentType: file.Header.Get("Content-Type"),
 	})
 	if err != nil {
 		return err

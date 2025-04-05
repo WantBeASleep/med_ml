@@ -112,7 +112,7 @@ func run() (exitCode int) {
 
 	r := chi.NewRouter()
 	r.Mount("/api/v1/", http.StripPrefix("/api/v1", server))
-	r.Mount("/swagger/", http.StripPrefix("/swagger", swaggerui.Handler(spec)))
+	r.Mount("/docs/", http.StripPrefix("/docs", swaggerui.Handler(spec)))
 
 	slog.Info("start serve", slog.String("url", cfg.App.Url))
 	if err := http.ListenAndServe(cfg.App.Url, r); err != nil {

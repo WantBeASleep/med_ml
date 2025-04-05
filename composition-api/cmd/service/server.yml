@@ -496,12 +496,16 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
+security:
+  - bearerAuth: []
+
 paths:
   /login:
     post:
       summary: авторизация
       tags:
         - auth
+      security: []
       requestBody:
         required: true
         content:
@@ -553,6 +557,7 @@ paths:
       summary: обновить access token
       tags:
         - auth
+      security: []
       requestBody:
         required: true
         content:
@@ -597,6 +602,7 @@ paths:
       summary: зарегистрировать врача (как пользователя)
       tags:
         - reg
+      security: []
       requestBody:
         required: true
         content:
@@ -658,6 +664,7 @@ paths:
       summary: зарегистрировать пациента (как пользователя). **Сделано под мобилки api**. Врачам регистрировать пациентов через /med/patient
       tags:
         - reg
+      security: []
       requestBody:
         required: true
         content:
@@ -715,8 +722,6 @@ paths:
       summary: получить врача
       tags:
         - med
-      security:
-        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -742,8 +747,7 @@ paths:
       summary: зарегистрировать пациента
       tags:
         - med
-      security:
-        - bearerAuth: []
+      
       requestBody:
         required: true
         content:
@@ -798,8 +802,7 @@ paths:
       summary: получить пациента
       tags:
         - med
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -824,8 +827,7 @@ paths:
       summary: обновить пациента
       tags:
         - med
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -864,8 +866,7 @@ paths:
       summary: получить пациентов врача
       tags:
         - med
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -893,8 +894,7 @@ paths:
       summary: создать карту пациента
       tags:
         - med
-      security:
-        - bearerAuth: []
+      
       requestBody:
         required: true
         content:
@@ -914,8 +914,7 @@ paths:
       summary: получить карту пациента
       tags:
         - med
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: doctor_id
           in: path
@@ -947,8 +946,7 @@ paths:
       summary: обновить карту пациента
       tags:
         - med
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: doctor_id
           in: path
@@ -992,8 +990,7 @@ paths:
       summary: загрузить узи на обработку
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       requestBody:
         required: true
         content:
@@ -1043,8 +1040,7 @@ paths:
       summary: получить узи
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1069,8 +1065,7 @@ paths:
       summary: обновить узи
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1114,8 +1109,7 @@ paths:
       summary: удалить узи
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1137,8 +1131,7 @@ paths:
       summary: получить узи по внешнему id
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1166,8 +1159,7 @@ paths:
       summary: получить узи по id автора
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1195,8 +1187,7 @@ paths:
       summary: получить эхографику uzi
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1221,8 +1212,7 @@ paths:
       summary: обновить эхографику
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1254,8 +1244,7 @@ paths:
       summary: добавить uzi аппарат
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       requestBody:
         required: true
         content:
@@ -1296,8 +1285,7 @@ paths:
       summary: получит список uzi апппапапратов
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       responses:
         '200':
           description: uzi аппараты
@@ -1317,8 +1305,7 @@ paths:
       summary: получает списк изображений uzi
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1346,8 +1333,7 @@ paths:
       summary: получит узлы и сегменты на указанном изображении
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1382,8 +1368,7 @@ paths:
       summary: добавить узел с сегментами
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1481,8 +1466,7 @@ paths:
       summary: получить все узлы узи
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1510,8 +1494,7 @@ paths:
       summary: обновить узел
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1568,8 +1551,7 @@ paths:
       description: сегменты узла будут также удалены
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1590,8 +1572,7 @@ paths:
       summary: получить сегменты узла
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1619,8 +1600,7 @@ paths:
       summary: добавить новый сегмент
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       requestBody:
         required: true
         content:
@@ -1672,8 +1652,7 @@ paths:
       summary: обновить сегмент
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1729,8 +1708,7 @@ paths:
       description: если у узла не останется сегментов, он будет **удален**
       tags:
         - uzi
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -1751,8 +1729,7 @@ paths:
       summary: получить кадр узи
       tags:
         - download
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: uzi_id
           in: path

@@ -2,6 +2,7 @@ package uzi
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/AlekSi/pointer"
 
@@ -21,6 +22,11 @@ func (h *handler) UziPost(ctx context.Context, req *api.UziPostReq) (api.UziPost
 	token, err := security.ParseToken(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	contentType := req.File.Header.Get("Content-Type")
+	if contentType != "image/tiff" {
+		return nil, fmt.Errorf("wrong file type, expected: image/tiff, got: %s", contentType)
 	}
 
 	uziID, err := h.services.UziService.Create(ctx, uziSrv.CreateUziArg{
