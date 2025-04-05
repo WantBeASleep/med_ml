@@ -4,6 +4,7 @@ package api
 
 import (
 	"fmt"
+	"io"
 	"time"
 
 	"github.com/go-faster/errors"
@@ -198,6 +199,22 @@ func (s *Doctor) SetDescription(val OptString) {
 }
 
 func (*Doctor) medDoctorIDGetRes() {}
+
+type DownloadUziIDImageIDGetOK struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s DownloadUziIDImageIDGetOK) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*DownloadUziIDImageIDGetOK) downloadUziIDImageIDGetRes() {}
 
 // Эхографическая информация.
 // Ref: #/components/schemas/echographics
@@ -488,6 +505,7 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
+func (*ErrorStatusCode) downloadUziIDImageIDGetRes()       {}
 func (*ErrorStatusCode) loginPostRes()                     {}
 func (*ErrorStatusCode) medCardDoctorIDPatientIDGetRes()   {}
 func (*ErrorStatusCode) medCardDoctorIDPatientIDPatchRes() {}

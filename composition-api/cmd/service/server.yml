@@ -4,7 +4,7 @@ info:
   description: API для сервера med_ml
   version: "v0.0.1"
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8080/api/v1
     description: Local development server
 
 components:
@@ -1741,6 +1741,41 @@ paths:
       responses:
         '200':
           description: сегмент удален
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+  
+  /download/{uzi_id}/{image_id}:
+    get:
+      summary: получить кадр узи
+      tags:
+        - download
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: uzi_id
+          in: path
+          required: true
+          description: id узи
+          schema:
+            type: string
+            format: uuid
+        - name: image_id
+          in: path
+          required: true
+          description: id кадра
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: кадр узи
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
         '500':
           $ref: "#/components/responses/error"
         default:

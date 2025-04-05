@@ -61,6 +61,61 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'd': // Prefix: "download/"
+
+				if l := len("download/"); len(elem) >= l && elem[0:l] == "download/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "uzi_id"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "image_id"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[1] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleDownloadUziIDImageIDGetRequest([2]string{
+								args[0],
+								args[1],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+				}
+
 			case 'l': // Prefix: "login"
 
 				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
@@ -921,6 +976,62 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'd': // Prefix: "download/"
+
+				if l := len("download/"); len(elem) >= l && elem[0:l] == "download/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "uzi_id"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "image_id"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[1] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = DownloadUziIDImageIDGetOperation
+							r.summary = "получить кадр узи"
+							r.operationID = ""
+							r.pathPattern = "/download/{uzi_id}/{image_id}"
+							r.args = args
+							r.count = 2
+							return r, true
+						default:
+							return
+						}
+					}
+
+				}
+
 			case 'l': // Prefix: "login"
 
 				if l := len("login"); len(elem) >= l && elem[0:l] == "login" {

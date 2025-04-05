@@ -7,6 +7,7 @@ import (
 	"composition-api/internal/services/card"
 	"composition-api/internal/services/device"
 	"composition-api/internal/services/doctor"
+	"composition-api/internal/services/download"
 	"composition-api/internal/services/image"
 	"composition-api/internal/services/node"
 	"composition-api/internal/services/node_segment"
@@ -29,6 +30,7 @@ type Services struct {
 	DoctorService      doctor.Service
 	PatientService     patient.Service
 	RegisterService    register.Service
+	DownloadService    download.Service
 }
 
 func New(
@@ -47,6 +49,7 @@ func New(
 	doctorService := doctor.New(adapters)
 	patientService := patient.New(adapters)
 	registerService := register.New(adapters)
+	downloadService := download.New(dao)
 
 	return &Services{
 		DeviceService:      deviceService,
@@ -60,5 +63,6 @@ func New(
 		DoctorService:      doctorService,
 		PatientService:     patientService,
 		RegisterService:    registerService,
+		DownloadService:    downloadService,
 	}
 }

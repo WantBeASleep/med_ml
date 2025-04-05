@@ -13,6 +13,15 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// DownloadUziIDImageIDGet implements GET /download/{uzi_id}/{image_id} operation.
+//
+// Получить кадр узи.
+//
+// GET /download/{uzi_id}/{image_id}
+func (UnimplementedHandler) DownloadUziIDImageIDGet(ctx context.Context, params DownloadUziIDImageIDGetParams) (r DownloadUziIDImageIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // LoginPost implements POST /login operation.
 //
 // Авторизация.

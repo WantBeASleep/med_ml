@@ -16,6 +16,126 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// DownloadUziIDImageIDGetParams is parameters of GET /download/{uzi_id}/{image_id} operation.
+type DownloadUziIDImageIDGetParams struct {
+	// Id узи.
+	UziID uuid.UUID
+	// Id кадра.
+	ImageID uuid.UUID
+}
+
+func unpackDownloadUziIDImageIDGetParams(packed middleware.Parameters) (params DownloadUziIDImageIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "uzi_id",
+			In:   "path",
+		}
+		params.UziID = packed[key].(uuid.UUID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "image_id",
+			In:   "path",
+		}
+		params.ImageID = packed[key].(uuid.UUID)
+	}
+	return params
+}
+
+func decodeDownloadUziIDImageIDGetParams(args [2]string, argsEscaped bool, r *http.Request) (params DownloadUziIDImageIDGetParams, _ error) {
+	// Decode path: uzi_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "uzi_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.UziID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "uzi_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: image_id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "image_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToUUID(val)
+				if err != nil {
+					return err
+				}
+
+				params.ImageID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "image_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // MedCardDoctorIDPatientIDGetParams is parameters of GET /med/card/{doctor_id}/{patient_id} operation.
 type MedCardDoctorIDPatientIDGetParams struct {
 	// Id врача.

@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// DownloadUziIDImageIDGet implements GET /download/{uzi_id}/{image_id} operation.
+	//
+	// Получить кадр узи.
+	//
+	// GET /download/{uzi_id}/{image_id}
+	DownloadUziIDImageIDGet(ctx context.Context, params DownloadUziIDImageIDGetParams) (DownloadUziIDImageIDGetRes, error)
 	// LoginPost implements POST /login operation.
 	//
 	// Авторизация.

@@ -1,12 +1,15 @@
 package main
 
 import (
+	_ "embed"
 	"log/slog"
 	"net/http"
 	"os"
 
 	"github.com/IBM/sarama"
 	loglib "github.com/WantBeASleep/med_ml_lib/observer/log"
+	"github.com/flowchartsman/swaggerui"
+	"github.com/go-chi/chi/v5"
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -22,6 +25,9 @@ import (
 	"composition-api/internal/server/security"
 	"composition-api/internal/services"
 )
+
+//go:embed server.yml
+var spec []byte
 
 const (
 	successExitCode = 0
@@ -104,8 +110,12 @@ func run() (exitCode int) {
 		return failExitCode
 	}
 
+	r := chi.NewRouter()
+	r.Mount("/api/v1/", http.StripPrefix("/api/v1", server))
+	r.Mount("/swagger/", http.StripPrefix("/swagger", swaggerui.Handler(spec)))
+
 	slog.Info("start serve", slog.String("url", cfg.App.Url))
-	if err := http.ListenAndServe(cfg.App.Url, server); err != nil {
+	if err := http.ListenAndServe(cfg.App.Url, r); err != nil {
 		slog.Error("listen and serve", slog.Any("err", err))
 		return failExitCode
 	}
