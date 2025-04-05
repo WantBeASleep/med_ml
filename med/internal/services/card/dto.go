@@ -4,11 +4,11 @@ import (
 	"med/internal/domain"
 )
 
-type UpdateCard struct {
+type UpdateCardArg struct {
 	Diagnosis *string
 }
 
-func (u UpdateCard) Update(d *domain.Card) {
+func (u UpdateCardArg) Update(d *domain.Card) {
 	if u.Diagnosis != nil {
 		d.Diagnosis = u.Diagnosis
 	}

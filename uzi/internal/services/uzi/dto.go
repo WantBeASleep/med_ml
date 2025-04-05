@@ -1,15 +1,26 @@
 package uzi
 
 import (
+	"github.com/google/uuid"
+
 	"uzi/internal/domain"
 )
 
-type UpdateUzi struct {
-	Projection *string
+type CreateUziArg struct {
+	Projection  domain.UziProjection
+	ExternalID  uuid.UUID
+	Author      uuid.UUID
+	DeviceID    int
+	Description *string
+}
+
+type UpdateUziArg struct {
+	Id         uuid.UUID
+	Projection *domain.UziProjection
 	Checked    *bool
 }
 
-func (u UpdateUzi) Update(d *domain.Uzi) {
+func (u UpdateUziArg) UpdateDomain(d *domain.Uzi) {
 	if u.Projection != nil {
 		d.Projection = *u.Projection
 	}
@@ -18,7 +29,8 @@ func (u UpdateUzi) Update(d *domain.Uzi) {
 	}
 }
 
-type UpdateEchographic struct {
+type UpdateEchographicArg struct {
+	Id              uuid.UUID
 	Contors         *string
 	LeftLobeLength  *float64
 	LeftLobeWidth   *float64
@@ -39,8 +51,7 @@ type UpdateEchographic struct {
 	Conclusion      *string
 }
 
-// TODO: пойти написать рефлексию
-func (u UpdateEchographic) Update(d *domain.Echographic) {
+func (u UpdateEchographicArg) UpdateDomain(d *domain.Echographic) {
 	if u.Contors != nil {
 		d.Contors = u.Contors
 	}

@@ -26,7 +26,7 @@ class EventsYo:
             if msg is None:
                 continue  # Если сообщения нет, то пропускаем итерацию
 
-            uzi_splitted_event = pb.uziSplitted()
+            uzi_splitted_event = pb.UziSplitted()
             uzi_splitted_event.ParseFromString(msg.value())
 
             print("UZI ID: ", uzi_splitted_event.uzi_id)

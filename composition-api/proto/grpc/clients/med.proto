@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+option go_package = "internal/generated/grpc/clients/med";
+
+import "google/protobuf/empty.proto";
+
+service MedSrv {
+  rpc registerDoctor(RegisterDoctorIn) returns (google.protobuf.Empty);
+  rpc getDoctor(GetDoctorIn) returns (GetDoctorOut);
+
+  rpc createPatient(CreatePatientIn) returns (google.protobuf.Empty);
+  rpc getPatient(GetPatientIn) returns (GetPatientOut);
+  rpc getPatientsByDoctorID(GetPatientsByDoctorIDIn) returns (GetPatientsByDoctorIDOut);
+  rpc updatePatient(UpdatePatientIn) returns (UpdatePatientOut);
+
+  rpc createCard(CreateCardIn) returns (google.protobuf.Empty);
+  rpc getCard(GetCardIn) returns (GetCardOut);
+  rpc updateCard(UpdateCardIn) returns (UpdateCardOut);
+}
+
+message Doctor {
+  string id = 100;
+  string fullname = 200;
+  string org = 300;
+  string job = 400;
+  optional string description = 500;
+}
+
+message RegisterDoctorIn { Doctor doctor = 100; }
+
+message GetDoctorIn { string id = 100; }
+
+message GetDoctorOut { Doctor doctor = 100; }
+
+message Patient {
+  string id = 100;
+  string fullname = 200;
+  string email = 300;
+  string policy = 400;
+  bool active = 500;
+  bool malignancy = 600;
+  string birth_date = 700; // RFC3339
+  optional string last_uzi_date = 800; // RFC3339
+}
+
+message CreatePatientIn {
+  string id = 100;
+  string fullname = 200;
+  string email = 300;
+  string policy = 400;
+  bool active = 500;
+  bool malignancy = 600;
+  string birth_date = 700; // RFC3339
+}
+
+message GetPatientIn { string id = 100; }
+
+message GetPatientOut { Patient patient = 100; }
+
+message GetPatientsByDoctorIDIn { string id = 100; }
+
+message GetPatientsByDoctorIDOut { repeated Patient patients = 100; }
+
+message UpdatePatientIn {
+  string id = 100;
+  optional bool active = 300;
+  optional bool malignancy = 400;
+  optional string last_uzi_date = 500; // RFC3339
+}
+
+message UpdatePatientOut { Patient patient = 100; }
+
+message Card {
+  string doctor_id = 100;
+  string patient_id = 200;
+  optional string diagnosis = 300;
+}
+
+message CreateCardIn { Card card = 100; }
+
+message CreateCardOut { Card card = 100; }
+
+message GetCardIn {
+  string doctor_id = 100;
+  string patient_id = 200;
+}
+
+message GetCardOut { Card card = 100; }
+
+message UpdateCardIn { Card card = 100; }
+
+message UpdateCardOut { Card card = 100; }

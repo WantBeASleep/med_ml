@@ -15,17 +15,10 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 
 	"med/internal/repository"
-
-	cardsrv "med/internal/services/card"
-	doctorsrv "med/internal/services/doctor"
-	patientsrv "med/internal/services/patient"
+	"med/internal/server"
+	"med/internal/services"
 
 	pb "med/internal/generated/grpc/service"
-	grpchandler "med/internal/grpc"
-
-	cardhandler "med/internal/grpc/card"
-	doctorhandler "med/internal/grpc/doctor"
-	patienthandler "med/internal/grpc/patient"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -64,19 +57,8 @@ func run() (exitCode int) {
 
 	dao := repository.NewRepository(db)
 
-	patientSrv := patientsrv.New(dao)
-	doctorSrv := doctorsrv.New(dao)
-	cardSrv := cardsrv.New(dao)
-
-	patientHandler := patienthandler.New(patientSrv)
-	doctorHandler := doctorhandler.New(doctorSrv)
-	cardHandler := cardhandler.New(cardSrv)
-
-	handler := grpchandler.New(
-		patientHandler,
-		doctorHandler,
-		cardHandler,
-	)
+	service := services.NewService(dao)
+	handler := server.New(service)
 
 	server := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(

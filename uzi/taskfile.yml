@@ -5,7 +5,6 @@ vars:
 
 dotenv: [".env.example"]
 #TODO: написать проверки в коде при подключении ко всему (к S3 и т.д)
-#TODO: универсализировать TaskFile, вынести все на верхний уровень
 tasks:
   bin-deps:
     cmds:
@@ -14,20 +13,16 @@ tasks:
 
   codegen:
     vars:
-      proto_libs:
-        sh: find {{.VENDOR_PROTOGEN}} -mindepth 1 -maxdepth 1 -type d | xargs echo
       proto_files:
         sh: find proto -type f -name "*.proto" | xargs echo
 
     cmds:
-      - task: bin-deps
+      - rm -rf internal/generated
       - for: { var: proto_files }
         cmd: >
           protoc
-          -I {{dir .ITEM}}
           --plugin=protoc-gen-go=$(pwd)/bin/protoc-gen-go
           --plugin=protoc-gen-go-grpc=$(pwd)/bin/protoc-gen-go-grpc
-          {{range $lib := splitList " " .proto_libs}}-I {{$lib}} {{end}}
           --experimental_allow_proto3_optional
           --go_out . --go-grpc_out .
           {{.ITEM}}
@@ -47,7 +42,6 @@ tasks:
       - task: build
       - ./bin/service
   
-  # TODO: перевести все на go tool go 1.24
   e2e:
     cmds:
       - go test -v -count=1 ./tests/e2e/... -tags=e2e

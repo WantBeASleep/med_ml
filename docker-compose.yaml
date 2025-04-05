@@ -137,7 +137,7 @@ services:
     env_file:
       - ./auth/.env-docker
     ports:
-      - 50050:50055
+      - 50040:50055
     depends_on:
       postgres:
         condition: service_healthy
@@ -152,7 +152,7 @@ services:
     env_file:
       - ./med/.env-docker
     ports:
-      - 50051:50055
+      - 50050:50055
     depends_on:
       postgres:
         condition: service_healthy
@@ -167,7 +167,7 @@ services:
     env_file:
       - ./uzi/.env-docker
     ports:
-      - 50052:50055
+      - 50060:50055
     depends_on:
       postgres:
         condition: service_healthy
@@ -176,15 +176,15 @@ services:
     profiles:
       - app
     
-  gateway:
-    container_name: gateway
+  composition_api:
+    container_name: composition_api
     build:
-      context: ./gateway/
+      context: ./composition-api/
       dockerfile: Dockerfile
     env_file:
-      - ./gateway/.env-docker
+      - ./composition-api/.env-docker
     ports:
-      - 8080:8080
+      - 8080:50055
     depends_on:
       - redpanda-0
       - uzi_service

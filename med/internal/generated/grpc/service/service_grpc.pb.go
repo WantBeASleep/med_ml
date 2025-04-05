@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: service.proto
+// source: proto/grpc/service.proto
 
 package service
 
@@ -21,16 +21,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	MedSrv_RegisterDoctor_FullMethodName    = "/MedSrv/registerDoctor"
-	MedSrv_GetDoctor_FullMethodName         = "/MedSrv/getDoctor"
-	MedSrv_UpdateDoctor_FullMethodName      = "/MedSrv/updateDoctor"
-	MedSrv_CreatePatient_FullMethodName     = "/MedSrv/createPatient"
-	MedSrv_GetPatient_FullMethodName        = "/MedSrv/getPatient"
-	MedSrv_GetDoctorPatients_FullMethodName = "/MedSrv/getDoctorPatients"
-	MedSrv_UpdatePatient_FullMethodName     = "/MedSrv/updatePatient"
-	MedSrv_CreateCard_FullMethodName        = "/MedSrv/createCard"
-	MedSrv_GetCard_FullMethodName           = "/MedSrv/getCard"
-	MedSrv_UpdateCard_FullMethodName        = "/MedSrv/updateCard"
+	MedSrv_RegisterDoctor_FullMethodName        = "/MedSrv/registerDoctor"
+	MedSrv_GetDoctor_FullMethodName             = "/MedSrv/getDoctor"
+	MedSrv_CreatePatient_FullMethodName         = "/MedSrv/createPatient"
+	MedSrv_GetPatient_FullMethodName            = "/MedSrv/getPatient"
+	MedSrv_GetPatientsByDoctorID_FullMethodName = "/MedSrv/getPatientsByDoctorID"
+	MedSrv_UpdatePatient_FullMethodName         = "/MedSrv/updatePatient"
+	MedSrv_CreateCard_FullMethodName            = "/MedSrv/createCard"
+	MedSrv_GetCard_FullMethodName               = "/MedSrv/getCard"
+	MedSrv_UpdateCard_FullMethodName            = "/MedSrv/updateCard"
 )
 
 // MedSrvClient is the client API for MedSrv service.
@@ -39,10 +38,9 @@ const (
 type MedSrvClient interface {
 	RegisterDoctor(ctx context.Context, in *RegisterDoctorIn, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetDoctor(ctx context.Context, in *GetDoctorIn, opts ...grpc.CallOption) (*GetDoctorOut, error)
-	UpdateDoctor(ctx context.Context, in *UpdateDoctorIn, opts ...grpc.CallOption) (*UpdateDoctorOut, error)
-	CreatePatient(ctx context.Context, in *CreatePatientIn, opts ...grpc.CallOption) (*CreatePatientOut, error)
+	CreatePatient(ctx context.Context, in *CreatePatientIn, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetPatient(ctx context.Context, in *GetPatientIn, opts ...grpc.CallOption) (*GetPatientOut, error)
-	GetDoctorPatients(ctx context.Context, in *GetDoctorPatientsIn, opts ...grpc.CallOption) (*GetDoctorPatientsOut, error)
+	GetPatientsByDoctorID(ctx context.Context, in *GetPatientsByDoctorIDIn, opts ...grpc.CallOption) (*GetPatientsByDoctorIDOut, error)
 	UpdatePatient(ctx context.Context, in *UpdatePatientIn, opts ...grpc.CallOption) (*UpdatePatientOut, error)
 	CreateCard(ctx context.Context, in *CreateCardIn, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetCard(ctx context.Context, in *GetCardIn, opts ...grpc.CallOption) (*GetCardOut, error)
@@ -77,19 +75,9 @@ func (c *medSrvClient) GetDoctor(ctx context.Context, in *GetDoctorIn, opts ...g
 	return out, nil
 }
 
-func (c *medSrvClient) UpdateDoctor(ctx context.Context, in *UpdateDoctorIn, opts ...grpc.CallOption) (*UpdateDoctorOut, error) {
+func (c *medSrvClient) CreatePatient(ctx context.Context, in *CreatePatientIn, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateDoctorOut)
-	err := c.cc.Invoke(ctx, MedSrv_UpdateDoctor_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *medSrvClient) CreatePatient(ctx context.Context, in *CreatePatientIn, opts ...grpc.CallOption) (*CreatePatientOut, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreatePatientOut)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, MedSrv_CreatePatient_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -107,10 +95,10 @@ func (c *medSrvClient) GetPatient(ctx context.Context, in *GetPatientIn, opts ..
 	return out, nil
 }
 
-func (c *medSrvClient) GetDoctorPatients(ctx context.Context, in *GetDoctorPatientsIn, opts ...grpc.CallOption) (*GetDoctorPatientsOut, error) {
+func (c *medSrvClient) GetPatientsByDoctorID(ctx context.Context, in *GetPatientsByDoctorIDIn, opts ...grpc.CallOption) (*GetPatientsByDoctorIDOut, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetDoctorPatientsOut)
-	err := c.cc.Invoke(ctx, MedSrv_GetDoctorPatients_FullMethodName, in, out, cOpts...)
+	out := new(GetPatientsByDoctorIDOut)
+	err := c.cc.Invoke(ctx, MedSrv_GetPatientsByDoctorID_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -163,10 +151,9 @@ func (c *medSrvClient) UpdateCard(ctx context.Context, in *UpdateCardIn, opts ..
 type MedSrvServer interface {
 	RegisterDoctor(context.Context, *RegisterDoctorIn) (*emptypb.Empty, error)
 	GetDoctor(context.Context, *GetDoctorIn) (*GetDoctorOut, error)
-	UpdateDoctor(context.Context, *UpdateDoctorIn) (*UpdateDoctorOut, error)
-	CreatePatient(context.Context, *CreatePatientIn) (*CreatePatientOut, error)
+	CreatePatient(context.Context, *CreatePatientIn) (*emptypb.Empty, error)
 	GetPatient(context.Context, *GetPatientIn) (*GetPatientOut, error)
-	GetDoctorPatients(context.Context, *GetDoctorPatientsIn) (*GetDoctorPatientsOut, error)
+	GetPatientsByDoctorID(context.Context, *GetPatientsByDoctorIDIn) (*GetPatientsByDoctorIDOut, error)
 	UpdatePatient(context.Context, *UpdatePatientIn) (*UpdatePatientOut, error)
 	CreateCard(context.Context, *CreateCardIn) (*emptypb.Empty, error)
 	GetCard(context.Context, *GetCardIn) (*GetCardOut, error)
@@ -187,17 +174,14 @@ func (UnimplementedMedSrvServer) RegisterDoctor(context.Context, *RegisterDoctor
 func (UnimplementedMedSrvServer) GetDoctor(context.Context, *GetDoctorIn) (*GetDoctorOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDoctor not implemented")
 }
-func (UnimplementedMedSrvServer) UpdateDoctor(context.Context, *UpdateDoctorIn) (*UpdateDoctorOut, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateDoctor not implemented")
-}
-func (UnimplementedMedSrvServer) CreatePatient(context.Context, *CreatePatientIn) (*CreatePatientOut, error) {
+func (UnimplementedMedSrvServer) CreatePatient(context.Context, *CreatePatientIn) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePatient not implemented")
 }
 func (UnimplementedMedSrvServer) GetPatient(context.Context, *GetPatientIn) (*GetPatientOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPatient not implemented")
 }
-func (UnimplementedMedSrvServer) GetDoctorPatients(context.Context, *GetDoctorPatientsIn) (*GetDoctorPatientsOut, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDoctorPatients not implemented")
+func (UnimplementedMedSrvServer) GetPatientsByDoctorID(context.Context, *GetPatientsByDoctorIDIn) (*GetPatientsByDoctorIDOut, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPatientsByDoctorID not implemented")
 }
 func (UnimplementedMedSrvServer) UpdatePatient(context.Context, *UpdatePatientIn) (*UpdatePatientOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePatient not implemented")
@@ -268,24 +252,6 @@ func _MedSrv_GetDoctor_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MedSrv_UpdateDoctor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateDoctorIn)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MedSrvServer).UpdateDoctor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MedSrv_UpdateDoctor_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MedSrvServer).UpdateDoctor(ctx, req.(*UpdateDoctorIn))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _MedSrv_CreatePatient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreatePatientIn)
 	if err := dec(in); err != nil {
@@ -322,20 +288,20 @@ func _MedSrv_GetPatient_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MedSrv_GetDoctorPatients_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetDoctorPatientsIn)
+func _MedSrv_GetPatientsByDoctorID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPatientsByDoctorIDIn)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MedSrvServer).GetDoctorPatients(ctx, in)
+		return srv.(MedSrvServer).GetPatientsByDoctorID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MedSrv_GetDoctorPatients_FullMethodName,
+		FullMethod: MedSrv_GetPatientsByDoctorID_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MedSrvServer).GetDoctorPatients(ctx, req.(*GetDoctorPatientsIn))
+		return srv.(MedSrvServer).GetPatientsByDoctorID(ctx, req.(*GetPatientsByDoctorIDIn))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -428,10 +394,6 @@ var MedSrv_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _MedSrv_GetDoctor_Handler,
 		},
 		{
-			MethodName: "updateDoctor",
-			Handler:    _MedSrv_UpdateDoctor_Handler,
-		},
-		{
 			MethodName: "createPatient",
 			Handler:    _MedSrv_CreatePatient_Handler,
 		},
@@ -440,8 +402,8 @@ var MedSrv_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _MedSrv_GetPatient_Handler,
 		},
 		{
-			MethodName: "getDoctorPatients",
-			Handler:    _MedSrv_GetDoctorPatients_Handler,
+			MethodName: "getPatientsByDoctorID",
+			Handler:    _MedSrv_GetPatientsByDoctorID_Handler,
 		},
 		{
 			MethodName: "updatePatient",
@@ -461,5 +423,5 @@ var MedSrv_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "service.proto",
+	Metadata: "proto/grpc/service.proto",
 }

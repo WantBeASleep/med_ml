@@ -3,9 +3,11 @@ module uzi
 go 1.24.0
 
 require (
+	github.com/AlekSi/pointer v1.2.0
 	github.com/IBM/sarama v1.45.0
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/WantBeASleep/med_ml_lib v1.0.8
+	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/chai2010/tiff v0.0.0-20211005095045-4ec2aa243943
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
@@ -14,7 +16,6 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/minio/minio-go/v7 v7.0.86
 	github.com/stretchr/testify v1.10.0
-	github.com/thanhpk/randstr v1.0.6
 	google.golang.org/grpc v1.70.0
 	google.golang.org/protobuf v1.36.5
 )
