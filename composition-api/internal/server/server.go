@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"composition-api/internal/server/billing"
+
 	api "composition-api/internal/generated/http/api"
 	"composition-api/internal/server/auth"
 	"composition-api/internal/server/download"
@@ -19,6 +21,7 @@ type server struct {
 	med.MedRoute
 	register.RegisterRoute
 	download.DownloadRoute
+	billing.BillingRoute
 }
 
 func New(services *services.Services) api.Handler {
@@ -27,6 +30,7 @@ func New(services *services.Services) api.Handler {
 	medRoute := med.NewMedRoute(services)
 	registerRoute := register.NewRegisterRoute(services)
 	downloadRoute := download.NewDownloadRoute(services)
+	billingRoute := billing.NewBillingRoute(services)
 
 	return &server{
 		UziRoute:      uziRoute,
@@ -34,6 +38,7 @@ func New(services *services.Services) api.Handler {
 		MedRoute:      medRoute,
 		RegisterRoute: registerRoute,
 		DownloadRoute: downloadRoute,
+		BillingRoute:  billingRoute,
 	}
 }
 

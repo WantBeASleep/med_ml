@@ -6,7 +6,10 @@ import (
 	"net/http"
 	"os"
 
+	"composition-api/internal/dbus/producers"
+
 	"github.com/IBM/sarama"
+
 	loglib "github.com/WantBeASleep/med_ml_lib/observer/log"
 	"github.com/flowchartsman/swaggerui"
 	"github.com/go-chi/chi/v5"
@@ -18,7 +21,6 @@ import (
 
 	"composition-api/internal/adapters"
 	"composition-api/internal/config"
-	"composition-api/internal/dbus/producers"
 	api "composition-api/internal/generated/http/api"
 	"composition-api/internal/repository"
 	"composition-api/internal/server"
@@ -73,7 +75,12 @@ func run() (exitCode int) {
 		return failExitCode
 	}
 
-	adapters := adapters.NewAdapters(uziConn, authConn, medConn)
+	billingConn, err := grpc.NewClient(
+		cfg.Adapters.BillingUrl,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+
+	adapters := adapters.NewAdapters(uziConn, authConn, medConn, billingConn)
 
 	// infra
 	s3Client, err := minio.New(cfg.S3.Endpoint, &minio.Options{
