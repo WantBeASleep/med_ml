@@ -514,9 +514,15 @@ func (*ErrorStatusCode) medDoctorIDGetRes()                {}
 func (*ErrorStatusCode) medPatientIDGetRes()               {}
 func (*ErrorStatusCode) medPatientIDPatchRes()             {}
 func (*ErrorStatusCode) medPatientPostRes()                {}
+func (*ErrorStatusCode) paymentProvidersGetRes()           {}
 func (*ErrorStatusCode) refreshPostRes()                   {}
 func (*ErrorStatusCode) regDoctorPostRes()                 {}
 func (*ErrorStatusCode) regPatientPostRes()                {}
+func (*ErrorStatusCode) subscriptionsCheckActiveGetRes()   {}
+func (*ErrorStatusCode) subscriptionsGetActiveGetRes()     {}
+func (*ErrorStatusCode) subscriptionsPurchasePostRes()     {}
+func (*ErrorStatusCode) tariffPlansGetRes()                {}
+func (*ErrorStatusCode) tariffPlansIDGetRes()              {}
 func (*ErrorStatusCode) uziDevicePostRes()                 {}
 func (*ErrorStatusCode) uziDevicesGetRes()                 {}
 func (*ErrorStatusCode) uziIDDeleteRes()                   {}
@@ -537,6 +543,7 @@ func (*ErrorStatusCode) uziSegmentIDPatchRes()             {}
 func (*ErrorStatusCode) uziSegmentPostRes()                {}
 func (*ErrorStatusCode) uzisAuthorIDGetRes()               {}
 func (*ErrorStatusCode) uzisExternalIDGetRes()             {}
+func (*ErrorStatusCode) yookassaWebhooksPostRes()          {}
 
 // Изображение.
 // Ref: #/components/schemas/image
@@ -1008,6 +1015,52 @@ func (o OptDate) Or(d time.Time) time.Time {
 	return d
 }
 
+// NewOptDateTime returns new OptDateTime with value set to v.
+func NewOptDateTime(v time.Time) OptDateTime {
+	return OptDateTime{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDateTime is optional time.Time.
+type OptDateTime struct {
+	Value time.Time
+	Set   bool
+}
+
+// IsSet returns true if OptDateTime was set.
+func (o OptDateTime) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDateTime) Reset() {
+	var v time.Time
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDateTime) SetTo(v time.Time) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDateTime) Get() (v time.Time, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptFloat64 returns new OptFloat64 with value set to v.
 func NewOptFloat64(v float64) OptFloat64 {
 	return OptFloat64{
@@ -1226,6 +1279,52 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
+// NewOptUUID returns new OptUUID with value set to v.
+func NewOptUUID(v uuid.UUID) OptUUID {
+	return OptUUID{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUUID is optional uuid.UUID.
+type OptUUID struct {
+	Value uuid.UUID
+	Set   bool
+}
+
+// IsSet returns true if OptUUID was set.
+func (o OptUUID) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUUID) Reset() {
+	var v uuid.UUID
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUUID) SetTo(v uuid.UUID) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUUID) Get() (v uuid.UUID, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUUID) Or(d uuid.UUID) uuid.UUID {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptUziIDPatchReqProjection returns new OptUziIDPatchReqProjection with value set to v.
 func NewOptUziIDPatchReqProjection(v UziIDPatchReqProjection) OptUziIDPatchReqProjection {
 	return OptUziIDPatchReqProjection{
@@ -1266,6 +1365,190 @@ func (o OptUziIDPatchReqProjection) Get() (v UziIDPatchReqProjection, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptUziIDPatchReqProjection) Or(d UziIDPatchReqProjection) UziIDPatchReqProjection {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptYookassaWebhookRequestObject returns new OptYookassaWebhookRequestObject with value set to v.
+func NewOptYookassaWebhookRequestObject(v YookassaWebhookRequestObject) OptYookassaWebhookRequestObject {
+	return OptYookassaWebhookRequestObject{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptYookassaWebhookRequestObject is optional YookassaWebhookRequestObject.
+type OptYookassaWebhookRequestObject struct {
+	Value YookassaWebhookRequestObject
+	Set   bool
+}
+
+// IsSet returns true if OptYookassaWebhookRequestObject was set.
+func (o OptYookassaWebhookRequestObject) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptYookassaWebhookRequestObject) Reset() {
+	var v YookassaWebhookRequestObject
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptYookassaWebhookRequestObject) SetTo(v YookassaWebhookRequestObject) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptYookassaWebhookRequestObject) Get() (v YookassaWebhookRequestObject, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptYookassaWebhookRequestObject) Or(d YookassaWebhookRequestObject) YookassaWebhookRequestObject {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptYookassaWebhookRequestObjectAmount returns new OptYookassaWebhookRequestObjectAmount with value set to v.
+func NewOptYookassaWebhookRequestObjectAmount(v YookassaWebhookRequestObjectAmount) OptYookassaWebhookRequestObjectAmount {
+	return OptYookassaWebhookRequestObjectAmount{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptYookassaWebhookRequestObjectAmount is optional YookassaWebhookRequestObjectAmount.
+type OptYookassaWebhookRequestObjectAmount struct {
+	Value YookassaWebhookRequestObjectAmount
+	Set   bool
+}
+
+// IsSet returns true if OptYookassaWebhookRequestObjectAmount was set.
+func (o OptYookassaWebhookRequestObjectAmount) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptYookassaWebhookRequestObjectAmount) Reset() {
+	var v YookassaWebhookRequestObjectAmount
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptYookassaWebhookRequestObjectAmount) SetTo(v YookassaWebhookRequestObjectAmount) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptYookassaWebhookRequestObjectAmount) Get() (v YookassaWebhookRequestObjectAmount, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptYookassaWebhookRequestObjectAmount) Or(d YookassaWebhookRequestObjectAmount) YookassaWebhookRequestObjectAmount {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptYookassaWebhookRequestObjectPaymentMethod returns new OptYookassaWebhookRequestObjectPaymentMethod with value set to v.
+func NewOptYookassaWebhookRequestObjectPaymentMethod(v YookassaWebhookRequestObjectPaymentMethod) OptYookassaWebhookRequestObjectPaymentMethod {
+	return OptYookassaWebhookRequestObjectPaymentMethod{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptYookassaWebhookRequestObjectPaymentMethod is optional YookassaWebhookRequestObjectPaymentMethod.
+type OptYookassaWebhookRequestObjectPaymentMethod struct {
+	Value YookassaWebhookRequestObjectPaymentMethod
+	Set   bool
+}
+
+// IsSet returns true if OptYookassaWebhookRequestObjectPaymentMethod was set.
+func (o OptYookassaWebhookRequestObjectPaymentMethod) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptYookassaWebhookRequestObjectPaymentMethod) Reset() {
+	var v YookassaWebhookRequestObjectPaymentMethod
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptYookassaWebhookRequestObjectPaymentMethod) SetTo(v YookassaWebhookRequestObjectPaymentMethod) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptYookassaWebhookRequestObjectPaymentMethod) Get() (v YookassaWebhookRequestObjectPaymentMethod, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptYookassaWebhookRequestObjectPaymentMethod) Or(d YookassaWebhookRequestObjectPaymentMethod) YookassaWebhookRequestObjectPaymentMethod {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptYookassaWebhookRequestObjectPaymentMethodCard returns new OptYookassaWebhookRequestObjectPaymentMethodCard with value set to v.
+func NewOptYookassaWebhookRequestObjectPaymentMethodCard(v YookassaWebhookRequestObjectPaymentMethodCard) OptYookassaWebhookRequestObjectPaymentMethodCard {
+	return OptYookassaWebhookRequestObjectPaymentMethodCard{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptYookassaWebhookRequestObjectPaymentMethodCard is optional YookassaWebhookRequestObjectPaymentMethodCard.
+type OptYookassaWebhookRequestObjectPaymentMethodCard struct {
+	Value YookassaWebhookRequestObjectPaymentMethodCard
+	Set   bool
+}
+
+// IsSet returns true if OptYookassaWebhookRequestObjectPaymentMethodCard was set.
+func (o OptYookassaWebhookRequestObjectPaymentMethodCard) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptYookassaWebhookRequestObjectPaymentMethodCard) Reset() {
+	var v YookassaWebhookRequestObjectPaymentMethodCard
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptYookassaWebhookRequestObjectPaymentMethodCard) SetTo(v YookassaWebhookRequestObjectPaymentMethodCard) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptYookassaWebhookRequestObjectPaymentMethodCard) Get() (v YookassaWebhookRequestObjectPaymentMethodCard, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptYookassaWebhookRequestObjectPaymentMethodCard) Or(d YookassaWebhookRequestObjectPaymentMethodCard) YookassaWebhookRequestObjectPaymentMethodCard {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1376,6 +1659,111 @@ func (s *Patient) SetLastUziDate(val OptDate) {
 
 func (*Patient) medPatientIDGetRes()   {}
 func (*Patient) medPatientIDPatchRes() {}
+
+// Платежный провайдер.
+// Ref: #/components/schemas/PaymentProvider
+type PaymentProvider struct {
+	// Идентификатор платежного провайдера.
+	ID OptUUID `json:"id"`
+	// Название платежного провайдера.
+	Name OptString `json:"name"`
+	// Активен ли провайдер.
+	IsActive OptBool `json:"is_active"`
+}
+
+// GetID returns the value of ID.
+func (s *PaymentProvider) GetID() OptUUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *PaymentProvider) GetName() OptString {
+	return s.Name
+}
+
+// GetIsActive returns the value of IsActive.
+func (s *PaymentProvider) GetIsActive() OptBool {
+	return s.IsActive
+}
+
+// SetID sets the value of ID.
+func (s *PaymentProvider) SetID(val OptUUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PaymentProvider) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetIsActive sets the value of IsActive.
+func (s *PaymentProvider) SetIsActive(val OptBool) {
+	s.IsActive = val
+}
+
+type PaymentProvidersGetOKApplicationJSON []PaymentProvider
+
+func (*PaymentProvidersGetOKApplicationJSON) paymentProvidersGetRes() {}
+
+// Запрос на покупку подписки.
+// Ref: #/components/schemas/PurchaseSubscriptionRequest
+type PurchaseSubscriptionRequest struct {
+	// Идентификатор тарифного плана.
+	TariffPlanID uuid.UUID `json:"tariff_plan_id"`
+	// Идентификатор провайдера платежей.
+	PaymentProviderID uuid.UUID `json:"payment_provider_id"`
+}
+
+// GetTariffPlanID returns the value of TariffPlanID.
+func (s *PurchaseSubscriptionRequest) GetTariffPlanID() uuid.UUID {
+	return s.TariffPlanID
+}
+
+// GetPaymentProviderID returns the value of PaymentProviderID.
+func (s *PurchaseSubscriptionRequest) GetPaymentProviderID() uuid.UUID {
+	return s.PaymentProviderID
+}
+
+// SetTariffPlanID sets the value of TariffPlanID.
+func (s *PurchaseSubscriptionRequest) SetTariffPlanID(val uuid.UUID) {
+	s.TariffPlanID = val
+}
+
+// SetPaymentProviderID sets the value of PaymentProviderID.
+func (s *PurchaseSubscriptionRequest) SetPaymentProviderID(val uuid.UUID) {
+	s.PaymentProviderID = val
+}
+
+// Ответ на покупку подписки.
+// Ref: #/components/schemas/PurchaseSubscriptionResponse
+type PurchaseSubscriptionResponse struct {
+	// Идентификатор подписки.
+	SubscriptionID uuid.UUID `json:"subscription_id"`
+	// URL для подтверждения подписки.
+	ConfirmationURL string `json:"confirmation_url"`
+}
+
+// GetSubscriptionID returns the value of SubscriptionID.
+func (s *PurchaseSubscriptionResponse) GetSubscriptionID() uuid.UUID {
+	return s.SubscriptionID
+}
+
+// GetConfirmationURL returns the value of ConfirmationURL.
+func (s *PurchaseSubscriptionResponse) GetConfirmationURL() string {
+	return s.ConfirmationURL
+}
+
+// SetSubscriptionID sets the value of SubscriptionID.
+func (s *PurchaseSubscriptionResponse) SetSubscriptionID(val uuid.UUID) {
+	s.SubscriptionID = val
+}
+
+// SetConfirmationURL sets the value of ConfirmationURL.
+func (s *PurchaseSubscriptionResponse) SetConfirmationURL(val string) {
+	s.ConfirmationURL = val
+}
+
+func (*PurchaseSubscriptionResponse) subscriptionsPurchasePostRes() {}
 
 type RefreshPostOK struct {
 	// Access токен.
@@ -1683,6 +2071,209 @@ func (*SimpleUuid) regDoctorPostRes()  {}
 func (*SimpleUuid) regPatientPostRes() {}
 func (*SimpleUuid) uziPostRes()        {}
 func (*SimpleUuid) uziSegmentPostRes() {}
+
+// Подписка.
+// Ref: #/components/schemas/Subscription
+type Subscription struct {
+	// Идентификатор подписки.
+	ID uuid.UUID `json:"id"`
+	// Идентификатор тарифного плана.
+	TariffPlanID uuid.UUID `json:"tariff_plan_id"`
+	// Статус подписки.
+	Status SubscriptionStatus `json:"status"`
+	// Дата начала подписки.
+	StartDate time.Time `json:"start_date"`
+	// Дата окончания подписки.
+	EndDate time.Time `json:"end_date"`
+}
+
+// GetID returns the value of ID.
+func (s *Subscription) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetTariffPlanID returns the value of TariffPlanID.
+func (s *Subscription) GetTariffPlanID() uuid.UUID {
+	return s.TariffPlanID
+}
+
+// GetStatus returns the value of Status.
+func (s *Subscription) GetStatus() SubscriptionStatus {
+	return s.Status
+}
+
+// GetStartDate returns the value of StartDate.
+func (s *Subscription) GetStartDate() time.Time {
+	return s.StartDate
+}
+
+// GetEndDate returns the value of EndDate.
+func (s *Subscription) GetEndDate() time.Time {
+	return s.EndDate
+}
+
+// SetID sets the value of ID.
+func (s *Subscription) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetTariffPlanID sets the value of TariffPlanID.
+func (s *Subscription) SetTariffPlanID(val uuid.UUID) {
+	s.TariffPlanID = val
+}
+
+// SetStatus sets the value of Status.
+func (s *Subscription) SetStatus(val SubscriptionStatus) {
+	s.Status = val
+}
+
+// SetStartDate sets the value of StartDate.
+func (s *Subscription) SetStartDate(val time.Time) {
+	s.StartDate = val
+}
+
+// SetEndDate sets the value of EndDate.
+func (s *Subscription) SetEndDate(val time.Time) {
+	s.EndDate = val
+}
+
+func (*Subscription) subscriptionsGetActiveGetRes() {}
+
+// Статус подписки.
+type SubscriptionStatus string
+
+const (
+	SubscriptionStatusPendingPayment SubscriptionStatus = "pending_payment"
+	SubscriptionStatusActive         SubscriptionStatus = "active"
+	SubscriptionStatusCancelled      SubscriptionStatus = "cancelled"
+)
+
+// AllValues returns all SubscriptionStatus values.
+func (SubscriptionStatus) AllValues() []SubscriptionStatus {
+	return []SubscriptionStatus{
+		SubscriptionStatusPendingPayment,
+		SubscriptionStatusActive,
+		SubscriptionStatusCancelled,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s SubscriptionStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case SubscriptionStatusPendingPayment:
+		return []byte(s), nil
+	case SubscriptionStatusActive:
+		return []byte(s), nil
+	case SubscriptionStatusCancelled:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *SubscriptionStatus) UnmarshalText(data []byte) error {
+	switch SubscriptionStatus(data) {
+	case SubscriptionStatusPendingPayment:
+		*s = SubscriptionStatusPendingPayment
+		return nil
+	case SubscriptionStatusActive:
+		*s = SubscriptionStatusActive
+		return nil
+	case SubscriptionStatusCancelled:
+		*s = SubscriptionStatusCancelled
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type SubscriptionsCheckActiveGetOK struct {
+	HasActiveSubscription OptBool `json:"has_active_subscription"`
+}
+
+// GetHasActiveSubscription returns the value of HasActiveSubscription.
+func (s *SubscriptionsCheckActiveGetOK) GetHasActiveSubscription() OptBool {
+	return s.HasActiveSubscription
+}
+
+// SetHasActiveSubscription sets the value of HasActiveSubscription.
+func (s *SubscriptionsCheckActiveGetOK) SetHasActiveSubscription(val OptBool) {
+	s.HasActiveSubscription = val
+}
+
+func (*SubscriptionsCheckActiveGetOK) subscriptionsCheckActiveGetRes() {}
+
+// Тарифный план.
+// Ref: #/components/schemas/TariffPlan
+type TariffPlan struct {
+	// Идентификатор тарифного плана.
+	ID uuid.UUID `json:"id"`
+	// Название тарифного плана.
+	Name string `json:"name"`
+	// Описание тарифного плана.
+	Description string `json:"description"`
+	// Цена тарифного плана.
+	Price string `json:"price"`
+	// Длительность тарифного плана в наносекундах.
+	Duration int `json:"duration"`
+}
+
+// GetID returns the value of ID.
+func (s *TariffPlan) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *TariffPlan) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *TariffPlan) GetDescription() string {
+	return s.Description
+}
+
+// GetPrice returns the value of Price.
+func (s *TariffPlan) GetPrice() string {
+	return s.Price
+}
+
+// GetDuration returns the value of Duration.
+func (s *TariffPlan) GetDuration() int {
+	return s.Duration
+}
+
+// SetID sets the value of ID.
+func (s *TariffPlan) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *TariffPlan) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *TariffPlan) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetPrice sets the value of Price.
+func (s *TariffPlan) SetPrice(val string) {
+	s.Price = val
+}
+
+// SetDuration sets the value of Duration.
+func (s *TariffPlan) SetDuration(val int) {
+	s.Duration = val
+}
+
+func (*TariffPlan) tariffPlansIDGetRes() {}
+
+type TariffPlansGetOKApplicationJSON []TariffPlan
+
+func (*TariffPlansGetOKApplicationJSON) tariffPlansGetRes() {}
 
 // Узи.
 // Ref: #/components/schemas/uzi
@@ -2514,3 +3105,356 @@ func (*UzisAuthorIDGetOKApplicationJSON) uzisAuthorIDGetRes() {}
 type UzisExternalIDGetOKApplicationJSON []Uzi
 
 func (*UzisExternalIDGetOKApplicationJSON) uzisExternalIDGetRes() {}
+
+// Запрос вебхука от Юкассы.
+// Ref: #/components/schemas/YookassaWebhookRequest
+type YookassaWebhookRequest struct {
+	// Тип уведомления.
+	Type OptString `json:"type"`
+	// Событие, связанное с уведомлением.
+	Event OptString `json:"event"`
+	// Объект уведомления.
+	Object OptYookassaWebhookRequestObject `json:"object"`
+}
+
+// GetType returns the value of Type.
+func (s *YookassaWebhookRequest) GetType() OptString {
+	return s.Type
+}
+
+// GetEvent returns the value of Event.
+func (s *YookassaWebhookRequest) GetEvent() OptString {
+	return s.Event
+}
+
+// GetObject returns the value of Object.
+func (s *YookassaWebhookRequest) GetObject() OptYookassaWebhookRequestObject {
+	return s.Object
+}
+
+// SetType sets the value of Type.
+func (s *YookassaWebhookRequest) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetEvent sets the value of Event.
+func (s *YookassaWebhookRequest) SetEvent(val OptString) {
+	s.Event = val
+}
+
+// SetObject sets the value of Object.
+func (s *YookassaWebhookRequest) SetObject(val OptYookassaWebhookRequestObject) {
+	s.Object = val
+}
+
+// Объект уведомления.
+type YookassaWebhookRequestObject struct {
+	// Идентификатор платежа.
+	ID OptUUID `json:"id"`
+	// Статус платежа.
+	Status OptString `json:"status"`
+	// Был ли платеж оплачен.
+	Paid OptBool `json:"paid"`
+	// Сумма платежа.
+	Amount OptYookassaWebhookRequestObjectAmount `json:"amount"`
+	// Дата и время создания платежа.
+	CreatedAt OptDateTime `json:"created_at"`
+	// Описание платежа.
+	Description OptString `json:"description"`
+	// Дата и время истечения платежа.
+	ExpiresAt OptDateTime `json:"expires_at"`
+	// Дополнительные данные.
+	Metadata *YookassaWebhookRequestObjectMetadata `json:"metadata"`
+	// Метод оплаты.
+	PaymentMethod OptYookassaWebhookRequestObjectPaymentMethod `json:"payment_method"`
+	// Возможность возврата.
+	Refundable OptBool `json:"refundable"`
+	// Является ли платеж тестовым.
+	Test OptBool `json:"test"`
+}
+
+// GetID returns the value of ID.
+func (s *YookassaWebhookRequestObject) GetID() OptUUID {
+	return s.ID
+}
+
+// GetStatus returns the value of Status.
+func (s *YookassaWebhookRequestObject) GetStatus() OptString {
+	return s.Status
+}
+
+// GetPaid returns the value of Paid.
+func (s *YookassaWebhookRequestObject) GetPaid() OptBool {
+	return s.Paid
+}
+
+// GetAmount returns the value of Amount.
+func (s *YookassaWebhookRequestObject) GetAmount() OptYookassaWebhookRequestObjectAmount {
+	return s.Amount
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *YookassaWebhookRequestObject) GetCreatedAt() OptDateTime {
+	return s.CreatedAt
+}
+
+// GetDescription returns the value of Description.
+func (s *YookassaWebhookRequestObject) GetDescription() OptString {
+	return s.Description
+}
+
+// GetExpiresAt returns the value of ExpiresAt.
+func (s *YookassaWebhookRequestObject) GetExpiresAt() OptDateTime {
+	return s.ExpiresAt
+}
+
+// GetMetadata returns the value of Metadata.
+func (s *YookassaWebhookRequestObject) GetMetadata() *YookassaWebhookRequestObjectMetadata {
+	return s.Metadata
+}
+
+// GetPaymentMethod returns the value of PaymentMethod.
+func (s *YookassaWebhookRequestObject) GetPaymentMethod() OptYookassaWebhookRequestObjectPaymentMethod {
+	return s.PaymentMethod
+}
+
+// GetRefundable returns the value of Refundable.
+func (s *YookassaWebhookRequestObject) GetRefundable() OptBool {
+	return s.Refundable
+}
+
+// GetTest returns the value of Test.
+func (s *YookassaWebhookRequestObject) GetTest() OptBool {
+	return s.Test
+}
+
+// SetID sets the value of ID.
+func (s *YookassaWebhookRequestObject) SetID(val OptUUID) {
+	s.ID = val
+}
+
+// SetStatus sets the value of Status.
+func (s *YookassaWebhookRequestObject) SetStatus(val OptString) {
+	s.Status = val
+}
+
+// SetPaid sets the value of Paid.
+func (s *YookassaWebhookRequestObject) SetPaid(val OptBool) {
+	s.Paid = val
+}
+
+// SetAmount sets the value of Amount.
+func (s *YookassaWebhookRequestObject) SetAmount(val OptYookassaWebhookRequestObjectAmount) {
+	s.Amount = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *YookassaWebhookRequestObject) SetCreatedAt(val OptDateTime) {
+	s.CreatedAt = val
+}
+
+// SetDescription sets the value of Description.
+func (s *YookassaWebhookRequestObject) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetExpiresAt sets the value of ExpiresAt.
+func (s *YookassaWebhookRequestObject) SetExpiresAt(val OptDateTime) {
+	s.ExpiresAt = val
+}
+
+// SetMetadata sets the value of Metadata.
+func (s *YookassaWebhookRequestObject) SetMetadata(val *YookassaWebhookRequestObjectMetadata) {
+	s.Metadata = val
+}
+
+// SetPaymentMethod sets the value of PaymentMethod.
+func (s *YookassaWebhookRequestObject) SetPaymentMethod(val OptYookassaWebhookRequestObjectPaymentMethod) {
+	s.PaymentMethod = val
+}
+
+// SetRefundable sets the value of Refundable.
+func (s *YookassaWebhookRequestObject) SetRefundable(val OptBool) {
+	s.Refundable = val
+}
+
+// SetTest sets the value of Test.
+func (s *YookassaWebhookRequestObject) SetTest(val OptBool) {
+	s.Test = val
+}
+
+// Сумма платежа.
+type YookassaWebhookRequestObjectAmount struct {
+	// Сумма.
+	Value OptString `json:"value"`
+	// Валюта.
+	Currency OptString `json:"currency"`
+}
+
+// GetValue returns the value of Value.
+func (s *YookassaWebhookRequestObjectAmount) GetValue() OptString {
+	return s.Value
+}
+
+// GetCurrency returns the value of Currency.
+func (s *YookassaWebhookRequestObjectAmount) GetCurrency() OptString {
+	return s.Currency
+}
+
+// SetValue sets the value of Value.
+func (s *YookassaWebhookRequestObjectAmount) SetValue(val OptString) {
+	s.Value = val
+}
+
+// SetCurrency sets the value of Currency.
+func (s *YookassaWebhookRequestObjectAmount) SetCurrency(val OptString) {
+	s.Currency = val
+}
+
+// Дополнительные данные.
+type YookassaWebhookRequestObjectMetadata struct{}
+
+// Метод оплаты.
+type YookassaWebhookRequestObjectPaymentMethod struct {
+	// Тип метода оплаты.
+	Type OptString `json:"type"`
+	// Идентификатор метода оплаты.
+	ID OptUUID `json:"id"`
+	// Был ли метод оплаты сохранен.
+	Saved OptBool `json:"saved"`
+	// Информация о карте.
+	Card OptYookassaWebhookRequestObjectPaymentMethodCard `json:"card"`
+}
+
+// GetType returns the value of Type.
+func (s *YookassaWebhookRequestObjectPaymentMethod) GetType() OptString {
+	return s.Type
+}
+
+// GetID returns the value of ID.
+func (s *YookassaWebhookRequestObjectPaymentMethod) GetID() OptUUID {
+	return s.ID
+}
+
+// GetSaved returns the value of Saved.
+func (s *YookassaWebhookRequestObjectPaymentMethod) GetSaved() OptBool {
+	return s.Saved
+}
+
+// GetCard returns the value of Card.
+func (s *YookassaWebhookRequestObjectPaymentMethod) GetCard() OptYookassaWebhookRequestObjectPaymentMethodCard {
+	return s.Card
+}
+
+// SetType sets the value of Type.
+func (s *YookassaWebhookRequestObjectPaymentMethod) SetType(val OptString) {
+	s.Type = val
+}
+
+// SetID sets the value of ID.
+func (s *YookassaWebhookRequestObjectPaymentMethod) SetID(val OptUUID) {
+	s.ID = val
+}
+
+// SetSaved sets the value of Saved.
+func (s *YookassaWebhookRequestObjectPaymentMethod) SetSaved(val OptBool) {
+	s.Saved = val
+}
+
+// SetCard sets the value of Card.
+func (s *YookassaWebhookRequestObjectPaymentMethod) SetCard(val OptYookassaWebhookRequestObjectPaymentMethodCard) {
+	s.Card = val
+}
+
+// Информация о карте.
+type YookassaWebhookRequestObjectPaymentMethodCard struct {
+	// Первые 6 цифр карты.
+	First6 OptString `json:"first6"`
+	// Последние 4 цифры карты.
+	Last4 OptString `json:"last4"`
+	// Месяц истечения срока действия карты.
+	ExpiryMonth OptString `json:"expiry_month"`
+	// Год истечения срока действия карты.
+	ExpiryYear OptString `json:"expiry_year"`
+	// Тип карты.
+	CardType OptString `json:"card_type"`
+	// Страна эмитента карты.
+	IssuerCountry OptString `json:"issuer_country"`
+	// Имя эмитента карты.
+	IssuerName OptString `json:"issuer_name"`
+}
+
+// GetFirst6 returns the value of First6.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) GetFirst6() OptString {
+	return s.First6
+}
+
+// GetLast4 returns the value of Last4.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) GetLast4() OptString {
+	return s.Last4
+}
+
+// GetExpiryMonth returns the value of ExpiryMonth.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) GetExpiryMonth() OptString {
+	return s.ExpiryMonth
+}
+
+// GetExpiryYear returns the value of ExpiryYear.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) GetExpiryYear() OptString {
+	return s.ExpiryYear
+}
+
+// GetCardType returns the value of CardType.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) GetCardType() OptString {
+	return s.CardType
+}
+
+// GetIssuerCountry returns the value of IssuerCountry.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) GetIssuerCountry() OptString {
+	return s.IssuerCountry
+}
+
+// GetIssuerName returns the value of IssuerName.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) GetIssuerName() OptString {
+	return s.IssuerName
+}
+
+// SetFirst6 sets the value of First6.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) SetFirst6(val OptString) {
+	s.First6 = val
+}
+
+// SetLast4 sets the value of Last4.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) SetLast4(val OptString) {
+	s.Last4 = val
+}
+
+// SetExpiryMonth sets the value of ExpiryMonth.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) SetExpiryMonth(val OptString) {
+	s.ExpiryMonth = val
+}
+
+// SetExpiryYear sets the value of ExpiryYear.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) SetExpiryYear(val OptString) {
+	s.ExpiryYear = val
+}
+
+// SetCardType sets the value of CardType.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) SetCardType(val OptString) {
+	s.CardType = val
+}
+
+// SetIssuerCountry sets the value of IssuerCountry.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) SetIssuerCountry(val OptString) {
+	s.IssuerCountry = val
+}
+
+// SetIssuerName sets the value of IssuerName.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) SetIssuerName(val OptString) {
+	s.IssuerName = val
+}
+
+// YookassaWebhooksPostOK is response for YookassaWebhooksPost operation.
+type YookassaWebhooksPostOK struct{}
+
+func (*YookassaWebhooksPostOK) yookassaWebhooksPostRes() {}

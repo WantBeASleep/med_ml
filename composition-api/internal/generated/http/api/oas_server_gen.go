@@ -68,6 +68,12 @@ type Handler interface {
 	//
 	// POST /med/patient
 	MedPatientPost(ctx context.Context, req *MedPatientPostReq) (MedPatientPostRes, error)
+	// PaymentProvidersGet implements GET /payment_providers operation.
+	//
+	// Получить список всех платежных провайдеров.
+	//
+	// GET /payment_providers
+	PaymentProvidersGet(ctx context.Context) (PaymentProvidersGetRes, error)
 	// RefreshPost implements POST /refresh operation.
 	//
 	// Обновить access token.
@@ -88,6 +94,38 @@ type Handler interface {
 	//
 	// POST /reg/patient
 	RegPatientPost(ctx context.Context, req *RegPatientPostReq) (RegPatientPostRes, error)
+	// SubscriptionsCheckActiveGet implements GET /subscriptions/check-active operation.
+	//
+	// Проверить наличие активной подписки у текущего
+	// пользователя.
+	//
+	// GET /subscriptions/check-active
+	SubscriptionsCheckActiveGet(ctx context.Context) (SubscriptionsCheckActiveGetRes, error)
+	// SubscriptionsGetActiveGet implements GET /subscriptions/get-active operation.
+	//
+	// Получить информацию об активной подписке текущего
+	// пользователя.
+	//
+	// GET /subscriptions/get-active
+	SubscriptionsGetActiveGet(ctx context.Context) (SubscriptionsGetActiveGetRes, error)
+	// SubscriptionsPurchasePost implements POST /subscriptions/purchase operation.
+	//
+	// Купить подписку.
+	//
+	// POST /subscriptions/purchase
+	SubscriptionsPurchasePost(ctx context.Context, req *PurchaseSubscriptionRequest) (SubscriptionsPurchasePostRes, error)
+	// TariffPlansGet implements GET /tariff_plans operation.
+	//
+	// Получить список всех тарифных планов.
+	//
+	// GET /tariff_plans
+	TariffPlansGet(ctx context.Context) (TariffPlansGetRes, error)
+	// TariffPlansIDGet implements GET /tariff_plans/{id} operation.
+	//
+	// Получить тарифный план по ID.
+	//
+	// GET /tariff_plans/{id}
+	TariffPlansIDGet(ctx context.Context, params TariffPlansIDGetParams) (TariffPlansIDGetRes, error)
 	// UziDevicePost implements POST /uzi/device operation.
 	//
 	// Добавить uzi аппарат.
@@ -208,6 +246,12 @@ type Handler interface {
 	//
 	// GET /uzis/external/{id}
 	UzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (UzisExternalIDGetRes, error)
+	// YookassaWebhooksPost implements POST /yookassa/webhooks operation.
+	//
+	// Обработка уведомлений от Юкассы.
+	//
+	// POST /yookassa/webhooks
+	YookassaWebhooksPost(ctx context.Context, req *YookassaWebhookRequest) (YookassaWebhooksPostRes, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

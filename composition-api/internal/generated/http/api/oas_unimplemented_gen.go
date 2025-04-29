@@ -103,6 +103,15 @@ func (UnimplementedHandler) MedPatientPost(ctx context.Context, req *MedPatientP
 	return r, ht.ErrNotImplemented
 }
 
+// PaymentProvidersGet implements GET /payment_providers operation.
+//
+// Получить список всех платежных провайдеров.
+//
+// GET /payment_providers
+func (UnimplementedHandler) PaymentProvidersGet(ctx context.Context) (r PaymentProvidersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // RefreshPost implements POST /refresh operation.
 //
 // Обновить access token.
@@ -129,6 +138,53 @@ func (UnimplementedHandler) RegDoctorPost(ctx context.Context, req *RegDoctorPos
 //
 // POST /reg/patient
 func (UnimplementedHandler) RegPatientPost(ctx context.Context, req *RegPatientPostReq) (r RegPatientPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// SubscriptionsCheckActiveGet implements GET /subscriptions/check-active operation.
+//
+// Проверить наличие активной подписки у текущего
+// пользователя.
+//
+// GET /subscriptions/check-active
+func (UnimplementedHandler) SubscriptionsCheckActiveGet(ctx context.Context) (r SubscriptionsCheckActiveGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// SubscriptionsGetActiveGet implements GET /subscriptions/get-active operation.
+//
+// Получить информацию об активной подписке текущего
+// пользователя.
+//
+// GET /subscriptions/get-active
+func (UnimplementedHandler) SubscriptionsGetActiveGet(ctx context.Context) (r SubscriptionsGetActiveGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// SubscriptionsPurchasePost implements POST /subscriptions/purchase operation.
+//
+// Купить подписку.
+//
+// POST /subscriptions/purchase
+func (UnimplementedHandler) SubscriptionsPurchasePost(ctx context.Context, req *PurchaseSubscriptionRequest) (r SubscriptionsPurchasePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// TariffPlansGet implements GET /tariff_plans operation.
+//
+// Получить список всех тарифных планов.
+//
+// GET /tariff_plans
+func (UnimplementedHandler) TariffPlansGet(ctx context.Context) (r TariffPlansGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// TariffPlansIDGet implements GET /tariff_plans/{id} operation.
+//
+// Получить тарифный план по ID.
+//
+// GET /tariff_plans/{id}
+func (UnimplementedHandler) TariffPlansIDGet(ctx context.Context, params TariffPlansIDGetParams) (r TariffPlansIDGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -309,6 +365,15 @@ func (UnimplementedHandler) UzisAuthorIDGet(ctx context.Context, params UzisAuth
 //
 // GET /uzis/external/{id}
 func (UnimplementedHandler) UzisExternalIDGet(ctx context.Context, params UzisExternalIDGetParams) (r UzisExternalIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// YookassaWebhooksPost implements POST /yookassa/webhooks operation.
+//
+// Обработка уведомлений от Юкассы.
+//
+// POST /yookassa/webhooks
+func (UnimplementedHandler) YookassaWebhooksPost(ctx context.Context, req *YookassaWebhookRequest) (r YookassaWebhooksPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

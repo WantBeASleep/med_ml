@@ -41,6 +41,10 @@ type MedPatientPostRes interface {
 	medPatientPostRes()
 }
 
+type PaymentProvidersGetRes interface {
+	paymentProvidersGetRes()
+}
+
 type RefreshPostRes interface {
 	refreshPostRes()
 }
@@ -51,6 +55,26 @@ type RegDoctorPostRes interface {
 
 type RegPatientPostRes interface {
 	regPatientPostRes()
+}
+
+type SubscriptionsCheckActiveGetRes interface {
+	subscriptionsCheckActiveGetRes()
+}
+
+type SubscriptionsGetActiveGetRes interface {
+	subscriptionsGetActiveGetRes()
+}
+
+type SubscriptionsPurchasePostRes interface {
+	subscriptionsPurchasePostRes()
+}
+
+type TariffPlansGetRes interface {
+	tariffPlansGetRes()
+}
+
+type TariffPlansIDGetRes interface {
+	tariffPlansIDGetRes()
 }
 
 type UziDevicePostRes interface {
@@ -131,4 +155,8 @@ type UzisAuthorIDGetRes interface {
 
 type UzisExternalIDGetRes interface {
 	uzisExternalIDGetRes()
+}
+
+type YookassaWebhooksPostRes interface {
+	yookassaWebhooksPostRes()
 }

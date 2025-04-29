@@ -452,6 +452,141 @@ func TestPatient_Examples(t *testing.T) {
 		})
 	}
 }
+func TestPaymentProvider_EncodeDecode(t *testing.T) {
+	var typ PaymentProvider
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 PaymentProvider
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestPaymentProvider_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"is_active\":true,\"name\":\"Yookassa\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ PaymentProvider
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 PaymentProvider
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestPaymentProvidersGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ PaymentProvidersGetOKApplicationJSON
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 PaymentProvidersGetOKApplicationJSON
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestPurchaseSubscriptionRequest_EncodeDecode(t *testing.T) {
+	var typ PurchaseSubscriptionRequest
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 PurchaseSubscriptionRequest
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestPurchaseSubscriptionRequest_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"payment_provider_id\":\"123e4567-e89b-12d3-a456-426614174000\",\"tariff_plan_id\":\"123e4567-e89b-12d3-a456-426614174000\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ PurchaseSubscriptionRequest
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 PurchaseSubscriptionRequest
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestPurchaseSubscriptionResponse_EncodeDecode(t *testing.T) {
+	var typ PurchaseSubscriptionResponse
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 PurchaseSubscriptionResponse
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestPurchaseSubscriptionResponse_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"confirmation_url\":\"https://example.com/confirm\",\"subscription_id\":\"123e4567-e89b-12d3-a456-426614174000\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ PurchaseSubscriptionResponse
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 PurchaseSubscriptionResponse
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
 func TestRefreshPostOK_EncodeDecode(t *testing.T) {
 	var typ RefreshPostOK
 	typ.SetFake()
@@ -668,6 +803,124 @@ func TestSimpleUuid_Examples(t *testing.T) {
 			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
 		})
 	}
+}
+func TestSubscription_EncodeDecode(t *testing.T) {
+	var typ Subscription
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 Subscription
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestSubscription_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"end_date\":\"2023-12-31T23:59:59Z\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"start_date\":\"2023-01-01T00:00:00Z\",\"status\":\"active\",\"tariff_plan_id\":\"123e4567-e89b-12d3-a456-426614174000\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ Subscription
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 Subscription
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestSubscriptionStatus_EncodeDecode(t *testing.T) {
+	var typ SubscriptionStatus
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 SubscriptionStatus
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestSubscriptionsCheckActiveGetOK_EncodeDecode(t *testing.T) {
+	var typ SubscriptionsCheckActiveGetOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 SubscriptionsCheckActiveGetOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestTariffPlan_EncodeDecode(t *testing.T) {
+	var typ TariffPlan
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 TariffPlan
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestTariffPlan_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"description\":\"This is a basic tariff plan.\",\"duration\":2592000000000000,\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"name\":\"Basic Plan\",\"price\":\"9.99\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ TariffPlan
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 TariffPlan
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestTariffPlansGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ TariffPlansGetOKApplicationJSON
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 TariffPlansGetOKApplicationJSON
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
 func TestUzi_EncodeDecode(t *testing.T) {
 	var typ Uzi
@@ -1105,5 +1358,106 @@ func TestUzisExternalIDGetOKApplicationJSON_EncodeDecode(t *testing.T) {
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
 	var typ2 UzisExternalIDGetOKApplicationJSON
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestYookassaWebhookRequest_EncodeDecode(t *testing.T) {
+	var typ YookassaWebhookRequest
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 YookassaWebhookRequest
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestYookassaWebhookRequest_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"event\":\"payment.waiting_for_capture\",\"object\":{\"amount\":{\"currency\":\"RUB\",\"value\":\"2.00\"},\"created_at\":\"2018-07-10T14:27:54.691Z\",\"description\":\"Заказ №72\",\"expires_at\":\"2018-07-17T14:28:32.484Z\",\"id\":\"22d6d597-000f-5000-9000-145f6df21d6f\",\"metadata\":{},\"paid\":true,\"payment_method\":{\"card\":{\"card_type\":\"MasterCard\",\"expiry_month\":\"07\",\"expiry_year\":\"2021\",\"first6\":\"555555\",\"issuer_country\":\"RU\",\"issuer_name\":\"Sberbank\",\"last4\":\"4444\"},\"id\":\"22d6d597-000f-5000-9000-145f6df21d6f\",\"saved\":false,\"type\":\"bank_card\"},\"refundable\":false,\"status\":\"waiting_for_capture\",\"test\":false},\"type\":\"notification\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ YookassaWebhookRequest
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 YookassaWebhookRequest
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestYookassaWebhookRequestObject_EncodeDecode(t *testing.T) {
+	var typ YookassaWebhookRequestObject
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 YookassaWebhookRequestObject
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestYookassaWebhookRequestObjectAmount_EncodeDecode(t *testing.T) {
+	var typ YookassaWebhookRequestObjectAmount
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 YookassaWebhookRequestObjectAmount
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestYookassaWebhookRequestObjectMetadata_EncodeDecode(t *testing.T) {
+	var typ YookassaWebhookRequestObjectMetadata
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 YookassaWebhookRequestObjectMetadata
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestYookassaWebhookRequestObjectPaymentMethod_EncodeDecode(t *testing.T) {
+	var typ YookassaWebhookRequestObjectPaymentMethod
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 YookassaWebhookRequestObjectPaymentMethod
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestYookassaWebhookRequestObjectPaymentMethodCard_EncodeDecode(t *testing.T) {
+	var typ YookassaWebhookRequestObjectPaymentMethodCard
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 YookassaWebhookRequestObjectPaymentMethodCard
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
