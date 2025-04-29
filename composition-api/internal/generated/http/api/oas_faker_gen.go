@@ -401,6 +401,15 @@ func (s *OptDate) SetFake() {
 }
 
 // SetFake set fake values.
+func (s *OptDateTime) SetFake() {
+	var elem time.Time
+	{
+		elem = time.Now()
+	}
+	s.SetTo(elem)
+}
+
+// SetFake set fake values.
 func (s *OptFloat64) SetFake() {
 	var elem float64
 	{
@@ -431,8 +440,53 @@ func (s *OptString) SetFake() {
 }
 
 // SetFake set fake values.
+func (s *OptUUID) SetFake() {
+	var elem uuid.UUID
+	{
+		elem = uuid.New()
+	}
+	s.SetTo(elem)
+}
+
+// SetFake set fake values.
 func (s *OptUziIDPatchReqProjection) SetFake() {
 	var elem UziIDPatchReqProjection
+	{
+		elem.SetFake()
+	}
+	s.SetTo(elem)
+}
+
+// SetFake set fake values.
+func (s *OptYookassaWebhookRequestObject) SetFake() {
+	var elem YookassaWebhookRequestObject
+	{
+		elem.SetFake()
+	}
+	s.SetTo(elem)
+}
+
+// SetFake set fake values.
+func (s *OptYookassaWebhookRequestObjectAmount) SetFake() {
+	var elem YookassaWebhookRequestObjectAmount
+	{
+		elem.SetFake()
+	}
+	s.SetTo(elem)
+}
+
+// SetFake set fake values.
+func (s *OptYookassaWebhookRequestObjectPaymentMethod) SetFake() {
+	var elem YookassaWebhookRequestObjectPaymentMethod
+	{
+		elem.SetFake()
+	}
+	s.SetTo(elem)
+}
+
+// SetFake set fake values.
+func (s *OptYookassaWebhookRequestObjectPaymentMethodCard) SetFake() {
+	var elem YookassaWebhookRequestObjectPaymentMethodCard
 	{
 		elem.SetFake()
 	}
@@ -479,6 +533,69 @@ func (s *Patient) SetFake() {
 	{
 		{
 			s.LastUziDate.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *PaymentProvider) SetFake() {
+	{
+		{
+			s.ID.SetFake()
+		}
+	}
+	{
+		{
+			s.Name.SetFake()
+		}
+	}
+	{
+		{
+			s.IsActive.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *PaymentProvidersGetOKApplicationJSON) SetFake() {
+	var unwrapped []PaymentProvider
+	{
+		unwrapped = nil
+		for i := 0; i < 0; i++ {
+			var elem PaymentProvider
+			{
+				elem.SetFake()
+			}
+			unwrapped = append(unwrapped, elem)
+		}
+	}
+	*s = PaymentProvidersGetOKApplicationJSON(unwrapped)
+}
+
+// SetFake set fake values.
+func (s *PurchaseSubscriptionRequest) SetFake() {
+	{
+		{
+			s.TariffPlanID = uuid.New()
+		}
+	}
+	{
+		{
+			s.PaymentProviderID = uuid.New()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *PurchaseSubscriptionResponse) SetFake() {
+	{
+		{
+			s.SubscriptionID = uuid.New()
+		}
+	}
+	{
+		{
+			s.ConfirmationURL = "string"
 		}
 	}
 }
@@ -620,6 +737,94 @@ func (s *SimpleUuid) SetFake() {
 			s.ID = uuid.New()
 		}
 	}
+}
+
+// SetFake set fake values.
+func (s *Subscription) SetFake() {
+	{
+		{
+			s.ID = uuid.New()
+		}
+	}
+	{
+		{
+			s.TariffPlanID = uuid.New()
+		}
+	}
+	{
+		{
+			s.Status.SetFake()
+		}
+	}
+	{
+		{
+			s.StartDate = time.Now()
+		}
+	}
+	{
+		{
+			s.EndDate = time.Now()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *SubscriptionStatus) SetFake() {
+	*s = SubscriptionStatusPendingPayment
+}
+
+// SetFake set fake values.
+func (s *SubscriptionsCheckActiveGetOK) SetFake() {
+	{
+		{
+			s.HasActiveSubscription.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *TariffPlan) SetFake() {
+	{
+		{
+			s.ID = uuid.New()
+		}
+	}
+	{
+		{
+			s.Name = "string"
+		}
+	}
+	{
+		{
+			s.Description = "string"
+		}
+	}
+	{
+		{
+			s.Price = "string"
+		}
+	}
+	{
+		{
+			s.Duration = int(0)
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *TariffPlansGetOKApplicationJSON) SetFake() {
+	var unwrapped []TariffPlan
+	{
+		unwrapped = nil
+		for i := 0; i < 0; i++ {
+			var elem TariffPlan
+			{
+				elem.SetFake()
+			}
+			unwrapped = append(unwrapped, elem)
+		}
+	}
+	*s = TariffPlansGetOKApplicationJSON(unwrapped)
 }
 
 // SetFake set fake values.
@@ -1017,4 +1222,163 @@ func (s *UzisExternalIDGetOKApplicationJSON) SetFake() {
 		}
 	}
 	*s = UzisExternalIDGetOKApplicationJSON(unwrapped)
+}
+
+// SetFake set fake values.
+func (s *YookassaWebhookRequest) SetFake() {
+	{
+		{
+			s.Type.SetFake()
+		}
+	}
+	{
+		{
+			s.Event.SetFake()
+		}
+	}
+	{
+		{
+			s.Object.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *YookassaWebhookRequestObject) SetFake() {
+	{
+		{
+			s.ID.SetFake()
+		}
+	}
+	{
+		{
+			s.Status.SetFake()
+		}
+	}
+	{
+		{
+			s.Paid.SetFake()
+		}
+	}
+	{
+		{
+			s.Amount.SetFake()
+		}
+	}
+	{
+		{
+			s.CreatedAt.SetFake()
+		}
+	}
+	{
+		{
+			s.Description.SetFake()
+		}
+	}
+	{
+		{
+			s.ExpiresAt.SetFake()
+		}
+	}
+	{
+		{ // Keep pointer nil to prevent infinite recursion.
+			s.Metadata = nil
+		}
+	}
+	{
+		{
+			s.PaymentMethod.SetFake()
+		}
+	}
+	{
+		{
+			s.Refundable.SetFake()
+		}
+	}
+	{
+		{
+			s.Test.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *YookassaWebhookRequestObjectAmount) SetFake() {
+	{
+		{
+			s.Value.SetFake()
+		}
+	}
+	{
+		{
+			s.Currency.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *YookassaWebhookRequestObjectMetadata) SetFake() {
+}
+
+// SetFake set fake values.
+func (s *YookassaWebhookRequestObjectPaymentMethod) SetFake() {
+	{
+		{
+			s.Type.SetFake()
+		}
+	}
+	{
+		{
+			s.ID.SetFake()
+		}
+	}
+	{
+		{
+			s.Saved.SetFake()
+		}
+	}
+	{
+		{
+			s.Card.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *YookassaWebhookRequestObjectPaymentMethodCard) SetFake() {
+	{
+		{
+			s.First6.SetFake()
+		}
+	}
+	{
+		{
+			s.Last4.SetFake()
+		}
+	}
+	{
+		{
+			s.ExpiryMonth.SetFake()
+		}
+	}
+	{
+		{
+			s.ExpiryYear.SetFake()
+		}
+	}
+	{
+		{
+			s.CardType.SetFake()
+		}
+	}
+	{
+		{
+			s.IssuerCountry.SetFake()
+		}
+	}
+	{
+		{
+			s.IssuerName.SetFake()
+		}
+	}
 }

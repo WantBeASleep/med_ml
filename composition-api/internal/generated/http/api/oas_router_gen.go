@@ -341,6 +341,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 				}
 
+			case 'p': // Prefix: "payment_providers"
+
+				if l := len("payment_providers"); len(elem) >= l && elem[0:l] == "payment_providers" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handlePaymentProvidersGetRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+
 			case 'r': // Prefix: "re"
 
 				if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
@@ -425,6 +445,132 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							return
 						}
 
+					}
+
+				}
+
+			case 's': // Prefix: "subscriptions/"
+
+				if l := len("subscriptions/"); len(elem) >= l && elem[0:l] == "subscriptions/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "check-active"
+
+					if l := len("check-active"); len(elem) >= l && elem[0:l] == "check-active" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleSubscriptionsCheckActiveGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+				case 'g': // Prefix: "get-active"
+
+					if l := len("get-active"); len(elem) >= l && elem[0:l] == "get-active" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleSubscriptionsGetActiveGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+				case 'p': // Prefix: "purchase"
+
+					if l := len("purchase"); len(elem) >= l && elem[0:l] == "purchase" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleSubscriptionsPurchasePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+				}
+
+			case 't': // Prefix: "tariff_plans"
+
+				if l := len("tariff_plans"); len(elem) >= l && elem[0:l] == "tariff_plans" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "GET":
+						s.handleTariffPlansGetRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleTariffPlansIDGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
 					}
 
 				}
@@ -882,6 +1028,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 				}
 
+			case 'y': // Prefix: "yookassa/webhooks"
+
+				if l := len("yookassa/webhooks"); len(elem) >= l && elem[0:l] == "yookassa/webhooks" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleYookassaWebhooksPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
+				}
+
 			}
 
 		}
@@ -1283,6 +1449,30 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 				}
 
+			case 'p': // Prefix: "payment_providers"
+
+				if l := len("payment_providers"); len(elem) >= l && elem[0:l] == "payment_providers" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "GET":
+						r.name = PaymentProvidersGetOperation
+						r.summary = "Получить список всех платежных провайдеров"
+						r.operationID = ""
+						r.pathPattern = "/payment_providers"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
 			case 'r': // Prefix: "re"
 
 				if l := len("re"); len(elem) >= l && elem[0:l] == "re" {
@@ -1379,6 +1569,150 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 						}
 
+					}
+
+				}
+
+			case 's': // Prefix: "subscriptions/"
+
+				if l := len("subscriptions/"); len(elem) >= l && elem[0:l] == "subscriptions/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "check-active"
+
+					if l := len("check-active"); len(elem) >= l && elem[0:l] == "check-active" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = SubscriptionsCheckActiveGetOperation
+							r.summary = "Проверить наличие активной подписки у текущего пользователя"
+							r.operationID = ""
+							r.pathPattern = "/subscriptions/check-active"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				case 'g': // Prefix: "get-active"
+
+					if l := len("get-active"); len(elem) >= l && elem[0:l] == "get-active" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = SubscriptionsGetActiveGetOperation
+							r.summary = "Получить информацию об активной подписке текущего пользователя"
+							r.operationID = ""
+							r.pathPattern = "/subscriptions/get-active"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				case 'p': // Prefix: "purchase"
+
+					if l := len("purchase"); len(elem) >= l && elem[0:l] == "purchase" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = SubscriptionsPurchasePostOperation
+							r.summary = "Купить подписку"
+							r.operationID = ""
+							r.pathPattern = "/subscriptions/purchase"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				}
+
+			case 't': // Prefix: "tariff_plans"
+
+				if l := len("tariff_plans"); len(elem) >= l && elem[0:l] == "tariff_plans" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						r.name = TariffPlansGetOperation
+						r.summary = "Получить список всех тарифных планов"
+						r.operationID = ""
+						r.pathPattern = "/tariff_plans"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = TariffPlansIDGetOperation
+							r.summary = "Получить тарифный план по ID"
+							r.operationID = ""
+							r.pathPattern = "/tariff_plans/{id}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
 					}
 
 				}
@@ -1892,6 +2226,30 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 					}
 
+				}
+
+			case 'y': // Prefix: "yookassa/webhooks"
+
+				if l := len("yookassa/webhooks"); len(elem) >= l && elem[0:l] == "yookassa/webhooks" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = YookassaWebhooksPostOperation
+						r.summary = "Обработка уведомлений от Юкассы"
+						r.operationID = ""
+						r.pathPattern = "/yookassa/webhooks"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 
 			}

@@ -25,7 +25,7 @@ services:
       interval: 5s
       retries: 5
     environment:
-      POSTGRES_MULTIPLE_DATABASES: authdb,meddb,uzidb
+      POSTGRES_MULTIPLE_DATABASES: authdb,meddb,uzidb,billingdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
 
@@ -190,5 +190,20 @@ services:
       - uzi_service
       - med_service
       - auth_service
+    profiles:
+      - app
+
+  billing_service:
+    container_name: billing_service
+    build:
+      context: ./billing/
+      dockerfile: Dockerfile
+    env_file:
+      - ./billing/.env-docker
+    ports:
+      - 50055:50055
+    depends_on:
+      postgres:
+        condition: service_healthy
     profiles:
       - app
