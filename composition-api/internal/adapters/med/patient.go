@@ -2,13 +2,18 @@ package med
 
 import (
 	"context"
+	"fmt"
+	"log/slog"
 	"time"
 
+	adapter_errors "composition-api/internal/adapters/errors"
 	"composition-api/internal/adapters/med/mappers"
 	domain "composition-api/internal/domain/med"
 	pb "composition-api/internal/generated/grpc/clients/med"
 
 	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (a *adapter) CreatePatient(ctx context.Context, arg CreatePatientArg) error {
@@ -39,8 +44,19 @@ func (a *adapter) GetPatientsByDoctorID(ctx context.Context, doctorID uuid.UUID)
 	res, err := a.client.GetPatientsByDoctorID(ctx, &pb.GetPatientsByDoctorIDIn{
 		Id: doctorID.String(),
 	})
+	slog.Info("GetPatientsByDoctorID", "res", res, "err", err)
 	if err != nil {
-		return nil, err
+		st, ok := status.FromError(err)
+		if !ok {
+			return nil, fmt.Errorf("unknown error: %w", err)
+		}
+
+		switch st.Code() {
+		case codes.NotFound:
+			return nil, adapter_errors.ErrNotFound
+		default:
+			return nil, err
+		}
 	}
 
 	return mappers.Patient{}.SliceDomain(res.Patients), nil

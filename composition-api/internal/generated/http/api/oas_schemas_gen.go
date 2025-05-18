@@ -511,7 +511,6 @@ func (*ErrorStatusCode) medCardDoctorIDPatientIDGetRes()   {}
 func (*ErrorStatusCode) medCardDoctorIDPatientIDPatchRes() {}
 func (*ErrorStatusCode) medCardPostRes()                   {}
 func (*ErrorStatusCode) medDoctorIDGetRes()                {}
-func (*ErrorStatusCode) medDoctorIDPatientsGetRes()        {}
 func (*ErrorStatusCode) medPatientIDGetRes()               {}
 func (*ErrorStatusCode) medPatientIDPatchRes()             {}
 func (*ErrorStatusCode) medPatientPostRes()                {}
@@ -655,6 +654,14 @@ func (s *MedCardDoctorIDPatientIDPatchReq) SetDiagnosis(val string) {
 type MedCardPostOK struct{}
 
 func (*MedCardPostOK) medCardPostRes() {}
+
+type MedDoctorIDPatientsGetInternalServerError ErrorStatusCode
+
+func (*MedDoctorIDPatientsGetInternalServerError) medDoctorIDPatientsGetRes() {}
+
+type MedDoctorIDPatientsGetNotFound ErrorStatusCode
+
+func (*MedDoctorIDPatientsGetNotFound) medDoctorIDPatientsGetRes() {}
 
 type MedDoctorIDPatientsGetOKApplicationJSON []Patient
 

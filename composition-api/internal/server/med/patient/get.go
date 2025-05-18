@@ -2,7 +2,9 @@ package patient
 
 import (
 	"context"
+	"errors"
 
+	adapter_errors "composition-api/internal/adapters/errors"
 	api "composition-api/internal/generated/http/api"
 	"composition-api/internal/server/med/mappers"
 
@@ -21,6 +23,19 @@ func (h *handler) MedPatientIDGet(ctx context.Context, params api.MedPatientIDGe
 func (h *handler) MedDoctorIDPatientsGet(ctx context.Context, params api.MedDoctorIDPatientsGetParams) (api.MedDoctorIDPatientsGetRes, error) {
 	patients, err := h.services.PatientService.GetPatientsByDoctorID(ctx, params.ID)
 	if err != nil {
+		if errors.Is(err, adapter_errors.ErrNotFound) {
+			return pointer.To(
+				api.MedDoctorIDPatientsGetNotFound(
+					api.ErrorStatusCode{
+						StatusCode: 404,
+						Response: api.Error{
+							Code:    404,
+							Message: err.Error(),
+						},
+					},
+				),
+			), nil
+		}
 		return nil, err
 	}
 

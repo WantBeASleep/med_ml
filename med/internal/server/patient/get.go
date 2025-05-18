@@ -2,8 +2,10 @@ package patient
 
 import (
 	"context"
+	"errors"
 
 	pb "med/internal/generated/grpc/service"
+	"med/internal/repository/entity"
 	"med/internal/server/mappers"
 
 	"github.com/google/uuid"
@@ -33,7 +35,12 @@ func (h *handler) GetPatientsByDoctorID(ctx context.Context, in *pb.GetPatientsB
 
 	patients, err := h.patientSrv.GetPatientsByDoctorID(ctx, doctorID)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, entity.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "Пациенты не найдены")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	return &pb.GetPatientsByDoctorIDOut{Patients: mappers.SlicePatientFromDomain(patients)}, nil
