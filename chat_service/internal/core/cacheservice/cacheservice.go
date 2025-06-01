@@ -1,4 +1,4 @@
-package cache_service
+package cacheservice
 
 import (
 	"context"
@@ -51,6 +51,7 @@ func (s *CacheService) GetDoctor(ctx context.Context, doctorID string) (entity.D
 			log.Debug().
 				Str("doctorID", doctorID).
 				Msg("doctor found in cache")
+
 			return doctor, nil
 		}
 	}
@@ -100,6 +101,7 @@ func (s *CacheService) GetPatient(ctx context.Context, patientID string) (entity
 			log.Debug().
 				Str("patientID", patientID).
 				Msg("patient found in cache")
+
 			return patient, nil
 		}
 	}

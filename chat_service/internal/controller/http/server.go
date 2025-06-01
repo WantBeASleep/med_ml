@@ -1,4 +1,4 @@
-package http_server
+package httpserver
 
 import (
 	"chat_service/internal/config"
@@ -49,12 +49,11 @@ func NewServer(cfg config.Config, chatService websocket.ChatService, messageServ
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/ws", WSToHandle(upgrader))
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("ok"))
+		_, _ = w.Write([]byte("ok"))
 	})
 
-	//nolint:gosec
 	return &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", cfg.HTTP.Host, cfg.HTTP.Port),
 		Handler:      mux,

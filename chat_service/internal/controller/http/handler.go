@@ -1,4 +1,4 @@
-package http_server
+package httpserver
 
 import (
 	"net/http"
@@ -12,9 +12,7 @@ import (
 
 func WSToHandle(upgrader *gws.Upgrader) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
-		// TODO: token => user_id
-		clientID := uuid.New() //temporary
+		clientID := uuid.New() // TODO: temporary
 
 		socket, err := upgrader.Upgrade(w, r)
 		if err != nil {

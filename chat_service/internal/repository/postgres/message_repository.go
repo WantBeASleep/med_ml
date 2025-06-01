@@ -53,8 +53,8 @@ func (r *MessageRepository) GetMessages(ctx context.Context, chatID uuid.UUID, l
 		From("chat.messages").
 		Where(squirrel.Eq{"chat_id": chatID}).
 		OrderBy("created_at DESC").
-		Limit(uint64(limit)).
-		Offset(uint64(offset)).
+		Limit(uint64(limit)).   //nolint:gosec
+		Offset(uint64(offset)). //nolint:gosec
 		ToSql()
 	if err != nil {
 		return nil, fmt.Errorf("build select query: %w", err)

@@ -89,7 +89,7 @@ func (h *Hub) SaveMessage(message entity.Message) error {
 	return nil
 }
 
-func (h *Hub) BroadcastToChat(chatID uuid.UUID, message []byte, sender *gws.Conn) {
+func (h *Hub) BroadcastToChat(chatID uuid.UUID, message []byte, _ *gws.Conn) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -99,6 +99,7 @@ func (h *Hub) BroadcastToChat(chatID uuid.UUID, message []byte, sender *gws.Conn
 			Err(err).
 			Str("chatID", chatID.String()).
 			Msg("get chat participants")
+
 		return
 	}
 
@@ -116,6 +117,7 @@ func (h *Hub) BroadcastToChat(chatID uuid.UUID, message []byte, sender *gws.Conn
 				Str("clientID", clientID.String()).
 				Str("chatID", chatID.String()).
 				Msg("send message to client")
+
 			continue
 		}
 
@@ -134,6 +136,7 @@ func (h *Hub) BroadcastToChat(chatID uuid.UUID, message []byte, sender *gws.Conn
 			Err(err).
 			Str("chatID", chatID.String()).
 			Msg("update chat last activity")
+
 		return
 	}
 }

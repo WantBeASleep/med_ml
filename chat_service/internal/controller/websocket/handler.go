@@ -75,6 +75,7 @@ func (ws *wsHandler) OnPing(socket *gws.Conn, payload []byte) {
 		log.Error().
 			Err(err).
 			Msg("set read deadline")
+
 		return
 	}
 
@@ -118,6 +119,7 @@ func (ws *wsHandler) OnMessage(socket *gws.Conn, message *gws.Message) {
 	if !exists {
 		log.Error().
 			Msg("missing clientID from connection")
+
 		return
 	}
 
@@ -126,6 +128,7 @@ func (ws *wsHandler) OnMessage(socket *gws.Conn, message *gws.Message) {
 		log.Error().
 			Err(err).
 			Msg("unmarshal message")
+
 		return
 	}
 
@@ -152,6 +155,7 @@ func (ws *wsHandler) OnMessage(socket *gws.Conn, message *gws.Message) {
 			Err(err).
 			Str("clientID", clientID).
 			Msg("validate message")
+
 		return
 	}
 
@@ -160,6 +164,7 @@ func (ws *wsHandler) OnMessage(socket *gws.Conn, message *gws.Message) {
 			Err(err).
 			Str("clientID", clientID).
 			Msg("save message")
+
 		return
 	}
 
@@ -169,6 +174,7 @@ func (ws *wsHandler) OnMessage(socket *gws.Conn, message *gws.Message) {
 			Err(err).
 			Str("clientID", clientID).
 			Msg("marshal message")
+
 		return
 	}
 

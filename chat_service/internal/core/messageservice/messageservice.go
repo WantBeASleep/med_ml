@@ -1,4 +1,4 @@
-package message_service
+package messageservice
 
 import (
 	"context"

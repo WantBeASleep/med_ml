@@ -6,7 +6,7 @@ import (
 
 	"chat_service/internal/config"
 
-	_ "github.com/jackc/pgx/v5"
+	_ "github.com/jackc/pgx/v5" // PostgreSQL driver for pgxpool
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -39,8 +39,4 @@ func New(cfg config.Postgres) (*Postgres, error) {
 	return &Postgres{
 		pool,
 	}, nil
-}
-
-func (p *Postgres) Close() {
-	p.Close()
 }

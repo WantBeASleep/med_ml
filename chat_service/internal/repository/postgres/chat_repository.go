@@ -33,7 +33,9 @@ func (r *ChatRepository) CreateChatWithParticipants(ctx context.Context, chat Ch
 		return fmt.Errorf("begin transaction: %w", err)
 	}
 
-	defer tx.Rollback(ctx)
+	defer func() {
+		_ = tx.Rollback(ctx)
+	}()
 
 	query, args, err := r.qb.Insert("chat.chats").
 		Columns("id", "name", "description", "patient_id", "last_activity", "created_at").
@@ -177,15 +179,15 @@ func (r *ChatRepository) ListChatsByDoctorID(ctx context.Context, doctorID uuid.
 
 	for rows.Next() {
 		var chatDTO ChatDTO
-		err := rows.Scan(
+
+		if err := rows.Scan(
 			&chatDTO.ID,
 			&chatDTO.Name,
 			&chatDTO.Description,
 			&chatDTO.PatientID,
 			&chatDTO.LastActivity,
 			&chatDTO.CreatedAt,
-		)
-		if err != nil {
+		); err != nil {
 			return nil, fmt.Errorf("scan chat: %w", err)
 		}
 

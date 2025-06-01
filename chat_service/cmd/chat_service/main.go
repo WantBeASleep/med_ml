@@ -13,9 +13,9 @@ import (
 	"chat_service/internal/config"
 	grpc_server "chat_service/internal/controller/grpc"
 	http_server "chat_service/internal/controller/http"
-	"chat_service/internal/core/cache_service"
-	"chat_service/internal/core/chat_service"
-	"chat_service/internal/core/message_service"
+	"chat_service/internal/core/cacheservice"
+	"chat_service/internal/core/chatservice"
+	"chat_service/internal/core/messageservice"
 	"chat_service/internal/repository/med"
 	"chat_service/internal/repository/postgres"
 	"chat_service/internal/repository/redis"
@@ -40,6 +40,7 @@ func main() {
 	configPath := "./config/config.yaml"
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		configPath = ""
+
 		log.Warn().
 			Msg("config file not found, using environment variables and defaults")
 	}
@@ -89,11 +90,11 @@ func main() {
 	messageRepo := postgres.NewMessageRepository(pg)
 
 	// Core services
-	cacheService := cache_service.NewCacheService(redisRepo, medClient, cfg.MedService.CacheTTL)
+	cacheService := cacheservice.NewCacheService(redisRepo, medClient, cfg.MedService.CacheTTL)
 
 	// Domain services
-	chatSvc := chat_service.NewChatService(chatRepo)
-	messageSvc := message_service.NewMessageService(messageRepo, cacheService)
+	chatSvc := chatservice.NewChatService(chatRepo)
+	messageSvc := messageservice.NewMessageService(messageRepo, cacheService)
 
 	// Use cases
 	chatUsecase := usecase.NewChatUsecase(chatSvc, messageSvc)

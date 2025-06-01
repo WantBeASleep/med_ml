@@ -109,6 +109,7 @@ func (c *Client) GetPatient(ctx context.Context, patientID string) (entity.Patie
 	}
 
 	var lastUziDate time.Time
+
 	if resp.Patient.LastUziDate != nil && *resp.Patient.LastUziDate != "" {
 		parsed, err := time.Parse(time.RFC3339, *resp.Patient.LastUziDate)
 		if err != nil {
