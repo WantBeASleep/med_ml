@@ -28,6 +28,110 @@ func (s *Card) SetFake() {
 }
 
 // SetFake set fake values.
+func (s *Chat) SetFake() {
+	{
+		{
+			s.ID = uuid.New()
+		}
+	}
+	{
+		{
+			s.Name = "string"
+		}
+	}
+	{
+		{
+			s.Description.SetFake()
+		}
+	}
+	{
+		{
+			s.PatientID = uuid.New()
+		}
+	}
+	{
+		{
+			s.ParticipantIds = nil
+			for i := 0; i < 0; i++ {
+				var elem uuid.UUID
+				{
+					elem = uuid.New()
+				}
+				s.ParticipantIds = append(s.ParticipantIds, elem)
+			}
+		}
+	}
+	{
+		{
+			s.CreatedAt = time.Now()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *ChatsChatidHistoryGetOKApplicationJSON) SetFake() {
+	var unwrapped []Message
+	{
+		unwrapped = nil
+		for i := 0; i < 0; i++ {
+			var elem Message
+			{
+				elem.SetFake()
+			}
+			unwrapped = append(unwrapped, elem)
+		}
+	}
+	*s = ChatsChatidHistoryGetOKApplicationJSON(unwrapped)
+}
+
+// SetFake set fake values.
+func (s *ChatsGetOKApplicationJSON) SetFake() {
+	var unwrapped []Chat
+	{
+		unwrapped = nil
+		for i := 0; i < 0; i++ {
+			var elem Chat
+			{
+				elem.SetFake()
+			}
+			unwrapped = append(unwrapped, elem)
+		}
+	}
+	*s = ChatsGetOKApplicationJSON(unwrapped)
+}
+
+// SetFake set fake values.
+func (s *ChatsPostReq) SetFake() {
+	{
+		{
+			s.Name = "string"
+		}
+	}
+	{
+		{
+			s.Description.SetFake()
+		}
+	}
+	{
+		{
+			s.PatientID = uuid.New()
+		}
+	}
+	{
+		{
+			s.ParticipantIds = nil
+			for i := 0; i < 0; i++ {
+				var elem uuid.UUID
+				{
+					elem = uuid.New()
+				}
+				s.ParticipantIds = append(s.ParticipantIds, elem)
+			}
+		}
+	}
+}
+
+// SetFake set fake values.
 func (s *Contor) SetFake() {
 	var unwrapped []ContorItem
 	{
@@ -329,6 +433,35 @@ func (s *MedPatientPostReq) SetFake() {
 	{
 		{
 			s.BirthDate = time.Now()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *Message) SetFake() {
+	{
+		{
+			s.ID = uuid.New()
+		}
+	}
+	{
+		{
+			s.ChatID = uuid.New()
+		}
+	}
+	{
+		{
+			s.SenderID = uuid.New()
+		}
+	}
+	{
+		{
+			s.Content = "string"
+		}
+	}
+	{
+		{
+			s.CreatedAt = time.Now()
 		}
 	}
 }

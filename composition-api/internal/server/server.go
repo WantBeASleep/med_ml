@@ -1,16 +1,16 @@
 package server
 
 import (
-	"context"
-	"fmt"
-
 	api "composition-api/internal/generated/http/api"
 	"composition-api/internal/server/auth"
+	"composition-api/internal/server/chat"
 	"composition-api/internal/server/download"
 	"composition-api/internal/server/med"
 	"composition-api/internal/server/register"
 	"composition-api/internal/server/uzi"
 	services "composition-api/internal/services"
+	"context"
+	"fmt"
 )
 
 type server struct {
@@ -19,6 +19,7 @@ type server struct {
 	med.MedRoute
 	register.RegisterRoute
 	download.DownloadRoute
+	chat.ChatRoute
 }
 
 func New(services *services.Services) api.Handler {
@@ -27,6 +28,7 @@ func New(services *services.Services) api.Handler {
 	medRoute := med.NewMedRoute(services)
 	registerRoute := register.NewRegisterRoute(services)
 	downloadRoute := download.NewDownloadRoute(services)
+	chatRoute := chat.NewChatRoute(services)
 
 	return &server{
 		UziRoute:      uziRoute,
@@ -34,6 +36,7 @@ func New(services *services.Services) api.Handler {
 		MedRoute:      medRoute,
 		RegisterRoute: registerRoute,
 		DownloadRoute: downloadRoute,
+		ChatRoute:     chatRoute,
 	}
 }
 

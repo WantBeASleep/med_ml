@@ -75,6 +75,144 @@ func (s *Card) SetDiagnosis(val OptString) {
 func (*Card) medCardDoctorIDPatientIDGetRes()   {}
 func (*Card) medCardDoctorIDPatientIDPatchRes() {}
 
+// Chat.
+// Ref: #/components/schemas/chat
+type Chat struct {
+	// Chat id.
+	ID uuid.UUID `json:"id"`
+	// Chat name.
+	Name string `json:"name"`
+	// Chat description.
+	Description OptString `json:"description"`
+	// Patient id.
+	PatientID uuid.UUID `json:"patient_id"`
+	// Chat participants ids.
+	ParticipantIds []uuid.UUID `json:"participant_ids"`
+	// Chat creation date in RFC3339 format.
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Chat) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *Chat) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *Chat) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPatientID returns the value of PatientID.
+func (s *Chat) GetPatientID() uuid.UUID {
+	return s.PatientID
+}
+
+// GetParticipantIds returns the value of ParticipantIds.
+func (s *Chat) GetParticipantIds() []uuid.UUID {
+	return s.ParticipantIds
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Chat) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Chat) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *Chat) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Chat) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPatientID sets the value of PatientID.
+func (s *Chat) SetPatientID(val uuid.UUID) {
+	s.PatientID = val
+}
+
+// SetParticipantIds sets the value of ParticipantIds.
+func (s *Chat) SetParticipantIds(val []uuid.UUID) {
+	s.ParticipantIds = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Chat) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+func (*Chat) chatsChatidGetRes() {}
+
+type ChatsChatidHistoryGetOKApplicationJSON []Message
+
+func (*ChatsChatidHistoryGetOKApplicationJSON) chatsChatidHistoryGetRes() {}
+
+type ChatsGetOKApplicationJSON []Chat
+
+func (*ChatsGetOKApplicationJSON) chatsGetRes() {}
+
+type ChatsPostReq struct {
+	// Chat name.
+	Name string `json:"name"`
+	// Chat description.
+	Description OptString `json:"description"`
+	// Patient id.
+	PatientID uuid.UUID `json:"patient_id"`
+	// Chat participants ids.
+	ParticipantIds []uuid.UUID `json:"participant_ids"`
+}
+
+// GetName returns the value of Name.
+func (s *ChatsPostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *ChatsPostReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetPatientID returns the value of PatientID.
+func (s *ChatsPostReq) GetPatientID() uuid.UUID {
+	return s.PatientID
+}
+
+// GetParticipantIds returns the value of ParticipantIds.
+func (s *ChatsPostReq) GetParticipantIds() []uuid.UUID {
+	return s.ParticipantIds
+}
+
+// SetName sets the value of Name.
+func (s *ChatsPostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *ChatsPostReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetPatientID sets the value of PatientID.
+func (s *ChatsPostReq) SetPatientID(val uuid.UUID) {
+	s.PatientID = val
+}
+
+// SetParticipantIds sets the value of ParticipantIds.
+func (s *ChatsPostReq) SetParticipantIds(val []uuid.UUID) {
+	s.ParticipantIds = val
+}
+
 type Contor []ContorItem
 
 type ContorItem struct {
@@ -505,6 +643,10 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
+func (*ErrorStatusCode) chatsChatidGetRes()                {}
+func (*ErrorStatusCode) chatsChatidHistoryGetRes()         {}
+func (*ErrorStatusCode) chatsGetRes()                      {}
+func (*ErrorStatusCode) chatsPostRes()                     {}
 func (*ErrorStatusCode) downloadUziIDImageIDGetRes()       {}
 func (*ErrorStatusCode) loginPostRes()                     {}
 func (*ErrorStatusCode) medCardDoctorIDPatientIDGetRes()   {}
@@ -769,6 +911,71 @@ func (s *MedPatientPostReq) SetMalignancy(val bool) {
 // SetBirthDate sets the value of BirthDate.
 func (s *MedPatientPostReq) SetBirthDate(val time.Time) {
 	s.BirthDate = val
+}
+
+// Chat message.
+// Ref: #/components/schemas/message
+type Message struct {
+	// Message id.
+	ID uuid.UUID `json:"id"`
+	// Chat id.
+	ChatID uuid.UUID `json:"chat_id"`
+	// Sender id.
+	SenderID uuid.UUID `json:"sender_id"`
+	// Message content.
+	Content string `json:"content"`
+	// Message creation date in RFC3339 format.
+	CreatedAt time.Time `json:"created_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Message) GetID() uuid.UUID {
+	return s.ID
+}
+
+// GetChatID returns the value of ChatID.
+func (s *Message) GetChatID() uuid.UUID {
+	return s.ChatID
+}
+
+// GetSenderID returns the value of SenderID.
+func (s *Message) GetSenderID() uuid.UUID {
+	return s.SenderID
+}
+
+// GetContent returns the value of Content.
+func (s *Message) GetContent() string {
+	return s.Content
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Message) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Message) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+// SetChatID sets the value of ChatID.
+func (s *Message) SetChatID(val uuid.UUID) {
+	s.ChatID = val
+}
+
+// SetSenderID sets the value of SenderID.
+func (s *Message) SetSenderID(val uuid.UUID) {
+	s.SenderID = val
+}
+
+// SetContent sets the value of Content.
+func (s *Message) SetContent(val string) {
+	s.Content = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Message) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
 }
 
 // Узел.
@@ -1048,6 +1255,52 @@ func (o OptFloat64) Get() (v float64, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptFloat64) Or(d float64) float64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt returns new OptInt with value set to v.
+func NewOptInt(v int) OptInt {
+	return OptInt{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt is optional int.
+type OptInt struct {
+	Value int
+	Set   bool
+}
+
+// IsSet returns true if OptInt was set.
+func (o OptInt) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt) Reset() {
+	var v int
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt) SetTo(v int) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt) Get() (v int, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt) Or(d int) int {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1678,6 +1931,7 @@ func (s *SimpleUuid) SetID(val uuid.UUID) {
 	s.ID = val
 }
 
+func (*SimpleUuid) chatsPostRes()      {}
 func (*SimpleUuid) medPatientPostRes() {}
 func (*SimpleUuid) regDoctorPostRes()  {}
 func (*SimpleUuid) regPatientPostRes() {}

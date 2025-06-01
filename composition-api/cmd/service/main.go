@@ -72,8 +72,16 @@ func run() (exitCode int) {
 		slog.Error("init medConn", slog.Any("err", err))
 		return failExitCode
 	}
+	chatConn, err := grpc.NewClient(
+		cfg.Adapters.ChatUrl,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		slog.Error("init chatConn", slog.Any("err", err))
+		return failExitCode
+	}
 
-	adapters := adapters.NewAdapters(uziConn, authConn, medConn)
+	adapters := adapters.NewAdapters(uziConn, authConn, medConn, chatConn)
 
 	// infra
 	s3Client, err := minio.New(cfg.S3.Endpoint, &minio.Options{
