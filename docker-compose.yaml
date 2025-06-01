@@ -4,6 +4,7 @@ volumes:
   redpanda-0: 
   minio-s3:
   postgres:
+  redis-data:
 
 services:
   postgres:
@@ -25,7 +26,7 @@ services:
       interval: 5s
       retries: 5
     environment:
-      POSTGRES_MULTIPLE_DATABASES: authdb,meddb,uzidb
+      POSTGRES_MULTIPLE_DATABASES: authdb,meddb,uzidb,chatdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
 
@@ -48,6 +49,23 @@ services:
       - deps
       - app
     restart: always
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    profiles:
+      - deps
+      - app
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 5
 
   ##################
   # Redpanda Brokers #
@@ -176,6 +194,26 @@ services:
     profiles:
       - app
     
+  chat_service:
+    container_name: chat_service
+    build:
+      context: ./chat_service/
+      dockerfile: Dockerfile
+    env_file:
+      - ./chat_service/.env-docker
+    ports:
+      - 50070:8080
+      - 50071:9090
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      med_service:
+        condition: service_started
+    profiles:
+      - app
+  
   composition_api:
     container_name: composition_api
     build:
@@ -190,5 +228,6 @@ services:
       - uzi_service
       - med_service
       - auth_service
+      - chat_service
     profiles:
       - app

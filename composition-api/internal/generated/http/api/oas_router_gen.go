@@ -61,6 +61,83 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'c': // Prefix: "chats"
+
+				if l := len("chats"); len(elem) >= l && elem[0:l] == "chats" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "GET":
+						s.handleChatsGetRequest([0]string{}, elemIsEscaped, w, r)
+					case "POST":
+						s.handleChatsPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "chatid"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "GET":
+							s.handleChatsChatidGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/history"
+
+						if l := len("/history"); len(elem) >= l && elem[0:l] == "/history" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleChatsChatidHistoryGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+					}
+
+				}
+
 			case 'd': // Prefix: "download/"
 
 				if l := len("download/"); len(elem) >= l && elem[0:l] == "download/" {
@@ -976,6 +1053,97 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'c': // Prefix: "chats"
+
+				if l := len("chats"); len(elem) >= l && elem[0:l] == "chats" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						r.name = ChatsGetOperation
+						r.summary = "get list of chats for doctor"
+						r.operationID = ""
+						r.pathPattern = "/chats"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = ChatsPostOperation
+						r.summary = "create new chat"
+						r.operationID = ""
+						r.pathPattern = "/chats"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "chatid"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						switch method {
+						case "GET":
+							r.name = ChatsChatidGetOperation
+							r.summary = "get chat info"
+							r.operationID = ""
+							r.pathPattern = "/chats/{chatid}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/history"
+
+						if l := len("/history"); len(elem) >= l && elem[0:l] == "/history" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = ChatsChatidHistoryGetOperation
+								r.summary = "get chat message history"
+								r.operationID = ""
+								r.pathPattern = "/chats/{chatid}/history"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+				}
+
 			case 'd': // Prefix: "download/"
 
 				if l := len("download/"); len(elem) >= l && elem[0:l] == "download/" {

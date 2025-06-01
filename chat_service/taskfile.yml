@@ -1,0 +1,109 @@
+version: "3"
+
+dotenv: [".env"]
+
+tasks:
+  bin-deps:
+    cmds:
+      - GOBIN=$(pwd)/bin go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+      - GOBIN=$(pwd)/bin go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+  codegen:
+    desc: "Generate protobuf code for this service and external dependencies"
+    cmds:
+      # Clean previous generated code
+      - rm -rf internal/pb/
+      - rm -rf pkg/api/
+      
+      # Generate code for INTERNAL usage (internal/pb) - this is what controllers use
+      - mkdir -p internal/pb/chat/v1
+      - >
+        protoc
+        --plugin=protoc-gen-go=$(pwd)/bin/protoc-gen-go
+        --plugin=protoc-gen-go-grpc=$(pwd)/bin/protoc-gen-go-grpc
+        --experimental_allow_proto3_optional
+        --go_out=internal/pb --go-grpc_out=internal/pb
+        --go_opt=module=chat_service/internal/pb
+        --go-grpc_opt=module=chat_service/internal/pb
+        api/chat_service/chat.proto
+      
+      # Generate code for EXTERNAL consumption (pkg/api) - what other services import
+      - mkdir -p pkg/api/chat/v1
+      - >
+        protoc
+        --plugin=protoc-gen-go=$(pwd)/bin/protoc-gen-go
+        --plugin=protoc-gen-go-grpc=$(pwd)/bin/protoc-gen-go-grpc
+        --experimental_allow_proto3_optional
+        --go_out=pkg/api --go-grpc_out=pkg/api
+        --go_opt=module=chat_service/pkg/api
+        --go-grpc_opt=module=chat_service/pkg/api
+        --go_opt=Mapi/chat_service/chat.proto=chat_service/pkg/api/chat/v1
+        --go-grpc_opt=Mapi/chat_service/chat.proto=chat_service/pkg/api/chat/v1
+        api/chat_service/chat.proto
+
+  codegen-external:
+    desc: "Generate code for external proto dependencies (internal/repository/pb)"
+    cmds:
+      # Create vendor.protogen directory if missing 
+      - mkdir -p vendor.protogen/med/v1
+      # Check if we need to copy med proto from composition-api
+      - >
+        if [ ! -f vendor.protogen/med/v1/med.proto ]; then
+          if [ -f ../composition-api/api/med/med.proto ]; then
+            cp ../composition-api/api/med/med.proto vendor.protogen/med/v1/
+          else
+            echo "Med service proto not found, please copy it manually to vendor.protogen/med/v1/med.proto"
+            exit 1
+          fi
+        fi
+      # Generate med service proto for internal repository usage
+      - rm -rf internal/repository/pb/med
+      - mkdir -p internal/repository/pb/med/v1
+      - >
+        protoc
+        --plugin=protoc-gen-go=$(pwd)/bin/protoc-gen-go
+        --plugin=protoc-gen-go-grpc=$(pwd)/bin/protoc-gen-go-grpc
+        --experimental_allow_proto3_optional
+        --go_out=internal/repository/pb --go-grpc_out=internal/repository/pb
+        --go_opt=module=chat_service/internal/repository/pb
+        --go-grpc_opt=module=chat_service/internal/repository/pb
+        vendor.protogen/med/v1/med.proto
+  
+  style:
+    cmds:
+      - go fmt ./...
+      - go tool goimports -w .
+      - go tool gofumpt -l -w .
+
+  build:
+    cmds:
+      - task: style
+      - go build -v -o bin/chat_service cmd/chat_service/main.go
+
+  run:
+    cmds:
+      - task: build
+      - ./bin/chat_service
+  
+  test:
+    cmds:
+      - go test -v -count=1 ./...
+
+  e2e:
+    cmds:
+      - go test -v -count=1 ./tests/e2e/... -tags=e2e
+
+  migration-up:
+    cmds:
+      - go tool goose -dir migrations postgres "$(DATABASE_URL)" up
+
+  migration-down:
+    cmds:
+      - go tool goose -dir migrations postgres "$(DATABASE_URL)" down
+
+  clean:
+    cmds:
+      - rm -rf bin/
+      - rm -rf internal/pb/
+      - rm -rf pkg/api/
+      - rm -rf internal/repository/pb/
