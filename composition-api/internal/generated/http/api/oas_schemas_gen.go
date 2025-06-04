@@ -519,7 +519,6 @@ func (*ErrorStatusCode) refreshPostRes()                   {}
 func (*ErrorStatusCode) regDoctorPostRes()                 {}
 func (*ErrorStatusCode) regPatientPostRes()                {}
 func (*ErrorStatusCode) subscriptionsCheckActiveGetRes()   {}
-func (*ErrorStatusCode) subscriptionsGetActiveGetRes()     {}
 func (*ErrorStatusCode) subscriptionsPurchasePostRes()     {}
 func (*ErrorStatusCode) tariffPlansGetRes()                {}
 func (*ErrorStatusCode) tariffPlansIDGetRes()              {}
@@ -2203,6 +2202,14 @@ func (s *SubscriptionsCheckActiveGetOK) SetHasActiveSubscription(val OptBool) {
 }
 
 func (*SubscriptionsCheckActiveGetOK) subscriptionsCheckActiveGetRes() {}
+
+type SubscriptionsGetActiveGetInternalServerError ErrorStatusCode
+
+func (*SubscriptionsGetActiveGetInternalServerError) subscriptionsGetActiveGetRes() {}
+
+type SubscriptionsGetActiveGetNotFound ErrorStatusCode
+
+func (*SubscriptionsGetActiveGetNotFound) subscriptionsGetActiveGetRes() {}
 
 // Тарифный план.
 // Ref: #/components/schemas/TariffPlan

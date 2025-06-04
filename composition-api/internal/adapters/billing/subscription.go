@@ -4,6 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	adapter_errors "composition-api/internal/adapters/errors"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	"composition-api/internal/adapters/billing/mappers"
 	domain "composition-api/internal/domain/billing"
 	pb "composition-api/internal/generated/grpc/clients/billing"
@@ -34,7 +39,16 @@ func (a *adapter) IsUserHasActiveSubscription(ctx context.Context, userID uuid.U
 func (a *adapter) GetUserActiveSubscription(ctx context.Context, userID uuid.UUID) (domain.Subscription, error) {
 	res, err := a.client.GetUserActiveSubscription(ctx, &pb.GetUserActiveSubscriptionIn{UserId: userID.String()})
 	if err != nil {
-		return domain.Subscription{}, fmt.Errorf("failed to get user active subscription: %w", err)
+		st, ok := status.FromError(err)
+		if !ok {
+			return domain.Subscription{}, fmt.Errorf("unknown error: %w", err)
+		}
+		switch st.Code() {
+		case codes.NotFound:
+			return domain.Subscription{}, adapter_errors.ErrNotFound
+		default:
+			return domain.Subscription{}, err
+		}
 	}
 	return mappers.Subscription{}.Domain(res.Subscription), nil
 }
