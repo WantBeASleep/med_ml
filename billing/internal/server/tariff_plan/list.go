@@ -25,6 +25,7 @@ func (h *handler) ListTariffPlans(ctx context.Context, _ *empty.Empty) (*pb.List
 			TariffPlanId: tp.ID.String(),
 			Name:         tp.Name,
 			Description:  tp.Description,
+			Price:        tp.Price.String(),
 			Duration:     durationpb.New(tp.Duration),
 		})
 	}
