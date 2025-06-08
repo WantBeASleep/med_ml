@@ -1,11 +1,10 @@
 package subscription
 
 import (
-	"context"
-	"errors"
-
 	adapter_errors "composition-api/internal/adapters/errors"
 	"composition-api/internal/server/security"
+	"context"
+	"errors"
 
 	api "composition-api/internal/generated/http/api"
 
@@ -47,6 +46,10 @@ func (h *handler) SubscriptionsCheckActiveGet(ctx context.Context) (api.Subscrip
 func (h *handler) SubscriptionsGetActiveGet(ctx context.Context) (api.SubscriptionsGetActiveGetRes, error) {
 	userID, err := getUserIDFromContext(ctx)
 	if err != nil {
+		return nil, err
+	}
+	subscription, err := h.services.SubscriptionService.GetUserActiveSubscription(ctx, userID)
+	if err != nil {
 		if errors.Is(err, adapter_errors.ErrNotFound) {
 			return pointer.To(
 				api.SubscriptionsGetActiveGetNotFound(
@@ -60,10 +63,6 @@ func (h *handler) SubscriptionsGetActiveGet(ctx context.Context) (api.Subscripti
 				),
 			), nil
 		}
-	}
-	subscription, err := h.services.SubscriptionService.GetUserActiveSubscription(ctx, userID)
-	if err != nil {
-		return nil, err
 	}
 
 	return pointer.To(api.Subscription{
