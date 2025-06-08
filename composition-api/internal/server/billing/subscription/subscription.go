@@ -5,6 +5,7 @@ import (
 	"composition-api/internal/server/security"
 	"context"
 	"errors"
+	"log"
 
 	api "composition-api/internal/generated/http/api"
 
@@ -50,6 +51,7 @@ func (h *handler) SubscriptionsGetActiveGet(ctx context.Context) (api.Subscripti
 	}
 	subscription, err := h.services.SubscriptionService.GetUserActiveSubscription(ctx, userID)
 	if err != nil {
+		log.Printf("Error retrieving subscription: %v", err)
 		if errors.Is(err, adapter_errors.ErrNotFound) {
 			return pointer.To(
 				api.SubscriptionsGetActiveGetNotFound(
