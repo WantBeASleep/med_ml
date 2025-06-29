@@ -5,11 +5,11 @@ import "fmt"
 type NodeValidation string
 
 const (
-	// узел не оценен специалистом
+	// ai узел не провалидирован специалистом
 	NodeValidationNull NodeValidation = "null"
-	// узел не оценен специалистом
+	// ai узел не прошел валидацию специалистом
 	NodeValidationInvalid NodeValidation = "invalid"
-	// узел оценен специалистом
+	// ai узел провалидирован специалистом
 	NodeValidationValid NodeValidation = "valid"
 )
 

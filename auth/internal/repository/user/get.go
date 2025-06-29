@@ -17,7 +17,6 @@ func (r *repo) GetUserByID(id uuid.UUID) (uentity.User, error) {
 			columnID,
 			columnEmail,
 			columnPassword,
-			columnRefreshToken,
 			columnRole,
 		).
 		From(table).
@@ -43,7 +42,6 @@ func (r *repo) GetUserByEmail(email string) (uentity.User, error) {
 			columnID,
 			columnEmail,
 			columnPassword,
-			columnRefreshToken,
 			columnRole,
 		).
 		From(table).

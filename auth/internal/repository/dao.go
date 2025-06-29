@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 
+	"auth/internal/repository/refresh_token"
 	"auth/internal/repository/user"
 
 	daolib "github.com/WantBeASleep/med_ml_lib/dao"
@@ -13,6 +14,7 @@ import (
 type DAO interface {
 	daolib.DAO
 	NewUserRepo(ctx context.Context) user.Repository
+	NewRefreshTokenRepo(ctx context.Context) refresh_token.Repository
 }
 
 type dao struct {
@@ -28,4 +30,11 @@ func (d *dao) NewUserRepo(ctx context.Context) user.Repository {
 	d.NewRepo(ctx, userRepo)
 
 	return userRepo
+}
+
+func (d *dao) NewRefreshTokenRepo(ctx context.Context) refresh_token.Repository {
+	refreshTokenRepo := refresh_token.NewR()
+	d.NewRepo(ctx, refreshTokenRepo)
+
+	return refreshTokenRepo
 }

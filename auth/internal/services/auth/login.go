@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"auth/internal/domain"
+	rtentity "auth/internal/repository/refresh_token/entity"
 )
 
 var (
@@ -34,8 +35,12 @@ func (s *service) Login(ctx context.Context, email, password string) (domain.Tok
 		return "", "", fmt.Errorf("generate tokens: %w", err)
 	}
 
-	if err := userRepo.UpdateUserRefreshToken(user.Id, refreshToken.String()); err != nil {
-		return "", "", fmt.Errorf("update user: %w", err)
+	refreshTokenRepo := s.dao.NewRefreshTokenRepo(ctx)
+	if err := refreshTokenRepo.InsertRefreshToken(rtentity.RefreshToken{
+		Id:           user.Id,
+		RefreshToken: refreshToken.String(),
+	}); err != nil {
+		return "", "", fmt.Errorf("insert new refresh token: %w", err)
 	}
 
 	return accessToken, refreshToken, nil

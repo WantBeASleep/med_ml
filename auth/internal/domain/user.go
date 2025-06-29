@@ -5,9 +5,8 @@ import (
 )
 
 type User struct {
-	Id           uuid.UUID
-	Email        string
-	Password     *Password
-	RefreshToken *Token
-	Role         Role
+	Id       uuid.UUID
+	Email    string
+	Password *Password
+	Role     Role
 }

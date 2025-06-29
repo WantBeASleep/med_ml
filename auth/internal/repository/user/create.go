@@ -11,14 +11,12 @@ func (r *repo) InsertUser(user entity.User) error {
 			columnID,
 			columnEmail,
 			columnPassword,
-			columnRefreshToken,
 			columnRole,
 		).
 		Values(
 			user.Id,
 			user.Email,
 			user.Password,
-			user.RefreshToken,
 			user.Role,
 		)
 

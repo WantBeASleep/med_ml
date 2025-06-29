@@ -9,12 +9,11 @@ import (
 )
 
 const (
-	table              = "\"user\""
-	columnID           = "id"
-	columnEmail        = "email"
-	columnPassword     = "password"
-	columnRefreshToken = "refresh_token"
-	columnRole         = "role"
+	table          = "\"user\""
+	columnID       = "id"
+	columnEmail    = "email"
+	columnPassword = "password"
+	columnRole     = "role"
 )
 
 type Repository interface {
@@ -24,7 +23,6 @@ type Repository interface {
 	GetUserByEmail(email string) (uentity.User, error)
 
 	UpdateUserPassword(id uuid.UUID, password string) error
-	UpdateUserRefreshToken(id uuid.UUID, refreshToken string) error
 }
 
 type repo struct {

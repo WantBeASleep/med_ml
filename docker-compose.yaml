@@ -19,11 +19,6 @@ services:
     restart: always
     profiles:
       - deps
-      - app
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 5s
-      retries: 5
     environment:
       POSTGRES_MULTIPLE_DATABASES: authdb,meddb,uzidb
       POSTGRES_USER: postgres
@@ -46,7 +41,6 @@ services:
     command: server --address 0.0.0.0:9000 --console-address 0.0.0.0:9001 /data
     profiles:
       - deps
-      - app
     restart: always
 
   ##################
@@ -85,8 +79,7 @@ services:
       - 19092:19092
       - 19644:9644
     profiles:
-      - deps
-      - app    
+      - deps 
   ####################
   # Redpanda Console #
   ####################
@@ -115,7 +108,6 @@ services:
       - redpanda-0
     profiles:
       - deps
-      - app
 
   ml_service:
     container_name: ml_service
@@ -138,9 +130,6 @@ services:
       - ./auth/.env-docker
     ports:
       - 50040:50055
-    depends_on:
-      postgres:
-        condition: service_healthy
     profiles:
       - app
 
@@ -153,9 +142,6 @@ services:
       - ./med/.env-docker
     ports:
       - 50050:50055
-    depends_on:
-      postgres:
-        condition: service_healthy
     profiles:
       - app
 
@@ -168,11 +154,6 @@ services:
       - ./uzi/.env-docker
     ports:
       - 50060:50055
-    depends_on:
-      postgres:
-        condition: service_healthy
-      minio:
-        condition: service_started
     profiles:
       - app
     
