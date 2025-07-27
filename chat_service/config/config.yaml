@@ -1,0 +1,34 @@
+HTTP:
+  Host: localhost
+  Port: 18080
+
+GRPC:
+  Host: localhost
+  Port: 50055
+
+WSClient:
+  PingInterval: 20s
+  PongWait: 30s
+
+Postgres:
+  DSN: postgres://postgres:postgres@localhost:5432/chatdb?sslmode=disable
+  MaxConns: 50
+  MinConns: 10
+  MaxConnLifetime: 1h
+  MaxConnIdleTime: 30m
+  HealthCheckPeriod: 1m
+  ConnectTimeout: 10s
+
+Redis:
+  Addr: localhost:6379
+  Password: ""
+  DB: 0
+  DialTimeout: 5s
+  ReadTimeout: 3s
+  WriteTimeout: 3s
+  PoolSize: 30
+  MinIdleConns: 4
+
+MedService:
+  Addr: localhost:50051
+  CacheTTL: 12h

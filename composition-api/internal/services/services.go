@@ -5,6 +5,7 @@ import (
 	"composition-api/internal/dbus/producers"
 	"composition-api/internal/repository"
 	"composition-api/internal/services/card"
+	"composition-api/internal/services/chat"
 	"composition-api/internal/services/device"
 	"composition-api/internal/services/doctor"
 	"composition-api/internal/services/download"
@@ -31,6 +32,7 @@ type Services struct {
 	PatientService     patient.Service
 	RegisterService    register.Service
 	DownloadService    download.Service
+	ChatService        chat.Service
 }
 
 func New(
@@ -50,6 +52,7 @@ func New(
 	patientService := patient.New(adapters)
 	registerService := register.New(adapters)
 	downloadService := download.New(dao)
+	chatService := chat.New(adapters)
 
 	return &Services{
 		DeviceService:      deviceService,
@@ -64,5 +67,6 @@ func New(
 		PatientService:     patientService,
 		RegisterService:    registerService,
 		DownloadService:    downloadService,
+		ChatService:        chatService,
 	}
 }

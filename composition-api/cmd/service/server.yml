@@ -469,6 +469,85 @@ components:
       example:
         id: "123e4567-e89b-12d3-a456-426614174000"
     
+    chat:
+      type: object
+      description: chat
+      required:
+        - id
+        - name
+        - patient_id
+        - participant_ids
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: chat id
+        name:
+          type: string
+          maxLength: 255
+          description: chat name
+        description:
+          type: string
+          description: chat description
+        patient_id:
+          type: string
+          format: uuid
+          description: patient id
+        participant_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: chat participants ids
+        created_at:
+          type: string
+          format: date-time
+          description: chat creation date in RFC3339 format
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        name: "Consultation about UZI"
+        description: "Discussion about UZI results"
+        patient_id: "123e4567-e89b-12d3-a456-426614174000"
+        participant_ids: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+        created_at: "2021-01-01T00:00:00Z"
+
+    message:
+      type: object
+      description: chat message
+      required:
+        - id
+        - chat_id
+        - sender_id
+        - content
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: message id
+        chat_id:
+          type: string
+          format: uuid
+          description: chat id
+        sender_id:
+          type: string
+          format: uuid
+          description: sender id
+        content:
+          type: string
+          description: message content
+        created_at:
+          type: string
+          format: date-time
+          description: message creation date in RFC3339 format
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        chat_id: "123e4567-e89b-12d3-a456-426614174001"
+        sender_id: "123e4567-e89b-12d3-a456-426614174002"
+        content: "Patient shows improvement after treatment"
+        created_at: "2021-01-01T00:00:00Z"
+
     error:
       description: Ошибка
       type: object
@@ -1755,6 +1834,151 @@ paths:
               schema:
                 type: string
                 format: binary
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /chats:
+    post:
+      summary: create new chat
+      tags:
+        - chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - patient_id
+                - participant_ids
+              properties:
+                name:
+                  type: string
+                  maxLength: 255
+                  description: chat name
+                description:
+                  type: string
+                  description: chat description
+                patient_id:
+                  type: string
+                  format: uuid
+                  description: patient id
+                participant_ids:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: chat participants ids
+              example:
+                name: "Consultation about UZI"
+                description: "Discussion about UZI results"
+                patient_id: "123e4567-e89b-12d3-a456-426614174000"
+                participant_ids: ["123e4567-e89b-12d3-a456-426614174001"]
+      responses:
+        '200':
+          description: chat created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/simpleUuid"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+    get:
+      summary: get list of chats for doctor
+      tags:
+        - chat
+      parameters:
+        - name: doctor_id
+          in: query
+          required: true
+          description: doctor id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: list of chats for doctor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/chat'
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /chats/{chatid}:
+    get:
+      summary: get chat info
+      tags:
+        - chat
+      parameters:
+        - name: chatid
+          in: path
+          required: true
+          description: chat id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: chat info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chat'
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /chats/{chatid}/history:
+    get:
+      summary: get chat message history
+      tags:
+        - chat
+      parameters:
+        - name: chatid
+          in: path
+          required: true
+          description: chat id
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          required: false
+          description: limit number of messages
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 50
+        - name: offset
+          in: query
+          required: false
+          description: offset for pagination
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: chat message history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/message'
         '500':
           $ref: "#/components/responses/error"
         default:
