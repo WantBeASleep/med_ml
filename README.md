@@ -4,8 +4,6 @@
 // TODO: добавить визуализатор protodot
 // TODO: поправить в схеме echographics на update и ответ, что бы go не зажевывала поля
 
-__РУЧКИ В SWAGGER БЕЗ ПРИПИСКИ API__
-
 ## Общая архитектура
 
 ![all_services_shema](./docs/assets/system_model.png)
@@ -22,7 +20,7 @@ __РУЧКИ В SWAGGER БЕЗ ПРИПИСКИ API__
 * 50051 - grpc med service
 * 50052 - grpc uzi service
 
-_psql db: authdb, meddb, uzidb_. Создаются при инициализации docker volume. Миграции накатываются при запуске контейнера. __ПОРТ 5433__
+_psql db: authdb, meddb, uzidb_. Создаются при инициализации docker volume. Миграции накатываются при запуске контейнера. __ПОРТ 5432__
 
 __КАК ЗАПУСТИТЬ?__
 
@@ -66,7 +64,8 @@ _P.S.: хз как сделать это через env'арники, тольк
 + go install github.com/swaggo/swag/cmd/swag@latest
 + go install golang.org/x/tools/cmd/goimports@latest
 + go install mvdan.cc/gofumpt@latest
-+ docker compose up --profile deps -d (поднимет s3, psql, redpanda)
++ docker compose --profile deps up -d (поднимет s3, psql, redpanda)
++ docker compose --profile deps up -d
 
 //TODO: в task'ах написать форматеры для sql + proto + go + smt..?
 //TODO: подумать над решение задачи об общей /pkg для всех сервисов
