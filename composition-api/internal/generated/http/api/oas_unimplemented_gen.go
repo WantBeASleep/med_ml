@@ -13,6 +13,42 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// ChatsChatidGet implements GET /chats/{chatid} operation.
+//
+// Get chat info.
+//
+// GET /chats/{chatid}
+func (UnimplementedHandler) ChatsChatidGet(ctx context.Context, params ChatsChatidGetParams) (r ChatsChatidGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ChatsChatidHistoryGet implements GET /chats/{chatid}/history operation.
+//
+// Get chat message history.
+//
+// GET /chats/{chatid}/history
+func (UnimplementedHandler) ChatsChatidHistoryGet(ctx context.Context, params ChatsChatidHistoryGetParams) (r ChatsChatidHistoryGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ChatsGet implements GET /chats operation.
+//
+// Get list of chats for doctor.
+//
+// GET /chats
+func (UnimplementedHandler) ChatsGet(ctx context.Context, params ChatsGetParams) (r ChatsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ChatsPost implements POST /chats operation.
+//
+// Create new chat.
+//
+// POST /chats
+func (UnimplementedHandler) ChatsPost(ctx context.Context, req *ChatsPostReq) (r ChatsPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // DownloadUziIDImageIDGet implements GET /download/{uzi_id}/{image_id} operation.
 //
 // Получить кадр узи.

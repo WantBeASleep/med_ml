@@ -57,6 +57,112 @@ func TestCard_Examples(t *testing.T) {
 		})
 	}
 }
+func TestChat_EncodeDecode(t *testing.T) {
+	var typ Chat
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 Chat
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestChat_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"created_at\":\"2021-01-01T00:00:00Z\",\"description\":\"Discussion about UZI results\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"name\":\"Consultation about UZI\",\"participant_ids\":[\"123e4567-e89b-12d3-a456-426614174001\",\"123e4567-e89b-12d3-a456-426614174002\"],\"patient_id\":\"123e4567-e89b-12d3-a456-426614174000\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ Chat
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 Chat
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestChatsChatidHistoryGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ ChatsChatidHistoryGetOKApplicationJSON
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 ChatsChatidHistoryGetOKApplicationJSON
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestChatsGetOKApplicationJSON_EncodeDecode(t *testing.T) {
+	var typ ChatsGetOKApplicationJSON
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 ChatsGetOKApplicationJSON
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestChatsPostReq_EncodeDecode(t *testing.T) {
+	var typ ChatsPostReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 ChatsPostReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestChatsPostReq_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"description\":\"Discussion about UZI results\",\"name\":\"Consultation about UZI\",\"participant_ids\":[\"123e4567-e89b-12d3-a456-426614174001\"],\"patient_id\":\"123e4567-e89b-12d3-a456-426614174000\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ ChatsPostReq
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 ChatsPostReq
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
 func TestContor_EncodeDecode(t *testing.T) {
 	var typ Contor
 	typ.SetFake()
@@ -357,6 +463,47 @@ func TestMedPatientPostReq_EncodeDecode(t *testing.T) {
 
 	var typ2 MedPatientPostReq
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestMessage_EncodeDecode(t *testing.T) {
+	var typ Message
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 Message
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestMessage_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"chat_id\":\"123e4567-e89b-12d3-a456-426614174001\",\"content\":\"Patient shows improvement after treatment\",\"created_at\":\"2021-01-01T00:00:00Z\",\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"sender_id\":\"123e4567-e89b-12d3-a456-426614174002\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ Message
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 Message
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
 }
 func TestNode_EncodeDecode(t *testing.T) {
 	var typ Node

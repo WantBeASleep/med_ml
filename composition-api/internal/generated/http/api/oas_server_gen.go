@@ -8,6 +8,30 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// ChatsChatidGet implements GET /chats/{chatid} operation.
+	//
+	// Get chat info.
+	//
+	// GET /chats/{chatid}
+	ChatsChatidGet(ctx context.Context, params ChatsChatidGetParams) (ChatsChatidGetRes, error)
+	// ChatsChatidHistoryGet implements GET /chats/{chatid}/history operation.
+	//
+	// Get chat message history.
+	//
+	// GET /chats/{chatid}/history
+	ChatsChatidHistoryGet(ctx context.Context, params ChatsChatidHistoryGetParams) (ChatsChatidHistoryGetRes, error)
+	// ChatsGet implements GET /chats operation.
+	//
+	// Get list of chats for doctor.
+	//
+	// GET /chats
+	ChatsGet(ctx context.Context, params ChatsGetParams) (ChatsGetRes, error)
+	// ChatsPost implements POST /chats operation.
+	//
+	// Create new chat.
+	//
+	// POST /chats
+	ChatsPost(ctx context.Context, req *ChatsPostReq) (ChatsPostRes, error)
 	// DownloadUziIDImageIDGet implements GET /download/{uzi_id}/{image_id} operation.
 	//
 	// Получить кадр узи.
