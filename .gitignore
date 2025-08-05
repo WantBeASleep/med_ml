@@ -5,6 +5,7 @@
 # libs
 vendor.protogen/*
 !vendor.protogen/*.md
+**/vendor/
 
 # bin
 bin

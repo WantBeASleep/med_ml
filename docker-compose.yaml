@@ -20,10 +20,6 @@ services:
     profiles:
       - deps
       - app
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      retries: 5
     environment:
       POSTGRES_MULTIPLE_DATABASES: authdb,meddb,uzidb,billingdb
       POSTGRES_USER: postgres
