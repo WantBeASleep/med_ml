@@ -7,7 +7,7 @@ import (
 
 	"billing/internal/domain"
 	"billing/internal/repository"
-	"billing/internal/repository/entity"
+	"billing/internal/repository/payment/entity"
 	"billing/internal/services/yookassa"
 
 	"github.com/google/uuid"

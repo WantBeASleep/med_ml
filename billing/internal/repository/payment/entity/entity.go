@@ -3,11 +3,10 @@ package entity
 import (
 	"time"
 
-	"github.com/shopspring/decimal"
-
 	"billing/internal/domain"
 
 	"github.com/google/uuid"
+	"github.com/shopspring/decimal"
 )
 
 type Payment struct {

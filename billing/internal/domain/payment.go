@@ -3,17 +3,8 @@ package domain
 import (
 	"time"
 
-	"github.com/shopspring/decimal"
-
 	"github.com/google/uuid"
-)
-
-type SubscriptionStatus string
-
-const (
-	SubPendingPayment SubscriptionStatus = "pending_payment"
-	SubActive         SubscriptionStatus = "active"
-	SubCancelled      SubscriptionStatus = "cancelled"
+	"github.com/shopspring/decimal"
 )
 
 type PaymentStatus string
@@ -25,29 +16,6 @@ const (
 	PayCompleted         PaymentStatus = "completed"
 	PayCancelled         PaymentStatus = "pay_cancelled"
 )
-
-type PaymentProvider struct {
-	ID       uuid.UUID
-	Name     string
-	IsActive bool
-}
-
-type TariffPlan struct {
-	ID          uuid.UUID
-	Name        string
-	Description string
-	Price       decimal.Decimal
-	Duration    time.Duration
-}
-
-type Subscription struct {
-	ID           uuid.UUID
-	UserID       uuid.UUID
-	TariffPlanID uuid.UUID
-	StartDate    time.Time
-	EndDate      time.Time
-	Status       SubscriptionStatus
-}
 
 type Payment struct {
 	ID                uuid.UUID

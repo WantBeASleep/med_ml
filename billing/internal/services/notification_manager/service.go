@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"billing/internal/repository/entity"
+	"billing/internal/repository/payment_notification/entity"
 
 	"github.com/google/uuid"
 
@@ -73,11 +73,7 @@ func (s *service) HandlSuccessfulNotification(ctx context.Context, notification 
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer func() {
-		if err != nil {
-			_ = s.dao.RollbackTx(ctx)
-		}
-	}()
+	defer func() { _ = s.dao.RollbackTx(ctx) }()
 	internalPayment, err := s.PaymentSrv.GetPaymentByProviderName(ctx, notification.ProviderPaymentID, notification.ProviderName)
 	if err != nil {
 		return fmt.Errorf("failed to get payment by provider name: %w", err)
@@ -135,11 +131,7 @@ func (s *service) HandlCanceledNotification(ctx context.Context, notification Ca
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer func() {
-		if err != nil {
-			_ = s.dao.RollbackTx(ctx)
-		}
-	}()
+	defer func() { _ = s.dao.RollbackTx(ctx) }()
 
 	internalPayment, err := s.PaymentSrv.GetPaymentByProviderName(ctx, notification.ProviderPaymentID, notification.ProviderName)
 	if err != nil {
@@ -201,11 +193,7 @@ func (s *service) HandlWaitingForCaptureNotification(ctx context.Context, notifi
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer func() {
-		if err != nil {
-			_ = s.dao.RollbackTx(ctx)
-		}
-	}()
+	defer func() { _ = s.dao.RollbackTx(ctx) }()
 
 	internalPayment, err := s.PaymentSrv.GetPaymentByProviderName(ctx, notification.ProviderPaymentID, notification.ProviderName)
 	if err != nil {

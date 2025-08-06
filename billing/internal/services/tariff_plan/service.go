@@ -6,7 +6,7 @@ import (
 
 	"billing/internal/domain"
 	"billing/internal/repository"
-	"billing/internal/repository/entity"
+	"billing/internal/repository/tariff_plan/entity"
 
 	"github.com/google/uuid"
 )

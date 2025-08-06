@@ -7,7 +7,7 @@ import (
 
 	"billing/internal/domain"
 	"billing/internal/repository"
-	"billing/internal/repository/entity"
+	"billing/internal/repository/subscription/entity"
 	"billing/internal/services/payment"
 
 	"github.com/google/uuid"
@@ -49,11 +49,7 @@ func (s *service) PurchaseSubscrption(ctx context.Context, tariffPlanID uuid.UUI
 	if err != nil {
 		return uuid.Nil, "", fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer func() {
-		if err != nil {
-			_ = s.dao.RollbackTx(ctx)
-		}
-	}()
+	defer func() { _ = s.dao.RollbackTx(ctx) }()
 	userSubscribtionsDB, err := s.dao.NewSubscriptionQuery(ctx).GetSubscriptionsByUserID(userId)
 	if err != nil {
 		return uuid.Nil, "", fmt.Errorf("get subscribtion by userID: %w", err)
