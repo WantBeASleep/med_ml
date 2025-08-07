@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package billing.grpc;
+
+option go_package = "internal/generated/grpc/clients/billing";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+service BillingService {
+  // Tariff Plan
+  rpc GetTariffPlanByID(GetTariffPlanByIDIn) returns (GetTariffPlanByIDOut);
+  rpc ListTariffPlans(google.protobuf.Empty) returns (ListTariffPlansOut);
+
+  // Subscription
+  rpc PurchaseSubscription(PurchaseSubscriptionIn) returns (PurchaseSubscriptionOut);
+  rpc IsUserHasActiveSubscription(IsUserHasActiveSubscriptionIn) returns (IsUserHasActiveSubscriptionOut);
+  rpc GetUserActiveSubscription(GetUserActiveSubscriptionIn) returns (GetUserActiveSubscriptionOut);
+
+  // Payment Provider
+  rpc ListPaymentProviders(google.protobuf.Empty) returns (ListPaymentProvidersOut);
+
+  // Yookassa Webhook
+  rpc HandleYookassaWebhook(YookassaWebhookRequest) returns (google.protobuf.Empty);
+}
+
+// Enums
+
+enum SubscriptionStatus {
+  pending_payment = 0;
+  active = 1;
+  cancelled = 2;
+}
+
+enum PaymentStatus {
+  pending = 0;
+  waiting_for_capture = 1;
+  waiting_for_cancel = 2;
+  completed = 3;
+  pay_cancelled = 4;
+}
+
+// Tariff Plan Messages
+
+message CreateTariffPlanIn {
+  string name = 1;
+  string description = 2;
+  string price = 3;
+  google.protobuf.Duration duration = 4;
+}
+
+message CreateTariffPlanOut {
+  string id = 1;
+}
+
+message GetTariffPlanByIDIn {
+  string id = 1;
+}
+
+message GetTariffPlanByIDOut {
+  TariffPlan tariff_plan = 1;
+}
+
+message ListTariffPlansOut {
+  repeated TariffPlan tariff_plans = 1;
+}
+
+message TariffPlan {
+  string tariff_plan_id = 1;
+  string name = 2;
+  string description = 3;
+  string price = 4;
+  google.protobuf.Duration duration = 5;
+}
+
+// Subscription Messages
+
+message PurchaseSubscriptionIn {
+  string tariff_plan_id = 1;
+  string payment_provider_id = 2;
+  string user_id = 3;
+}
+
+message PurchaseSubscriptionOut {
+  string subscription_id = 1;
+  string confirmation_url = 2;
+}
+
+message SetSubscriptionStatusIn {
+  string subscription_id = 1;
+  SubscriptionStatus status = 2;
+}
+
+message IsUserHasActiveSubscriptionIn {
+  string user_id = 1;
+}
+
+message IsUserHasActiveSubscriptionOut {
+  bool has_active_subscription = 1;
+}
+
+message GetUserActiveSubscriptionIn {
+  string user_id = 1;
+}
+
+message GetUserActiveSubscriptionOut {
+  Subscription subscription = 1;
+}
+
+message Subscription {
+  string subscription_id = 1;
+  string tariff_plan_id = 2;
+  SubscriptionStatus status = 3;
+  google.protobuf.Timestamp start_date = 4;
+  google.protobuf.Timestamp end_date = 5;
+}
+
+// Payment Provider
+
+message PaymentProvider {
+  string id = 1;
+  string name = 2;
+  bool is_active = 3;
+}
+
+message ListPaymentProvidersOut {
+  repeated PaymentProvider payment_providers = 1;
+}
+
+// Yookassa Webhook Messages
+
+message YookassaWebhookRequest {
+  string event = 1;
+  string payment_id = 2;
+  PaymentStatus status = 3;
+  string provider_name = 4;
+  google.protobuf.Timestamp received_at = 5;
+  map<string, string> extra_info = 6;
+  string reason = 7;
+}

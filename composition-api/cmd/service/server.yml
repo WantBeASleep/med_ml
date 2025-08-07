@@ -468,7 +468,255 @@ components:
           format: uuid
       example:
         id: "123e4567-e89b-12d3-a456-426614174000"
-    
+
+    TariffPlan:
+      type: object
+      description: Тарифный план
+      required:
+        - id
+        - name
+        - description
+        - price
+        - duration
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Идентификатор тарифного плана
+        name:
+          type: string
+          description: Название тарифного плана
+        description:
+          type: string
+          description: Описание тарифного плана
+        price:
+          type: string
+          description: Цена тарифного плана
+        duration:
+          type: integer
+          description: Длительность тарифного плана в наносекундах
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        name: "Basic Plan"
+        description: "This is a basic tariff plan."
+        price: "9.99"
+        duration: 2592000000000000  # 30 дней в наносекундах
+
+    Subscription:
+      type: object
+      description: Подписка
+      required:
+        - id
+        - tariff_plan_id
+        - status
+        - start_date
+        - end_date
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Идентификатор подписки
+        tariff_plan_id:
+          type: string
+          format: uuid
+          description: Идентификатор тарифного плана
+        status:
+          type: string
+          enum: [pending_payment, active, cancelled ]
+          description: Статус подписки
+        start_date:
+          type: string
+          format: date-time
+          description: Дата начала подписки
+        end_date:
+          type: string
+          format: date-time
+          description: Дата окончания подписки
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        tariff_plan_id: "123e4567-e89b-12d3-a456-426614174000"
+        status: "active"
+        start_date: "2023-01-01T00:00:00Z"
+        end_date: "2023-12-31T23:59:59Z"
+
+    PurchaseSubscriptionRequest:
+      type: object
+      description: Запрос на покупку подписки
+      required:
+        - tariff_plan_id
+        - payment_provider_id
+      properties:
+        tariff_plan_id:
+          type: string
+          format: uuid
+          description: Идентификатор тарифного плана
+        payment_provider_id:
+          type: string
+          format: uuid
+          description: Идентификатор провайдера платежей
+      example:
+        tariff_plan_id: "123e4567-e89b-12d3-a456-426614174000"
+        payment_provider_id: "123e4567-e89b-12d3-a456-426614174000"
+
+    PurchaseSubscriptionResponse:
+      type: object
+      description: Ответ на покупку подписки
+      required:
+        - subscription_id
+        - confirmation_url
+      properties:
+        subscription_id:
+          type: string
+          format: uuid
+          description: Идентификатор подписки
+        confirmation_url:
+          type: string
+          description: URL для подтверждения подписки
+      example:
+        subscription_id: "123e4567-e89b-12d3-a456-426614174000"
+        confirmation_url: "https://example.com/confirm"
+
+    YookassaWebhookRequest:
+      type: object
+      description: Запрос вебхука от Юкассы
+      properties:
+        type:
+          type: string
+          description: Тип уведомления
+        event:
+          type: string
+          description: Событие, связанное с уведомлением
+        object:
+          type: object
+          description: Объект уведомления
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Идентификатор платежа
+            status:
+              type: string
+              description: Статус платежа
+            paid:
+              type: boolean
+              description: Был ли платеж оплачен
+            amount:
+              type: object
+              description: Сумма платежа
+              properties:
+                value:
+                  type: string
+                  description: Сумма
+                currency:
+                  type: string
+                  description: Валюта
+            created_at:
+              type: string
+              format: date-time
+              description: Дата и время создания платежа
+            description:
+              type: string
+              description: Описание платежа
+            expires_at:
+              type: string
+              format: date-time
+              description: Дата и время истечения платежа
+            metadata:
+              type: object
+              description: Дополнительные данные
+            payment_method:
+              type: object
+              description: Метод оплаты
+              properties:
+                type:
+                  type: string
+                  description: Тип метода оплаты
+                id:
+                  type: string
+                  format: uuid
+                  description: Идентификатор метода оплаты
+                saved:
+                  type: boolean
+                  description: Был ли метод оплаты сохранен
+                card:
+                  type: object
+                  description: Информация о карте
+                  properties:
+                    first6:
+                      type: string
+                      description: Первые 6 цифр карты
+                    last4:
+                      type: string
+                      description: Последние 4 цифры карты
+                    expiry_month:
+                      type: string
+                      description: Месяц истечения срока действия карты
+                    expiry_year:
+                      type: string
+                      description: Год истечения срока действия карты
+                    card_type:
+                      type: string
+                      description: Тип карты
+                    issuer_country:
+                      type: string
+                      description: Страна эмитента карты
+                    issuer_name:
+                      type: string
+                      description: Имя эмитента карты
+            refundable:
+              type: boolean
+              description: Возможность возврата
+            test:
+              type: boolean
+              description: Является ли платеж тестовым
+      example:
+        type: "notification"
+        event: "payment.waiting_for_capture"
+        object:
+          id: "22d6d597-000f-5000-9000-145f6df21d6f"
+          status: "waiting_for_capture"
+          paid: true
+          amount:
+            value: "2.00"
+            currency: "RUB"
+          created_at: "2018-07-10T14:27:54.691Z"
+          description: "Заказ №72"
+          expires_at: "2018-07-17T14:28:32.484Z"
+          metadata: { }
+          payment_method:
+            type: "bank_card"
+            id: "22d6d597-000f-5000-9000-145f6df21d6f"
+            saved: false
+            card:
+              first6: "555555"
+              last4: "4444"
+              expiry_month: "07"
+              expiry_year: "2021"
+              card_type: "MasterCard"
+              issuer_country: "RU"
+              issuer_name: "Sberbank"
+          refundable: false
+          test: false
+
+    PaymentProvider:
+      type: object
+      description: Платежный провайдер
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Идентификатор платежного провайдера
+        name:
+          type: string
+          description: Название платежного провайдера
+        is_active:
+          type: boolean
+          description: Активен ли провайдер
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        name: "Yookassa"
+        is_active: true
+
     error:
       description: Ошибка
       type: object
@@ -1755,6 +2003,151 @@ paths:
               schema:
                 type: string
                 format: binary
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /tariff_plans/{id}:
+    get:
+      summary: Получить тарифный план по ID
+      tags:
+        - Tariff Plans
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор тарифного плана
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TariffPlan'
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /tariff_plans:
+    get:
+      summary: Получить список всех тарифных планов
+      tags:
+        - Tariff Plans
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TariffPlan'
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /subscriptions/purchase:
+    post:
+      summary: Купить подписку
+      tags:
+        - Subscriptions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseSubscriptionRequest'
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseSubscriptionResponse'
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /subscriptions/check-active:
+    get:
+      summary: Проверить наличие активной подписки у текущего пользователя
+      tags:
+        - Subscriptions
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  has_active_subscription:
+                    type: boolean
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /subscriptions/get-active:
+    get:
+      summary: Получить информацию об активной подписке текущего пользователя
+      tags:
+        - Subscriptions
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '404':
+          $ref: "#/components/responses/error"
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /payment_providers:
+    get:
+      summary: Получить список всех платежных провайдеров
+      tags:
+        - Payment Providers
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentProvider'
+        '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /yookassa/webhooks:
+    post:
+      summary: Обработка уведомлений от Юкассы
+      tags:
+        - Webhooks
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YookassaWebhookRequest'
+      responses:
+        '200':
+          description: Успешная обработка уведомления
         '500':
           $ref: "#/components/responses/error"
         default:
