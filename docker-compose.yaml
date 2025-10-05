@@ -113,17 +113,17 @@ services:
       - deps
       - app
 
-  ml_service:
-    container_name: ml_service
-    build: 
-      context: ./ml_service/
-      dockerfile: Dockerfile
-    depends_on:
-      - redpanda-0
-    profiles:
-      - app
-    env_file:
-      - ./ml_service/.env-docker
+  # ml_service:
+  #   container_name: ml_service
+  #   build: 
+  #     context: ./ml_service/
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - redpanda-0
+  #   profiles:
+  #     - app
+  #   env_file:
+  #     - ./ml_service/.env-docker
 
   auth_service:
     container_name: auth_service
@@ -149,17 +149,17 @@ services:
     profiles:
       - app
 
-  uzi_service:
-    container_name: uzi_service
-    build:
-      context: ./uzi/
-      dockerfile: Dockerfile
-    env_file:
-      - ./uzi/.env-docker
-    ports:
-      - 50060:50055
-    profiles:
-      - app
+  # uzi_service:
+  #   container_name: uzi_service
+  #   build:
+  #     context: ./uzi/
+  #     dockerfile: Dockerfile
+  #   env_file:
+  #     - ./uzi/.env-docker
+  #   ports:
+  #     - 50060:50055
+  #   profiles:
+  #     - app
     
   composition_api:
     container_name: composition_api
@@ -172,26 +172,26 @@ services:
       - 8080:50055
     depends_on:
       - redpanda-0
-      - uzi_service
+      # - uzi_service
       - med_service
       - auth_service
     profiles:
       - app
 
-  billing_service:
-    container_name: billing_service
-    build:
-      context: ./billing/
-      dockerfile: Dockerfile
-    env_file:
-      - ./billing/.env-docker
-    ports:
-      - 50055:50055
-    depends_on:
-      postgres:
-        condition: service_healthy
-    profiles:
-      - app
+  # billing_service:
+  #   container_name: billing_service
+  #   build:
+  #     context: ./billing/
+  #     dockerfile: Dockerfile
+  #   env_file:
+  #     - ./billing/.env-docker
+  #   ports:
+  #     - 50055:50055
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   profiles:
+  #     - app
 
   nginx:
     image: nginx:alpine

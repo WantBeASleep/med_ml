@@ -511,7 +511,6 @@ func (*ErrorStatusCode) medCardDoctorIDPatientIDGetRes()   {}
 func (*ErrorStatusCode) medCardDoctorIDPatientIDPatchRes() {}
 func (*ErrorStatusCode) medCardPostRes()                   {}
 func (*ErrorStatusCode) medDoctorIDGetRes()                {}
-func (*ErrorStatusCode) medPatientIDGetRes()               {}
 func (*ErrorStatusCode) medPatientIDPatchRes()             {}
 func (*ErrorStatusCode) medPatientPostRes()                {}
 func (*ErrorStatusCode) paymentProvidersGetRes()           {}
@@ -672,6 +671,14 @@ func (*MedDoctorIDPatientsGetNotFound) medDoctorIDPatientsGetRes() {}
 type MedDoctorIDPatientsGetOKApplicationJSON []Patient
 
 func (*MedDoctorIDPatientsGetOKApplicationJSON) medDoctorIDPatientsGetRes() {}
+
+type MedPatientIDGetInternalServerError ErrorStatusCode
+
+func (*MedPatientIDGetInternalServerError) medPatientIDGetRes() {}
+
+type MedPatientIDGetNotFound ErrorStatusCode
+
+func (*MedPatientIDGetNotFound) medPatientIDGetRes() {}
 
 type MedPatientIDPatchReq struct {
 	// Признак того, что пациент активен.

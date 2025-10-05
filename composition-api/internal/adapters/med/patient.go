@@ -34,7 +34,17 @@ func (a *adapter) GetPatient(ctx context.Context, id uuid.UUID) (domain.Patient,
 		Id: id.String(),
 	})
 	if err != nil {
-		return domain.Patient{}, err
+		st, ok := status.FromError(err)
+		if !ok {
+			return domain.Patient{}, fmt.Errorf("unknown error: %w", err)
+		}
+
+		switch st.Code() {
+		case codes.NotFound:
+			return domain.Patient{}, adapter_errors.ErrNotFound
+		default:
+			return domain.Patient{}, err
+		}
 	}
 
 	return mappers.Patient{}.Domain(res.Patient), nil
