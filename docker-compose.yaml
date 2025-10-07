@@ -172,7 +172,7 @@ services:
       - 8080:50055
     depends_on:
       - redpanda-0
-      # - uzi_service
+      - uzi_service
       - med_service
       - auth_service
     profiles:
@@ -202,6 +202,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-   depends_on:
-     - composition_api
+#    depends_on:
+#      - composition_api
     restart: always
