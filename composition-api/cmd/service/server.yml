@@ -1066,6 +1066,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/patient"
+        '404':
+          $ref: "#/components/responses/error"
         '500':
           $ref: "#/components/responses/error"
         default:

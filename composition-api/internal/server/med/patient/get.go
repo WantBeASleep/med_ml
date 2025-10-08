@@ -14,7 +14,18 @@ import (
 func (h *handler) MedPatientIDGet(ctx context.Context, params api.MedPatientIDGetParams) (api.MedPatientIDGetRes, error) {
 	patient, err := h.services.PatientService.GetPatient(ctx, params.ID)
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, adapter_errors.ErrNotFound):
+			return &api.MedPatientIDGetNotFound{
+				StatusCode: 404,
+				Response: api.Error{
+					Code:    404,
+					Message: err.Error(),
+				},
+			}, nil
+		default:
+			return nil, err
+		}
 	}
 
 	return pointer.To(mappers.Patient{}.Api(patient)), nil

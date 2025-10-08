@@ -21,7 +21,12 @@ func (h *handler) GetPatient(ctx context.Context, in *pb.GetPatientIn) (*pb.GetP
 
 	patient, err := h.patientSrv.GetPatient(ctx, patientID)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, entity.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "Пациент не найден")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	return &pb.GetPatientOut{Patient: mappers.PatientFromDomain(patient)}, nil
