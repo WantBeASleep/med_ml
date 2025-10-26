@@ -322,7 +322,7 @@ components:
         tirads_23: 0.45
         tirads_4: 0.78
         tirads_5: 0.12
-    
+
     image:
       type: object
       description: изображение
@@ -413,7 +413,7 @@ components:
         active:
           type: boolean
           description: признак того, что пациент активен
-        malignancy: 
+        malignancy:
           type: boolean
           description: признак того, что пациент имеет злокачественную опухоль
         birth_date:
@@ -761,7 +761,7 @@ paths:
             schema:
               type: object
               required:
-                - email 
+                - email
                 - password
               properties:
                 email:
@@ -985,17 +985,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/doctor"
+        '404':
+          description: врач не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         '500':
           $ref: "#/components/responses/error"
         default:
           $ref: "#/components/responses/error"
-     
+
   /med/patient:
     post:
       summary: зарегистрировать пациента
       tags:
         - med
-      
+
       requestBody:
         required: true
         content:
@@ -1050,7 +1056,7 @@ paths:
       summary: получить пациента
       tags:
         - med
-      
+
       parameters:
         - name: id
           in: path
@@ -1077,7 +1083,7 @@ paths:
       summary: обновить пациента
       tags:
         - med
-      
+
       parameters:
         - name: id
           in: path
@@ -1106,6 +1112,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/patient"
+        '404':
+          description: пациент не найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1116,7 +1128,7 @@ paths:
       summary: получить пациентов врача
       tags:
         - med
-      
+
       parameters:
         - name: id
           in: path
@@ -1146,7 +1158,7 @@ paths:
       summary: создать карту пациента
       tags:
         - med
-      
+
       requestBody:
         required: true
         content:
@@ -1160,13 +1172,13 @@ paths:
           $ref: "#/components/responses/error"
         default:
           $ref: "#/components/responses/error"
-    
+
   /med/card/{doctor_id}/{patient_id}:
     get:
       summary: получить карту пациента
       tags:
         - med
-      
+
       parameters:
         - name: doctor_id
           in: path
@@ -1175,7 +1187,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: patient_id  
+        - name: patient_id
           in: path
           required: true
           description: id пациента
@@ -1189,6 +1201,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/card"
+        '404':
+          description: карта не найдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1198,7 +1216,7 @@ paths:
       summary: обновить карту пациента
       tags:
         - med
-      
+
       parameters:
         - name: doctor_id
           in: path
@@ -1207,7 +1225,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: patient_id  
+        - name: patient_id
           in: path
           required: true
           description: id пациента
@@ -1233,6 +1251,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/card"
+        '404':
+          description: карта не найдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1242,7 +1266,7 @@ paths:
       summary: загрузить узи на обработку
       tags:
         - uzi
-      
+
       requestBody:
         required: true
         content:
@@ -1292,7 +1316,7 @@ paths:
       summary: получить узи
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1308,16 +1332,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/uzi"
+        '404':
+          description: узи не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         '500':
           $ref: "#/components/responses/error"
         default:
           $ref: "#/components/responses/error"
-    
+
     patch:
       summary: обновить узи
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1352,6 +1382,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/uzi"
+        '404':
+          description: узи не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1361,7 +1397,7 @@ paths:
       summary: удалить узи
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1383,7 +1419,7 @@ paths:
       summary: получить узи по внешнему id
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1405,13 +1441,13 @@ paths:
           $ref: "#/components/responses/error"
         default:
           $ref: "#/components/responses/error"
-  
+
   /uzis/author/{id}:
     get:
       summary: получить узи по id автора
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1439,7 +1475,7 @@ paths:
       summary: получить эхографику uzi
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1455,16 +1491,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/echographics'
+        '404':
+          description: эхографическое исследование не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         '500':
           $ref: "#/components/responses/error"
         default:
           $ref: "#/components/responses/error"
-    
+
     patch:
       summary: обновить эхографику
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1486,6 +1528,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/echographics'
+        '404':
+          description: эхографическое исследование не найдено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1496,7 +1544,7 @@ paths:
       summary: добавить uzi аппарат
       tags:
         - uzi
-      
+
       requestBody:
         required: true
         content:
@@ -1532,12 +1580,12 @@ paths:
         default:
           $ref: "#/components/responses/error"
 
-  /uzi/devices:              
+  /uzi/devices:
     get:
       summary: получит список uzi апппапапратов
       tags:
         - uzi
-      
+
       responses:
         '200':
           description: uzi аппараты
@@ -1557,7 +1605,7 @@ paths:
       summary: получает списк изображений uzi
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1585,7 +1633,7 @@ paths:
       summary: получит узлы и сегменты на указанном изображении
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1620,7 +1668,7 @@ paths:
       summary: добавить узел с сегментами
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1718,7 +1766,7 @@ paths:
       summary: получить все узлы узи
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1746,7 +1794,7 @@ paths:
       summary: обновить узел
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1785,7 +1833,7 @@ paths:
                 tirads_23: 0.67
                 tirads_4: 0.23
                 tirads_5: 0.89
-            
+
       responses:
         '200':
           description: обновленный узел
@@ -1803,7 +1851,7 @@ paths:
       description: сегменты узла будут также удалены
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1824,7 +1872,7 @@ paths:
       summary: получить сегменты узла
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1852,7 +1900,7 @@ paths:
       summary: добавить новый сегмент
       tags:
         - uzi
-      
+
       requestBody:
         required: true
         content:
@@ -1904,7 +1952,7 @@ paths:
       summary: обновить сегмент
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1960,7 +2008,7 @@ paths:
       description: если у узла не останется сегментов, он будет **удален**
       tags:
         - uzi
-      
+
       parameters:
         - name: id
           in: path
@@ -1975,13 +2023,13 @@ paths:
           $ref: "#/components/responses/error"
         default:
           $ref: "#/components/responses/error"
-  
+
   /download/{uzi_id}/{image_id}:
     get:
       summary: получить кадр узи
       tags:
         - download
-      
+
       parameters:
         - name: uzi_id
           in: path
