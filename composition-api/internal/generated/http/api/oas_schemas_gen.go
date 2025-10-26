@@ -479,6 +479,15 @@ func (s *Error) SetMessage(val string) {
 	s.Message = val
 }
 
+func (*Error) medCardDoctorIDPatientIDGetRes()   {}
+func (*Error) medCardDoctorIDPatientIDPatchRes() {}
+func (*Error) medDoctorIDGetRes()                {}
+func (*Error) medPatientIDPatchRes()             {}
+func (*Error) uziIDEchographicsGetRes()          {}
+func (*Error) uziIDEchographicsPatchRes()        {}
+func (*Error) uziIDGetRes()                      {}
+func (*Error) uziIDPatchRes()                    {}
+
 // ErrorStatusCode wraps Error with StatusCode.
 type ErrorStatusCode struct {
 	StatusCode int
