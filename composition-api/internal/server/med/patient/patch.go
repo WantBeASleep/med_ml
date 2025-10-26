@@ -2,7 +2,9 @@ package patient
 
 import (
 	"context"
+	"errors"
 
+	adapter_errors "composition-api/internal/adapters/errors"
 	api "composition-api/internal/generated/http/api"
 	apimappers "composition-api/internal/server/mappers"
 	"composition-api/internal/server/med/mappers"
@@ -18,7 +20,18 @@ func (h *handler) MedPatientIDPatch(ctx context.Context, req *api.MedPatientIDPa
 		Malignancy: apimappers.FromOptBool(req.Malignancy),
 	})
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, adapter_errors.ErrNotFound):
+			return &api.MedPatientIDPatchNotFound{
+				StatusCode: 404,
+				Response: api.Error{
+					Code:    404,
+					Message: "Пациент не найден",
+				},
+			}, nil
+		default:
+			return nil, err
+		}
 	}
 
 	return pointer.To(mappers.Patient{}.Api(patient)), nil

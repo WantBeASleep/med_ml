@@ -2,6 +2,9 @@ package uzi
 
 import (
 	"context"
+	"errors"
+
+	adapter_errors "composition-api/internal/adapters/errors"
 
 	"github.com/AlekSi/pointer"
 
@@ -24,7 +27,18 @@ func (h *handler) UziIDPatch(ctx context.Context, req *api.UziIDPatchReq, params
 		Checked:    apimappers.FromOptBool(req.Checked),
 	})
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, adapter_errors.ErrNotFound):
+			return &api.UziIDPatchNotFound{
+				StatusCode: 404,
+				Response: api.Error{
+					Code:    404,
+					Message: "УЗИ не найдено",
+				},
+			}, nil
+		default:
+			return nil, err
+		}
 	}
 	return pointer.To(mappers.Uzi{}.Domain(uzi)), nil
 }
@@ -52,7 +66,18 @@ func (h *handler) UziIDEchographicsPatch(ctx context.Context, req *api.Echograph
 		Conclusion:      apimappers.FromOptString(req.Conclusion),
 	})
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, adapter_errors.ErrNotFound):
+			return &api.UziIDEchographicsPatchNotFound{
+				StatusCode: 404,
+				Response: api.Error{
+					Code:    404,
+					Message: "Эхографическое исследование не найдено",
+				},
+			}, nil
+		default:
+			return nil, err
+		}
 	}
 	return pointer.To(mappers.Echographics(echographics)), nil
 }
