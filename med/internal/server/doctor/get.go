@@ -2,8 +2,10 @@ package doctor
 
 import (
 	"context"
+	"errors"
 
 	"med/internal/generated/grpc/service"
+	"med/internal/repository/entity"
 	"med/internal/server/mappers"
 
 	"github.com/google/uuid"
@@ -19,7 +21,12 @@ func (h *handler) GetDoctor(ctx context.Context, in *service.GetDoctorIn) (*serv
 
 	doctor, err := h.doctorSrv.GetDoctor(ctx, doctorID)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, entity.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "Врач не найден")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	return &service.GetDoctorOut{Doctor: mappers.DoctorFromDomain(doctor)}, nil

@@ -2,7 +2,6 @@ package med
 
 import (
 	"context"
-	"fmt"
 
 	adapter_errors "composition-api/internal/adapters/errors"
 	"composition-api/internal/adapters/med/mappers"
@@ -10,8 +9,6 @@ import (
 	pb "composition-api/internal/generated/grpc/clients/med"
 
 	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func (a *adapter) CreateCard(ctx context.Context, card domain.Card) error {
@@ -31,17 +28,7 @@ func (a *adapter) GetCard(ctx context.Context, doctorID, patientID uuid.UUID) (d
 		PatientId: patientID.String(),
 	})
 	if err != nil {
-		st, ok := status.FromError(err)
-		if !ok {
-			return domain.Card{}, fmt.Errorf("unknown error: %w", err)
-		}
-
-		switch st.Code() {
-		case codes.NotFound:
-			return domain.Card{}, adapter_errors.ErrNotFound
-		default:
-			return domain.Card{}, err
-		}
+		return domain.Card{}, adapter_errors.HandleGRPCError(err)
 	}
 	return mappers.Card{}.Domain(res.Card), nil
 }
@@ -55,17 +42,7 @@ func (a *adapter) UpdateCard(ctx context.Context, card domain.Card) (domain.Card
 		},
 	})
 	if err != nil {
-		st, ok := status.FromError(err)
-		if !ok {
-			return domain.Card{}, fmt.Errorf("unknown error: %w", err)
-		}
-
-		switch st.Code() {
-		case codes.NotFound:
-			return domain.Card{}, adapter_errors.ErrNotFound
-		default:
-			return domain.Card{}, err
-		}
+		return domain.Card{}, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Card{}.Domain(res.Card), nil

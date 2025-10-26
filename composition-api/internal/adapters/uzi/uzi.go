@@ -2,7 +2,6 @@ package uzi
 
 import (
 	"context"
-	"fmt"
 
 	adapter_errors "composition-api/internal/adapters/errors"
 	"composition-api/internal/adapters/uzi/mappers"
@@ -10,8 +9,6 @@ import (
 	pb "composition-api/internal/generated/grpc/clients/uzi"
 
 	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 var uziProjectionMap = map[domain.UziProjection]pb.UziProjection{
@@ -37,17 +34,7 @@ func (a *adapter) CreateUzi(ctx context.Context, in CreateUziIn) (uuid.UUID, err
 func (a *adapter) GetUziById(ctx context.Context, id uuid.UUID) (domain.Uzi, error) {
 	res, err := a.client.GetUziById(ctx, &pb.GetUziByIdIn{Id: id.String()})
 	if err != nil {
-		st, ok := status.FromError(err)
-		if !ok {
-			return domain.Uzi{}, fmt.Errorf("unknown error: %w", err)
-		}
-
-		switch st.Code() {
-		case codes.NotFound:
-			return domain.Uzi{}, adapter_errors.ErrNotFound
-		default:
-			return domain.Uzi{}, err
-		}
+		return domain.Uzi{}, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Uzi{}.Domain(res.Uzi), nil
@@ -74,17 +61,7 @@ func (a *adapter) GetUzisByAuthor(ctx context.Context, id uuid.UUID) ([]domain.U
 func (a *adapter) GetEchographicByUziId(ctx context.Context, id uuid.UUID) (domain.Echographic, error) {
 	res, err := a.client.GetEchographicByUziId(ctx, &pb.GetEchographicByUziIdIn{UziId: id.String()})
 	if err != nil {
-		st, ok := status.FromError(err)
-		if !ok {
-			return domain.Echographic{}, fmt.Errorf("unknown error: %w", err)
-		}
-
-		switch st.Code() {
-		case codes.NotFound:
-			return domain.Echographic{}, adapter_errors.ErrNotFound
-		default:
-			return domain.Echographic{}, err
-		}
+		return domain.Echographic{}, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Echographic{}.Domain(res.Echographic), nil
@@ -97,17 +74,7 @@ func (a *adapter) UpdateUzi(ctx context.Context, in UpdateUziIn) (domain.Uzi, er
 		Checked:    in.Checked,
 	})
 	if err != nil {
-		st, ok := status.FromError(err)
-		if !ok {
-			return domain.Uzi{}, fmt.Errorf("unknown error: %w", err)
-		}
-
-		switch st.Code() {
-		case codes.NotFound:
-			return domain.Uzi{}, adapter_errors.ErrNotFound
-		default:
-			return domain.Uzi{}, err
-		}
+		return domain.Uzi{}, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Uzi{}.Domain(res.Uzi), nil
@@ -138,17 +105,7 @@ func (a *adapter) UpdateEchographic(ctx context.Context, in domain.Echographic) 
 		},
 	})
 	if err != nil {
-		st, ok := status.FromError(err)
-		if !ok {
-			return domain.Echographic{}, fmt.Errorf("unknown error: %w", err)
-		}
-
-		switch st.Code() {
-		case codes.NotFound:
-			return domain.Echographic{}, adapter_errors.ErrNotFound
-		default:
-			return domain.Echographic{}, err
-		}
+		return domain.Echographic{}, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Echographic{}.Domain(res.Echographic), nil

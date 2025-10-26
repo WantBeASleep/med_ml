@@ -2,8 +2,10 @@ package card
 
 import (
 	"context"
+	"errors"
 
 	pb "med/internal/generated/grpc/service"
+	"med/internal/repository/entity"
 	"med/internal/server/mappers"
 	"med/internal/services/card"
 
@@ -29,7 +31,12 @@ func (h *handler) UpdateCard(ctx context.Context, in *pb.UpdateCardIn) (*pb.Upda
 		},
 	)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, entity.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "Карта не найдена")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	return &pb.UpdateCardOut{Card: mappers.CardFromDomain(card)}, nil

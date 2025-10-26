@@ -2,9 +2,11 @@ package patient
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	pb "med/internal/generated/grpc/service"
+	"med/internal/repository/entity"
 	"med/internal/server/mappers"
 	"med/internal/services/patient"
 
@@ -38,7 +40,12 @@ func (h *handler) UpdatePatient(ctx context.Context, in *pb.UpdatePatientIn) (*p
 		},
 	)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, entity.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "Пациент не найден")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	return &pb.UpdatePatientOut{Patient: mappers.PatientFromDomain(patient)}, nil

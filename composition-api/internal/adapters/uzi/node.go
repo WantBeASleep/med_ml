@@ -2,7 +2,6 @@ package uzi
 
 import (
 	"context"
-	"fmt"
 
 	adapter_errors "composition-api/internal/adapters/errors"
 	"composition-api/internal/adapters/uzi/mappers"
@@ -10,8 +9,6 @@ import (
 	pb "composition-api/internal/generated/grpc/clients/uzi"
 
 	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 var nodeValidationMap = map[domain.NodeValidation]pb.NodeValidation{
@@ -37,17 +34,7 @@ func (a *adapter) UpdateNode(ctx context.Context, in UpdateNodeIn) (domain.Node,
 		Tirads_5:   in.Tirads_5,
 	})
 	if err != nil {
-		st, ok := status.FromError(err)
-		if !ok {
-			return domain.Node{}, fmt.Errorf("unknown error: %w", err)
-		}
-
-		switch st.Code() {
-		case codes.NotFound:
-			return domain.Node{}, adapter_errors.ErrNotFound
-		default:
-			return domain.Node{}, err
-		}
+		return domain.Node{}, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Node{}.Domain(res.Node), nil

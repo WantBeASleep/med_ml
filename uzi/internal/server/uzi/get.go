@@ -2,12 +2,14 @@ package uzi
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	pb "uzi/internal/generated/grpc/service"
+	"uzi/internal/repository/entity"
 	"uzi/internal/server/mappers"
 )
 
@@ -18,7 +20,12 @@ func (h *handler) GetUziById(ctx context.Context, in *pb.GetUziByIdIn) (*pb.GetU
 
 	uzi, err := h.services.Uzi.GetUziByID(ctx, uuid.MustParse(in.Id))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, entity.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "УЗИ не найдено")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	out := new(pb.GetUziByIdOut)
@@ -66,7 +73,12 @@ func (h *handler) GetEchographicByUziId(ctx context.Context, in *pb.GetEchograph
 
 	echographic, err := h.services.Uzi.GetUziEchographicsByID(ctx, uuid.MustParse(in.UziId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, entity.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "Эхографическое исследование не найдено")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	out := new(pb.GetEchographicByUziIdOut)

@@ -2,7 +2,6 @@ package uzi
 
 import (
 	"context"
-	"fmt"
 
 	adapter_errors "composition-api/internal/adapters/errors"
 	"composition-api/internal/adapters/uzi/mappers"
@@ -10,8 +9,6 @@ import (
 	pb "composition-api/internal/generated/grpc/clients/uzi"
 
 	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func (a *adapter) CreateNodeWithSegments(ctx context.Context, in CreateNodeWithSegmentsIn) (uuid.UUID, []uuid.UUID, error) {
@@ -52,17 +49,7 @@ func (a *adapter) CreateNodeWithSegments(ctx context.Context, in CreateNodeWithS
 func (a *adapter) GetNodesWithSegmentsByImageId(ctx context.Context, id uuid.UUID) ([]domain.Node, []domain.Segment, error) {
 	res, err := a.client.GetNodesWithSegmentsByImageId(ctx, &pb.GetNodesWithSegmentsByImageIdIn{Id: id.String()})
 	if err != nil {
-		st, ok := status.FromError(err)
-		if !ok {
-			return nil, nil, fmt.Errorf("unknown error: %w", err)
-		}
-
-		switch st.Code() {
-		case codes.NotFound:
-			return nil, nil, adapter_errors.ErrNotFound
-		default:
-			return nil, nil, err
-		}
+		return nil, nil, adapter_errors.HandleGRPCError(err)
 	}
 
 	nodes := mappers.Node{}.SliceDomain(res.Nodes)

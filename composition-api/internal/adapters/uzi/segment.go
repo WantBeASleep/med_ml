@@ -2,7 +2,6 @@ package uzi
 
 import (
 	"context"
-	"fmt"
 
 	adapter_errors "composition-api/internal/adapters/errors"
 	"composition-api/internal/adapters/uzi/mappers"
@@ -10,8 +9,6 @@ import (
 	pb "composition-api/internal/generated/grpc/clients/uzi"
 
 	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func (a *adapter) CreateSegment(ctx context.Context, in CreateSegmentIn) (uuid.UUID, error) {
@@ -48,17 +45,7 @@ func (a *adapter) UpdateSegment(ctx context.Context, in UpdateSegmentIn) (domain
 		Tirads_5:  in.Tirads_5,
 	})
 	if err != nil {
-		st, ok := status.FromError(err)
-		if !ok {
-			return domain.Segment{}, fmt.Errorf("unknown error: %w", err)
-		}
-
-		switch st.Code() {
-		case codes.NotFound:
-			return domain.Segment{}, adapter_errors.ErrNotFound
-		default:
-			return domain.Segment{}, err
-		}
+		return domain.Segment{}, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Segment{}.Domain(res.Segment), nil
