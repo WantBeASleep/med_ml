@@ -2,12 +2,16 @@ package med
 
 import (
 	"context"
+	"fmt"
 
+	adapter_errors "composition-api/internal/adapters/errors"
 	"composition-api/internal/adapters/med/mappers"
 	domain "composition-api/internal/domain/med"
 	pb "composition-api/internal/generated/grpc/clients/med"
 
 	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (a *adapter) RegisterDoctor(ctx context.Context, doctor domain.Doctor) error {
@@ -28,7 +32,17 @@ func (a *adapter) GetDoctor(ctx context.Context, id uuid.UUID) (domain.Doctor, e
 		Id: id.String(),
 	})
 	if err != nil {
-		return domain.Doctor{}, err
+		st, ok := status.FromError(err)
+		if !ok {
+			return domain.Doctor{}, fmt.Errorf("unknown error: %w", err)
+		}
+
+		switch st.Code() {
+		case codes.NotFound:
+			return domain.Doctor{}, adapter_errors.ErrNotFound
+		default:
+			return domain.Doctor{}, err
+		}
 	}
 
 	return mappers.Doctor{}.Domain(res.Doctor), nil
