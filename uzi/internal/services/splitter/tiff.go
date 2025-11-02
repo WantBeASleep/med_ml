@@ -29,4 +29,5 @@ func (tiffSplitter) splitToPng(f domain.File) ([]domain.File, error) {
 	}
 
 	return res, nil
+
 }
