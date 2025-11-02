@@ -309,7 +309,10 @@ func decodeMedCardDoctorIDPatientIDGetResponse(resp *http.Response) (res MedCard
 				}
 				return res, err
 			}
-			return &response, nil
+			return &MedCardDoctorIDPatientIDGetNotFound{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
@@ -344,7 +347,7 @@ func decodeMedCardDoctorIDPatientIDGetResponse(resp *http.Response) (res MedCard
 				}
 				return res, err
 			}
-			return &ErrorStatusCode{
+			return &MedCardDoctorIDPatientIDGetInternalServerError{
 				StatusCode: resp.StatusCode,
 				Response:   response,
 			}, nil
@@ -465,7 +468,10 @@ func decodeMedCardDoctorIDPatientIDPatchResponse(resp *http.Response) (res MedCa
 				}
 				return res, err
 			}
-			return &response, nil
+			return &MedCardDoctorIDPatientIDPatchNotFound{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
@@ -500,7 +506,7 @@ func decodeMedCardDoctorIDPatientIDPatchResponse(resp *http.Response) (res MedCa
 				}
 				return res, err
 			}
-			return &ErrorStatusCode{
+			return &MedCardDoctorIDPatientIDPatchInternalServerError{
 				StatusCode: resp.StatusCode,
 				Response:   response,
 			}, nil
@@ -719,7 +725,10 @@ func decodeMedDoctorIDGetResponse(resp *http.Response) (res MedDoctorIDGetRes, _
 				}
 				return res, err
 			}
-			return &response, nil
+			return &MedDoctorIDGetNotFound{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
@@ -754,7 +763,7 @@ func decodeMedDoctorIDGetResponse(resp *http.Response) (res MedDoctorIDGetRes, _
 				}
 				return res, err
 			}
-			return &ErrorStatusCode{
+			return &MedDoctorIDGetInternalServerError{
 				StatusCode: resp.StatusCode,
 				Response:   response,
 			}, nil
@@ -1220,7 +1229,10 @@ func decodeMedPatientIDPatchResponse(resp *http.Response) (res MedPatientIDPatch
 				}
 				return res, err
 			}
-			return &response, nil
+			return &MedPatientIDPatchNotFound{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
@@ -1255,7 +1267,7 @@ func decodeMedPatientIDPatchResponse(resp *http.Response) (res MedPatientIDPatch
 				}
 				return res, err
 			}
-			return &ErrorStatusCode{
+			return &MedPatientIDPatchInternalServerError{
 				StatusCode: resp.StatusCode,
 				Response:   response,
 			}, nil
@@ -3000,7 +3012,10 @@ func decodeUziIDEchographicsGetResponse(resp *http.Response) (res UziIDEchograph
 				}
 				return res, err
 			}
-			return &response, nil
+			return &UziIDEchographicsGetNotFound{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
@@ -3035,7 +3050,7 @@ func decodeUziIDEchographicsGetResponse(resp *http.Response) (res UziIDEchograph
 				}
 				return res, err
 			}
-			return &ErrorStatusCode{
+			return &UziIDEchographicsGetInternalServerError{
 				StatusCode: resp.StatusCode,
 				Response:   response,
 			}, nil
@@ -3165,7 +3180,10 @@ func decodeUziIDEchographicsPatchResponse(resp *http.Response) (res UziIDEchogra
 				}
 				return res, err
 			}
-			return &response, nil
+			return &UziIDEchographicsPatchNotFound{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
@@ -3200,7 +3218,7 @@ func decodeUziIDEchographicsPatchResponse(resp *http.Response) (res UziIDEchogra
 				}
 				return res, err
 			}
-			return &ErrorStatusCode{
+			return &UziIDEchographicsPatchInternalServerError{
 				StatusCode: resp.StatusCode,
 				Response:   response,
 			}, nil
@@ -3330,7 +3348,10 @@ func decodeUziIDGetResponse(resp *http.Response) (res UziIDGetRes, _ error) {
 				}
 				return res, err
 			}
-			return &response, nil
+			return &UziIDGetNotFound{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
@@ -3365,7 +3386,7 @@ func decodeUziIDGetResponse(resp *http.Response) (res UziIDGetRes, _ error) {
 				}
 				return res, err
 			}
-			return &ErrorStatusCode{
+			return &UziIDGetInternalServerError{
 				StatusCode: resp.StatusCode,
 				Response:   response,
 			}, nil
@@ -3885,7 +3906,10 @@ func decodeUziIDPatchResponse(resp *http.Response) (res UziIDPatchRes, _ error) 
 				}
 				return res, err
 			}
-			return &response, nil
+			return &UziIDPatchNotFound{
+				StatusCode: resp.StatusCode,
+				Response:   response,
+			}, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
@@ -3920,7 +3944,7 @@ func decodeUziIDPatchResponse(resp *http.Response) (res UziIDPatchRes, _ error) 
 				}
 				return res, err
 			}
-			return &ErrorStatusCode{
+			return &UziIDPatchInternalServerError{
 				StatusCode: resp.StatusCode,
 				Response:   response,
 			}, nil

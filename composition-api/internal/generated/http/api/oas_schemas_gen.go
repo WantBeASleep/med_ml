@@ -479,15 +479,6 @@ func (s *Error) SetMessage(val string) {
 	s.Message = val
 }
 
-func (*Error) medCardDoctorIDPatientIDGetRes()   {}
-func (*Error) medCardDoctorIDPatientIDPatchRes() {}
-func (*Error) medDoctorIDGetRes()                {}
-func (*Error) medPatientIDPatchRes()             {}
-func (*Error) uziIDEchographicsGetRes()          {}
-func (*Error) uziIDEchographicsPatchRes()        {}
-func (*Error) uziIDGetRes()                      {}
-func (*Error) uziIDPatchRes()                    {}
-
 // ErrorStatusCode wraps Error with StatusCode.
 type ErrorStatusCode struct {
 	StatusCode int
@@ -514,43 +505,35 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
-func (*ErrorStatusCode) downloadUziIDImageIDGetRes()       {}
-func (*ErrorStatusCode) loginPostRes()                     {}
-func (*ErrorStatusCode) medCardDoctorIDPatientIDGetRes()   {}
-func (*ErrorStatusCode) medCardDoctorIDPatientIDPatchRes() {}
-func (*ErrorStatusCode) medCardPostRes()                   {}
-func (*ErrorStatusCode) medDoctorIDGetRes()                {}
-func (*ErrorStatusCode) medPatientIDPatchRes()             {}
-func (*ErrorStatusCode) medPatientPostRes()                {}
-func (*ErrorStatusCode) paymentProvidersGetRes()           {}
-func (*ErrorStatusCode) refreshPostRes()                   {}
-func (*ErrorStatusCode) regDoctorPostRes()                 {}
-func (*ErrorStatusCode) regPatientPostRes()                {}
-func (*ErrorStatusCode) subscriptionsCheckActiveGetRes()   {}
-func (*ErrorStatusCode) subscriptionsPurchasePostRes()     {}
-func (*ErrorStatusCode) tariffPlansGetRes()                {}
-func (*ErrorStatusCode) tariffPlansIDGetRes()              {}
-func (*ErrorStatusCode) uziDevicePostRes()                 {}
-func (*ErrorStatusCode) uziDevicesGetRes()                 {}
-func (*ErrorStatusCode) uziIDDeleteRes()                   {}
-func (*ErrorStatusCode) uziIDEchographicsGetRes()          {}
-func (*ErrorStatusCode) uziIDEchographicsPatchRes()        {}
-func (*ErrorStatusCode) uziIDGetRes()                      {}
-func (*ErrorStatusCode) uziIDImagesGetRes()                {}
-func (*ErrorStatusCode) uziIDNodesGetRes()                 {}
-func (*ErrorStatusCode) uziIDNodesSegmentsPostRes()        {}
-func (*ErrorStatusCode) uziIDPatchRes()                    {}
-func (*ErrorStatusCode) uziImageIDNodesSegmentsGetRes()    {}
-func (*ErrorStatusCode) uziNodesIDDeleteRes()              {}
-func (*ErrorStatusCode) uziNodesIDPatchRes()               {}
-func (*ErrorStatusCode) uziNodesIDSegmentsGetRes()         {}
-func (*ErrorStatusCode) uziPostRes()                       {}
-func (*ErrorStatusCode) uziSegmentIDDeleteRes()            {}
-func (*ErrorStatusCode) uziSegmentIDPatchRes()             {}
-func (*ErrorStatusCode) uziSegmentPostRes()                {}
-func (*ErrorStatusCode) uzisAuthorIDGetRes()               {}
-func (*ErrorStatusCode) uzisExternalIDGetRes()             {}
-func (*ErrorStatusCode) yookassaWebhooksPostRes()          {}
+func (*ErrorStatusCode) downloadUziIDImageIDGetRes()     {}
+func (*ErrorStatusCode) loginPostRes()                   {}
+func (*ErrorStatusCode) medCardPostRes()                 {}
+func (*ErrorStatusCode) medPatientPostRes()              {}
+func (*ErrorStatusCode) paymentProvidersGetRes()         {}
+func (*ErrorStatusCode) refreshPostRes()                 {}
+func (*ErrorStatusCode) regDoctorPostRes()               {}
+func (*ErrorStatusCode) regPatientPostRes()              {}
+func (*ErrorStatusCode) subscriptionsCheckActiveGetRes() {}
+func (*ErrorStatusCode) subscriptionsPurchasePostRes()   {}
+func (*ErrorStatusCode) tariffPlansGetRes()              {}
+func (*ErrorStatusCode) tariffPlansIDGetRes()            {}
+func (*ErrorStatusCode) uziDevicePostRes()               {}
+func (*ErrorStatusCode) uziDevicesGetRes()               {}
+func (*ErrorStatusCode) uziIDDeleteRes()                 {}
+func (*ErrorStatusCode) uziIDImagesGetRes()              {}
+func (*ErrorStatusCode) uziIDNodesGetRes()               {}
+func (*ErrorStatusCode) uziIDNodesSegmentsPostRes()      {}
+func (*ErrorStatusCode) uziImageIDNodesSegmentsGetRes()  {}
+func (*ErrorStatusCode) uziNodesIDDeleteRes()            {}
+func (*ErrorStatusCode) uziNodesIDPatchRes()             {}
+func (*ErrorStatusCode) uziNodesIDSegmentsGetRes()       {}
+func (*ErrorStatusCode) uziPostRes()                     {}
+func (*ErrorStatusCode) uziSegmentIDDeleteRes()          {}
+func (*ErrorStatusCode) uziSegmentIDPatchRes()           {}
+func (*ErrorStatusCode) uziSegmentPostRes()              {}
+func (*ErrorStatusCode) uzisAuthorIDGetRes()             {}
+func (*ErrorStatusCode) uzisExternalIDGetRes()           {}
+func (*ErrorStatusCode) yookassaWebhooksPostRes()        {}
 
 // Изображение.
 // Ref: #/components/schemas/image
@@ -649,6 +632,22 @@ func (s *LoginPostReq) SetPassword(val string) {
 	s.Password = val
 }
 
+type MedCardDoctorIDPatientIDGetInternalServerError ErrorStatusCode
+
+func (*MedCardDoctorIDPatientIDGetInternalServerError) medCardDoctorIDPatientIDGetRes() {}
+
+type MedCardDoctorIDPatientIDGetNotFound ErrorStatusCode
+
+func (*MedCardDoctorIDPatientIDGetNotFound) medCardDoctorIDPatientIDGetRes() {}
+
+type MedCardDoctorIDPatientIDPatchInternalServerError ErrorStatusCode
+
+func (*MedCardDoctorIDPatientIDPatchInternalServerError) medCardDoctorIDPatientIDPatchRes() {}
+
+type MedCardDoctorIDPatientIDPatchNotFound ErrorStatusCode
+
+func (*MedCardDoctorIDPatientIDPatchNotFound) medCardDoctorIDPatientIDPatchRes() {}
+
 type MedCardDoctorIDPatientIDPatchReq struct {
 	// Диагноз пациента.
 	Diagnosis string `json:"diagnosis"`
@@ -669,6 +668,14 @@ type MedCardPostOK struct{}
 
 func (*MedCardPostOK) medCardPostRes() {}
 
+type MedDoctorIDGetInternalServerError ErrorStatusCode
+
+func (*MedDoctorIDGetInternalServerError) medDoctorIDGetRes() {}
+
+type MedDoctorIDGetNotFound ErrorStatusCode
+
+func (*MedDoctorIDGetNotFound) medDoctorIDGetRes() {}
+
 type MedDoctorIDPatientsGetInternalServerError ErrorStatusCode
 
 func (*MedDoctorIDPatientsGetInternalServerError) medDoctorIDPatientsGetRes() {}
@@ -688,6 +695,14 @@ func (*MedPatientIDGetInternalServerError) medPatientIDGetRes() {}
 type MedPatientIDGetNotFound ErrorStatusCode
 
 func (*MedPatientIDGetNotFound) medPatientIDGetRes() {}
+
+type MedPatientIDPatchInternalServerError ErrorStatusCode
+
+func (*MedPatientIDPatchInternalServerError) medPatientIDPatchRes() {}
+
+type MedPatientIDPatchNotFound ErrorStatusCode
+
+func (*MedPatientIDPatchNotFound) medPatientIDPatchRes() {}
 
 type MedPatientIDPatchReq struct {
 	// Признак того, что пациент активен.
@@ -2444,6 +2459,30 @@ type UziIDDeleteOK struct{}
 
 func (*UziIDDeleteOK) uziIDDeleteRes() {}
 
+type UziIDEchographicsGetInternalServerError ErrorStatusCode
+
+func (*UziIDEchographicsGetInternalServerError) uziIDEchographicsGetRes() {}
+
+type UziIDEchographicsGetNotFound ErrorStatusCode
+
+func (*UziIDEchographicsGetNotFound) uziIDEchographicsGetRes() {}
+
+type UziIDEchographicsPatchInternalServerError ErrorStatusCode
+
+func (*UziIDEchographicsPatchInternalServerError) uziIDEchographicsPatchRes() {}
+
+type UziIDEchographicsPatchNotFound ErrorStatusCode
+
+func (*UziIDEchographicsPatchNotFound) uziIDEchographicsPatchRes() {}
+
+type UziIDGetInternalServerError ErrorStatusCode
+
+func (*UziIDGetInternalServerError) uziIDGetRes() {}
+
+type UziIDGetNotFound ErrorStatusCode
+
+func (*UziIDGetNotFound) uziIDGetRes() {}
+
 type UziIDImagesGetOKApplicationJSON []Image
 
 func (*UziIDImagesGetOKApplicationJSON) uziIDImagesGetRes() {}
@@ -2609,6 +2648,14 @@ func (s *UziIDNodesSegmentsPostReqSegmentsItem) SetTirads4(val float64) {
 func (s *UziIDNodesSegmentsPostReqSegmentsItem) SetTirads5(val float64) {
 	s.Tirads5 = val
 }
+
+type UziIDPatchInternalServerError ErrorStatusCode
+
+func (*UziIDPatchInternalServerError) uziIDPatchRes() {}
+
+type UziIDPatchNotFound ErrorStatusCode
+
+func (*UziIDPatchNotFound) uziIDPatchRes() {}
 
 type UziIDPatchReq struct {
 	// Проекция узи.

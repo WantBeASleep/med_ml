@@ -187,9 +187,6 @@ services:
       - ./billing/.env-docker
     ports:
       - 50055:50055
-    depends_on:
-      postgres:
-        condition: service_healthy
     profiles:
       - app
 

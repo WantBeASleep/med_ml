@@ -986,11 +986,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/doctor"
         '404':
-          description: врач не найден
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
+          $ref: "#/components/responses/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1113,11 +1109,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/patient"
         '404':
-          description: пациент не найден
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
+          $ref: "#/components/responses/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1202,11 +1194,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/card"
         '404':
-          description: карта не найдена
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
+          $ref: "#/components/responses/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1252,11 +1240,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/card"
         '404':
-          description: карта не найдена
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
+          $ref: "#/components/responses/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1333,11 +1317,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/uzi"
         '404':
-          description: узи не найдено
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
+          $ref: "#/components/responses/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1383,11 +1363,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/uzi"
         '404':
-          description: узи не найдено
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
+          $ref: "#/components/responses/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1492,11 +1468,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/echographics'
         '404':
-          description: эхографическое исследование не найдено
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
+          $ref: "#/components/responses/error"
         '500':
           $ref: "#/components/responses/error"
         default:
@@ -1529,11 +1501,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/echographics'
         '404':
-          description: эхографическое исследование не найдено
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
+          $ref: "#/components/responses/error"
         '500':
           $ref: "#/components/responses/error"
         default:
