@@ -43,7 +43,7 @@ func (a *adapter) GetUziById(ctx context.Context, id uuid.UUID) (domain.Uzi, err
 func (a *adapter) GetUzisByExternalId(ctx context.Context, id uuid.UUID) ([]domain.Uzi, error) {
 	res, err := a.client.GetUzisByExternalId(ctx, &pb.GetUzisByExternalIdIn{ExternalId: id.String()})
 	if err != nil {
-		return nil, err
+		return nil, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Uzi{}.SliceDomain(res.Uzis), nil
@@ -52,7 +52,7 @@ func (a *adapter) GetUzisByExternalId(ctx context.Context, id uuid.UUID) ([]doma
 func (a *adapter) GetUzisByAuthor(ctx context.Context, id uuid.UUID) ([]domain.Uzi, error) {
 	res, err := a.client.GetUzisByAuthor(ctx, &pb.GetUzisByAuthorIn{Author: id.String()})
 	if err != nil {
-		return nil, err
+		return nil, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Uzi{}.SliceDomain(res.Uzis), nil

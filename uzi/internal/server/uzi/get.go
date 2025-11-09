@@ -41,7 +41,12 @@ func (h *handler) GetUzisByExternalId(ctx context.Context, in *pb.GetUzisByExter
 
 	uzis, err := h.services.Uzi.GetUzisByExternalID(ctx, uuid.MustParse(in.ExternalId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, entity.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "УЗИ не найдено")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	out := new(pb.GetUzisByExternalIdOut)
@@ -57,7 +62,12 @@ func (h *handler) GetUzisByAuthor(ctx context.Context, in *pb.GetUzisByAuthorIn)
 
 	uzis, err := h.services.Uzi.GetUzisByAuthor(ctx, uuid.MustParse(in.Author))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, entity.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "УЗИ не найдено")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	out := new(pb.GetUzisByAuthorOut)
