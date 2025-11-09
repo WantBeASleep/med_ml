@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	adapter_errors "composition-api/internal/adapters/errors"
+	"composition-api/internal/domain"
 	api "composition-api/internal/generated/http/api"
 	"composition-api/internal/server/med/mappers"
 
@@ -15,7 +15,7 @@ func (h *handler) MedPatientIDGet(ctx context.Context, params api.MedPatientIDGe
 	patient, err := h.services.PatientService.GetPatient(ctx, params.ID)
 	if err != nil {
 		switch {
-		case errors.Is(err, adapter_errors.ErrNotFound):
+		case errors.Is(err, domain.ErrNotFound):
 			return &api.MedPatientIDGetNotFound{
 				StatusCode: 404,
 				Response: api.Error{
@@ -33,7 +33,16 @@ func (h *handler) MedPatientIDGet(ctx context.Context, params api.MedPatientIDGe
 
 func (h *handler) MedDoctorIDPatientsGet(ctx context.Context, params api.MedDoctorIDPatientsGetParams) (api.MedDoctorIDPatientsGetRes, error) {
 	patients, err := h.services.PatientService.GetPatientsByDoctorID(ctx, params.ID)
-	if err != nil && !errors.Is(err, adapter_errors.ErrNotFound) {
+	if err != nil {
+		if errors.Is(err, domain.ErrNotFound) {
+			return &api.MedDoctorIDPatientsGetNotFound{
+				StatusCode: 404,
+				Response: api.Error{
+					Code:    404,
+					Message: "Врач не найден",
+				},
+			}, nil
+		}
 		return nil, err
 	}
 

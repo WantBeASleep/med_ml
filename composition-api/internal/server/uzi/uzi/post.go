@@ -2,20 +2,23 @@ package uzi
 
 import (
 	"context"
+	"errors"
 	"fmt"
+
+	"composition-api/internal/domain"
+	uzi_domain "composition-api/internal/domain/uzi"
 
 	"github.com/AlekSi/pointer"
 
-	domain "composition-api/internal/domain/uzi"
 	api "composition-api/internal/generated/http/api"
 	mappers "composition-api/internal/server/mappers"
 	"composition-api/internal/server/security"
 	uziSrv "composition-api/internal/services/uzi"
 )
 
-var uziProjectionMap = map[api.UziPostReqProjection]domain.UziProjection{
-	api.UziPostReqProjectionCross: domain.UziProjectionCross,
-	api.UziPostReqProjectionLong:  domain.UziProjectionLong,
+var uziProjectionMap = map[api.UziPostReqProjection]uzi_domain.UziProjection{
+	api.UziPostReqProjectionCross: uzi_domain.UziProjectionCross,
+	api.UziPostReqProjectionLong:  uzi_domain.UziProjectionLong,
 }
 
 func (h *handler) UziPost(ctx context.Context, req *api.UziPostReq) (api.UziPostRes, error) {
@@ -26,7 +29,13 @@ func (h *handler) UziPost(ctx context.Context, req *api.UziPostReq) (api.UziPost
 
 	contentType := req.File.Header.Get("Content-Type")
 	if contentType != "image/tiff" {
-		return nil, fmt.Errorf("wrong file type, expected: image/tiff, got: %s", contentType)
+		return &api.UziPostBadRequest{
+			StatusCode: 400,
+			Response: api.Error{
+				Code:    400,
+				Message: fmt.Sprintf("Неверный формат файла, ожидается: image/tiff, получено: %s", contentType),
+			},
+		}, nil
 	}
 
 	uziID, err := h.services.UziService.Create(ctx, uziSrv.CreateUziArg{
@@ -38,7 +47,26 @@ func (h *handler) UziPost(ctx context.Context, req *api.UziPostReq) (api.UziPost
 		Description: mappers.FromOptString(req.Description),
 	})
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, domain.ErrBadRequest):
+			return &api.UziPostBadRequest{
+				StatusCode: 400,
+				Response: api.Error{
+					Code:    400,
+					Message: "Неверный формат запроса или файла",
+				},
+			}, nil
+		case errors.Is(err, domain.ErrUnprocessableEntity):
+			return &api.UziPostUnprocessableEntity{
+				StatusCode: 422,
+				Response: api.Error{
+					Code:    422,
+					Message: "Ошибка валидации данных",
+				},
+			}, nil
+		default:
+			return nil, err
+		}
 	}
 
 	return pointer.To(api.SimpleUuid{ID: uziID}), nil

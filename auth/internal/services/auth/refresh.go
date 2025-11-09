@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"auth/internal/domain"
@@ -13,7 +12,7 @@ import (
 func (s *service) Refresh(ctx context.Context, refreshToken domain.Token) (domain.Token, domain.Token, error) {
 	userID, _, err := s.tokenSrv.ParseUserToken(refreshToken)
 	if err != nil {
-		return "", "", fmt.Errorf("parse token: %w", err)
+		return "", "", domain.ErrBadRequest
 	}
 
 	refreshTokenRepo := s.dao.NewRefreshTokenRepo(ctx)
@@ -22,7 +21,7 @@ func (s *service) Refresh(ctx context.Context, refreshToken domain.Token) (domai
 		return "", "", fmt.Errorf("check exists refresh token: %w", err)
 	}
 	if !exists {
-		return "", "", errors.New("refresh token not found") // 403 отсюда бы ы пробрасывать
+		return "", "", domain.ErrUnauthorized
 	}
 
 	// итого сюда нужно транзакцию, но не критично если ее не будет

@@ -2,6 +2,7 @@ package card
 
 import (
 	"context"
+	"errors"
 
 	"med/internal/domain"
 	pb "med/internal/generated/grpc/service"
@@ -25,7 +26,16 @@ func (h *handler) CreateCard(ctx context.Context, in *pb.CreateCardIn) (*empty.E
 		PatientID: uuid.MustParse(in.Card.PatientId),
 		Diagnosis: in.Card.Diagnosis,
 	}); err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, domain.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "Пациент не найден")
+		case errors.Is(err, domain.ErrBadRequest):
+			return nil, status.Errorf(codes.InvalidArgument, "Неверный формат ОМС пациента")
+		case errors.Is(err, domain.ErrUnprocessableEntity):
+			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	return &empty.Empty{}, nil

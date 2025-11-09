@@ -2,11 +2,13 @@ package uzi
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	"uzi/internal/domain"
 	pb "uzi/internal/generated/grpc/service"
 	"uzi/internal/server/mappers"
 	"uzi/internal/services/uzi"
@@ -29,7 +31,12 @@ func (h *handler) CreateUzi(ctx context.Context, in *pb.CreateUziIn) (*pb.Create
 		Description: in.Description,
 	})
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, domain.ErrUnprocessableEntity):
+			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	return &pb.CreateUziOut{Id: id.String()}, nil

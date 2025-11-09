@@ -3,6 +3,7 @@ package uzi
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"uzi/internal/domain"
@@ -32,10 +33,16 @@ func (s *service) CreateUzi(ctx context.Context, arg CreateUziArg) (uuid.UUID, e
 	}
 
 	if err := s.dao.NewUziQuery(ctx).InsertUzi(uziEntity.Uzi{}.FromDomain(uzi)); err != nil {
+		if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") || strings.Contains(err.Error(), "check") {
+			return uuid.Nil, domain.ErrUnprocessableEntity
+		}
 		return uuid.Nil, fmt.Errorf("insert uzi: %w", err)
 	}
 
 	if err := s.dao.NewEchographicQuery(ctx).InsertEchographic(echographicEntity.Echographic{Id: uzi.Id}); err != nil {
+		if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") || strings.Contains(err.Error(), "check") {
+			return uuid.Nil, domain.ErrUnprocessableEntity
+		}
 		return uuid.Nil, fmt.Errorf("insert echographic: %w", err)
 	}
 

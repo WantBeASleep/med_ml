@@ -2,7 +2,9 @@ package register
 
 import (
 	"context"
+	"errors"
 
+	"composition-api/internal/domain"
 	api "composition-api/internal/generated/http/api"
 	"composition-api/internal/services/register"
 
@@ -18,7 +20,34 @@ func (h *handler) RegPatientPost(ctx context.Context, req *api.RegPatientPostReq
 		BirthDate: req.BirthDate,
 	})
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, domain.ErrBadRequest):
+			return &api.RegPatientPostBadRequest{
+				StatusCode: 400,
+				Response: api.Error{
+					Code:    400,
+					Message: "Неверный формат запроса",
+				},
+			}, nil
+		case errors.Is(err, domain.ErrConflict):
+			return &api.RegPatientPostConflict{
+				StatusCode: 409,
+				Response: api.Error{
+					Code:    409,
+					Message: "Пользователь с таким email уже существует",
+				},
+			}, nil
+		case errors.Is(err, domain.ErrUnprocessableEntity):
+			return &api.RegPatientPostUnprocessableEntity{
+				StatusCode: 422,
+				Response: api.Error{
+					Code:    422,
+					Message: "Ошибка валидации данных",
+				},
+			}, nil
+		default:
+			return nil, err
+		}
 	}
 
 	return pointer.To(api.SimpleUuid{ID: id}), nil

@@ -2,9 +2,11 @@ package uzi
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 
+	"uzi/internal/domain"
 	pb "uzi/internal/generated/grpc/service"
 
 	"google.golang.org/grpc/codes"
@@ -20,7 +22,12 @@ func (h *handler) DeleteUzi(ctx context.Context, req *pb.DeleteUziIn) (*emptypb.
 
 	err = h.services.Uzi.DeleteUzi(ctx, id)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to delete uzi: %v", err)
+		switch {
+		case errors.Is(err, domain.ErrNotFound):
+			return nil, status.Errorf(codes.NotFound, "УЗИ не найдено")
+		default:
+			return nil, status.Errorf(codes.Internal, "failed to delete uzi: %v", err)
+		}
 	}
 
 	return &emptypb.Empty{}, nil

@@ -2,6 +2,7 @@ package patient
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"med/internal/domain"
@@ -34,7 +35,14 @@ func (h *handler) CreatePatient(ctx context.Context, in *pb.CreatePatientIn) (*e
 		BirthDate:  birthDate,
 	})
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		switch {
+		case errors.Is(err, domain.ErrBadRequest):
+			return nil, status.Errorf(codes.InvalidArgument, "Неверный формат ОМС")
+		case errors.Is(err, domain.ErrUnprocessableEntity):
+			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
+		default:
+			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
+		}
 	}
 
 	return &empty.Empty{}, nil

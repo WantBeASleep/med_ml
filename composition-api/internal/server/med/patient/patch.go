@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	adapter_errors "composition-api/internal/adapters/errors"
+	"composition-api/internal/domain"
 	api "composition-api/internal/generated/http/api"
 	apimappers "composition-api/internal/server/mappers"
 	"composition-api/internal/server/med/mappers"
@@ -21,7 +21,7 @@ func (h *handler) MedPatientIDPatch(ctx context.Context, req *api.MedPatientIDPa
 	})
 	if err != nil {
 		switch {
-		case errors.Is(err, adapter_errors.ErrNotFound):
+		case errors.Is(err, domain.ErrNotFound):
 			return &api.MedPatientIDPatchNotFound{
 				StatusCode: 404,
 				Response: api.Error{

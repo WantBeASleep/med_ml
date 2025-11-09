@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"med/internal/domain"
 	pb "med/internal/generated/grpc/service"
-	"med/internal/repository/entity"
 	"med/internal/server/mappers"
 	"med/internal/services/card"
 
@@ -32,8 +32,10 @@ func (h *handler) UpdateCard(ctx context.Context, in *pb.UpdateCardIn) (*pb.Upda
 	)
 	if err != nil {
 		switch {
-		case errors.Is(err, entity.ErrNotFound):
+		case errors.Is(err, domain.ErrNotFound):
 			return nil, status.Errorf(codes.NotFound, "Карта не найдена")
+		case errors.Is(err, domain.ErrUnprocessableEntity):
+			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
 		default:
 			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
 		}

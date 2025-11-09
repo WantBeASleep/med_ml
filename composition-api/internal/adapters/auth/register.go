@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 
+	adapter_errors "composition-api/internal/adapters/errors"
 	domain "composition-api/internal/domain/auth"
 	pb "composition-api/internal/generated/grpc/clients/auth"
 
@@ -21,7 +22,7 @@ func (a *adapter) RegisterUser(ctx context.Context, email, password string, role
 		Role:     roleMap[role],
 	})
 	if err != nil {
-		return uuid.Nil, err
+		return uuid.Nil, adapter_errors.HandleGRPCError(err)
 	}
 
 	return uuid.MustParse(res.Id), nil

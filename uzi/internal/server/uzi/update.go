@@ -9,7 +9,6 @@ import (
 	"google.golang.org/grpc/status"
 
 	"uzi/internal/domain"
-	"uzi/internal/repository/entity"
 
 	"github.com/AlekSi/pointer"
 
@@ -35,8 +34,10 @@ func (h *handler) UpdateUzi(ctx context.Context, in *pb.UpdateUziIn) (*pb.Update
 	})
 	if err != nil {
 		switch {
-		case errors.Is(err, entity.ErrNotFound):
+		case errors.Is(err, domain.ErrNotFound):
 			return nil, status.Errorf(codes.NotFound, "УЗИ не найдено")
+		case errors.Is(err, domain.ErrUnprocessableEntity):
+			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
 		default:
 			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
 		}
@@ -49,6 +50,10 @@ func (h *handler) UpdateUzi(ctx context.Context, in *pb.UpdateUziIn) (*pb.Update
 }
 
 func (h *handler) UpdateEchographic(ctx context.Context, in *pb.UpdateEchographicIn) (*pb.UpdateEchographicOut, error) {
+	if _, err := uuid.Parse(in.Echographic.Id); err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "id is not a valid uuid: %s", err.Error())
+	}
+
 	echographic, err := h.services.Uzi.UpdateEchographic(
 		ctx,
 		uzi.UpdateEchographicArg{
@@ -75,8 +80,10 @@ func (h *handler) UpdateEchographic(ctx context.Context, in *pb.UpdateEchographi
 	)
 	if err != nil {
 		switch {
-		case errors.Is(err, entity.ErrNotFound):
+		case errors.Is(err, domain.ErrNotFound):
 			return nil, status.Errorf(codes.NotFound, "Эхографическое исследование не найдено")
+		case errors.Is(err, domain.ErrUnprocessableEntity):
+			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
 		default:
 			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
 		}

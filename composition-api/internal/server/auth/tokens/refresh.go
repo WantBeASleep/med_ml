@@ -2,15 +2,36 @@ package tokens
 
 import (
 	"context"
+	"errors"
 
-	domain "composition-api/internal/domain/auth"
+	"composition-api/internal/domain"
+	auth_domain "composition-api/internal/domain/auth"
 	api "composition-api/internal/generated/http/api"
 )
 
 func (h *handler) RefreshPost(ctx context.Context, req *api.RefreshPostReq) (api.RefreshPostRes, error) {
-	accesstoken, refreshToken, err := h.services.TokensService.Refresh(ctx, domain.Token(req.RefreshToken))
+	accesstoken, refreshToken, err := h.services.TokensService.Refresh(ctx, auth_domain.Token(req.RefreshToken))
 	if err != nil {
-		return nil, err
+		switch {
+		case errors.Is(err, domain.ErrBadRequest):
+			return &api.RefreshPostBadRequest{
+				StatusCode: 400,
+				Response: api.Error{
+					Code:    400,
+					Message: "Неверный формат запроса",
+				},
+			}, nil
+		case errors.Is(err, domain.ErrUnauthorized):
+			return &api.RefreshPostUnauthorized{
+				StatusCode: 401,
+				Response: api.Error{
+					Code:    401,
+					Message: "Неверный или истекший refresh токен",
+				},
+			}, nil
+		default:
+			return nil, err
+		}
 	}
 
 	return &api.RefreshPostOK{

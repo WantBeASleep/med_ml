@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 
 	"auth/internal/domain"
 
@@ -13,19 +14,21 @@ import (
 	uentity "auth/internal/repository/user/entity"
 )
 
-var (
-	ErrRegisterUserRoleDivergent = errors.New("register user role divergent")
-	ErrUserAlreadyRegistered     = errors.New("user already registered")
-)
-
 func (s *service) RegisterUser(
 	ctx context.Context,
 	email string,
 	password string,
 	role domain.Role,
 ) (uuid.UUID, error) {
+	if email == "" || password == "" {
+		return uuid.Nil, domain.ErrBadRequest
+	}
+
 	pass, err := s.passwordSrv.CreatePassword(password)
 	if err != nil {
+		if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") {
+			return uuid.Nil, domain.ErrUnprocessableEntity
+		}
 		return uuid.Nil, fmt.Errorf("create password: %w", err)
 	}
 
@@ -35,10 +38,10 @@ func (s *service) RegisterUser(
 	case err == nil:
 		user := userDB.ToDomain()
 		if user.Password != nil {
-			return uuid.Nil, ErrUserAlreadyRegistered
+			return uuid.Nil, domain.ErrConflict
 		}
 		if user.Role != role {
-			return uuid.Nil, ErrRegisterUserRoleDivergent
+			return uuid.Nil, domain.ErrUnprocessableEntity
 		}
 		user.Password = &pass
 		if err := userRepo.UpdateUserPassword(user.Id, pass.String()); err != nil {
@@ -54,6 +57,9 @@ func (s *service) RegisterUser(
 			Role:     role,
 		}
 		if err := userRepo.InsertUser(uentity.User{}.FromDomain(user)); err != nil {
+			if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") {
+				return uuid.Nil, domain.ErrUnprocessableEntity
+			}
 			return uuid.Nil, fmt.Errorf("create user: %w", err)
 		}
 

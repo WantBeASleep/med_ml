@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	adapter_errors "composition-api/internal/adapters/errors"
+	"composition-api/internal/domain"
 	api "composition-api/internal/generated/http/api"
 	"composition-api/internal/server/med/mappers"
 
@@ -15,7 +15,7 @@ func (h *handler) MedCardDoctorIDPatientIDGet(ctx context.Context, params api.Me
 	card, err := h.services.CardService.GetCard(ctx, params.DoctorID, params.PatientID)
 	if err != nil {
 		switch {
-		case errors.Is(err, adapter_errors.ErrNotFound):
+		case errors.Is(err, domain.ErrNotFound):
 			return &api.MedCardDoctorIDPatientIDGetNotFound{
 				StatusCode: 404,
 				Response: api.Error{
