@@ -2,6 +2,7 @@ package card
 
 import (
 	"med/internal/repository/card/entity"
+	repoEntity "med/internal/repository/entity"
 
 	sq "github.com/Masterminds/squirrel"
 )
@@ -18,5 +19,8 @@ func (r *repo) UpdateCard(card entity.Card) error {
 		})
 
 	_, err := r.Runner().Execx(r.Context(), query)
-	return err
+	if err != nil {
+		return repoEntity.WrapDBError(err)
+	}
+	return nil
 }

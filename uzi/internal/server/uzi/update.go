@@ -36,6 +36,8 @@ func (h *handler) UpdateUzi(ctx context.Context, in *pb.UpdateUziIn) (*pb.Update
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return nil, status.Errorf(codes.NotFound, "УЗИ не найдено")
+		case errors.Is(err, domain.ErrConflict):
+			return nil, status.Errorf(codes.AlreadyExists, "Конфликт данных")
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
 		default:
@@ -82,6 +84,8 @@ func (h *handler) UpdateEchographic(ctx context.Context, in *pb.UpdateEchographi
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return nil, status.Errorf(codes.NotFound, "Эхографическое исследование не найдено")
+		case errors.Is(err, domain.ErrConflict):
+			return nil, status.Errorf(codes.AlreadyExists, "Конфликт данных")
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
 		default:

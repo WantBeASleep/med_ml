@@ -34,6 +34,8 @@ func (h *handler) UpdateCard(ctx context.Context, in *pb.UpdateCardIn) (*pb.Upda
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return nil, status.Errorf(codes.NotFound, "Карта не найдена")
+		case errors.Is(err, domain.ErrConflict):
+			return nil, status.Errorf(codes.AlreadyExists, "Конфликт данных")
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
 		default:

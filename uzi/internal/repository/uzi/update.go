@@ -4,6 +4,7 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 
+	repoEntity "uzi/internal/repository/entity"
 	"uzi/internal/repository/uzi/entity"
 )
 
@@ -21,7 +22,7 @@ func (q *repo) UpdateUzi(uzi entity.Uzi) error {
 
 	_, err := q.Runner().Execx(q.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 
 	"med/internal/domain"
 	centity "med/internal/repository/card/entity"
@@ -26,10 +25,14 @@ func (s *service) UpdateCard(ctx context.Context, doctorID, patientID uuid.UUID,
 	update.Update(&card)
 
 	if err := cardQuery.UpdateCard(centity.Card{}.FromDomain(card)); err != nil {
-		if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") || strings.Contains(err.Error(), "check") {
+		switch {
+		case errors.Is(err, entity.ErrConflict):
+			return domain.Card{}, domain.ErrConflict
+		case errors.Is(err, entity.ErrValidation):
 			return domain.Card{}, domain.ErrUnprocessableEntity
+		default:
+			return domain.Card{}, fmt.Errorf("update card: %w", err)
 		}
-		return domain.Card{}, fmt.Errorf("update card: %w", err)
 	}
 
 	return card, nil

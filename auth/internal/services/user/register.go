@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 
 	"auth/internal/domain"
 
@@ -26,9 +25,6 @@ func (s *service) RegisterUser(
 
 	pass, err := s.passwordSrv.CreatePassword(password)
 	if err != nil {
-		if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") {
-			return uuid.Nil, domain.ErrUnprocessableEntity
-		}
 		return uuid.Nil, fmt.Errorf("create password: %w", err)
 	}
 
@@ -57,10 +53,14 @@ func (s *service) RegisterUser(
 			Role:     role,
 		}
 		if err := userRepo.InsertUser(uentity.User{}.FromDomain(user)); err != nil {
-			if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") {
+			switch {
+			case errors.Is(err, entity.ErrConflict):
+				return uuid.Nil, domain.ErrConflict
+			case errors.Is(err, entity.ErrValidation):
 				return uuid.Nil, domain.ErrUnprocessableEntity
+			default:
+				return uuid.Nil, fmt.Errorf("create user: %w", err)
 			}
-			return uuid.Nil, fmt.Errorf("create user: %w", err)
 		}
 
 		return user.Id, nil

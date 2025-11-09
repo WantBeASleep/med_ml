@@ -2,6 +2,7 @@ package card
 
 import (
 	"med/internal/repository/card/entity"
+	repoEntity "med/internal/repository/entity"
 )
 
 func (r *repo) InsertCard(card entity.Card) error {
@@ -20,7 +21,7 @@ func (r *repo) InsertCard(card entity.Card) error {
 
 	_, err := r.Runner().Execx(r.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 
 	"uzi/internal/domain"
 	echographicEntity "uzi/internal/repository/echographic/entity"
@@ -23,10 +22,14 @@ func (s *service) UpdateUzi(ctx context.Context, arg UpdateUziArg) (domain.Uzi, 
 	arg.UpdateDomain(&uzi)
 
 	if err := s.dao.NewUziQuery(ctx).UpdateUzi(uziEntity.Uzi{}.FromDomain(uzi)); err != nil {
-		if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") || strings.Contains(err.Error(), "check") {
+		switch {
+		case errors.Is(err, entity.ErrConflict):
+			return domain.Uzi{}, domain.ErrConflict
+		case errors.Is(err, entity.ErrValidation):
 			return domain.Uzi{}, domain.ErrUnprocessableEntity
+		default:
+			return domain.Uzi{}, fmt.Errorf("update uzi: %w", err)
 		}
-		return domain.Uzi{}, fmt.Errorf("update uzi: %w", err)
 	}
 
 	return uzi, nil
@@ -43,10 +46,14 @@ func (s *service) UpdateEchographic(ctx context.Context, arg UpdateEchographicAr
 	arg.UpdateDomain(&echographic)
 
 	if err := s.dao.NewEchographicQuery(ctx).UpdateEchographic(echographicEntity.Echographic{}.FromDomain(echographic)); err != nil {
-		if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") || strings.Contains(err.Error(), "check") {
+		switch {
+		case errors.Is(err, entity.ErrConflict):
+			return domain.Echographic{}, domain.ErrConflict
+		case errors.Is(err, entity.ErrValidation):
 			return domain.Echographic{}, domain.ErrUnprocessableEntity
+		default:
+			return domain.Echographic{}, fmt.Errorf("update echographic: %w", err)
 		}
-		return domain.Echographic{}, fmt.Errorf("update echographic: %w", err)
 	}
 
 	return echographic, nil

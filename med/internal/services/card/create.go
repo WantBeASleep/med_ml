@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 
 	"med/internal/domain"
 	centity "med/internal/repository/card/entity"
@@ -28,10 +27,14 @@ func (s *service) CreateCard(ctx context.Context, card domain.Card) error {
 	}
 
 	if err := s.dao.NewCardQuery(ctx).InsertCard(centity.Card{}.FromDomain(card)); err != nil {
-		if strings.Contains(err.Error(), "validation") || strings.Contains(err.Error(), "constraint") || strings.Contains(err.Error(), "check") {
+		switch {
+		case errors.Is(err, entity.ErrConflict):
+			return domain.ErrConflict
+		case errors.Is(err, entity.ErrValidation):
 			return domain.ErrUnprocessableEntity
+		default:
+			return fmt.Errorf("insert card: %w", err)
 		}
-		return fmt.Errorf("insert card: %w", err)
 	}
 
 	return nil

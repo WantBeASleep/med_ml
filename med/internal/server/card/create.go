@@ -31,6 +31,8 @@ func (h *handler) CreateCard(ctx context.Context, in *pb.CreateCardIn) (*empty.E
 			return nil, status.Errorf(codes.NotFound, "Пациент не найден")
 		case errors.Is(err, domain.ErrBadRequest):
 			return nil, status.Errorf(codes.InvalidArgument, "Неверный формат ОМС пациента")
+		case errors.Is(err, domain.ErrConflict):
+			return nil, status.Errorf(codes.AlreadyExists, "Конфликт данных")
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
 		default:
