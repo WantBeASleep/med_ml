@@ -1,6 +1,7 @@
 package refresh_token
 
 import (
+	repoEntity "auth/internal/repository/entity"
 	rtentity "auth/internal/repository/refresh_token/entity"
 
 	sq "github.com/Masterminds/squirrel"
@@ -20,5 +21,8 @@ func (r *repo) DeleteRefreshTokens(refreshTokens []rtentity.RefreshToken) error 
 		Where(cond)
 
 	_, err := r.Runner().Execx(r.Context(), query)
-	return err
+	if err != nil {
+		return repoEntity.WrapDBError(err)
+	}
+	return nil
 }

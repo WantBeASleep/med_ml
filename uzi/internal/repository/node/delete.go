@@ -3,6 +3,8 @@ package node
 import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
+
+	repoEntity "uzi/internal/repository/entity"
 )
 
 func (q *repo) DeleteNodeByID(id uuid.UUID) error {
@@ -14,7 +16,7 @@ func (q *repo) DeleteNodeByID(id uuid.UUID) error {
 
 	_, err := q.Runner().Execx(q.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

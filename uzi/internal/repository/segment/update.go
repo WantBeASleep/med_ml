@@ -1,6 +1,7 @@
 package segment
 
 import (
+	repoEntity "uzi/internal/repository/entity"
 	"uzi/internal/repository/segment/entity"
 
 	sq "github.com/Masterminds/squirrel"
@@ -21,7 +22,7 @@ func (q *repo) UpdateSegment(segment entity.Segment) error {
 
 	_, err := q.Runner().Execx(q.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

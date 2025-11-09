@@ -1,6 +1,7 @@
 package segment
 
 import (
+	repoEntity "uzi/internal/repository/entity"
 	"uzi/internal/repository/segment/entity"
 )
 
@@ -32,7 +33,7 @@ func (q *repo) InsertSegments(segments ...entity.Segment) error {
 	}
 	_, err := q.Runner().Execx(q.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

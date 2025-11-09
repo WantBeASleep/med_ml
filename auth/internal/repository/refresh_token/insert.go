@@ -2,6 +2,7 @@ package refresh_token
 
 import (
 	rtentity "auth/internal/repository/refresh_token/entity"
+	repoEntity "auth/internal/repository/entity"
 )
 
 func (r *repo) InsertRefreshToken(refreshToken rtentity.RefreshToken) error {
@@ -18,7 +19,7 @@ func (r *repo) InsertRefreshToken(refreshToken rtentity.RefreshToken) error {
 
 	_, err := r.Runner().Execx(r.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

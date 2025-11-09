@@ -4,6 +4,8 @@ import (
 	"github.com/google/uuid"
 
 	sq "github.com/Masterminds/squirrel"
+
+	repoEntity "uzi/internal/repository/entity"
 )
 
 func (r *repo) DeleteUzi(id uuid.UUID) error {
@@ -15,7 +17,7 @@ func (r *repo) DeleteUzi(id uuid.UUID) error {
 
 	_, err := r.Runner().Execx(r.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

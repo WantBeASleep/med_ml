@@ -1,6 +1,7 @@
 package node
 
 import (
+	repoEntity "uzi/internal/repository/entity"
 	"uzi/internal/repository/node/entity"
 )
 
@@ -32,7 +33,7 @@ func (q *repo) InsertNodes(nodes ...entity.Node) error {
 	}
 	_, err := q.Runner().Execx(q.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

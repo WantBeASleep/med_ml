@@ -1,6 +1,7 @@
 package image
 
 import (
+	repoEntity "uzi/internal/repository/entity"
 	"uzi/internal/repository/image/entity"
 )
 
@@ -23,7 +24,7 @@ func (q *repo) InsertImages(images ...entity.Image) error {
 
 	_, err := q.Runner().Execx(q.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

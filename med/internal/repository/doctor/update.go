@@ -2,6 +2,7 @@ package doctor
 
 import (
 	"med/internal/repository/doctor/entity"
+	repoEntity "med/internal/repository/entity"
 
 	sq "github.com/Masterminds/squirrel"
 )
@@ -19,5 +20,8 @@ func (r *repo) UpdateDoctor(doctor entity.Doctor) error {
 		})
 
 	_, err := r.Runner().Execx(r.Context(), query)
-	return err
+	if err != nil {
+		return repoEntity.WrapDBError(err)
+	}
+	return nil
 }
