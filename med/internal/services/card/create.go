@@ -27,14 +27,15 @@ func (s *service) CreateCard(ctx context.Context, card domain.Card) error {
 	}
 
 	if err := s.dao.NewCardQuery(ctx).InsertCard(centity.Card{}.FromDomain(card)); err != nil {
-		switch {
-		case errors.Is(err, entity.ErrConflict):
+		var dbErr *entity.DBConflictError
+		if errors.As(err, &dbErr) {
 			return domain.ErrConflict
-		case errors.Is(err, entity.ErrValidation):
-			return domain.ErrUnprocessableEntity
-		default:
-			return fmt.Errorf("insert card: %w", err)
 		}
+		var valErr *entity.DBValidationError
+		if errors.As(err, &valErr) {
+			return domain.ErrUnprocessableEntity
+		}
+		return fmt.Errorf("insert card: %w", err)
 	}
 
 	return nil

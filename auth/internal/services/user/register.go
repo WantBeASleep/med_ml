@@ -53,14 +53,15 @@ func (s *service) RegisterUser(
 			Role:     role,
 		}
 		if err := userRepo.InsertUser(uentity.User{}.FromDomain(user)); err != nil {
-			switch {
-			case errors.Is(err, entity.ErrConflict):
+			var dbErr *entity.DBConflictError
+			if errors.As(err, &dbErr) {
 				return uuid.Nil, domain.ErrConflict
-			case errors.Is(err, entity.ErrValidation):
-				return uuid.Nil, domain.ErrUnprocessableEntity
-			default:
-				return uuid.Nil, fmt.Errorf("create user: %w", err)
 			}
+			var valErr *entity.DBValidationError
+			if errors.As(err, &valErr) {
+				return uuid.Nil, domain.ErrUnprocessableEntity
+			}
+			return uuid.Nil, fmt.Errorf("create user: %w", err)
 		}
 
 		return user.Id, nil
@@ -80,7 +81,8 @@ func (s *service) CreateUnRegisteredUser(
 	}
 
 	if err := s.dao.NewUserRepo(ctx).InsertUser(uentity.User{}.FromDomain(user)); err != nil {
-		if errors.Is(err, entity.ErrConflict) {
+		var dbErr *entity.DBConflictError
+		if errors.As(err, &dbErr) {
 			return uuid.Nil, domain.ErrConflict
 		}
 		return uuid.Nil, fmt.Errorf("create user: %w", err)

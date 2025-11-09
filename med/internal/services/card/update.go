@@ -25,14 +25,15 @@ func (s *service) UpdateCard(ctx context.Context, doctorID, patientID uuid.UUID,
 	update.Update(&card)
 
 	if err := cardQuery.UpdateCard(centity.Card{}.FromDomain(card)); err != nil {
-		switch {
-		case errors.Is(err, entity.ErrConflict):
+		var dbErr *entity.DBConflictError
+		if errors.As(err, &dbErr) {
 			return domain.Card{}, domain.ErrConflict
-		case errors.Is(err, entity.ErrValidation):
-			return domain.Card{}, domain.ErrUnprocessableEntity
-		default:
-			return domain.Card{}, fmt.Errorf("update card: %w", err)
 		}
+		var valErr *entity.DBValidationError
+		if errors.As(err, &valErr) {
+			return domain.Card{}, domain.ErrUnprocessableEntity
+		}
+		return domain.Card{}, fmt.Errorf("update card: %w", err)
 	}
 
 	return card, nil

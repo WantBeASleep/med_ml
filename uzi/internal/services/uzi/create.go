@@ -34,14 +34,16 @@ func (s *service) CreateUzi(ctx context.Context, arg CreateUziArg) (uuid.UUID, e
 	}
 
 	if err := s.dao.NewUziQuery(ctx).InsertUzi(uziEntity.Uzi{}.FromDomain(uzi)); err != nil {
-		if errors.Is(err, entity.ErrValidation) {
+		var valErr *entity.DBValidationError
+		if errors.As(err, &valErr) {
 			return uuid.Nil, domain.ErrUnprocessableEntity
 		}
 		return uuid.Nil, fmt.Errorf("insert uzi: %w", err)
 	}
 
 	if err := s.dao.NewEchographicQuery(ctx).InsertEchographic(echographicEntity.Echographic{Id: uzi.Id}); err != nil {
-		if errors.Is(err, entity.ErrValidation) {
+		var valErr *entity.DBValidationError
+		if errors.As(err, &valErr) {
 			return uuid.Nil, domain.ErrUnprocessableEntity
 		}
 		return uuid.Nil, fmt.Errorf("insert echographic: %w", err)

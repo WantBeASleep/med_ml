@@ -19,14 +19,15 @@ func (s *service) InsertPatient(ctx context.Context, patient domain.Patient) err
 
 	err := s.dao.NewPatientQuery(ctx).InsertPatient(entity.Patient{}.FromDomain(patient))
 	if err != nil {
-		switch {
-		case errors.Is(err, repoEntity.ErrConflict):
+		var dbErr *repoEntity.DBConflictError
+		if errors.As(err, &dbErr) {
 			return domain.ErrConflict
-		case errors.Is(err, repoEntity.ErrValidation):
-			return domain.ErrUnprocessableEntity
-		default:
-			return err
 		}
+		var valErr *repoEntity.DBValidationError
+		if errors.As(err, &valErr) {
+			return domain.ErrUnprocessableEntity
+		}
+		return err
 	}
 	return nil
 }

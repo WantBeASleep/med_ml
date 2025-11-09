@@ -22,14 +22,15 @@ func (s *service) UpdateUzi(ctx context.Context, arg UpdateUziArg) (domain.Uzi, 
 	arg.UpdateDomain(&uzi)
 
 	if err := s.dao.NewUziQuery(ctx).UpdateUzi(uziEntity.Uzi{}.FromDomain(uzi)); err != nil {
-		switch {
-		case errors.Is(err, entity.ErrConflict):
+		var dbErr *entity.DBConflictError
+		if errors.As(err, &dbErr) {
 			return domain.Uzi{}, domain.ErrConflict
-		case errors.Is(err, entity.ErrValidation):
-			return domain.Uzi{}, domain.ErrUnprocessableEntity
-		default:
-			return domain.Uzi{}, fmt.Errorf("update uzi: %w", err)
 		}
+		var valErr *entity.DBValidationError
+		if errors.As(err, &valErr) {
+			return domain.Uzi{}, domain.ErrUnprocessableEntity
+		}
+		return domain.Uzi{}, fmt.Errorf("update uzi: %w", err)
 	}
 
 	return uzi, nil
@@ -46,14 +47,15 @@ func (s *service) UpdateEchographic(ctx context.Context, arg UpdateEchographicAr
 	arg.UpdateDomain(&echographic)
 
 	if err := s.dao.NewEchographicQuery(ctx).UpdateEchographic(echographicEntity.Echographic{}.FromDomain(echographic)); err != nil {
-		switch {
-		case errors.Is(err, entity.ErrConflict):
+		var dbErr *entity.DBConflictError
+		if errors.As(err, &dbErr) {
 			return domain.Echographic{}, domain.ErrConflict
-		case errors.Is(err, entity.ErrValidation):
-			return domain.Echographic{}, domain.ErrUnprocessableEntity
-		default:
-			return domain.Echographic{}, fmt.Errorf("update echographic: %w", err)
 		}
+		var valErr *entity.DBValidationError
+		if errors.As(err, &valErr) {
+			return domain.Echographic{}, domain.ErrUnprocessableEntity
+		}
+		return domain.Echographic{}, fmt.Errorf("update echographic: %w", err)
 	}
 
 	return echographic, nil

@@ -7,9 +7,7 @@ import (
 )
 
 var (
-	ErrNotFound   = errors.New("not found")
-	ErrConflict   = errors.New("conflict")
-	ErrValidation = errors.New("validation error")
+	ErrNotFound = errors.New("not found")
 )
 
 // DBConflictError представляет ошибку конфликта в БД (unique_violation).
@@ -40,7 +38,7 @@ func (e *DBValidationError) Unwrap() error {
 
 // WrapDBError оборачивает ошибку БД в типизированную ошибку repository.
 // Использует errors.As для проверки конкретных типов ошибок БД согласно Uber Go Style Guide.
-// Возвращает типизированные ошибки, которые можно проверить через errors.As() или errors.Is().
+// Возвращает типизированные ошибки, которые можно проверить через errors.As().
 func WrapDBError(err error) error {
 	if err == nil {
 		return nil
@@ -52,13 +50,11 @@ func WrapDBError(err error) error {
 		// Коды ошибок PostgreSQL для constraint violations и check constraints
 		switch pqErr.Code {
 		case pq.ErrorCode("23505"): // unique_violation
-			// Оборачиваем ErrConflict для поддержки errors.Is()
-			return &DBConflictError{Err: errors.Join(ErrConflict, err)}
+			return &DBConflictError{Err: err}
 		case pq.ErrorCode("23514"), // check_violation
 			pq.ErrorCode("23503"), // foreign_key_violation
 			pq.ErrorCode("23502"): // not_null_violation
-			// Оборачиваем ErrValidation для поддержки errors.Is()
-			return &DBValidationError{Err: errors.Join(ErrValidation, err)}
+			return &DBValidationError{Err: err}
 		}
 	}
 
