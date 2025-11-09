@@ -2,7 +2,6 @@ package register
 
 import (
 	"context"
-	"fmt"
 
 	"composition-api/internal/adapters/med"
 	"composition-api/internal/domain"
@@ -15,7 +14,7 @@ import (
 func (s *service) RegisterPatient(ctx context.Context, arg RegisterPatientArg) (uuid.UUID, error) {
 	// Проверка валидности ОМС перед созданием пользователя
 	if !validation.ValidatePolicy(arg.Policy) {
-		return uuid.UUID{}, fmt.Errorf("%w: неверный формат ОМС", domain.ErrBadRequest)
+		return uuid.UUID{}, domain.ErrBadRequest
 	}
 
 	id, err := s.adapters.Auth.RegisterUser(ctx, arg.Email, arg.Password, auth_domain.RolePatient)
