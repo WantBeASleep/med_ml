@@ -66,7 +66,7 @@ func (a *adapter) UpdatePatient(ctx context.Context, arg UpdatePatientIn) (domai
 		LastUziDate: lastUziDate,
 	})
 	if err != nil {
-		return domain.Patient{}, err
+		return domain.Patient{}, adapter_errors.HandleGRPCError(err)
 	}
 
 	return mappers.Patient{}.Domain(res.Patient), nil

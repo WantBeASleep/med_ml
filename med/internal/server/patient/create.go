@@ -42,8 +42,6 @@ func (h *handler) CreatePatient(ctx context.Context, in *pb.CreatePatientIn) (*e
 	})
 	if err != nil {
 		switch {
-		case errors.Is(err, domain.ErrBadRequest):
-			return nil, status.Errorf(codes.InvalidArgument, "Неверный формат ОМС")
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
 		case errors.Is(err, domain.ErrConflict):
