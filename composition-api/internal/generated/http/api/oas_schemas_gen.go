@@ -736,6 +736,10 @@ type MedPatientPostBadRequest ErrorStatusCode
 
 func (*MedPatientPostBadRequest) medPatientPostRes() {}
 
+type MedPatientPostConflict ErrorStatusCode
+
+func (*MedPatientPostConflict) medPatientPostRes() {}
+
 type MedPatientPostInternalServerError ErrorStatusCode
 
 func (*MedPatientPostInternalServerError) medPatientPostRes() {}
