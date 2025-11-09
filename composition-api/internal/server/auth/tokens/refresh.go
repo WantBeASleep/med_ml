@@ -3,6 +3,7 @@ package tokens
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"composition-api/internal/domain"
 	auth_domain "composition-api/internal/domain/auth"
@@ -15,12 +16,14 @@ func (h *handler) RefreshPost(ctx context.Context, req *api.RefreshPostReq) (api
 		switch {
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.RefreshPostBadRequest{
+				StatusCode: http.StatusBadRequest,
 				Response: api.Error{
 					Message: "Неверный формат запроса",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnauthorized):
 			return &api.RefreshPostUnauthorized{
+				StatusCode: http.StatusUnauthorized,
 				Response: api.Error{
 					Message: "Неверный или истекший refresh токен",
 				},

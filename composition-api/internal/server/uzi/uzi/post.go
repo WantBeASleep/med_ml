@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 
 	"composition-api/internal/domain"
 	uzi_domain "composition-api/internal/domain/uzi"
@@ -30,6 +31,7 @@ func (h *handler) UziPost(ctx context.Context, req *api.UziPostReq) (api.UziPost
 	contentType := req.File.Header.Get("Content-Type")
 	if contentType != "image/tiff" {
 		return &api.UziPostBadRequest{
+			StatusCode: http.StatusBadRequest,
 			Response: api.Error{
 				Message: fmt.Sprintf("Неверный формат файла, ожидается: image/tiff, получено: %s", contentType),
 			},
@@ -48,12 +50,14 @@ func (h *handler) UziPost(ctx context.Context, req *api.UziPostReq) (api.UziPost
 		switch {
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.UziPostBadRequest{
+				StatusCode: http.StatusBadRequest,
 				Response: api.Error{
 					Message: "Неверный формат запроса или файла",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return &api.UziPostUnprocessableEntity{
+				StatusCode: http.StatusUnprocessableEntity,
 				Response: api.Error{
 					Message: "Ошибка валидации данных",
 				},

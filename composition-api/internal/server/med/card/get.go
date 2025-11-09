@@ -3,6 +3,7 @@ package card
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"composition-api/internal/domain"
 	api "composition-api/internal/generated/http/api"
@@ -17,8 +18,9 @@ func (h *handler) MedCardDoctorIDPatientIDGet(ctx context.Context, params api.Me
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return &api.MedCardDoctorIDPatientIDGetNotFound{
+				StatusCode: http.StatusNotFound,
 				Response: api.Error{
-					Message: "Карта не найдена",
+					Message: "Карта пациента не найдена",
 				},
 			}, nil
 		default:

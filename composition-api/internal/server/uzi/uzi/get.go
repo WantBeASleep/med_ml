@@ -3,6 +3,7 @@ package uzi
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"composition-api/internal/domain"
 
@@ -18,6 +19,7 @@ func (h *handler) UziIDGet(ctx context.Context, params api.UziIDGetParams) (api.
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return &api.UziIDGetNotFound{
+				StatusCode: http.StatusNotFound,
 				Response: api.Error{
 					Message: "УЗИ не найдено",
 				},
@@ -35,6 +37,7 @@ func (h *handler) UzisExternalIDGet(ctx context.Context, params api.UzisExternal
 	if err != nil {
 		if errors.Is(err, domain.ErrNotFound) {
 			return &api.UzisExternalIDGetNotFound{
+				StatusCode: http.StatusNotFound,
 				Response: api.Error{
 					Message: "УЗИ не найдено",
 				},
@@ -51,6 +54,7 @@ func (h *handler) UzisAuthorIDGet(ctx context.Context, params api.UzisAuthorIDGe
 	if err != nil {
 		if errors.Is(err, domain.ErrNotFound) {
 			return &api.UzisAuthorIDGetNotFound{
+				StatusCode: http.StatusNotFound,
 				Response: api.Error{
 					Message: "УЗИ не найдено",
 				},
@@ -68,6 +72,7 @@ func (h *handler) UziIDEchographicsGet(ctx context.Context, params api.UziIDEcho
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return &api.UziIDEchographicsGetNotFound{
+				StatusCode: http.StatusNotFound,
 				Response: api.Error{
 					Message: "Эхографическое исследование не найдено",
 				},

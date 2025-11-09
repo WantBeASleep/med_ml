@@ -3,6 +3,7 @@ package uzi
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"composition-api/internal/domain"
 	uzi_domain "composition-api/internal/domain/uzi"
@@ -30,18 +31,21 @@ func (h *handler) UziIDPatch(ctx context.Context, req *api.UziIDPatchReq, params
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return &api.UziIDPatchNotFound{
+				StatusCode: http.StatusNotFound,
 				Response: api.Error{
 					Message: "УЗИ не найдено",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.UziIDPatchBadRequest{
+				StatusCode: http.StatusBadRequest,
 				Response: api.Error{
 					Message: "Неверный формат запроса",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return &api.UziIDPatchUnprocessableEntity{
+				StatusCode: http.StatusUnprocessableEntity,
 				Response: api.Error{
 					Message: "Ошибка валидации данных",
 				},
@@ -79,18 +83,21 @@ func (h *handler) UziIDEchographicsPatch(ctx context.Context, req *api.Echograph
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return &api.UziIDEchographicsPatchNotFound{
+				StatusCode: http.StatusNotFound,
 				Response: api.Error{
 					Message: "Эхографическое исследование не найдено",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.UziIDEchographicsPatchBadRequest{
+				StatusCode: http.StatusBadRequest,
 				Response: api.Error{
 					Message: "Неверный формат запроса",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return &api.UziIDEchographicsPatchUnprocessableEntity{
+				StatusCode: http.StatusUnprocessableEntity,
 				Response: api.Error{
 					Message: "Ошибка валидации данных",
 				},

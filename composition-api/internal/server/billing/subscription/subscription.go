@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"net/http"
 
 	api "composition-api/internal/generated/http/api"
 
@@ -56,6 +57,7 @@ func (h *handler) SubscriptionsGetActiveGet(ctx context.Context) (api.Subscripti
 			return pointer.To(
 				api.SubscriptionsGetActiveGetNotFound(
 					api.ErrorStatusCode{
+						StatusCode: http.StatusNotFound,
 						Response: api.Error{
 							Message: err.Error(),
 						},

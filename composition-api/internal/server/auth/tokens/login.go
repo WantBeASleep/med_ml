@@ -3,6 +3,7 @@ package tokens
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"composition-api/internal/domain"
 	api "composition-api/internal/generated/http/api"
@@ -14,12 +15,14 @@ func (h *handler) LoginPost(ctx context.Context, req *api.LoginPostReq) (api.Log
 		switch {
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.LoginPostBadRequest{
+				StatusCode: http.StatusBadRequest,
 				Response: api.Error{
 					Message: "Неверный формат запроса",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnauthorized):
 			return &api.LoginPostUnauthorized{
+				StatusCode: http.StatusUnauthorized,
 				Response: api.Error{
 					Message: "Неверный email или пароль",
 				},

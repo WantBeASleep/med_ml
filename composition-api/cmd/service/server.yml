@@ -1211,6 +1211,9 @@ paths:
         '400':
           description: Неверный формат запроса
           $ref: "#/components/responses/error"
+        '404':
+          description: Пациент не найден
+          $ref: "#/components/responses/error"
         '422':
           description: Ошибка валидации данных
           $ref: "#/components/responses/error"
