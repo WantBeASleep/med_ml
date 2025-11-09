@@ -9,11 +9,11 @@ import (
 )
 
 type Server struct {
+	service.UnimplementedMedSrvServer
+
 	patient.PatientHandler
 	doctor.DoctorHandler
 	card.CardHandler
-
-	service.UnsafeMedSrvServer
 }
 
 func New(
