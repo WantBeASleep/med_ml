@@ -80,7 +80,10 @@ func (s *service) CreateUnRegisteredUser(
 	}
 
 	if err := s.dao.NewUserRepo(ctx).InsertUser(uentity.User{}.FromDomain(user)); err != nil {
-		return uuid.Nil, err
+		if errors.Is(err, entity.ErrConflict) {
+			return uuid.Nil, domain.ErrConflict
+		}
+		return uuid.Nil, fmt.Errorf("create user: %w", err)
 	}
 
 	return user.Id, nil
