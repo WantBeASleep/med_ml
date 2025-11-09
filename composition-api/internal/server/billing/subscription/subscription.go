@@ -1,7 +1,7 @@
 package subscription
 
 import (
-	adapter_errors "composition-api/internal/adapters/errors"
+	"composition-api/internal/domain"
 	"composition-api/internal/server/security"
 	"context"
 	"errors"
@@ -52,7 +52,7 @@ func (h *handler) SubscriptionsGetActiveGet(ctx context.Context) (api.Subscripti
 	subscription, err := h.services.SubscriptionService.GetUserActiveSubscription(ctx, userID)
 	if err != nil {
 		log.Printf("Error retrieving subscription: %v", err)
-		if errors.Is(err, adapter_errors.ErrNotFound) {
+		if errors.Is(err, domain.ErrNotFound) {
 			return pointer.To(
 				api.SubscriptionsGetActiveGetNotFound(
 					api.ErrorStatusCode{
