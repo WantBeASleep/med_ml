@@ -1,6 +1,7 @@
 package patient
 
 import (
+	repoEntity "med/internal/repository/entity"
 	entity "med/internal/repository/patient/entity"
 )
 
@@ -30,7 +31,7 @@ func (r *repo) InsertPatient(patient entity.Patient) error {
 
 	_, err := r.Runner().Execx(r.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

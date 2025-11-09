@@ -24,16 +24,20 @@ func (h *handler) MedPatientPost(ctx context.Context, req *api.MedPatientPostReq
 		switch {
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.MedPatientPostBadRequest{
-				StatusCode: 400,
 				Response: api.Error{
 					Message: "Неверный формат ОМС",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return &api.MedPatientPostUnprocessableEntity{
-				StatusCode: 422,
 				Response: api.Error{
 					Message: "Ошибка валидации данных",
+				},
+			}, nil
+		case errors.Is(err, domain.ErrConflict):
+			return &api.MedPatientPostConflict{
+				Response: api.Error{
+					Message: "Пользователь с таким email уже существует",
 				},
 			}, nil
 		default:

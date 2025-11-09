@@ -1077,6 +1077,9 @@ paths:
         '400':
           description: Неверный формат запроса
           $ref: "#/components/responses/error"
+        '409':
+          description: Пользователь с таким email уже существует
+          $ref: "#/components/responses/error"
         '422':
           description: Ошибка валидации данных
           $ref: "#/components/responses/error"

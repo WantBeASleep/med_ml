@@ -40,6 +40,8 @@ func (h *handler) CreatePatient(ctx context.Context, in *pb.CreatePatientIn) (*e
 			return nil, status.Errorf(codes.InvalidArgument, "Неверный формат ОМС")
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return nil, status.Errorf(codes.FailedPrecondition, "Ошибка валидации данных")
+		case errors.Is(err, domain.ErrConflict):
+			return nil, status.Errorf(codes.AlreadyExists, "Пользователь с таким email уже существует")
 		default:
 			return nil, status.Errorf(codes.Internal, "Что то пошло не так: %s", err.Error())
 		}
