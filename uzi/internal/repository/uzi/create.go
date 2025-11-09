@@ -1,6 +1,7 @@
 package uzi
 
 import (
+	repoEntity "uzi/internal/repository/entity"
 	"uzi/internal/repository/uzi/entity"
 )
 
@@ -32,7 +33,7 @@ func (q *repo) InsertUzi(uzi entity.Uzi) error {
 
 	_, err := q.Runner().Execx(q.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

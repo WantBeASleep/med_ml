@@ -32,7 +32,6 @@ func (h *handler) UziIDPatch(ctx context.Context, req *api.UziIDPatchReq, params
 			return &api.UziIDPatchNotFound{
 				StatusCode: 404,
 				Response: api.Error{
-					Code:    404,
 					Message: "УЗИ не найдено",
 				},
 			}, nil
@@ -40,7 +39,6 @@ func (h *handler) UziIDPatch(ctx context.Context, req *api.UziIDPatchReq, params
 			return &api.UziIDPatchBadRequest{
 				StatusCode: 400,
 				Response: api.Error{
-					Code:    400,
 					Message: "Неверный формат запроса",
 				},
 			}, nil
@@ -48,7 +46,6 @@ func (h *handler) UziIDPatch(ctx context.Context, req *api.UziIDPatchReq, params
 			return &api.UziIDPatchUnprocessableEntity{
 				StatusCode: 422,
 				Response: api.Error{
-					Code:    422,
 					Message: "Ошибка валидации данных",
 				},
 			}, nil
@@ -87,7 +84,6 @@ func (h *handler) UziIDEchographicsPatch(ctx context.Context, req *api.Echograph
 			return &api.UziIDEchographicsPatchNotFound{
 				StatusCode: 404,
 				Response: api.Error{
-					Code:    404,
 					Message: "Эхографическое исследование не найдено",
 				},
 			}, nil
@@ -95,7 +91,6 @@ func (h *handler) UziIDEchographicsPatch(ctx context.Context, req *api.Echograph
 			return &api.UziIDEchographicsPatchBadRequest{
 				StatusCode: 400,
 				Response: api.Error{
-					Code:    400,
 					Message: "Неверный формат запроса",
 				},
 			}, nil
@@ -103,7 +98,6 @@ func (h *handler) UziIDEchographicsPatch(ctx context.Context, req *api.Echograph
 			return &api.UziIDEchographicsPatchUnprocessableEntity{
 				StatusCode: 422,
 				Response: api.Error{
-					Code:    422,
 					Message: "Ошибка валидации данных",
 				},
 			}, nil

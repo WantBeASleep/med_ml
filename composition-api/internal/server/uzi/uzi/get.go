@@ -20,7 +20,6 @@ func (h *handler) UziIDGet(ctx context.Context, params api.UziIDGetParams) (api.
 			return &api.UziIDGetNotFound{
 				StatusCode: 404,
 				Response: api.Error{
-					Code:    404,
 					Message: "УЗИ не найдено",
 				},
 			}, nil
@@ -39,7 +38,6 @@ func (h *handler) UzisExternalIDGet(ctx context.Context, params api.UzisExternal
 			return &api.UzisExternalIDGetNotFound{
 				StatusCode: 404,
 				Response: api.Error{
-					Code:    404,
 					Message: "УЗИ не найдено",
 				},
 			}, nil
@@ -57,7 +55,6 @@ func (h *handler) UzisAuthorIDGet(ctx context.Context, params api.UzisAuthorIDGe
 			return &api.UzisAuthorIDGetNotFound{
 				StatusCode: 404,
 				Response: api.Error{
-					Code:    404,
 					Message: "УЗИ не найдено",
 				},
 			}, nil
@@ -76,7 +73,6 @@ func (h *handler) UziIDEchographicsGet(ctx context.Context, params api.UziIDEcho
 			return &api.UziIDEchographicsGetNotFound{
 				StatusCode: 404,
 				Response: api.Error{
-					Code:    404,
 					Message: "Эхографическое исследование не найдено",
 				},
 			}, nil

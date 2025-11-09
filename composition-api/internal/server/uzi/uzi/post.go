@@ -32,7 +32,6 @@ func (h *handler) UziPost(ctx context.Context, req *api.UziPostReq) (api.UziPost
 		return &api.UziPostBadRequest{
 			StatusCode: 400,
 			Response: api.Error{
-				Code:    400,
 				Message: fmt.Sprintf("Неверный формат файла, ожидается: image/tiff, получено: %s", contentType),
 			},
 		}, nil
@@ -52,7 +51,6 @@ func (h *handler) UziPost(ctx context.Context, req *api.UziPostReq) (api.UziPost
 			return &api.UziPostBadRequest{
 				StatusCode: 400,
 				Response: api.Error{
-					Code:    400,
 					Message: "Неверный формат запроса или файла",
 				},
 			}, nil
@@ -60,7 +58,6 @@ func (h *handler) UziPost(ctx context.Context, req *api.UziPostReq) (api.UziPost
 			return &api.UziPostUnprocessableEntity{
 				StatusCode: 422,
 				Response: api.Error{
-					Code:    422,
 					Message: "Ошибка валидации данных",
 				},
 			}, nil

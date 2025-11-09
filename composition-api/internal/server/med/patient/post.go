@@ -26,15 +26,13 @@ func (h *handler) MedPatientPost(ctx context.Context, req *api.MedPatientPostReq
 			return &api.MedPatientPostBadRequest{
 				StatusCode: 400,
 				Response: api.Error{
-					Code:    400,
-					Message: "Неверный формат запроса",
+					Message: "Неверный формат ОМС",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return &api.MedPatientPostUnprocessableEntity{
 				StatusCode: 422,
 				Response: api.Error{
-					Code:    422,
 					Message: "Ошибка валидации данных",
 				},
 			}, nil

@@ -19,7 +19,6 @@ func (h *handler) MedDoctorIDGet(ctx context.Context, params api.MedDoctorIDGetP
 			return &api.MedDoctorIDGetNotFound{
 				StatusCode: 404,
 				Response: api.Error{
-					Code:    404,
 					Message: "Врач не найден",
 				},
 			}, nil

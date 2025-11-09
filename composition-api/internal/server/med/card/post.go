@@ -22,7 +22,6 @@ func (h *handler) MedCardPost(ctx context.Context, req *api.Card) (api.MedCardPo
 			return &api.MedCardPostBadRequest{
 				StatusCode: 400,
 				Response: api.Error{
-					Code:    400,
 					Message: "Неверный формат запроса",
 				},
 			}, nil
@@ -30,7 +29,6 @@ func (h *handler) MedCardPost(ctx context.Context, req *api.Card) (api.MedCardPo
 			return &api.MedCardPostUnprocessableEntity{
 				StatusCode: 422,
 				Response: api.Error{
-					Code:    422,
 					Message: "Ошибка валидации данных",
 				},
 			}, nil

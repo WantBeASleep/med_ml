@@ -19,7 +19,10 @@ func (a *adapter) CreateCard(ctx context.Context, card domain.Card) error {
 			Diagnosis: card.Diagnosis,
 		},
 	})
-	return err
+	if err != nil {
+		return adapter_errors.HandleGRPCError(err)
+	}
+	return nil
 }
 
 func (a *adapter) GetCard(ctx context.Context, doctorID, patientID uuid.UUID) (domain.Card, error) {

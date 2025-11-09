@@ -16,7 +16,6 @@ func (h *handler) LoginPost(ctx context.Context, req *api.LoginPostReq) (api.Log
 			return &api.LoginPostBadRequest{
 				StatusCode: 400,
 				Response: api.Error{
-					Code:    400,
 					Message: "Неверный формат запроса",
 				},
 			}, nil
@@ -24,7 +23,6 @@ func (h *handler) LoginPost(ctx context.Context, req *api.LoginPostReq) (api.Log
 			return &api.LoginPostUnauthorized{
 				StatusCode: 401,
 				Response: api.Error{
-					Code:    401,
 					Message: "Неверный email или пароль",
 				},
 			}, nil

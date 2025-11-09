@@ -24,7 +24,6 @@ func (h *handler) MedCardDoctorIDPatientIDPatch(ctx context.Context, req *api.Me
 			return &api.MedCardDoctorIDPatientIDPatchNotFound{
 				StatusCode: 404,
 				Response: api.Error{
-					Code:    404,
 					Message: "Карта пациента не найдена",
 				},
 			}, nil
@@ -32,7 +31,6 @@ func (h *handler) MedCardDoctorIDPatientIDPatch(ctx context.Context, req *api.Me
 			return &api.MedCardDoctorIDPatientIDPatchBadRequest{
 				StatusCode: 400,
 				Response: api.Error{
-					Code:    400,
 					Message: "Неверный формат запроса",
 				},
 			}, nil
@@ -40,7 +38,6 @@ func (h *handler) MedCardDoctorIDPatientIDPatch(ctx context.Context, req *api.Me
 			return &api.MedCardDoctorIDPatientIDPatchUnprocessableEntity{
 				StatusCode: 422,
 				Response: api.Error{
-					Code:    422,
 					Message: "Ошибка валидации данных",
 				},
 			}, nil

@@ -25,7 +25,6 @@ func (h *handler) RegPatientPost(ctx context.Context, req *api.RegPatientPostReq
 			return &api.RegPatientPostBadRequest{
 				StatusCode: 400,
 				Response: api.Error{
-					Code:    400,
 					Message: "Неверный формат запроса",
 				},
 			}, nil
@@ -33,7 +32,6 @@ func (h *handler) RegPatientPost(ctx context.Context, req *api.RegPatientPostReq
 			return &api.RegPatientPostConflict{
 				StatusCode: 409,
 				Response: api.Error{
-					Code:    409,
 					Message: "Пользователь с таким email уже существует",
 				},
 			}, nil
@@ -41,7 +39,6 @@ func (h *handler) RegPatientPost(ctx context.Context, req *api.RegPatientPostReq
 			return &api.RegPatientPostUnprocessableEntity{
 				StatusCode: 422,
 				Response: api.Error{
-					Code:    422,
 					Message: "Ошибка валидации данных",
 				},
 			}, nil

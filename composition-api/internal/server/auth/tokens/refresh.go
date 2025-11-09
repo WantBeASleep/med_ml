@@ -17,7 +17,6 @@ func (h *handler) RefreshPost(ctx context.Context, req *api.RefreshPostReq) (api
 			return &api.RefreshPostBadRequest{
 				StatusCode: 400,
 				Response: api.Error{
-					Code:    400,
 					Message: "Неверный формат запроса",
 				},
 			}, nil
@@ -25,7 +24,6 @@ func (h *handler) RefreshPost(ctx context.Context, req *api.RefreshPostReq) (api
 			return &api.RefreshPostUnauthorized{
 				StatusCode: 401,
 				Response: api.Error{
-					Code:    401,
 					Message: "Неверный или истекший refresh токен",
 				},
 			}, nil

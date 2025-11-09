@@ -23,7 +23,10 @@ func (a *adapter) CreatePatient(ctx context.Context, arg CreatePatientArg) error
 		Malignancy: arg.Malignancy,
 		BirthDate:  arg.BirthDate.Format(time.RFC3339),
 	})
-	return err
+	if err != nil {
+		return adapter_errors.HandleGRPCError(err)
+	}
+	return nil
 }
 
 func (a *adapter) GetPatient(ctx context.Context, id uuid.UUID) (domain.Patient, error) {

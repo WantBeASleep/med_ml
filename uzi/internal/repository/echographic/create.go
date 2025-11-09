@@ -2,6 +2,7 @@ package echographic
 
 import (
 	"uzi/internal/repository/echographic/entity"
+	repoEntity "uzi/internal/repository/entity"
 )
 
 func (q *repo) InsertEchographic(echographic entity.Echographic) error {
@@ -52,7 +53,7 @@ func (q *repo) InsertEchographic(echographic entity.Echographic) error {
 
 	_, err := q.Runner().Execx(q.Context(), query)
 	if err != nil {
-		return err
+		return repoEntity.WrapDBError(err)
 	}
 
 	return nil

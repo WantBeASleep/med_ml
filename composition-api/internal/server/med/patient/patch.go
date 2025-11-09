@@ -25,7 +25,6 @@ func (h *handler) MedPatientIDPatch(ctx context.Context, req *api.MedPatientIDPa
 			return &api.MedPatientIDPatchNotFound{
 				StatusCode: 404,
 				Response: api.Error{
-					Code:    404,
 					Message: "Пациент не найден",
 				},
 			}, nil
