@@ -506,33 +506,12 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 }
 
 func (*ErrorStatusCode) downloadUziIDImageIDGetRes()     {}
-func (*ErrorStatusCode) loginPostRes()                   {}
-func (*ErrorStatusCode) medCardPostRes()                 {}
-func (*ErrorStatusCode) medPatientPostRes()              {}
 func (*ErrorStatusCode) paymentProvidersGetRes()         {}
-func (*ErrorStatusCode) refreshPostRes()                 {}
-func (*ErrorStatusCode) regDoctorPostRes()               {}
-func (*ErrorStatusCode) regPatientPostRes()              {}
 func (*ErrorStatusCode) subscriptionsCheckActiveGetRes() {}
 func (*ErrorStatusCode) subscriptionsPurchasePostRes()   {}
 func (*ErrorStatusCode) tariffPlansGetRes()              {}
 func (*ErrorStatusCode) tariffPlansIDGetRes()            {}
-func (*ErrorStatusCode) uziDevicePostRes()               {}
 func (*ErrorStatusCode) uziDevicesGetRes()               {}
-func (*ErrorStatusCode) uziIDDeleteRes()                 {}
-func (*ErrorStatusCode) uziIDImagesGetRes()              {}
-func (*ErrorStatusCode) uziIDNodesGetRes()               {}
-func (*ErrorStatusCode) uziIDNodesSegmentsPostRes()      {}
-func (*ErrorStatusCode) uziImageIDNodesSegmentsGetRes()  {}
-func (*ErrorStatusCode) uziNodesIDDeleteRes()            {}
-func (*ErrorStatusCode) uziNodesIDPatchRes()             {}
-func (*ErrorStatusCode) uziNodesIDSegmentsGetRes()       {}
-func (*ErrorStatusCode) uziPostRes()                     {}
-func (*ErrorStatusCode) uziSegmentIDDeleteRes()          {}
-func (*ErrorStatusCode) uziSegmentIDPatchRes()           {}
-func (*ErrorStatusCode) uziSegmentPostRes()              {}
-func (*ErrorStatusCode) uzisAuthorIDGetRes()             {}
-func (*ErrorStatusCode) uzisExternalIDGetRes()           {}
 func (*ErrorStatusCode) yookassaWebhooksPostRes()        {}
 
 // Изображение.
@@ -575,6 +554,14 @@ func (s *Image) SetUziID(val uuid.UUID) {
 func (s *Image) SetPage(val int) {
 	s.Page = val
 }
+
+type LoginPostBadRequest ErrorStatusCode
+
+func (*LoginPostBadRequest) loginPostRes() {}
+
+type LoginPostInternalServerError ErrorStatusCode
+
+func (*LoginPostInternalServerError) loginPostRes() {}
 
 type LoginPostOK struct {
 	// Access токен.
@@ -632,6 +619,10 @@ func (s *LoginPostReq) SetPassword(val string) {
 	s.Password = val
 }
 
+type LoginPostUnauthorized ErrorStatusCode
+
+func (*LoginPostUnauthorized) loginPostRes() {}
+
 type MedCardDoctorIDPatientIDGetInternalServerError ErrorStatusCode
 
 func (*MedCardDoctorIDPatientIDGetInternalServerError) medCardDoctorIDPatientIDGetRes() {}
@@ -639,6 +630,10 @@ func (*MedCardDoctorIDPatientIDGetInternalServerError) medCardDoctorIDPatientIDG
 type MedCardDoctorIDPatientIDGetNotFound ErrorStatusCode
 
 func (*MedCardDoctorIDPatientIDGetNotFound) medCardDoctorIDPatientIDGetRes() {}
+
+type MedCardDoctorIDPatientIDPatchBadRequest ErrorStatusCode
+
+func (*MedCardDoctorIDPatientIDPatchBadRequest) medCardDoctorIDPatientIDPatchRes() {}
 
 type MedCardDoctorIDPatientIDPatchInternalServerError ErrorStatusCode
 
@@ -663,10 +658,26 @@ func (s *MedCardDoctorIDPatientIDPatchReq) SetDiagnosis(val string) {
 	s.Diagnosis = val
 }
 
+type MedCardDoctorIDPatientIDPatchUnprocessableEntity ErrorStatusCode
+
+func (*MedCardDoctorIDPatientIDPatchUnprocessableEntity) medCardDoctorIDPatientIDPatchRes() {}
+
+type MedCardPostBadRequest ErrorStatusCode
+
+func (*MedCardPostBadRequest) medCardPostRes() {}
+
+type MedCardPostInternalServerError ErrorStatusCode
+
+func (*MedCardPostInternalServerError) medCardPostRes() {}
+
 // MedCardPostOK is response for MedCardPost operation.
 type MedCardPostOK struct{}
 
 func (*MedCardPostOK) medCardPostRes() {}
+
+type MedCardPostUnprocessableEntity ErrorStatusCode
+
+func (*MedCardPostUnprocessableEntity) medCardPostRes() {}
 
 type MedDoctorIDGetInternalServerError ErrorStatusCode
 
@@ -731,6 +742,14 @@ func (s *MedPatientIDPatchReq) SetActive(val OptBool) {
 func (s *MedPatientIDPatchReq) SetMalignancy(val OptBool) {
 	s.Malignancy = val
 }
+
+type MedPatientPostBadRequest ErrorStatusCode
+
+func (*MedPatientPostBadRequest) medPatientPostRes() {}
+
+type MedPatientPostInternalServerError ErrorStatusCode
+
+func (*MedPatientPostInternalServerError) medPatientPostRes() {}
 
 type MedPatientPostReq struct {
 	// Полное имя пациента.
@@ -807,6 +826,10 @@ func (s *MedPatientPostReq) SetMalignancy(val bool) {
 func (s *MedPatientPostReq) SetBirthDate(val time.Time) {
 	s.BirthDate = val
 }
+
+type MedPatientPostUnprocessableEntity ErrorStatusCode
+
+func (*MedPatientPostUnprocessableEntity) medPatientPostRes() {}
 
 // Узел.
 // Ref: #/components/schemas/node
@@ -1795,6 +1818,14 @@ func (s *PurchaseSubscriptionResponse) SetConfirmationURL(val string) {
 
 func (*PurchaseSubscriptionResponse) subscriptionsPurchasePostRes() {}
 
+type RefreshPostBadRequest ErrorStatusCode
+
+func (*RefreshPostBadRequest) refreshPostRes() {}
+
+type RefreshPostInternalServerError ErrorStatusCode
+
+func (*RefreshPostInternalServerError) refreshPostRes() {}
+
 type RefreshPostOK struct {
 	// Access токен.
 	AccessToken string `json:"access_token"`
@@ -1838,6 +1869,22 @@ func (s *RefreshPostReq) GetRefreshToken() string {
 func (s *RefreshPostReq) SetRefreshToken(val string) {
 	s.RefreshToken = val
 }
+
+type RefreshPostUnauthorized ErrorStatusCode
+
+func (*RefreshPostUnauthorized) refreshPostRes() {}
+
+type RegDoctorPostBadRequest ErrorStatusCode
+
+func (*RegDoctorPostBadRequest) regDoctorPostRes() {}
+
+type RegDoctorPostConflict ErrorStatusCode
+
+func (*RegDoctorPostConflict) regDoctorPostRes() {}
+
+type RegDoctorPostInternalServerError ErrorStatusCode
+
+func (*RegDoctorPostInternalServerError) regDoctorPostRes() {}
 
 type RegDoctorPostReq struct {
 	// Email врача.
@@ -1914,6 +1961,22 @@ func (s *RegDoctorPostReq) SetDescription(val OptString) {
 	s.Description = val
 }
 
+type RegDoctorPostUnprocessableEntity ErrorStatusCode
+
+func (*RegDoctorPostUnprocessableEntity) regDoctorPostRes() {}
+
+type RegPatientPostBadRequest ErrorStatusCode
+
+func (*RegPatientPostBadRequest) regPatientPostRes() {}
+
+type RegPatientPostConflict ErrorStatusCode
+
+func (*RegPatientPostConflict) regPatientPostRes() {}
+
+type RegPatientPostInternalServerError ErrorStatusCode
+
+func (*RegPatientPostInternalServerError) regPatientPostRes() {}
+
 type RegPatientPostReq struct {
 	// Полное имя пациента.
 	Fullname string `json:"fullname"`
@@ -1976,6 +2039,10 @@ func (s *RegPatientPostReq) SetEmail(val string) {
 func (s *RegPatientPostReq) SetPassword(val string) {
 	s.Password = val
 }
+
+type RegPatientPostUnprocessableEntity ErrorStatusCode
+
+func (*RegPatientPostUnprocessableEntity) regPatientPostRes() {}
 
 // Сегмент узла на изображении.
 // Ref: #/components/schemas/segment
@@ -2418,6 +2485,14 @@ func (s *Uzi) SetCreateAt(val time.Time) {
 func (*Uzi) uziIDGetRes()   {}
 func (*Uzi) uziIDPatchRes() {}
 
+type UziDevicePostBadRequest ErrorStatusCode
+
+func (*UziDevicePostBadRequest) uziDevicePostRes() {}
+
+type UziDevicePostInternalServerError ErrorStatusCode
+
+func (*UziDevicePostInternalServerError) uziDevicePostRes() {}
+
 type UziDevicePostOK struct {
 	// Id uzi аппарата.
 	ID int `json:"id"`
@@ -2450,9 +2525,21 @@ func (s *UziDevicePostReq) SetName(val string) {
 	s.Name = val
 }
 
+type UziDevicePostUnprocessableEntity ErrorStatusCode
+
+func (*UziDevicePostUnprocessableEntity) uziDevicePostRes() {}
+
 type UziDevicesGetOKApplicationJSON []Device
 
 func (*UziDevicesGetOKApplicationJSON) uziDevicesGetRes() {}
+
+type UziIDDeleteInternalServerError ErrorStatusCode
+
+func (*UziIDDeleteInternalServerError) uziIDDeleteRes() {}
+
+type UziIDDeleteNotFound ErrorStatusCode
+
+func (*UziIDDeleteNotFound) uziIDDeleteRes() {}
 
 // UziIDDeleteOK is response for UziIDDelete operation.
 type UziIDDeleteOK struct{}
@@ -2467,6 +2554,10 @@ type UziIDEchographicsGetNotFound ErrorStatusCode
 
 func (*UziIDEchographicsGetNotFound) uziIDEchographicsGetRes() {}
 
+type UziIDEchographicsPatchBadRequest ErrorStatusCode
+
+func (*UziIDEchographicsPatchBadRequest) uziIDEchographicsPatchRes() {}
+
 type UziIDEchographicsPatchInternalServerError ErrorStatusCode
 
 func (*UziIDEchographicsPatchInternalServerError) uziIDEchographicsPatchRes() {}
@@ -2474,6 +2565,10 @@ func (*UziIDEchographicsPatchInternalServerError) uziIDEchographicsPatchRes() {}
 type UziIDEchographicsPatchNotFound ErrorStatusCode
 
 func (*UziIDEchographicsPatchNotFound) uziIDEchographicsPatchRes() {}
+
+type UziIDEchographicsPatchUnprocessableEntity ErrorStatusCode
+
+func (*UziIDEchographicsPatchUnprocessableEntity) uziIDEchographicsPatchRes() {}
 
 type UziIDGetInternalServerError ErrorStatusCode
 
@@ -2483,13 +2578,41 @@ type UziIDGetNotFound ErrorStatusCode
 
 func (*UziIDGetNotFound) uziIDGetRes() {}
 
+type UziIDImagesGetInternalServerError ErrorStatusCode
+
+func (*UziIDImagesGetInternalServerError) uziIDImagesGetRes() {}
+
+type UziIDImagesGetNotFound ErrorStatusCode
+
+func (*UziIDImagesGetNotFound) uziIDImagesGetRes() {}
+
 type UziIDImagesGetOKApplicationJSON []Image
 
 func (*UziIDImagesGetOKApplicationJSON) uziIDImagesGetRes() {}
 
+type UziIDNodesGetInternalServerError ErrorStatusCode
+
+func (*UziIDNodesGetInternalServerError) uziIDNodesGetRes() {}
+
+type UziIDNodesGetNotFound ErrorStatusCode
+
+func (*UziIDNodesGetNotFound) uziIDNodesGetRes() {}
+
 type UziIDNodesGetOKApplicationJSON []Node
 
 func (*UziIDNodesGetOKApplicationJSON) uziIDNodesGetRes() {}
+
+type UziIDNodesSegmentsPostBadRequest ErrorStatusCode
+
+func (*UziIDNodesSegmentsPostBadRequest) uziIDNodesSegmentsPostRes() {}
+
+type UziIDNodesSegmentsPostInternalServerError ErrorStatusCode
+
+func (*UziIDNodesSegmentsPostInternalServerError) uziIDNodesSegmentsPostRes() {}
+
+type UziIDNodesSegmentsPostNotFound ErrorStatusCode
+
+func (*UziIDNodesSegmentsPostNotFound) uziIDNodesSegmentsPostRes() {}
 
 type UziIDNodesSegmentsPostOK struct {
 	NodeID     uuid.UUID   `json:"node_id"`
@@ -2649,6 +2772,14 @@ func (s *UziIDNodesSegmentsPostReqSegmentsItem) SetTirads5(val float64) {
 	s.Tirads5 = val
 }
 
+type UziIDNodesSegmentsPostUnprocessableEntity ErrorStatusCode
+
+func (*UziIDNodesSegmentsPostUnprocessableEntity) uziIDNodesSegmentsPostRes() {}
+
+type UziIDPatchBadRequest ErrorStatusCode
+
+func (*UziIDPatchBadRequest) uziIDPatchRes() {}
+
 type UziIDPatchInternalServerError ErrorStatusCode
 
 func (*UziIDPatchInternalServerError) uziIDPatchRes() {}
@@ -2726,6 +2857,18 @@ func (s *UziIDPatchReqProjection) UnmarshalText(data []byte) error {
 	}
 }
 
+type UziIDPatchUnprocessableEntity ErrorStatusCode
+
+func (*UziIDPatchUnprocessableEntity) uziIDPatchRes() {}
+
+type UziImageIDNodesSegmentsGetInternalServerError ErrorStatusCode
+
+func (*UziImageIDNodesSegmentsGetInternalServerError) uziImageIDNodesSegmentsGetRes() {}
+
+type UziImageIDNodesSegmentsGetNotFound ErrorStatusCode
+
+func (*UziImageIDNodesSegmentsGetNotFound) uziImageIDNodesSegmentsGetRes() {}
+
 type UziImageIDNodesSegmentsGetOK struct {
 	Nodes    []Node    `json:"nodes"`
 	Segments []Segment `json:"segments"`
@@ -2753,10 +2896,30 @@ func (s *UziImageIDNodesSegmentsGetOK) SetSegments(val []Segment) {
 
 func (*UziImageIDNodesSegmentsGetOK) uziImageIDNodesSegmentsGetRes() {}
 
+type UziNodesIDDeleteInternalServerError ErrorStatusCode
+
+func (*UziNodesIDDeleteInternalServerError) uziNodesIDDeleteRes() {}
+
+type UziNodesIDDeleteNotFound ErrorStatusCode
+
+func (*UziNodesIDDeleteNotFound) uziNodesIDDeleteRes() {}
+
 // UziNodesIDDeleteOK is response for UziNodesIDDelete operation.
 type UziNodesIDDeleteOK struct{}
 
 func (*UziNodesIDDeleteOK) uziNodesIDDeleteRes() {}
+
+type UziNodesIDPatchBadRequest ErrorStatusCode
+
+func (*UziNodesIDPatchBadRequest) uziNodesIDPatchRes() {}
+
+type UziNodesIDPatchInternalServerError ErrorStatusCode
+
+func (*UziNodesIDPatchInternalServerError) uziNodesIDPatchRes() {}
+
+type UziNodesIDPatchNotFound ErrorStatusCode
+
+func (*UziNodesIDPatchNotFound) uziNodesIDPatchRes() {}
 
 type UziNodesIDPatchReq struct {
 	Validation OptNilUziNodesIDPatchReqValidation `json:"validation"`
@@ -2846,9 +3009,29 @@ func (s *UziNodesIDPatchReqValidation) UnmarshalText(data []byte) error {
 	}
 }
 
+type UziNodesIDPatchUnprocessableEntity ErrorStatusCode
+
+func (*UziNodesIDPatchUnprocessableEntity) uziNodesIDPatchRes() {}
+
+type UziNodesIDSegmentsGetInternalServerError ErrorStatusCode
+
+func (*UziNodesIDSegmentsGetInternalServerError) uziNodesIDSegmentsGetRes() {}
+
+type UziNodesIDSegmentsGetNotFound ErrorStatusCode
+
+func (*UziNodesIDSegmentsGetNotFound) uziNodesIDSegmentsGetRes() {}
+
 type UziNodesIDSegmentsGetOKApplicationJSON []Segment
 
 func (*UziNodesIDSegmentsGetOKApplicationJSON) uziNodesIDSegmentsGetRes() {}
+
+type UziPostBadRequest ErrorStatusCode
+
+func (*UziPostBadRequest) uziPostRes() {}
+
+type UziPostInternalServerError ErrorStatusCode
+
+func (*UziPostInternalServerError) uziPostRes() {}
 
 type UziPostReq struct {
 	// Файл узи. **обязательно с .tiff/.png**.
@@ -2955,6 +3138,10 @@ func (s *UziPostReqProjection) UnmarshalText(data []byte) error {
 	}
 }
 
+type UziPostUnprocessableEntity ErrorStatusCode
+
+func (*UziPostUnprocessableEntity) uziPostRes() {}
+
 // Проекция узи.
 type UziProjection string
 
@@ -2997,10 +3184,30 @@ func (s *UziProjection) UnmarshalText(data []byte) error {
 	}
 }
 
+type UziSegmentIDDeleteInternalServerError ErrorStatusCode
+
+func (*UziSegmentIDDeleteInternalServerError) uziSegmentIDDeleteRes() {}
+
+type UziSegmentIDDeleteNotFound ErrorStatusCode
+
+func (*UziSegmentIDDeleteNotFound) uziSegmentIDDeleteRes() {}
+
 // UziSegmentIDDeleteOK is response for UziSegmentIDDelete operation.
 type UziSegmentIDDeleteOK struct{}
 
 func (*UziSegmentIDDeleteOK) uziSegmentIDDeleteRes() {}
+
+type UziSegmentIDPatchBadRequest ErrorStatusCode
+
+func (*UziSegmentIDPatchBadRequest) uziSegmentIDPatchRes() {}
+
+type UziSegmentIDPatchInternalServerError ErrorStatusCode
+
+func (*UziSegmentIDPatchInternalServerError) uziSegmentIDPatchRes() {}
+
+type UziSegmentIDPatchNotFound ErrorStatusCode
+
+func (*UziSegmentIDPatchNotFound) uziSegmentIDPatchRes() {}
 
 type UziSegmentIDPatchReq struct {
 	Contor   Contor     `json:"contor"`
@@ -3048,6 +3255,22 @@ func (s *UziSegmentIDPatchReq) SetTirads4(val OptFloat64) {
 func (s *UziSegmentIDPatchReq) SetTirads5(val OptFloat64) {
 	s.Tirads5 = val
 }
+
+type UziSegmentIDPatchUnprocessableEntity ErrorStatusCode
+
+func (*UziSegmentIDPatchUnprocessableEntity) uziSegmentIDPatchRes() {}
+
+type UziSegmentPostBadRequest ErrorStatusCode
+
+func (*UziSegmentPostBadRequest) uziSegmentPostRes() {}
+
+type UziSegmentPostInternalServerError ErrorStatusCode
+
+func (*UziSegmentPostInternalServerError) uziSegmentPostRes() {}
+
+type UziSegmentPostNotFound ErrorStatusCode
+
+func (*UziSegmentPostNotFound) uziSegmentPostRes() {}
 
 type UziSegmentPostReq struct {
 	ImageID  uuid.UUID `json:"image_id"`
@@ -3118,6 +3341,10 @@ func (s *UziSegmentPostReq) SetTirads5(val float64) {
 	s.Tirads5 = val
 }
 
+type UziSegmentPostUnprocessableEntity ErrorStatusCode
+
+func (*UziSegmentPostUnprocessableEntity) uziSegmentPostRes() {}
+
 // Статус узи **new** - новое узи **pending** - в обработке
 // нейронкой **completed** - обработано.
 type UziStatus string
@@ -3168,9 +3395,25 @@ func (s *UziStatus) UnmarshalText(data []byte) error {
 	}
 }
 
+type UzisAuthorIDGetInternalServerError ErrorStatusCode
+
+func (*UzisAuthorIDGetInternalServerError) uzisAuthorIDGetRes() {}
+
+type UzisAuthorIDGetNotFound ErrorStatusCode
+
+func (*UzisAuthorIDGetNotFound) uzisAuthorIDGetRes() {}
+
 type UzisAuthorIDGetOKApplicationJSON []Uzi
 
 func (*UzisAuthorIDGetOKApplicationJSON) uzisAuthorIDGetRes() {}
+
+type UzisExternalIDGetInternalServerError ErrorStatusCode
+
+func (*UzisExternalIDGetInternalServerError) uzisExternalIDGetRes() {}
+
+type UzisExternalIDGetNotFound ErrorStatusCode
+
+func (*UzisExternalIDGetNotFound) uzisExternalIDGetRes() {}
 
 type UzisExternalIDGetOKApplicationJSON []Uzi
 
