@@ -659,6 +659,10 @@ type MedCardPostInternalServerError ErrorStatusCode
 
 func (*MedCardPostInternalServerError) medCardPostRes() {}
 
+type MedCardPostNotFound ErrorStatusCode
+
+func (*MedCardPostNotFound) medCardPostRes() {}
+
 // MedCardPostOK is response for MedCardPost operation.
 type MedCardPostOK struct{}
 
