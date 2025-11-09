@@ -7,6 +7,7 @@ import (
 
 	"med/internal/domain"
 	pb "med/internal/generated/grpc/service"
+	"med/internal/services/validation"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/google/uuid"
@@ -23,6 +24,11 @@ func (h *handler) CreatePatient(ctx context.Context, in *pb.CreatePatientIn) (*e
 	birthDate, err := time.Parse(time.RFC3339, in.BirthDate)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "Неверный формат даты рождения: %s", err.Error())
+	}
+
+	// Проверка валидности ОМС перед созданием пациента
+	if !validation.ValidatePolicy(in.Policy) {
+		return nil, status.Errorf(codes.InvalidArgument, "Неверный формат ОМС")
 	}
 
 	err = h.patientSrv.InsertPatient(ctx, domain.Patient{
