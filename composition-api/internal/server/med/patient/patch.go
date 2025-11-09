@@ -23,7 +23,6 @@ func (h *handler) MedPatientIDPatch(ctx context.Context, req *api.MedPatientIDPa
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return &api.MedPatientIDPatchNotFound{
-				StatusCode: 404,
 				Response: api.Error{
 					Message: "Пациент не найден",
 				},

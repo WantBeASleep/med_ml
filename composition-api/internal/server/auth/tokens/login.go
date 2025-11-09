@@ -14,14 +14,12 @@ func (h *handler) LoginPost(ctx context.Context, req *api.LoginPostReq) (api.Log
 		switch {
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.LoginPostBadRequest{
-				StatusCode: 400,
 				Response: api.Error{
 					Message: "Неверный формат запроса",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnauthorized):
 			return &api.LoginPostUnauthorized{
-				StatusCode: 401,
 				Response: api.Error{
 					Message: "Неверный email или пароль",
 				},

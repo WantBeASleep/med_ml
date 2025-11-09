@@ -56,7 +56,6 @@ func (h *handler) SubscriptionsGetActiveGet(ctx context.Context) (api.Subscripti
 			return pointer.To(
 				api.SubscriptionsGetActiveGetNotFound(
 					api.ErrorStatusCode{
-						StatusCode: 404,
 						Response: api.Error{
 							Message: err.Error(),
 						},

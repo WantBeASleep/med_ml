@@ -22,21 +22,18 @@ func (h *handler) MedCardDoctorIDPatientIDPatch(ctx context.Context, req *api.Me
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return &api.MedCardDoctorIDPatientIDPatchNotFound{
-				StatusCode: 404,
 				Response: api.Error{
 					Message: "Карта пациента не найдена",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.MedCardDoctorIDPatientIDPatchBadRequest{
-				StatusCode: 400,
 				Response: api.Error{
 					Message: "Неверный формат запроса",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return &api.MedCardDoctorIDPatientIDPatchUnprocessableEntity{
-				StatusCode: 422,
 				Response: api.Error{
 					Message: "Ошибка валидации данных",
 				},

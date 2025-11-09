@@ -17,7 +17,6 @@ func (h *handler) MedDoctorIDGet(ctx context.Context, params api.MedDoctorIDGetP
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return &api.MedDoctorIDGetNotFound{
-				StatusCode: 404,
 				Response: api.Error{
 					Message: "Врач не найден",
 				},

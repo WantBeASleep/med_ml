@@ -25,21 +25,18 @@ func (h *handler) RegDoctorPost(ctx context.Context, req *api.RegDoctorPostReq) 
 		switch {
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.RegDoctorPostBadRequest{
-				StatusCode: 400,
 				Response: api.Error{
 					Message: "Неверный формат запроса",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrConflict):
 			return &api.RegDoctorPostConflict{
-				StatusCode: 409,
 				Response: api.Error{
 					Message: "Пользователь с таким email уже существует",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return &api.RegDoctorPostUnprocessableEntity{
-				StatusCode: 422,
 				Response: api.Error{
 					Message: "Ошибка валидации данных",
 				},

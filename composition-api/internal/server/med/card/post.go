@@ -20,14 +20,12 @@ func (h *handler) MedCardPost(ctx context.Context, req *api.Card) (api.MedCardPo
 		switch {
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.MedCardPostBadRequest{
-				StatusCode: 400,
 				Response: api.Error{
 					Message: "Неверный формат запроса",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnprocessableEntity):
 			return &api.MedCardPostUnprocessableEntity{
-				StatusCode: 422,
 				Response: api.Error{
 					Message: "Ошибка валидации данных",
 				},

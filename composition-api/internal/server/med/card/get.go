@@ -17,7 +17,6 @@ func (h *handler) MedCardDoctorIDPatientIDGet(ctx context.Context, params api.Me
 		switch {
 		case errors.Is(err, domain.ErrNotFound):
 			return &api.MedCardDoctorIDPatientIDGetNotFound{
-				StatusCode: 404,
 				Response: api.Error{
 					Message: "Карта не найдена",
 				},

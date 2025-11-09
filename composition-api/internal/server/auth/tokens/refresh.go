@@ -15,14 +15,12 @@ func (h *handler) RefreshPost(ctx context.Context, req *api.RefreshPostReq) (api
 		switch {
 		case errors.Is(err, domain.ErrBadRequest):
 			return &api.RefreshPostBadRequest{
-				StatusCode: 400,
 				Response: api.Error{
 					Message: "Неверный формат запроса",
 				},
 			}, nil
 		case errors.Is(err, domain.ErrUnauthorized):
 			return &api.RefreshPostUnauthorized{
-				StatusCode: 401,
 				Response: api.Error{
 					Message: "Неверный или истекший refresh токен",
 				},

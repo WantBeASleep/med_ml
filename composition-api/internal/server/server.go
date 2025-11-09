@@ -44,7 +44,6 @@ func New(services *services.Services) api.Handler {
 
 func (s *server) NewError(ctx context.Context, err error) *api.ErrorStatusCode {
 	return &api.ErrorStatusCode{
-		StatusCode: 500,
 		Response: api.Error{
 			Message: fmt.Sprint("Необработанная ошибка сервера: ", err.Error()),
 		},
