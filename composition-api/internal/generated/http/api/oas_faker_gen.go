@@ -203,11 +203,6 @@ func (s *Echographics) SetFake() {
 func (s *Error) SetFake() {
 	{
 		{
-			s.Code = int64(0)
-		}
-	}
-	{
-		{
 			s.Message = "string"
 		}
 	}

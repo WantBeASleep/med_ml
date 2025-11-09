@@ -455,23 +455,12 @@ func (*Echographics) uziIDEchographicsPatchRes() {}
 // Ошибка.
 // Ref: #/components/schemas/error
 type Error struct {
-	Code    int64  `json:"code"`
 	Message string `json:"message"`
-}
-
-// GetCode returns the value of Code.
-func (s *Error) GetCode() int64 {
-	return s.Code
 }
 
 // GetMessage returns the value of Message.
 func (s *Error) GetMessage() string {
 	return s.Message
-}
-
-// SetCode sets the value of Code.
-func (s *Error) SetCode(val int64) {
-	s.Code = val
 }
 
 // SetMessage sets the value of Message.
