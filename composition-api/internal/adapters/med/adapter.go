@@ -18,7 +18,7 @@ type Adapter interface {
 	GetPatientsByDoctorID(ctx context.Context, id uuid.UUID, status *bool) ([]domain.Patient, error)
 	UpdatePatient(ctx context.Context, arg UpdatePatientIn) (domain.Patient, error)
 
-	CreateCard(ctx context.Context, card domain.Card) error
+	CreateCard(ctx context.Context, card domain.Card) (domain.Card, error)
 	GetCard(ctx context.Context, doctorID, patientID uuid.UUID) (domain.Card, error)
 	UpdateCard(ctx context.Context, card domain.Card) (domain.Card, error)
 }

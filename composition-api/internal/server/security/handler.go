@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/rsa"
 	"errors"
-	"fmt"
 
 	domain "composition-api/internal/domain/auth"
 	api "composition-api/internal/generated/http/api"
@@ -36,7 +35,8 @@ func New(cfg *config.Config) *handler {
 func (h *handler) HandleBearerAuth(ctx context.Context, operationName api.OperationName, t api.BearerAuth) (context.Context, error) {
 	parsed, err := jwt.Parse(t.Token, func(t *jwt.Token) (interface{}, error) { return h.publicKey, nil })
 	if err != nil {
-		return nil, fmt.Errorf("parse token: %w", err)
+		// Все ошибки парсинга токена возвращаем как ErrInvalidToken
+		return nil, ErrInvalidToken
 	}
 	if !parsed.Valid {
 		return nil, ErrInvalidToken
@@ -44,7 +44,7 @@ func (h *handler) HandleBearerAuth(ctx context.Context, operationName api.Operat
 
 	claims, ok := parsed.Claims.(jwt.MapClaims)
 	if !ok {
-		return nil, fmt.Errorf("invalid jwt claims")
+		return nil, ErrInvalidToken
 	}
 
 	idAny, ok := claims["id"]

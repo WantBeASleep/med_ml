@@ -5,7 +5,7 @@ import (
 	repoEntity "med/internal/repository/entity"
 )
 
-func (r *repo) InsertCard(card entity.Card) error {
+func (r *repo) InsertCard(card entity.Card) (int, error) {
 	query := r.QueryBuilder().
 		Insert(table).
 		Columns(
@@ -17,12 +17,14 @@ func (r *repo) InsertCard(card entity.Card) error {
 			card.DoctorID,
 			card.PatientID,
 			card.Diagnosis,
-		)
+		).
+		Suffix("RETURNING id")
 
-	_, err := r.Runner().Execx(r.Context(), query)
+	var id int
+	err := r.Runner().Getx(r.Context(), &id, query)
 	if err != nil {
-		return repoEntity.WrapDBError(err)
+		return 0, repoEntity.WrapDBError(err)
 	}
 
-	return nil
+	return id, nil
 }

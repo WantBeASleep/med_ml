@@ -12,7 +12,7 @@ import (
 )
 
 func (h *handler) MedCardPost(ctx context.Context, req *api.Card) (api.MedCardPostRes, error) {
-	err := h.services.CardService.CreateCard(ctx, med_domain.Card{
+	_, err := h.services.CardService.CreateCard(ctx, med_domain.Card{
 		PatientID: req.PatientID,
 		DoctorID:  req.DoctorID,
 		Diagnosis: mappers.FromOptString(req.Diagnosis),

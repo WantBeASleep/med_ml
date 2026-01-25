@@ -1,0 +1,341 @@
+syntax = "proto3";
+
+option go_package = "internal/generated/grpc/service";
+
+import "google/protobuf/empty.proto";
+
+service CytologySrv {
+  // CYTOLOGY IMAGE
+  rpc CreateCytologyImage(CreateCytologyImageIn) returns (CreateCytologyImageOut);
+  rpc GetCytologyImageById(GetCytologyImageByIdIn) returns (GetCytologyImageByIdOut);
+  rpc GetCytologyImagesByExternalId(GetCytologyImagesByExternalIdIn) returns (GetCytologyImagesByExternalIdOut);
+  rpc GetCytologyImagesByDoctorIdAndPatientId(GetCytologyImagesByDoctorIdAndPatientIdIn) returns (GetCytologyImagesByDoctorIdAndPatientIdOut);
+  rpc UpdateCytologyImage(UpdateCytologyImageIn) returns (UpdateCytologyImageOut);
+  rpc DeleteCytologyImage(DeleteCytologyImageIn) returns (google.protobuf.Empty);
+  rpc CopyCytologyImage(CopyCytologyImageIn) returns (CopyCytologyImageOut);
+  rpc GetCytologyImageHistory(GetCytologyImageHistoryIn) returns (GetCytologyImageHistoryOut);
+
+  // ORIGINAL IMAGE
+  rpc CreateOriginalImage(CreateOriginalImageIn) returns (CreateOriginalImageOut);
+  rpc GetOriginalImageById(GetOriginalImageByIdIn) returns (GetOriginalImageByIdOut);
+  rpc GetOriginalImagesByCytologyId(GetOriginalImagesByCytologyIdIn) returns (GetOriginalImagesByCytologyIdOut);
+  rpc UpdateOriginalImage(UpdateOriginalImageIn) returns (UpdateOriginalImageOut);
+
+  // SEGMENTATION GROUP
+  rpc CreateSegmentationGroup(CreateSegmentationGroupIn) returns (CreateSegmentationGroupOut);
+  rpc GetSegmentationGroupsByCytologyId(GetSegmentationGroupsByCytologyIdIn) returns (GetSegmentationGroupsByCytologyIdOut);
+  rpc UpdateSegmentationGroup(UpdateSegmentationGroupIn) returns (UpdateSegmentationGroupOut);
+  rpc DeleteSegmentationGroup(DeleteSegmentationGroupIn) returns (google.protobuf.Empty);
+
+  // SEGMENTATION
+  rpc CreateSegmentation(CreateSegmentationIn) returns (CreateSegmentationOut);
+  rpc GetSegmentationById(GetSegmentationByIdIn) returns (GetSegmentationByIdOut);
+  rpc GetSegmentsByGroupId(GetSegmentsByGroupIdIn) returns (GetSegmentsByGroupIdOut);
+  rpc UpdateSegmentation(UpdateSegmentationIn) returns (UpdateSegmentationOut);
+  rpc DeleteSegmentation(DeleteSegmentationIn) returns (google.protobuf.Empty);
+}
+
+// CYTOLOGY IMAGE
+
+enum DiagnosticMarking {
+  DIAGNOSTIC_MARKING_UNSPECIFIED = 0;
+  DIAGNOSTIC_MARKING_P11 = 1;
+  DIAGNOSTIC_MARKING_L23 = 2;
+}
+
+enum MaterialType {
+  MATERIAL_TYPE_UNSPECIFIED = 0;
+  MATERIAL_TYPE_GS = 1;
+  MATERIAL_TYPE_BP = 2;
+  MATERIAL_TYPE_TP = 3;
+  MATERIAL_TYPE_PTP = 4;
+  MATERIAL_TYPE_LNP = 5;
+}
+
+message CytologyImage {
+  string id = 100;
+  string external_id = 200;
+  string doctor_id = 300;
+  string patient_id = 400;
+  int32 diagnostic_number = 500;
+  optional DiagnosticMarking diagnostic_marking = 600;
+  optional MaterialType material_type = 700;
+  string diagnos_date = 800;
+  bool is_last = 900;
+  optional int32 calcitonin = 1000;
+  optional int32 calcitonin_in_flush = 1100;
+  optional int32 thyroglobulin = 1200;
+  optional string details = 1300; // JSON string
+  optional string prev_id = 1400;
+  optional string parent_prev_id = 1500;
+  string create_at = 1600;
+}
+
+message CreateCytologyImageIn {
+  string external_id = 100;
+  string doctor_id = 200;
+  string patient_id = 300;
+  int32 diagnostic_number = 400;
+  optional DiagnosticMarking diagnostic_marking = 500;
+  optional MaterialType material_type = 600;
+  optional int32 calcitonin = 700;
+  optional int32 calcitonin_in_flush = 800;
+  optional int32 thyroglobulin = 900;
+  optional string details = 1000; // JSON string
+  optional string prev_id = 1100;
+  optional string parent_prev_id = 1200;
+  optional bytes file = 1300; // файл изображения
+  optional string content_type = 1400; // Content-Type файла
+}
+
+message CreateCytologyImageOut {
+  string id = 100;
+}
+
+message GetCytologyImageByIdIn {
+  string id = 100;
+}
+
+message GetCytologyImageByIdOut {
+  CytologyImage cytology_image = 100;
+  optional OriginalImage original_image = 200;
+}
+
+message GetCytologyImagesByExternalIdIn {
+  string external_id = 100;
+}
+
+message GetCytologyImagesByExternalIdOut {
+  repeated CytologyImage cytology_images = 100;
+}
+
+message GetCytologyImagesByDoctorIdAndPatientIdIn {
+  string doctor_id = 100;
+  string patient_id = 200;
+}
+
+message GetCytologyImagesByDoctorIdAndPatientIdOut {
+  repeated CytologyImage cytology_images = 100;
+}
+
+message UpdateCytologyImageIn {
+  string id = 100;
+  optional DiagnosticMarking diagnostic_marking = 200;
+  optional MaterialType material_type = 300;
+  optional int32 calcitonin = 400;
+  optional int32 calcitonin_in_flush = 500;
+  optional int32 thyroglobulin = 600;
+  optional string details = 700; // JSON string
+  optional bool is_last = 800;
+  optional string prev_id = 900;
+  optional string parent_prev_id = 1000;
+}
+
+message UpdateCytologyImageOut {
+  CytologyImage cytology_image = 100;
+}
+
+message DeleteCytologyImageIn {
+  string id = 100;
+}
+
+message CopyCytologyImageIn {
+  string id = 100;
+}
+
+message CopyCytologyImageOut {
+  CytologyImage cytology_image = 100;
+}
+
+message GetCytologyImageHistoryIn {
+  string id = 100;
+}
+
+message GetCytologyImageHistoryOut {
+  repeated CytologyImage cytology_images = 100;
+}
+
+// ORIGINAL IMAGE
+
+message OriginalImage {
+  string id = 100;
+  string cytology_id = 200;
+  string image_path = 300;
+  string create_date = 400;
+  optional double delay_time = 500;
+  bool viewed_flag = 600;
+}
+
+message CreateOriginalImageIn {
+  string cytology_id = 100;
+  bytes file = 200;
+  string content_type = 300;
+  optional double delay_time = 400;
+  optional string image_path = 500; // путь к файлу в S3 (если файл уже загружен)
+}
+
+message CreateOriginalImageOut {
+  string id = 100;
+}
+
+message GetOriginalImageByIdIn {
+  string id = 100;
+}
+
+message GetOriginalImageByIdOut {
+  OriginalImage original_image = 100;
+}
+
+message GetOriginalImagesByCytologyIdIn {
+  string cytology_id = 100;
+}
+
+message GetOriginalImagesByCytologyIdOut {
+  repeated OriginalImage original_images = 100;
+}
+
+message UpdateOriginalImageIn {
+  string id = 100;
+  optional double delay_time = 200;
+  optional bool viewed_flag = 300;
+}
+
+message UpdateOriginalImageOut {
+  OriginalImage original_image = 100;
+}
+
+// SEGMENTATION GROUP
+
+enum SegType {
+  SEG_TYPE_UNSPECIFIED = 0;
+  SEG_TYPE_NIL = 1;
+  SEG_TYPE_NIR = 2;
+  SEG_TYPE_NIM = 3;
+  SEG_TYPE_CNO = 4;
+  SEG_TYPE_CGE = 5;
+  SEG_TYPE_C2N = 6;
+  SEG_TYPE_CPS = 7;
+  SEG_TYPE_CFC = 8;
+  SEG_TYPE_CLY = 9;
+  SEG_TYPE_SOS = 10;
+  SEG_TYPE_SDS = 11;
+  SEG_TYPE_SMS = 12;
+  SEG_TYPE_STS = 13;
+  SEG_TYPE_SPS = 14;
+  SEG_TYPE_SNM = 15;
+  SEG_TYPE_STM = 16;
+}
+
+enum GroupType {
+  GROUP_TYPE_UNSPECIFIED = 0;
+  GROUP_TYPE_CE = 1;
+  GROUP_TYPE_CL = 2;
+  GROUP_TYPE_ME = 3;
+}
+
+message SegmentationGroup {
+  int32 id = 100;
+  string cytology_id = 200;
+  SegType seg_type = 300;
+  GroupType group_type = 400;
+  bool is_ai = 500;
+  optional string details = 600; // JSON string
+  string create_at = 700;
+}
+
+message CreateSegmentationGroupIn {
+  string cytology_id = 100;
+  SegType seg_type = 200;
+  GroupType group_type = 300;
+  bool is_ai = 400;
+  optional string details = 500; // JSON string
+}
+
+message CreateSegmentationGroupOut {
+  int32 id = 100;
+}
+
+message GetSegmentationGroupsByCytologyIdIn {
+  string cytology_id = 100;
+  optional SegType seg_type = 200;
+  optional GroupType group_type = 300;
+  optional bool is_ai = 400;
+}
+
+message GetSegmentationGroupsByCytologyIdOut {
+  repeated SegmentationGroup segmentation_groups = 100;
+}
+
+message UpdateSegmentationGroupIn {
+  int32 id = 100;
+  optional SegType seg_type = 200;
+  optional string details = 300; // JSON string
+}
+
+message UpdateSegmentationGroupOut {
+  SegmentationGroup segmentation_group = 100;
+}
+
+message DeleteSegmentationGroupIn {
+  int32 id = 100;
+}
+
+// SEGMENTATION
+
+message SegmentationPoint {
+  int32 id = 100;
+  int32 segmentation_id = 200;
+  int32 x = 300;
+  int32 y = 400;
+  int64 uid = 500;
+}
+
+message Segmentation {
+  int32 id = 100;
+  int32 segmentation_group_id = 200;
+  repeated SegmentationPoint points = 300;
+  string create_at = 400;
+}
+
+message CreateSegmentationIn {
+  int32 segmentation_group_id = 100;
+  repeated SegmentationPointCreate points = 200;
+}
+
+message SegmentationPointCreate {
+  int32 x = 100;
+  int32 y = 200;
+}
+
+message CreateSegmentationOut {
+  int32 id = 100;
+}
+
+message GetSegmentationByIdIn {
+  int32 id = 100;
+}
+
+message GetSegmentationByIdOut {
+  Segmentation segmentation = 100;
+}
+
+message GetSegmentsByGroupIdIn {
+  int32 segmentation_group_id = 100;
+}
+
+message GetSegmentsByGroupIdOut {
+  repeated Segmentation segmentations = 100;
+}
+
+message UpdateSegmentationIn {
+  int32 id = 100;
+  repeated SegmentationPointCreate points = 200;
+}
+
+message UpdateSegmentationOut {
+  Segmentation segmentation = 100;
+}
+
+message DeleteSegmentationIn {
+  int32 id = 100;
+}

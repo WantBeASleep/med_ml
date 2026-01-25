@@ -1,0 +1,49 @@
+version: "3"
+
+dotenv: [".env.example"]
+
+tasks:
+  bin-deps:
+    cmds:
+      - GOBIN=$(pwd)/bin go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+      - GOBIN=$(pwd)/bin go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+  codegen:
+    vars:
+      proto_files:
+        sh: find proto -type f -name "*.proto" | xargs echo
+
+    cmds:
+      - rm -rf internal/generated
+      - for: { var: proto_files }
+        cmd: >
+          protoc
+          --plugin=protoc-gen-go=$(pwd)/bin/protoc-gen-go
+          --plugin=protoc-gen-go-grpc=$(pwd)/bin/protoc-gen-go-grpc
+          --experimental_allow_proto3_optional
+          --go_out . --go-grpc_out .
+          {{.ITEM}}
+
+  style:
+    cmds:
+      - go fmt ./...
+      - go tool goimports -w .
+      - go tool gofumpt -l -w .
+
+  build:
+    cmds:
+      - task: style
+      - go build -v -o bin/service cmd/service/main.go
+
+  run:
+    cmds:
+      - task: build
+      - ./bin/service
+
+  migration-up:
+    cmds:
+      - go tool goose -dir db/migrations up
+
+  migration-down:
+    cmds:
+      - go tool goose -dir db/migrations down

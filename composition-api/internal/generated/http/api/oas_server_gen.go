@@ -8,6 +8,88 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// CytologyCopyCreate implements CytologyCopyCreate operation.
+	//
+	// Создает новое цитологическое исследование на основе
+	// существующего.
+	// Копирует все данные из исходного исследования,
+	// включая изображения и сегментации.
+	//
+	// POST /cytology/copy
+	CytologyCopyCreate(ctx context.Context, req *CytologyCopyCreateReq) (CytologyCopyCreateRes, error)
+	// CytologyCreateCreate implements CytologyCreateCreate operation.
+	//
+	// Форма для сохранния цитологического изображения.
+	//
+	// POST /cytology/create
+	CytologyCreateCreate(ctx context.Context, req *CytologyCreateCreateReq) (CytologyCreateCreateRes, error)
+	// CytologyHistoryRead implements CytologyHistoryRead operation.
+	//
+	// Получить историю цитологического исследования.
+	//
+	// GET /cytology/history/{id}
+	CytologyHistoryRead(ctx context.Context, params CytologyHistoryReadParams) (CytologyHistoryReadRes, error)
+	// CytologyRead implements CytologyRead operation.
+	//
+	// Информация об одной группе снимков.
+	//
+	// GET /cytology/{id}
+	CytologyRead(ctx context.Context, params CytologyReadParams) (CytologyReadRes, error)
+	// CytologySegmentGroupCreateCreate implements CytologySegmentGroupCreateCreate operation.
+	//
+	// Создать группу сегментаций.
+	//
+	// POST /cytology/segment/group/create/{cytology_img_id}
+	CytologySegmentGroupCreateCreate(ctx context.Context, req *CytologySegmentGroupCreateCreateReq, params CytologySegmentGroupCreateCreateParams) (CytologySegmentGroupCreateCreateRes, error)
+	// CytologySegmentUpdateDelete implements CytologySegmentUpdateDelete operation.
+	//
+	// Удалить сегментацию.
+	//
+	// DELETE /cytology/segment/update/{id}
+	CytologySegmentUpdateDelete(ctx context.Context, params CytologySegmentUpdateDeleteParams) (CytologySegmentUpdateDeleteRes, error)
+	// CytologySegmentUpdatePartialUpdate implements CytologySegmentUpdatePartialUpdate operation.
+	//
+	// Обновить сегментацию.
+	//
+	// PATCH /cytology/segment/update/{id}
+	CytologySegmentUpdatePartialUpdate(ctx context.Context, req *CytologySegmentUpdatePartialUpdateReq, params CytologySegmentUpdatePartialUpdateParams) (CytologySegmentUpdatePartialUpdateRes, error)
+	// CytologySegmentUpdateRead implements CytologySegmentUpdateRead operation.
+	//
+	// Получить сегментацию.
+	//
+	// GET /cytology/segment/update/{id}
+	CytologySegmentUpdateRead(ctx context.Context, params CytologySegmentUpdateReadParams) (CytologySegmentUpdateReadRes, error)
+	// CytologySegmentUpdateUpdate implements CytologySegmentUpdateUpdate operation.
+	//
+	// Обновить сегментацию.
+	//
+	// PUT /cytology/segment/update/{id}
+	CytologySegmentUpdateUpdate(ctx context.Context, req *CytologySegmentUpdateUpdateReq, params CytologySegmentUpdateUpdateParams) (CytologySegmentUpdateUpdateRes, error)
+	// CytologySegmentsList implements CytologySegmentsList operation.
+	//
+	// Информация об одной группе снимков.
+	//
+	// GET /cytology/{id}/segments
+	CytologySegmentsList(ctx context.Context, params CytologySegmentsListParams) (CytologySegmentsListRes, error)
+	// CytologyUpdatePartialUpdate implements CytologyUpdatePartialUpdate operation.
+	//
+	// Обновление всей страницы с информацией о приеме.
+	//
+	// PATCH /cytology/{id}/update
+	CytologyUpdatePartialUpdate(ctx context.Context, req *CytologyUpdatePartialUpdateReq, params CytologyUpdatePartialUpdateParams) (CytologyUpdatePartialUpdateRes, error)
+	// CytologyUpdateUpdate implements CytologyUpdateUpdate operation.
+	//
+	// Обновление всей страницы с информацией о приеме.
+	//
+	// PUT /cytology/{id}/update
+	CytologyUpdateUpdate(ctx context.Context, req *CytologyUpdateUpdateReq, params CytologyUpdateUpdateParams) (CytologyUpdateUpdateRes, error)
+	// DownloadCytologyCytologyIDOriginalImageIDGet implements GET /download/cytology/{cytology_id}/{original_image_id} operation.
+	//
+	// Получить оригинальное изображение цитологического
+	// исследования.
+	//
+	// GET /download/cytology/{cytology_id}/{original_image_id}
+	DownloadCytologyCytologyIDOriginalImageIDGet(ctx context.Context, params DownloadCytologyCytologyIDOriginalImageIDGetParams) (DownloadCytologyCytologyIDOriginalImageIDGetRes, error)
 	// DownloadUziIDImageIDGet implements GET /download/{uzi_id}/{image_id} operation.
 	//
 	// Получить кадр узи.
@@ -126,6 +208,25 @@ type Handler interface {
 	//
 	// GET /tariff_plans/{id}
 	TariffPlansIDGet(ctx context.Context, params TariffPlansIDGetParams) (TariffPlansIDGetRes, error)
+	// TilerDziFilePathFilesLevelColRowFormatGet implements TilerDziFilePathFilesLevelColRowFormatGet operation.
+	//
+	// Возвращает конкретный тайл (плитку) изображения для
+	// указанного уровня масштабирования,
+	// колонки и строки. Запрос проксируется напрямую на
+	// tiler_service.
+	// Формат пути: `/tiler/dzi/{file_path}/files/{level}/{col}_{row}.{format}`.
+	//
+	// GET /tiler/dzi/{file_path}/files/{level}/{col}_{row}.{format}
+	TilerDziFilePathFilesLevelColRowFormatGet(ctx context.Context, params TilerDziFilePathFilesLevelColRowFormatGetParams) (TilerDziFilePathFilesLevelColRowFormatGetRes, error)
+	// TilerDziFilePathGet implements TilerDziFilePathGet operation.
+	//
+	// Возвращает XML метаданные в формате Deep Zoom Image (DZI) для
+	// указанного изображения.
+	// Путь к файлу должен быть URL-encoded. Запрос проксируется
+	// напрямую на tiler_service.
+	//
+	// GET /tiler/dzi/{file_path}
+	TilerDziFilePathGet(ctx context.Context, params TilerDziFilePathGetParams) (TilerDziFilePathGetRes, error)
 	// UziDevicePost implements POST /uzi/device operation.
 	//
 	// Добавить uzi аппарат.

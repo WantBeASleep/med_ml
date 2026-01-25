@@ -457,6 +457,26 @@ components:
         doctor_id: "123e4567-e89b-12d3-a456-426614174000"
         diagnosis: "опухоль"
 
+    patientCard:
+      type: object
+      description: карта пациента
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        acceptance_datetime:
+          type: string
+          format: date-time
+          readOnly: true
+        diagnosis:
+          type: string
+        patient:
+          type: integer
+          x-nullable: true
+        med_worker:
+          type: integer
+          x-nullable: true
+
     simpleUuid:
       type: object
       description: uuid
@@ -716,6 +736,254 @@ components:
         id: "123e4567-e89b-12d3-a456-426614174000"
         name: "Yookassa"
         is_active: true
+
+    cytologyImage:
+      type: object
+      description: цитологическое исследование
+      required:
+        - id
+        - external_id
+        - doctor_id
+        - patient_id
+        - diagnostic_number
+        - is_last
+        - diagnos_date
+        - create_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: id цитологического исследования
+        external_id:
+          type: string
+          format: uuid
+          description: внешний id пациента/организации etc.
+        doctor_id:
+          type: string
+          format: uuid
+          description: id врача
+        patient_id:
+          type: string
+          format: uuid
+          description: id пациента
+        diagnostic_number:
+          type: integer
+          description: номер диагностики
+        diagnostic_marking:
+          type: string
+          enum:
+            - П11
+            - Л23
+          description: маркировка диагностики
+        material_type:
+          type: string
+          enum:
+            - GS
+            - BP
+            - TP
+            - PTP
+            - LNP
+          description: тип материала
+        diagnos_date:
+          type: string
+          format: date-time
+          description: дата диагностики
+        is_last:
+          type: boolean
+          description: является ли данная версия последней
+        calcitonin:
+          type: integer
+          description: кальцитонин
+        calcitonin_in_flush:
+          type: integer
+          description: кальцитонин в смыве
+        thyroglobulin:
+          type: integer
+          description: тиреоглобулин
+        details:
+          type: object
+          description: детали диагностики (JSON)
+        prev_id:
+          type: string
+          format: uuid
+          description: id предыдущей версии
+        parent_prev_id:
+          type: string
+          format: uuid
+          description: id родительской предыдущей версии
+        create_at:
+          type: string
+          format: date-time
+          description: дата создания
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        external_id: "123e4567-e89b-12d3-a456-426614174000"
+        doctor_id: "123e4567-e89b-12d3-a456-426614174000"
+        patient_id: "123e4567-e89b-12d3-a456-426614174000"
+        diagnostic_number: 1
+        diagnostic_marking: "П11"
+        material_type: "GS"
+        diagnos_date: "2024-01-01T00:00:00Z"
+        is_last: true
+        calcitonin: 10
+        calcitonin_in_flush: 5
+        thyroglobulin: 20
+        create_at: "2024-01-01T00:00:00Z"
+
+    originalImage:
+      type: object
+      description: оригинальное изображение
+      required:
+        - id
+        - cytology_id
+        - image_path
+        - create_date
+        - viewed_flag
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: id изображения
+        cytology_id:
+          type: string
+          format: uuid
+          description: id цитологического исследования
+        image_path:
+          type: string
+          description: путь к изображению в S3
+        create_date:
+          type: string
+          format: date-time
+          description: дата создания
+        delay_time:
+          type: number
+          description: время обработки
+        viewed_flag:
+          type: boolean
+          description: флаг просмотра
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        cytology_id: "123e4567-e89b-12d3-a456-426614174000"
+        image_path: "cytology/images/123e4567-e89b-12d3-a456-426614174000.png"
+        create_date: "2024-01-01T00:00:00Z"
+        delay_time: 1.5
+        viewed_flag: false
+
+    segmentationGroup:
+      type: object
+      description: группа сегментаций
+      required:
+        - id
+        - cytology_id
+        - seg_type
+        - group_type
+        - is_ai
+        - create_at
+      properties:
+        id:
+          type: integer
+          description: id группы сегментаций
+        cytology_id:
+          type: string
+          format: uuid
+          description: id цитологического исследования
+        seg_type:
+          type: string
+          enum:
+            - NIL
+            - NIR
+            - NIM
+            - CNO
+            - CGE
+            - C2N
+            - CPS
+            - CFC
+            - CLY
+            - SOS
+            - SDS
+            - SMS
+            - STS
+            - SPS
+            - SNM
+            - STM
+          description: тип сегментации
+        group_type:
+          type: string
+          enum:
+            - CE
+            - CL
+            - ME
+          description: тип группы
+        is_ai:
+          type: boolean
+          description: создана ли группа AI
+        details:
+          type: object
+          description: детали (JSON)
+        create_at:
+          type: string
+          format: date-time
+          description: дата создания
+      example:
+        id: 1
+        cytology_id: "123e4567-e89b-12d3-a456-426614174000"
+        seg_type: "NIL"
+        group_type: "CE"
+        is_ai: false
+        create_at: "2024-01-01T00:00:00Z"
+
+    segmentationPoint:
+      type: object
+      description: точка сегментации
+      required:
+        - x
+        - y
+      properties:
+        x:
+          type: integer
+          minimum: 0
+          description: координата X
+        y:
+          type: integer
+          minimum: 0
+          description: координата Y
+      example:
+        x: 100
+        y: 200
+
+    segmentation:
+      type: object
+      description: сегментация
+      required:
+        - id
+        - segmentation_group_id
+        - points
+        - create_at
+      properties:
+        id:
+          type: integer
+          description: id сегментации
+        segmentation_group_id:
+          type: integer
+          description: id группы сегментаций
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/segmentationPoint'
+          description: точки сегментации
+        create_at:
+          type: string
+          format: date-time
+          description: дата создания
+      example:
+        id: 1
+        segmentation_group_id: 1
+        points:
+          - x: 100
+            y: 200
+          - x: 200
+            y: 300
+        create_at: "2024-01-01T00:00:00Z"
 
     error:
       description: Ошибка
@@ -2211,6 +2479,186 @@ paths:
         default:
           $ref: "#/components/responses/error"
 
+  /download/cytology/{cytology_id}/{original_image_id}:
+    get:
+      summary: получить оригинальное изображение цитологического исследования
+      tags:
+        - download
+      parameters:
+        - name: cytology_id
+          in: path
+          required: true
+          description: id цитологического исследования
+          schema:
+            type: string
+            format: uuid
+        - name: original_image_id
+          in: path
+          required: true
+          description: id оригинального изображения
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: оригинальное изображение
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Изображение не найдено
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /tiler/dzi/{file_path}:
+    get:
+      operationId: TilerDziFilePathGet
+      summary: Получить DZI XML метаданные для изображения
+      description: |
+        Возвращает XML метаданные в формате Deep Zoom Image (DZI) для указанного изображения.
+        Путь к файлу должен быть URL-encoded. Запрос проксируется напрямую на tiler_service.
+      tags:
+        - tiler
+      security: []
+      parameters:
+        - name: file_path
+          in: path
+          required: true
+          description: |
+            Путь к файлу изображения в S3 хранилище.
+            Формат пути из cytology: `{cytology_id}/{image_id}/{image_id}`
+            Пример: `123e4567-e89b-12d3-a456-426614174000/123e4567-e89b-12d3-a456-426614174001/123e4567-e89b-12d3-a456-426614174001`
+            Путь должен быть URL-encoded.
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000/123e4567-e89b-12d3-a456-426614174001/123e4567-e89b-12d3-a456-426614174001"
+      responses:
+        '200':
+          description: DZI XML метаданные
+          content:
+            application/xml:
+              schema:
+                type: string
+                example: |
+                  <?xml version="1.0" encoding="UTF-8"?>
+                  <Image xmlns="http://schemas.microsoft.com/deepzoom/2008">
+                    <Size Width="10000" Height="8000"/>
+                    <TileSize>256</TileSize>
+                    <Overlap>1</Overlap>
+                    <Format>jpg</Format>
+                  </Image>
+        '400':
+          description: Неверный формат запроса или путь к файлу
+          $ref: "#/components/responses/error"
+        '404':
+          description: Файл изображения не найден
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /tiler/dzi/{file_path}/files/{level}/{col}_{row}.{format}:
+    get:
+      operationId: TilerDziFilePathFilesLevelColRowFormatGet
+      summary: Получить тайл изображения
+      description: |
+        Возвращает конкретный тайл (плитку) изображения для указанного уровня масштабирования,
+        колонки и строки. Запрос проксируется напрямую на tiler_service.
+        Формат пути: `/tiler/dzi/{file_path}/files/{level}/{col}_{row}.{format}`
+      tags:
+        - tiler
+      security: []
+      parameters:
+        - name: file_path
+          in: path
+          required: true
+          description: |
+            Путь к файлу изображения в S3 хранилище.
+            Формат пути из cytology: `{cytology_id}/{image_id}/{image_id}`
+            Пример: `123e4567-e89b-12d3-a456-426614174000/123e4567-e89b-12d3-a456-426614174001/123e4567-e89b-12d3-a456-426614174001`
+            Путь должен быть URL-encoded.
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000/123e4567-e89b-12d3-a456-426614174001/123e4567-e89b-12d3-a456-426614174001"
+        - name: level
+          in: path
+          required: true
+          description: |
+            Уровень масштабирования (zoom level).
+            0 - оригинальное разрешение изображения, каждый следующий уровень уменьшает разрешение в 2 раза.
+          schema:
+            type: integer
+            minimum: 0
+          example: 5
+        - name: col
+          in: path
+          required: true
+          description: Номер колонки тайла (начинается с 0)
+          schema:
+            type: integer
+            minimum: 0
+          example: 10
+        - name: row
+          in: path
+          required: true
+          description: Номер строки тайла (начинается с 0)
+          schema:
+            type: integer
+            minimum: 0
+          example: 20
+        - name: format
+          in: path
+          required: true
+          description: Формат изображения тайла
+          schema:
+            type: string
+            enum:
+              - jpeg
+              - jpg
+              - png
+          example: "jpeg"
+      responses:
+        '200':
+          description: Тайл изображения в указанном формате
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+              description: Тайл в формате JPEG
+            image/png:
+              schema:
+                type: string
+                format: binary
+              description: Тайл в формате PNG
+        '400':
+          description: Неверный формат запроса или параметров
+          $ref: "#/components/responses/error"
+        '404':
+          description: Тайл не найден (неверный путь, уровень, колонка или строка)
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
   /tariff_plans/{id}:
     get:
       summary: Получить тарифный план по ID
@@ -2352,6 +2800,1314 @@ paths:
         '200':
           description: Успешная обработка уведомления
         '500':
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /cytology/create:
+    post:
+      operationId: CytologyCreateCreate
+      summary: Форма для сохранния цитологического изображения
+      tags:
+        - cytology
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - diagnostic_number
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: файл изображения цитологии
+                diagnostic_number:
+                  type: integer
+                  minimum: 0
+                  maximum: 2147483647
+                  description: Номер диагностики
+                diagnostic_marking:
+                  type: string
+                  enum:
+                    - П11
+                    - Л23
+                  description: Маркировка диагностики
+                material_type:
+                  type: string
+                  enum:
+                    - GS
+                    - BP
+                    - TP
+                    - PTP
+                    - LNP
+                calcitonin:
+                  type: integer
+                  minimum: -2147483648
+                  maximum: 2147483647
+                calcitonin_in_flush:
+                  type: integer
+                  minimum: -2147483648
+                  maximum: 2147483647
+                thyroglobulin:
+                  type: integer
+                  minimum: -2147483648
+                  maximum: 2147483647
+                prev:
+                  type: string
+                  format: uuid
+                  readOnly: true
+                  x-nullable: true
+                parent_prev:
+                  type: string
+                  format: uuid
+                  readOnly: true
+                  x-nullable: true
+                patient_card:
+                  type: integer
+                  x-nullable: true
+                details:
+                  type: string
+                  description: Детали диагностики в формате JSON
+                  x-nullable: true
+                is_last:
+                  type: boolean
+                  readOnly: true
+                  description: Является ли данная версия измениний последней?
+                diagnos_date:
+                  type: string
+                  format: date-time
+                  readOnly: true
+      responses:
+        '201':
+          description: созданное цитологическое исследование
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - diagnostic_number
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    readOnly: true
+                  image:
+                    type: string
+                    format: uri
+                    readOnly: true
+                  is_last:
+                    type: boolean
+                    readOnly: true
+                  diagnos_date:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  details:
+                    type: object
+                    x-nullable: true
+                  diagnostic_marking:
+                    type: string
+                    enum:
+                      - П11
+                      - Л23
+                  diagnostic_number:
+                    type: integer
+                  material_type:
+                    type: string
+                    enum:
+                      - GS
+                      - BP
+                      - TP
+                      - PTP
+                      - LNP
+                  calcitonin:
+                    type: integer
+                  calcitonin_in_flush:
+                    type: integer
+                  thyroglobulin:
+                    type: integer
+                  prev:
+                    type: string
+                    format: uuid
+                    readOnly: true
+                    x-nullable: true
+                  parent_prev:
+                    type: string
+                    format: uuid
+                    readOnly: true
+                    x-nullable: true
+                  patient_card:
+                    type: integer
+                    x-nullable: true
+        '400':
+          description: Неверный формат запроса
+          $ref: "#/components/responses/error"
+        '422':
+          description: Ошибка валидации данных
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /cytology/{id}:
+    get:
+      operationId: CytologyRead
+      summary: Информация об одной группе снимков
+      tags:
+        - cytology
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id цитологического исследования
+          schema:
+            type: string
+      responses:
+        '200':
+          description: цитологическое исследование
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - original_image
+                  - info
+                properties:
+                  original_image:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      create_date:
+                        type: string
+                        format: date-time
+                      delay_time:
+                        type: number
+                      viewed_flag:
+                        type: boolean
+                      image:
+                        type: string
+                        format: uri
+                        readOnly: true
+                      file_path:
+                        type: string
+                        description: путь к файлу изображения для DZI
+                        readOnly: true
+                  info:
+                    type: object
+                    required:
+                      - patient
+                      - patient_card
+                      - image_group
+                    properties:
+                      patient:
+                        $ref: '#/components/schemas/patient'
+                      patient_card:
+                        $ref: '#/components/schemas/patientCard'
+                      image_group:
+                        type: object
+                        required:
+                          - diagnostic_number
+                        properties:
+                          id:
+                            type: integer
+                            readOnly: true
+                          is_last:
+                            type: boolean
+                          diagnos_date:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                          details:
+                            type: object
+                            x-nullable: true
+                          diagnostic_marking:
+                            type: string
+                            enum:
+                              - П11
+                              - Л23
+                          diagnostic_number:
+                            type: integer
+                          material_type:
+                            type: string
+                            enum:
+                              - GS
+                              - BP
+                              - TP
+                              - PTP
+                              - LNP
+                          calcitonin:
+                            type: integer
+                          calcitonin_in_flush:
+                            type: integer
+                          thyroglobulin:
+                            type: integer
+                          prev:
+                            type: string
+                            format: uuid
+                            x-nullable: true
+                          parent_prev:
+                            type: string
+                            format: uuid
+                            x-nullable: true
+                          original_image:
+                            type: integer
+                            x-nullable: true
+        '404':
+          description: Цитологическое исследование не найдено
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /cytology/{id}/segments:
+    get:
+      operationId: CytologySegmentsList
+      summary: Информация об одной группе снимков
+      tags:
+        - cytology
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id цитологического исследования
+          schema:
+            type: string
+        - name: is_ai
+          in: query
+          required: false
+          description: is_ai
+          schema:
+            type: string
+        - name: group_type
+          in: query
+          required: false
+          description: group_type
+          schema:
+            type: string
+            enum:
+              - CE
+              - CL
+              - ME
+        - name: seg_type
+          in: query
+          required: false
+          description: seg_type
+          schema:
+            type: string
+            enum:
+              - NIL
+              - NIR
+              - NIM
+              - CNO
+              - CGE
+              - C2N
+              - CPS
+              - CFC
+              - CLY
+              - SOS
+              - SDS
+              - SMS
+              - STS
+              - SPS
+              - SNM
+              - STM
+        - name: limit
+          in: query
+          required: false
+          description: Number of results to return per page.
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: false
+          description: The initial index from which to return the results.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: сегменты цитологического исследования
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                  - results
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    format: uri
+                    x-nullable: true
+                  previous:
+                    type: string
+                    format: uri
+                    x-nullable: true
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - data
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        data:
+                          type: array
+                          items:
+                            type: object
+                            required:
+                              - points
+                            properties:
+                              id:
+                                type: integer
+                                readOnly: true
+                              points:
+                                type: array
+                                items:
+                                  type: object
+                                  required:
+                                    - uid
+                                    - x
+                                    - y
+                                  properties:
+                                    id:
+                                      type: integer
+                                      readOnly: true
+                                    uid:
+                                      type: integer
+                                    x:
+                                      type: integer
+                                    y:
+                                      type: integer
+                              details:
+                                type: string
+                                readOnly: true
+                        group_type:
+                          type: string
+                          enum:
+                            - CE
+                            - CL
+                            - ME
+                        seg_type:
+                          type: string
+                          enum:
+                            - NIL
+                            - NIR
+                            - NIM
+                            - CNO
+                            - CGE
+                            - C2N
+                            - CPS
+                            - CFC
+                            - CLY
+                            - SOS
+                            - SDS
+                            - SMS
+                            - STS
+                            - SPS
+                            - SNM
+                            - STM
+                        details:
+                          type: object
+                          x-nullable: true
+                        is_ai:
+                          type: boolean
+        '404':
+          description: Цитологическое исследование не найдено
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /cytology/{id}/update:
+    put:
+      operationId: CytologyUpdateUpdate
+      summary: Обновление всей страницы с информацией о приеме
+      tags:
+        - cytology
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id цитологического исследования
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - patient_card
+                - diagnostic_number
+              properties:
+                id:
+                  type: integer
+                  readOnly: true
+                patient_card:
+                  type: object
+                  properties:
+                    patient:
+                      type: integer
+                    acceptance_datetime:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    diagnosis:
+                      type: string
+                details:
+                  type: object
+                  required:
+                    - diagnostic_number
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    is_last:
+                      type: boolean
+                    diagnos_date:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    diagnostic_marking:
+                      type: string
+                      enum:
+                        - П11
+                        - Л23
+                    diagnostic_number:
+                      type: integer
+                    material_type:
+                      type: string
+                      enum:
+                        - GS
+                        - BP
+                        - TP
+                        - PTP
+                        - LNP
+                    calcitonin:
+                      type: integer
+                    calcitonin_in_flush:
+                      type: integer
+                    thyroglobulin:
+                      type: integer
+                    prev:
+                      type: string
+                      format: uuid
+                      x-nullable: true
+                    parent_prev:
+                      type: string
+                      format: uuid
+                      x-nullable: true
+                    patient_card:
+                      type: integer
+                      x-nullable: true
+                    original_image:
+                      type: integer
+                      x-nullable: true
+                is_last:
+                  type: boolean
+                diagnos_date:
+                  type: string
+                  format: date-time
+                  readOnly: true
+                diagnostic_marking:
+                  type: string
+                  enum:
+                    - П11
+                    - Л23
+                diagnostic_number:
+                  type: integer
+                material_type:
+                  type: string
+                  enum:
+                    - GS
+                    - BP
+                    - TP
+                    - PTP
+                    - LNP
+                calcitonin:
+                  type: integer
+                calcitonin_in_flush:
+                  type: integer
+                thyroglobulin:
+                  type: integer
+                prev:
+                  type: string
+                  format: uuid
+                  x-nullable: true
+                parent_prev:
+                  type: string
+                  format: uuid
+                  x-nullable: true
+                original_image:
+                  type: integer
+      responses:
+        '200':
+          description: обновленное цитологическое исследование
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - patient_card
+                  - diagnostic_number
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  patient_card:
+                    type: object
+                  details:
+                    type: object
+                  is_last:
+                    type: boolean
+                  diagnos_date:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  diagnostic_marking:
+                    type: string
+                  diagnostic_number:
+                    type: integer
+                  material_type:
+                    type: string
+                  calcitonin:
+                    type: integer
+                  calcitonin_in_flush:
+                    type: integer
+                  thyroglobulin:
+                    type: integer
+                  prev:
+                    type: string
+                    format: uuid
+                    x-nullable: true
+                  parent_prev:
+                    type: string
+                    format: uuid
+                    x-nullable: true
+                  original_image:
+                    type: integer
+        '404':
+          description: Цитологическое исследование не найдено
+          $ref: "#/components/responses/error"
+        '400':
+          description: Неверный формат запроса
+          $ref: "#/components/responses/error"
+        '422':
+          description: Ошибка валидации данных
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+    patch:
+      operationId: CytologyUpdatePartialUpdate
+      summary: Обновление всей страницы с информацией о приеме
+      tags:
+        - cytology
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id цитологического исследования
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - patient_card
+                - diagnostic_number
+              properties:
+                id:
+                  type: integer
+                  readOnly: true
+                patient_card:
+                  type: object
+                  properties:
+                    patient:
+                      type: integer
+                    acceptance_datetime:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                    diagnosis:
+                      type: string
+                details:
+                  type: object
+                is_last:
+                  type: boolean
+                diagnos_date:
+                  type: string
+                  format: date-time
+                  readOnly: true
+                diagnostic_marking:
+                  type: string
+                  enum:
+                    - П11
+                    - Л23
+                diagnostic_number:
+                  type: integer
+                material_type:
+                  type: string
+                  enum:
+                    - GS
+                    - BP
+                    - TP
+                    - PTP
+                    - LNP
+                calcitonin:
+                  type: integer
+                calcitonin_in_flush:
+                  type: integer
+                thyroglobulin:
+                  type: integer
+                prev:
+                  type: string
+                  format: uuid
+                  x-nullable: true
+                parent_prev:
+                  type: string
+                  format: uuid
+                  x-nullable: true
+                original_image:
+                  type: integer
+      responses:
+        '200':
+          description: обновленное цитологическое исследование
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - patient_card
+                  - diagnostic_number
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  patient_card:
+                    type: object
+                  details:
+                    type: object
+                  is_last:
+                    type: boolean
+                  diagnos_date:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  diagnostic_marking:
+                    type: string
+                  diagnostic_number:
+                    type: integer
+                  material_type:
+                    type: string
+                  calcitonin:
+                    type: integer
+                  calcitonin_in_flush:
+                    type: integer
+                  thyroglobulin:
+                    type: integer
+                  prev:
+                    type: string
+                    format: uuid
+                    x-nullable: true
+                  parent_prev:
+                    type: string
+                    format: uuid
+                    x-nullable: true
+                  original_image:
+                    type: integer
+        '404':
+          description: Цитологическое исследование не найдено
+          $ref: "#/components/responses/error"
+        '400':
+          description: Неверный формат запроса
+          $ref: "#/components/responses/error"
+        '422':
+          description: Ошибка валидации данных
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /cytology/copy:
+    post:
+      operationId: CytologyCopyCreate
+      summary: Создание нового исследования, на основе предыдущего
+      description: |
+        Создает новое цитологическое исследование на основе существующего.
+        Копирует все данные из исходного исследования, включая изображения и сегментации.
+      tags:
+        - cytology
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                pk:
+                  type: string
+                  format: uuid
+                  readOnly: true
+                  description: Первичный ключ (не используется в запросе)
+                id:
+                  type: string
+                  format: uuid
+                  description: UUID существующего цитологического исследования для копирования
+              example:
+                id: 123
+            examples:
+              example1:
+                summary: Копирование исследования по ID
+                description: Пример запроса для копирования исследования с ID 123
+                value:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '201':
+          description: скопированное цитологическое исследование
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pk:
+                    type: string
+                    format: uuid
+                    readOnly: true
+                    description: UUID нового исследования
+                  id:
+                    type: string
+                    format: uuid
+                    readOnly: true
+                    description: UUID нового скопированного исследования
+              example:
+                pk: "123e4567-e89b-12d3-a456-426614174000"
+                id: "123e4567-e89b-12d3-a456-426614174001"
+        '400':
+          description: Неверный формат запроса
+          $ref: "#/components/responses/error"
+        '404':
+          description: Цитологическое исследование не найдено
+          $ref: "#/components/responses/error"
+        '422':
+          description: Ошибка валидации данных
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /cytology/history/{id}:
+    get:
+      operationId: CytologyHistoryRead
+      summary: получить историю цитологического исследования
+      tags:
+        - cytology
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id цитологического исследования
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        - name: limit
+          in: query
+          required: false
+          description: Number of results to return per page.
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          example: 10
+        - name: offset
+          in: query
+          required: false
+          description: The initial index from which to return the results.
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          example: 0
+      responses:
+        '200':
+          description: история цитологического исследования
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                  - results
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    format: uri
+                    x-nullable: true
+                  previous:
+                    type: string
+                    format: uri
+                    x-nullable: true
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - diagnostic_number
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        is_last:
+                          type: boolean
+                        diagnos_date:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                        details:
+                          type: object
+                          x-nullable: true
+                        diagnostic_marking:
+                          type: string
+                          enum:
+                            - П11
+                            - Л23
+                        diagnostic_number:
+                          type: integer
+                        material_type:
+                          type: string
+                          enum:
+                            - GS
+                            - BP
+                            - TP
+                            - PTP
+                            - LNP
+                        calcitonin:
+                          type: integer
+                        calcitonin_in_flush:
+                          type: integer
+                        thyroglobulin:
+                          type: integer
+                        prev:
+                          type: string
+                          format: uuid
+                          x-nullable: true
+                        parent_prev:
+                          type: string
+                          format: uuid
+                          x-nullable: true
+                        patient_card:
+                          type: integer
+                          x-nullable: true
+                        original_image:
+                          type: integer
+                          x-nullable: true
+              examples:
+                example1:
+                  summary: Пример успешного ответа с историей исследований
+                  value:
+                    count: 3
+                    next: null
+                    previous: null
+                    results:
+                      - id: 1
+                        diagnostic_number: 12345
+                        is_last: true
+                        diagnos_date: "2024-12-21T10:30:00Z"
+                        diagnostic_marking: "П11"
+                        material_type: "GS"
+                        calcitonin: 5
+                        calcitonin_in_flush: 2
+                        thyroglobulin: 10
+                        prev: null
+                        parent_prev: null
+                        patient_card: 100
+                        original_image: 200
+                        details:
+                          note: "Первичное исследование"
+                      - id: 2
+                        diagnostic_number: 12344
+                        is_last: false
+                        diagnos_date: "2024-12-20T14:20:00Z"
+                        diagnostic_marking: "Л23"
+                        material_type: "BP"
+                        calcitonin: 3
+                        calcitonin_in_flush: 1
+                        thyroglobulin: 8
+                        prev: "123e4567-e89b-12d3-a456-426614174000"
+                        parent_prev: null
+                        patient_card: 100
+                        original_image: 199
+                        details:
+                          note: "Повторное исследование"
+                      - id: 3
+                        diagnostic_number: 12343
+                        is_last: false
+                        diagnos_date: "2024-12-19T09:15:00Z"
+                        diagnostic_marking: "П11"
+                        material_type: "TP"
+                        calcitonin: 4
+                        calcitonin_in_flush: 2
+                        thyroglobulin: 9
+                        prev: "123e4567-e89b-12d3-a456-426614174001"
+                        parent_prev: null
+                        patient_card: 100
+                        original_image: 198
+                        details: null
+        '404':
+          description: Цитологическое исследование не найдено
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /cytology/segment/group/create/{cytology_img_id}:
+    post:
+      operationId: CytologySegmentGroupCreateCreate
+      summary: создать группу сегментаций
+      tags:
+        - cytology
+      parameters:
+        - name: cytology_img_id
+          in: path
+          required: true
+          description: id цитологического исследования
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - data
+                - seg_type
+              properties:
+                data:
+                  type: object
+                  required:
+                    - points
+                  properties:
+                    points:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - x
+                          - y
+                        properties:
+                          x:
+                            type: integer
+                            minimum: 0
+                          y:
+                            type: integer
+                            minimum: 0
+                seg_type:
+                  type: string
+                  enum:
+                    - NIL
+                    - NIR
+                    - NIM
+                    - CNO
+                    - CGE
+                    - C2N
+                    - CPS
+                    - CFC
+                    - CLY
+                    - SOS
+                    - SDS
+                    - SMS
+                    - STS
+                    - SPS
+                    - SNM
+                    - STM
+      responses:
+        '201':
+          description: созданная группа сегментаций
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  data:
+                    type: object
+                    required:
+                      - points
+                    properties:
+                      points:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - x
+                            - y
+                          properties:
+                            x:
+                              type: integer
+                            y:
+                              type: integer
+                  seg_type:
+                    type: string
+        '400':
+          description: Неверный формат запроса
+          $ref: "#/components/responses/error"
+        '404':
+          description: Цитологическое исследование не найдено
+          $ref: "#/components/responses/error"
+        '422':
+          description: Ошибка валидации данных
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+
+  /cytology/segment/update/{id}:
+    get:
+      operationId: CytologySegmentUpdateRead
+      summary: получить сегментацию
+      tags:
+        - cytology
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id сегментации
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: сегментация
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - points
+                properties:
+                  points:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - x
+                        - y
+                      properties:
+                        x:
+                          type: integer
+                        y:
+                          type: integer
+                  segment_group:
+                    type: integer
+        '404':
+          description: Сегментация не найдена
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+    put:
+      operationId: CytologySegmentUpdateUpdate
+      summary: обновить сегментацию
+      tags:
+        - cytology
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id сегментации
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - points
+              properties:
+                points:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - x
+                      - y
+                    properties:
+                      x:
+                        type: integer
+                        minimum: 0
+                      y:
+                        type: integer
+                        minimum: 0
+                segment_group:
+                  type: integer
+      responses:
+        '200':
+          description: обновленная сегментация
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - points
+                properties:
+                  points:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - x
+                        - y
+                      properties:
+                        x:
+                          type: integer
+                        y:
+                          type: integer
+                  segment_group:
+                    type: integer
+        '404':
+          description: Сегментация не найдена
+          $ref: "#/components/responses/error"
+        '400':
+          description: Неверный формат запроса
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+    patch:
+      operationId: CytologySegmentUpdatePartialUpdate
+      summary: обновить сегментацию
+      tags:
+        - cytology
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id сегментации
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - points
+              properties:
+                points:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - x
+                      - y
+                    properties:
+                      x:
+                        type: integer
+                        minimum: 0
+                      y:
+                        type: integer
+                        minimum: 0
+                segment_group:
+                  type: integer
+      responses:
+        '200':
+          description: обновленная сегментация
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - points
+                properties:
+                  points:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - x
+                        - y
+                      properties:
+                        x:
+                          type: integer
+                        y:
+                          type: integer
+                  segment_group:
+                    type: integer
+        '404':
+          description: Сегментация не найдена
+          $ref: "#/components/responses/error"
+        '400':
+          description: Неверный формат запроса
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
+          $ref: "#/components/responses/error"
+        default:
+          $ref: "#/components/responses/error"
+    delete:
+      operationId: CytologySegmentUpdateDelete
+      summary: удалить сегментацию
+      tags:
+        - cytology
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id сегментации
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: сегментация удалена
+        '404':
+          description: Сегментация не найдена
+          $ref: "#/components/responses/error"
+        '500':
+          description: Внутренняя ошибка сервера
           $ref: "#/components/responses/error"
         default:
           $ref: "#/components/responses/error"

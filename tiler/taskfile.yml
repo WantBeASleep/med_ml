@@ -1,0 +1,24 @@
+version: "3"
+
+dotenv: [".env.example"]
+
+tasks:
+  style:
+    cmds:
+      - go fmt ./...
+      - go tool goimports -w .
+      - go tool gofumpt -l -w .
+
+  build:
+    cmds:
+      - task: style
+      - go build -v -o bin/tiler cmd/service/main.go
+
+  run:
+    cmds:
+      - task: build
+      - ./bin/tiler
+
+  default:
+    cmds:
+      - task: style

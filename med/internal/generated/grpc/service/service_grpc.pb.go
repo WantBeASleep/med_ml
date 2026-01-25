@@ -41,7 +41,7 @@ type MedSrvClient interface {
 	GetPatient(ctx context.Context, in *GetPatientIn, opts ...grpc.CallOption) (*GetPatientOut, error)
 	GetPatientsByDoctorID(ctx context.Context, in *GetPatientsByDoctorIDIn, opts ...grpc.CallOption) (*GetPatientsByDoctorIDOut, error)
 	UpdatePatient(ctx context.Context, in *UpdatePatientIn, opts ...grpc.CallOption) (*UpdatePatientOut, error)
-	CreateCard(ctx context.Context, in *CreateCardIn, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateCard(ctx context.Context, in *CreateCardIn, opts ...grpc.CallOption) (*CreateCardOut, error)
 	GetCard(ctx context.Context, in *GetCardIn, opts ...grpc.CallOption) (*GetCardOut, error)
 	UpdateCard(ctx context.Context, in *UpdateCardIn, opts ...grpc.CallOption) (*UpdateCardOut, error)
 }
@@ -114,9 +114,9 @@ func (c *medSrvClient) UpdatePatient(ctx context.Context, in *UpdatePatientIn, o
 	return out, nil
 }
 
-func (c *medSrvClient) CreateCard(ctx context.Context, in *CreateCardIn, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *medSrvClient) CreateCard(ctx context.Context, in *CreateCardIn, opts ...grpc.CallOption) (*CreateCardOut, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(emptypb.Empty)
+	out := new(CreateCardOut)
 	err := c.cc.Invoke(ctx, MedSrv_CreateCard_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -154,7 +154,7 @@ type MedSrvServer interface {
 	GetPatient(context.Context, *GetPatientIn) (*GetPatientOut, error)
 	GetPatientsByDoctorID(context.Context, *GetPatientsByDoctorIDIn) (*GetPatientsByDoctorIDOut, error)
 	UpdatePatient(context.Context, *UpdatePatientIn) (*UpdatePatientOut, error)
-	CreateCard(context.Context, *CreateCardIn) (*emptypb.Empty, error)
+	CreateCard(context.Context, *CreateCardIn) (*CreateCardOut, error)
 	GetCard(context.Context, *GetCardIn) (*GetCardOut, error)
 	UpdateCard(context.Context, *UpdateCardIn) (*UpdateCardOut, error)
 	mustEmbedUnimplementedMedSrvServer()
@@ -185,7 +185,7 @@ func (UnimplementedMedSrvServer) GetPatientsByDoctorID(context.Context, *GetPati
 func (UnimplementedMedSrvServer) UpdatePatient(context.Context, *UpdatePatientIn) (*UpdatePatientOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePatient not implemented")
 }
-func (UnimplementedMedSrvServer) CreateCard(context.Context, *CreateCardIn) (*emptypb.Empty, error) {
+func (UnimplementedMedSrvServer) CreateCard(context.Context, *CreateCardIn) (*CreateCardOut, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCard not implemented")
 }
 func (UnimplementedMedSrvServer) GetCard(context.Context, *GetCardIn) (*GetCardOut, error) {

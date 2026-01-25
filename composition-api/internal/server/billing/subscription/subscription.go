@@ -1,12 +1,13 @@
 package subscription
 
 import (
-	"composition-api/internal/domain"
-	"composition-api/internal/server/security"
 	"context"
 	"errors"
 	"log"
 	"net/http"
+
+	"composition-api/internal/domain"
+	"composition-api/internal/server/security"
 
 	api "composition-api/internal/generated/http/api"
 

@@ -5,6 +5,7 @@ package api
 import (
 	"fmt"
 	"io"
+	"net/url"
 	"time"
 
 	"github.com/go-faster/errors"
@@ -104,6 +105,3705 @@ func (s *ContorItem) SetY(val int) {
 	s.Y = val
 }
 
+type CytologyCopyCreateBadRequest ErrorStatusCode
+
+func (*CytologyCopyCreateBadRequest) cytologyCopyCreateRes() {}
+
+type CytologyCopyCreateCreated struct {
+	// UUID нового исследования.
+	Pk OptUUID `json:"pk"`
+	// UUID нового скопированного исследования.
+	ID OptUUID `json:"id"`
+}
+
+// GetPk returns the value of Pk.
+func (s *CytologyCopyCreateCreated) GetPk() OptUUID {
+	return s.Pk
+}
+
+// GetID returns the value of ID.
+func (s *CytologyCopyCreateCreated) GetID() OptUUID {
+	return s.ID
+}
+
+// SetPk sets the value of Pk.
+func (s *CytologyCopyCreateCreated) SetPk(val OptUUID) {
+	s.Pk = val
+}
+
+// SetID sets the value of ID.
+func (s *CytologyCopyCreateCreated) SetID(val OptUUID) {
+	s.ID = val
+}
+
+func (*CytologyCopyCreateCreated) cytologyCopyCreateRes() {}
+
+type CytologyCopyCreateInternalServerError ErrorStatusCode
+
+func (*CytologyCopyCreateInternalServerError) cytologyCopyCreateRes() {}
+
+type CytologyCopyCreateNotFound ErrorStatusCode
+
+func (*CytologyCopyCreateNotFound) cytologyCopyCreateRes() {}
+
+type CytologyCopyCreateReq struct {
+	// Первичный ключ (не используется в запросе).
+	Pk OptUUID `json:"pk"`
+	// UUID существующего цитологического исследования для
+	// копирования.
+	ID uuid.UUID `json:"id"`
+}
+
+// GetPk returns the value of Pk.
+func (s *CytologyCopyCreateReq) GetPk() OptUUID {
+	return s.Pk
+}
+
+// GetID returns the value of ID.
+func (s *CytologyCopyCreateReq) GetID() uuid.UUID {
+	return s.ID
+}
+
+// SetPk sets the value of Pk.
+func (s *CytologyCopyCreateReq) SetPk(val OptUUID) {
+	s.Pk = val
+}
+
+// SetID sets the value of ID.
+func (s *CytologyCopyCreateReq) SetID(val uuid.UUID) {
+	s.ID = val
+}
+
+type CytologyCopyCreateUnprocessableEntity ErrorStatusCode
+
+func (*CytologyCopyCreateUnprocessableEntity) cytologyCopyCreateRes() {}
+
+type CytologyCreateCreateBadRequest ErrorStatusCode
+
+func (*CytologyCreateCreateBadRequest) cytologyCreateCreateRes() {}
+
+type CytologyCreateCreateCreated struct {
+	ID                OptUUID                                         `json:"id"`
+	Image             OptURI                                          `json:"image"`
+	IsLast            OptBool                                         `json:"is_last"`
+	DiagnosDate       OptDateTime                                     `json:"diagnos_date"`
+	Details           *CytologyCreateCreateCreatedDetails             `json:"details"`
+	DiagnosticMarking OptCytologyCreateCreateCreatedDiagnosticMarking `json:"diagnostic_marking"`
+	DiagnosticNumber  int                                             `json:"diagnostic_number"`
+	MaterialType      OptCytologyCreateCreateCreatedMaterialType      `json:"material_type"`
+	Calcitonin        OptInt                                          `json:"calcitonin"`
+	CalcitoninInFlush OptInt                                          `json:"calcitonin_in_flush"`
+	Thyroglobulin     OptInt                                          `json:"thyroglobulin"`
+	Prev              OptUUID                                         `json:"prev"`
+	ParentPrev        OptUUID                                         `json:"parent_prev"`
+	PatientCard       OptInt                                          `json:"patient_card"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologyCreateCreateCreated) GetID() OptUUID {
+	return s.ID
+}
+
+// GetImage returns the value of Image.
+func (s *CytologyCreateCreateCreated) GetImage() OptURI {
+	return s.Image
+}
+
+// GetIsLast returns the value of IsLast.
+func (s *CytologyCreateCreateCreated) GetIsLast() OptBool {
+	return s.IsLast
+}
+
+// GetDiagnosDate returns the value of DiagnosDate.
+func (s *CytologyCreateCreateCreated) GetDiagnosDate() OptDateTime {
+	return s.DiagnosDate
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologyCreateCreateCreated) GetDetails() *CytologyCreateCreateCreatedDetails {
+	return s.Details
+}
+
+// GetDiagnosticMarking returns the value of DiagnosticMarking.
+func (s *CytologyCreateCreateCreated) GetDiagnosticMarking() OptCytologyCreateCreateCreatedDiagnosticMarking {
+	return s.DiagnosticMarking
+}
+
+// GetDiagnosticNumber returns the value of DiagnosticNumber.
+func (s *CytologyCreateCreateCreated) GetDiagnosticNumber() int {
+	return s.DiagnosticNumber
+}
+
+// GetMaterialType returns the value of MaterialType.
+func (s *CytologyCreateCreateCreated) GetMaterialType() OptCytologyCreateCreateCreatedMaterialType {
+	return s.MaterialType
+}
+
+// GetCalcitonin returns the value of Calcitonin.
+func (s *CytologyCreateCreateCreated) GetCalcitonin() OptInt {
+	return s.Calcitonin
+}
+
+// GetCalcitoninInFlush returns the value of CalcitoninInFlush.
+func (s *CytologyCreateCreateCreated) GetCalcitoninInFlush() OptInt {
+	return s.CalcitoninInFlush
+}
+
+// GetThyroglobulin returns the value of Thyroglobulin.
+func (s *CytologyCreateCreateCreated) GetThyroglobulin() OptInt {
+	return s.Thyroglobulin
+}
+
+// GetPrev returns the value of Prev.
+func (s *CytologyCreateCreateCreated) GetPrev() OptUUID {
+	return s.Prev
+}
+
+// GetParentPrev returns the value of ParentPrev.
+func (s *CytologyCreateCreateCreated) GetParentPrev() OptUUID {
+	return s.ParentPrev
+}
+
+// GetPatientCard returns the value of PatientCard.
+func (s *CytologyCreateCreateCreated) GetPatientCard() OptInt {
+	return s.PatientCard
+}
+
+// SetID sets the value of ID.
+func (s *CytologyCreateCreateCreated) SetID(val OptUUID) {
+	s.ID = val
+}
+
+// SetImage sets the value of Image.
+func (s *CytologyCreateCreateCreated) SetImage(val OptURI) {
+	s.Image = val
+}
+
+// SetIsLast sets the value of IsLast.
+func (s *CytologyCreateCreateCreated) SetIsLast(val OptBool) {
+	s.IsLast = val
+}
+
+// SetDiagnosDate sets the value of DiagnosDate.
+func (s *CytologyCreateCreateCreated) SetDiagnosDate(val OptDateTime) {
+	s.DiagnosDate = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologyCreateCreateCreated) SetDetails(val *CytologyCreateCreateCreatedDetails) {
+	s.Details = val
+}
+
+// SetDiagnosticMarking sets the value of DiagnosticMarking.
+func (s *CytologyCreateCreateCreated) SetDiagnosticMarking(val OptCytologyCreateCreateCreatedDiagnosticMarking) {
+	s.DiagnosticMarking = val
+}
+
+// SetDiagnosticNumber sets the value of DiagnosticNumber.
+func (s *CytologyCreateCreateCreated) SetDiagnosticNumber(val int) {
+	s.DiagnosticNumber = val
+}
+
+// SetMaterialType sets the value of MaterialType.
+func (s *CytologyCreateCreateCreated) SetMaterialType(val OptCytologyCreateCreateCreatedMaterialType) {
+	s.MaterialType = val
+}
+
+// SetCalcitonin sets the value of Calcitonin.
+func (s *CytologyCreateCreateCreated) SetCalcitonin(val OptInt) {
+	s.Calcitonin = val
+}
+
+// SetCalcitoninInFlush sets the value of CalcitoninInFlush.
+func (s *CytologyCreateCreateCreated) SetCalcitoninInFlush(val OptInt) {
+	s.CalcitoninInFlush = val
+}
+
+// SetThyroglobulin sets the value of Thyroglobulin.
+func (s *CytologyCreateCreateCreated) SetThyroglobulin(val OptInt) {
+	s.Thyroglobulin = val
+}
+
+// SetPrev sets the value of Prev.
+func (s *CytologyCreateCreateCreated) SetPrev(val OptUUID) {
+	s.Prev = val
+}
+
+// SetParentPrev sets the value of ParentPrev.
+func (s *CytologyCreateCreateCreated) SetParentPrev(val OptUUID) {
+	s.ParentPrev = val
+}
+
+// SetPatientCard sets the value of PatientCard.
+func (s *CytologyCreateCreateCreated) SetPatientCard(val OptInt) {
+	s.PatientCard = val
+}
+
+func (*CytologyCreateCreateCreated) cytologyCreateCreateRes() {}
+
+type CytologyCreateCreateCreatedDetails struct{}
+
+type CytologyCreateCreateCreatedDiagnosticMarking string
+
+const (
+	CytologyCreateCreateCreatedDiagnosticMarking11 CytologyCreateCreateCreatedDiagnosticMarking = "П11"
+	CytologyCreateCreateCreatedDiagnosticMarking23 CytologyCreateCreateCreatedDiagnosticMarking = "Л23"
+)
+
+// AllValues returns all CytologyCreateCreateCreatedDiagnosticMarking values.
+func (CytologyCreateCreateCreatedDiagnosticMarking) AllValues() []CytologyCreateCreateCreatedDiagnosticMarking {
+	return []CytologyCreateCreateCreatedDiagnosticMarking{
+		CytologyCreateCreateCreatedDiagnosticMarking11,
+		CytologyCreateCreateCreatedDiagnosticMarking23,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyCreateCreateCreatedDiagnosticMarking) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyCreateCreateCreatedDiagnosticMarking11:
+		return []byte(s), nil
+	case CytologyCreateCreateCreatedDiagnosticMarking23:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyCreateCreateCreatedDiagnosticMarking) UnmarshalText(data []byte) error {
+	switch CytologyCreateCreateCreatedDiagnosticMarking(data) {
+	case CytologyCreateCreateCreatedDiagnosticMarking11:
+		*s = CytologyCreateCreateCreatedDiagnosticMarking11
+		return nil
+	case CytologyCreateCreateCreatedDiagnosticMarking23:
+		*s = CytologyCreateCreateCreatedDiagnosticMarking23
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyCreateCreateCreatedMaterialType string
+
+const (
+	CytologyCreateCreateCreatedMaterialTypeGS  CytologyCreateCreateCreatedMaterialType = "GS"
+	CytologyCreateCreateCreatedMaterialTypeBP  CytologyCreateCreateCreatedMaterialType = "BP"
+	CytologyCreateCreateCreatedMaterialTypeTP  CytologyCreateCreateCreatedMaterialType = "TP"
+	CytologyCreateCreateCreatedMaterialTypePTP CytologyCreateCreateCreatedMaterialType = "PTP"
+	CytologyCreateCreateCreatedMaterialTypeLNP CytologyCreateCreateCreatedMaterialType = "LNP"
+)
+
+// AllValues returns all CytologyCreateCreateCreatedMaterialType values.
+func (CytologyCreateCreateCreatedMaterialType) AllValues() []CytologyCreateCreateCreatedMaterialType {
+	return []CytologyCreateCreateCreatedMaterialType{
+		CytologyCreateCreateCreatedMaterialTypeGS,
+		CytologyCreateCreateCreatedMaterialTypeBP,
+		CytologyCreateCreateCreatedMaterialTypeTP,
+		CytologyCreateCreateCreatedMaterialTypePTP,
+		CytologyCreateCreateCreatedMaterialTypeLNP,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyCreateCreateCreatedMaterialType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyCreateCreateCreatedMaterialTypeGS:
+		return []byte(s), nil
+	case CytologyCreateCreateCreatedMaterialTypeBP:
+		return []byte(s), nil
+	case CytologyCreateCreateCreatedMaterialTypeTP:
+		return []byte(s), nil
+	case CytologyCreateCreateCreatedMaterialTypePTP:
+		return []byte(s), nil
+	case CytologyCreateCreateCreatedMaterialTypeLNP:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyCreateCreateCreatedMaterialType) UnmarshalText(data []byte) error {
+	switch CytologyCreateCreateCreatedMaterialType(data) {
+	case CytologyCreateCreateCreatedMaterialTypeGS:
+		*s = CytologyCreateCreateCreatedMaterialTypeGS
+		return nil
+	case CytologyCreateCreateCreatedMaterialTypeBP:
+		*s = CytologyCreateCreateCreatedMaterialTypeBP
+		return nil
+	case CytologyCreateCreateCreatedMaterialTypeTP:
+		*s = CytologyCreateCreateCreatedMaterialTypeTP
+		return nil
+	case CytologyCreateCreateCreatedMaterialTypePTP:
+		*s = CytologyCreateCreateCreatedMaterialTypePTP
+		return nil
+	case CytologyCreateCreateCreatedMaterialTypeLNP:
+		*s = CytologyCreateCreateCreatedMaterialTypeLNP
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyCreateCreateInternalServerError ErrorStatusCode
+
+func (*CytologyCreateCreateInternalServerError) cytologyCreateCreateRes() {}
+
+type CytologyCreateCreateReq struct {
+	// Файл изображения цитологии.
+	Image OptMultipartFile `json:"image"`
+	// Номер диагностики.
+	DiagnosticNumber int `json:"diagnostic_number"`
+	// Маркировка диагностики.
+	DiagnosticMarking OptCytologyCreateCreateReqDiagnosticMarking `json:"diagnostic_marking"`
+	MaterialType      OptCytologyCreateCreateReqMaterialType      `json:"material_type"`
+	Calcitonin        OptInt                                      `json:"calcitonin"`
+	CalcitoninInFlush OptInt                                      `json:"calcitonin_in_flush"`
+	Thyroglobulin     OptInt                                      `json:"thyroglobulin"`
+	Prev              OptUUID                                     `json:"prev"`
+	ParentPrev        OptUUID                                     `json:"parent_prev"`
+	PatientCard       OptInt                                      `json:"patient_card"`
+	// Детали диагностики в формате JSON.
+	Details OptString `json:"details"`
+	// Является ли данная версия измениний последней?.
+	IsLast      OptBool     `json:"is_last"`
+	DiagnosDate OptDateTime `json:"diagnos_date"`
+}
+
+// GetImage returns the value of Image.
+func (s *CytologyCreateCreateReq) GetImage() OptMultipartFile {
+	return s.Image
+}
+
+// GetDiagnosticNumber returns the value of DiagnosticNumber.
+func (s *CytologyCreateCreateReq) GetDiagnosticNumber() int {
+	return s.DiagnosticNumber
+}
+
+// GetDiagnosticMarking returns the value of DiagnosticMarking.
+func (s *CytologyCreateCreateReq) GetDiagnosticMarking() OptCytologyCreateCreateReqDiagnosticMarking {
+	return s.DiagnosticMarking
+}
+
+// GetMaterialType returns the value of MaterialType.
+func (s *CytologyCreateCreateReq) GetMaterialType() OptCytologyCreateCreateReqMaterialType {
+	return s.MaterialType
+}
+
+// GetCalcitonin returns the value of Calcitonin.
+func (s *CytologyCreateCreateReq) GetCalcitonin() OptInt {
+	return s.Calcitonin
+}
+
+// GetCalcitoninInFlush returns the value of CalcitoninInFlush.
+func (s *CytologyCreateCreateReq) GetCalcitoninInFlush() OptInt {
+	return s.CalcitoninInFlush
+}
+
+// GetThyroglobulin returns the value of Thyroglobulin.
+func (s *CytologyCreateCreateReq) GetThyroglobulin() OptInt {
+	return s.Thyroglobulin
+}
+
+// GetPrev returns the value of Prev.
+func (s *CytologyCreateCreateReq) GetPrev() OptUUID {
+	return s.Prev
+}
+
+// GetParentPrev returns the value of ParentPrev.
+func (s *CytologyCreateCreateReq) GetParentPrev() OptUUID {
+	return s.ParentPrev
+}
+
+// GetPatientCard returns the value of PatientCard.
+func (s *CytologyCreateCreateReq) GetPatientCard() OptInt {
+	return s.PatientCard
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologyCreateCreateReq) GetDetails() OptString {
+	return s.Details
+}
+
+// GetIsLast returns the value of IsLast.
+func (s *CytologyCreateCreateReq) GetIsLast() OptBool {
+	return s.IsLast
+}
+
+// GetDiagnosDate returns the value of DiagnosDate.
+func (s *CytologyCreateCreateReq) GetDiagnosDate() OptDateTime {
+	return s.DiagnosDate
+}
+
+// SetImage sets the value of Image.
+func (s *CytologyCreateCreateReq) SetImage(val OptMultipartFile) {
+	s.Image = val
+}
+
+// SetDiagnosticNumber sets the value of DiagnosticNumber.
+func (s *CytologyCreateCreateReq) SetDiagnosticNumber(val int) {
+	s.DiagnosticNumber = val
+}
+
+// SetDiagnosticMarking sets the value of DiagnosticMarking.
+func (s *CytologyCreateCreateReq) SetDiagnosticMarking(val OptCytologyCreateCreateReqDiagnosticMarking) {
+	s.DiagnosticMarking = val
+}
+
+// SetMaterialType sets the value of MaterialType.
+func (s *CytologyCreateCreateReq) SetMaterialType(val OptCytologyCreateCreateReqMaterialType) {
+	s.MaterialType = val
+}
+
+// SetCalcitonin sets the value of Calcitonin.
+func (s *CytologyCreateCreateReq) SetCalcitonin(val OptInt) {
+	s.Calcitonin = val
+}
+
+// SetCalcitoninInFlush sets the value of CalcitoninInFlush.
+func (s *CytologyCreateCreateReq) SetCalcitoninInFlush(val OptInt) {
+	s.CalcitoninInFlush = val
+}
+
+// SetThyroglobulin sets the value of Thyroglobulin.
+func (s *CytologyCreateCreateReq) SetThyroglobulin(val OptInt) {
+	s.Thyroglobulin = val
+}
+
+// SetPrev sets the value of Prev.
+func (s *CytologyCreateCreateReq) SetPrev(val OptUUID) {
+	s.Prev = val
+}
+
+// SetParentPrev sets the value of ParentPrev.
+func (s *CytologyCreateCreateReq) SetParentPrev(val OptUUID) {
+	s.ParentPrev = val
+}
+
+// SetPatientCard sets the value of PatientCard.
+func (s *CytologyCreateCreateReq) SetPatientCard(val OptInt) {
+	s.PatientCard = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologyCreateCreateReq) SetDetails(val OptString) {
+	s.Details = val
+}
+
+// SetIsLast sets the value of IsLast.
+func (s *CytologyCreateCreateReq) SetIsLast(val OptBool) {
+	s.IsLast = val
+}
+
+// SetDiagnosDate sets the value of DiagnosDate.
+func (s *CytologyCreateCreateReq) SetDiagnosDate(val OptDateTime) {
+	s.DiagnosDate = val
+}
+
+// Маркировка диагностики.
+type CytologyCreateCreateReqDiagnosticMarking string
+
+const (
+	CytologyCreateCreateReqDiagnosticMarking11 CytologyCreateCreateReqDiagnosticMarking = "П11"
+	CytologyCreateCreateReqDiagnosticMarking23 CytologyCreateCreateReqDiagnosticMarking = "Л23"
+)
+
+// AllValues returns all CytologyCreateCreateReqDiagnosticMarking values.
+func (CytologyCreateCreateReqDiagnosticMarking) AllValues() []CytologyCreateCreateReqDiagnosticMarking {
+	return []CytologyCreateCreateReqDiagnosticMarking{
+		CytologyCreateCreateReqDiagnosticMarking11,
+		CytologyCreateCreateReqDiagnosticMarking23,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyCreateCreateReqDiagnosticMarking) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyCreateCreateReqDiagnosticMarking11:
+		return []byte(s), nil
+	case CytologyCreateCreateReqDiagnosticMarking23:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyCreateCreateReqDiagnosticMarking) UnmarshalText(data []byte) error {
+	switch CytologyCreateCreateReqDiagnosticMarking(data) {
+	case CytologyCreateCreateReqDiagnosticMarking11:
+		*s = CytologyCreateCreateReqDiagnosticMarking11
+		return nil
+	case CytologyCreateCreateReqDiagnosticMarking23:
+		*s = CytologyCreateCreateReqDiagnosticMarking23
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyCreateCreateReqMaterialType string
+
+const (
+	CytologyCreateCreateReqMaterialTypeGS  CytologyCreateCreateReqMaterialType = "GS"
+	CytologyCreateCreateReqMaterialTypeBP  CytologyCreateCreateReqMaterialType = "BP"
+	CytologyCreateCreateReqMaterialTypeTP  CytologyCreateCreateReqMaterialType = "TP"
+	CytologyCreateCreateReqMaterialTypePTP CytologyCreateCreateReqMaterialType = "PTP"
+	CytologyCreateCreateReqMaterialTypeLNP CytologyCreateCreateReqMaterialType = "LNP"
+)
+
+// AllValues returns all CytologyCreateCreateReqMaterialType values.
+func (CytologyCreateCreateReqMaterialType) AllValues() []CytologyCreateCreateReqMaterialType {
+	return []CytologyCreateCreateReqMaterialType{
+		CytologyCreateCreateReqMaterialTypeGS,
+		CytologyCreateCreateReqMaterialTypeBP,
+		CytologyCreateCreateReqMaterialTypeTP,
+		CytologyCreateCreateReqMaterialTypePTP,
+		CytologyCreateCreateReqMaterialTypeLNP,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyCreateCreateReqMaterialType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyCreateCreateReqMaterialTypeGS:
+		return []byte(s), nil
+	case CytologyCreateCreateReqMaterialTypeBP:
+		return []byte(s), nil
+	case CytologyCreateCreateReqMaterialTypeTP:
+		return []byte(s), nil
+	case CytologyCreateCreateReqMaterialTypePTP:
+		return []byte(s), nil
+	case CytologyCreateCreateReqMaterialTypeLNP:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyCreateCreateReqMaterialType) UnmarshalText(data []byte) error {
+	switch CytologyCreateCreateReqMaterialType(data) {
+	case CytologyCreateCreateReqMaterialTypeGS:
+		*s = CytologyCreateCreateReqMaterialTypeGS
+		return nil
+	case CytologyCreateCreateReqMaterialTypeBP:
+		*s = CytologyCreateCreateReqMaterialTypeBP
+		return nil
+	case CytologyCreateCreateReqMaterialTypeTP:
+		*s = CytologyCreateCreateReqMaterialTypeTP
+		return nil
+	case CytologyCreateCreateReqMaterialTypePTP:
+		*s = CytologyCreateCreateReqMaterialTypePTP
+		return nil
+	case CytologyCreateCreateReqMaterialTypeLNP:
+		*s = CytologyCreateCreateReqMaterialTypeLNP
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyCreateCreateUnprocessableEntity ErrorStatusCode
+
+func (*CytologyCreateCreateUnprocessableEntity) cytologyCreateCreateRes() {}
+
+type CytologyHistoryReadInternalServerError ErrorStatusCode
+
+func (*CytologyHistoryReadInternalServerError) cytologyHistoryReadRes() {}
+
+type CytologyHistoryReadNotFound ErrorStatusCode
+
+func (*CytologyHistoryReadNotFound) cytologyHistoryReadRes() {}
+
+type CytologyHistoryReadOK struct {
+	Count    int                                `json:"count"`
+	Next     OptURI                             `json:"next"`
+	Previous OptURI                             `json:"previous"`
+	Results  []CytologyHistoryReadOKResultsItem `json:"results"`
+}
+
+// GetCount returns the value of Count.
+func (s *CytologyHistoryReadOK) GetCount() int {
+	return s.Count
+}
+
+// GetNext returns the value of Next.
+func (s *CytologyHistoryReadOK) GetNext() OptURI {
+	return s.Next
+}
+
+// GetPrevious returns the value of Previous.
+func (s *CytologyHistoryReadOK) GetPrevious() OptURI {
+	return s.Previous
+}
+
+// GetResults returns the value of Results.
+func (s *CytologyHistoryReadOK) GetResults() []CytologyHistoryReadOKResultsItem {
+	return s.Results
+}
+
+// SetCount sets the value of Count.
+func (s *CytologyHistoryReadOK) SetCount(val int) {
+	s.Count = val
+}
+
+// SetNext sets the value of Next.
+func (s *CytologyHistoryReadOK) SetNext(val OptURI) {
+	s.Next = val
+}
+
+// SetPrevious sets the value of Previous.
+func (s *CytologyHistoryReadOK) SetPrevious(val OptURI) {
+	s.Previous = val
+}
+
+// SetResults sets the value of Results.
+func (s *CytologyHistoryReadOK) SetResults(val []CytologyHistoryReadOKResultsItem) {
+	s.Results = val
+}
+
+func (*CytologyHistoryReadOK) cytologyHistoryReadRes() {}
+
+type CytologyHistoryReadOKResultsItem struct {
+	ID                OptInt                                               `json:"id"`
+	IsLast            OptBool                                              `json:"is_last"`
+	DiagnosDate       OptDateTime                                          `json:"diagnos_date"`
+	Details           *CytologyHistoryReadOKResultsItemDetails             `json:"details"`
+	DiagnosticMarking OptCytologyHistoryReadOKResultsItemDiagnosticMarking `json:"diagnostic_marking"`
+	DiagnosticNumber  int                                                  `json:"diagnostic_number"`
+	MaterialType      OptCytologyHistoryReadOKResultsItemMaterialType      `json:"material_type"`
+	Calcitonin        OptInt                                               `json:"calcitonin"`
+	CalcitoninInFlush OptInt                                               `json:"calcitonin_in_flush"`
+	Thyroglobulin     OptInt                                               `json:"thyroglobulin"`
+	Prev              OptUUID                                              `json:"prev"`
+	ParentPrev        OptUUID                                              `json:"parent_prev"`
+	PatientCard       OptInt                                               `json:"patient_card"`
+	OriginalImage     OptInt                                               `json:"original_image"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologyHistoryReadOKResultsItem) GetID() OptInt {
+	return s.ID
+}
+
+// GetIsLast returns the value of IsLast.
+func (s *CytologyHistoryReadOKResultsItem) GetIsLast() OptBool {
+	return s.IsLast
+}
+
+// GetDiagnosDate returns the value of DiagnosDate.
+func (s *CytologyHistoryReadOKResultsItem) GetDiagnosDate() OptDateTime {
+	return s.DiagnosDate
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologyHistoryReadOKResultsItem) GetDetails() *CytologyHistoryReadOKResultsItemDetails {
+	return s.Details
+}
+
+// GetDiagnosticMarking returns the value of DiagnosticMarking.
+func (s *CytologyHistoryReadOKResultsItem) GetDiagnosticMarking() OptCytologyHistoryReadOKResultsItemDiagnosticMarking {
+	return s.DiagnosticMarking
+}
+
+// GetDiagnosticNumber returns the value of DiagnosticNumber.
+func (s *CytologyHistoryReadOKResultsItem) GetDiagnosticNumber() int {
+	return s.DiagnosticNumber
+}
+
+// GetMaterialType returns the value of MaterialType.
+func (s *CytologyHistoryReadOKResultsItem) GetMaterialType() OptCytologyHistoryReadOKResultsItemMaterialType {
+	return s.MaterialType
+}
+
+// GetCalcitonin returns the value of Calcitonin.
+func (s *CytologyHistoryReadOKResultsItem) GetCalcitonin() OptInt {
+	return s.Calcitonin
+}
+
+// GetCalcitoninInFlush returns the value of CalcitoninInFlush.
+func (s *CytologyHistoryReadOKResultsItem) GetCalcitoninInFlush() OptInt {
+	return s.CalcitoninInFlush
+}
+
+// GetThyroglobulin returns the value of Thyroglobulin.
+func (s *CytologyHistoryReadOKResultsItem) GetThyroglobulin() OptInt {
+	return s.Thyroglobulin
+}
+
+// GetPrev returns the value of Prev.
+func (s *CytologyHistoryReadOKResultsItem) GetPrev() OptUUID {
+	return s.Prev
+}
+
+// GetParentPrev returns the value of ParentPrev.
+func (s *CytologyHistoryReadOKResultsItem) GetParentPrev() OptUUID {
+	return s.ParentPrev
+}
+
+// GetPatientCard returns the value of PatientCard.
+func (s *CytologyHistoryReadOKResultsItem) GetPatientCard() OptInt {
+	return s.PatientCard
+}
+
+// GetOriginalImage returns the value of OriginalImage.
+func (s *CytologyHistoryReadOKResultsItem) GetOriginalImage() OptInt {
+	return s.OriginalImage
+}
+
+// SetID sets the value of ID.
+func (s *CytologyHistoryReadOKResultsItem) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetIsLast sets the value of IsLast.
+func (s *CytologyHistoryReadOKResultsItem) SetIsLast(val OptBool) {
+	s.IsLast = val
+}
+
+// SetDiagnosDate sets the value of DiagnosDate.
+func (s *CytologyHistoryReadOKResultsItem) SetDiagnosDate(val OptDateTime) {
+	s.DiagnosDate = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologyHistoryReadOKResultsItem) SetDetails(val *CytologyHistoryReadOKResultsItemDetails) {
+	s.Details = val
+}
+
+// SetDiagnosticMarking sets the value of DiagnosticMarking.
+func (s *CytologyHistoryReadOKResultsItem) SetDiagnosticMarking(val OptCytologyHistoryReadOKResultsItemDiagnosticMarking) {
+	s.DiagnosticMarking = val
+}
+
+// SetDiagnosticNumber sets the value of DiagnosticNumber.
+func (s *CytologyHistoryReadOKResultsItem) SetDiagnosticNumber(val int) {
+	s.DiagnosticNumber = val
+}
+
+// SetMaterialType sets the value of MaterialType.
+func (s *CytologyHistoryReadOKResultsItem) SetMaterialType(val OptCytologyHistoryReadOKResultsItemMaterialType) {
+	s.MaterialType = val
+}
+
+// SetCalcitonin sets the value of Calcitonin.
+func (s *CytologyHistoryReadOKResultsItem) SetCalcitonin(val OptInt) {
+	s.Calcitonin = val
+}
+
+// SetCalcitoninInFlush sets the value of CalcitoninInFlush.
+func (s *CytologyHistoryReadOKResultsItem) SetCalcitoninInFlush(val OptInt) {
+	s.CalcitoninInFlush = val
+}
+
+// SetThyroglobulin sets the value of Thyroglobulin.
+func (s *CytologyHistoryReadOKResultsItem) SetThyroglobulin(val OptInt) {
+	s.Thyroglobulin = val
+}
+
+// SetPrev sets the value of Prev.
+func (s *CytologyHistoryReadOKResultsItem) SetPrev(val OptUUID) {
+	s.Prev = val
+}
+
+// SetParentPrev sets the value of ParentPrev.
+func (s *CytologyHistoryReadOKResultsItem) SetParentPrev(val OptUUID) {
+	s.ParentPrev = val
+}
+
+// SetPatientCard sets the value of PatientCard.
+func (s *CytologyHistoryReadOKResultsItem) SetPatientCard(val OptInt) {
+	s.PatientCard = val
+}
+
+// SetOriginalImage sets the value of OriginalImage.
+func (s *CytologyHistoryReadOKResultsItem) SetOriginalImage(val OptInt) {
+	s.OriginalImage = val
+}
+
+type CytologyHistoryReadOKResultsItemDetails struct{}
+
+type CytologyHistoryReadOKResultsItemDiagnosticMarking string
+
+const (
+	CytologyHistoryReadOKResultsItemDiagnosticMarking11 CytologyHistoryReadOKResultsItemDiagnosticMarking = "П11"
+	CytologyHistoryReadOKResultsItemDiagnosticMarking23 CytologyHistoryReadOKResultsItemDiagnosticMarking = "Л23"
+)
+
+// AllValues returns all CytologyHistoryReadOKResultsItemDiagnosticMarking values.
+func (CytologyHistoryReadOKResultsItemDiagnosticMarking) AllValues() []CytologyHistoryReadOKResultsItemDiagnosticMarking {
+	return []CytologyHistoryReadOKResultsItemDiagnosticMarking{
+		CytologyHistoryReadOKResultsItemDiagnosticMarking11,
+		CytologyHistoryReadOKResultsItemDiagnosticMarking23,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyHistoryReadOKResultsItemDiagnosticMarking) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyHistoryReadOKResultsItemDiagnosticMarking11:
+		return []byte(s), nil
+	case CytologyHistoryReadOKResultsItemDiagnosticMarking23:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyHistoryReadOKResultsItemDiagnosticMarking) UnmarshalText(data []byte) error {
+	switch CytologyHistoryReadOKResultsItemDiagnosticMarking(data) {
+	case CytologyHistoryReadOKResultsItemDiagnosticMarking11:
+		*s = CytologyHistoryReadOKResultsItemDiagnosticMarking11
+		return nil
+	case CytologyHistoryReadOKResultsItemDiagnosticMarking23:
+		*s = CytologyHistoryReadOKResultsItemDiagnosticMarking23
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyHistoryReadOKResultsItemMaterialType string
+
+const (
+	CytologyHistoryReadOKResultsItemMaterialTypeGS  CytologyHistoryReadOKResultsItemMaterialType = "GS"
+	CytologyHistoryReadOKResultsItemMaterialTypeBP  CytologyHistoryReadOKResultsItemMaterialType = "BP"
+	CytologyHistoryReadOKResultsItemMaterialTypeTP  CytologyHistoryReadOKResultsItemMaterialType = "TP"
+	CytologyHistoryReadOKResultsItemMaterialTypePTP CytologyHistoryReadOKResultsItemMaterialType = "PTP"
+	CytologyHistoryReadOKResultsItemMaterialTypeLNP CytologyHistoryReadOKResultsItemMaterialType = "LNP"
+)
+
+// AllValues returns all CytologyHistoryReadOKResultsItemMaterialType values.
+func (CytologyHistoryReadOKResultsItemMaterialType) AllValues() []CytologyHistoryReadOKResultsItemMaterialType {
+	return []CytologyHistoryReadOKResultsItemMaterialType{
+		CytologyHistoryReadOKResultsItemMaterialTypeGS,
+		CytologyHistoryReadOKResultsItemMaterialTypeBP,
+		CytologyHistoryReadOKResultsItemMaterialTypeTP,
+		CytologyHistoryReadOKResultsItemMaterialTypePTP,
+		CytologyHistoryReadOKResultsItemMaterialTypeLNP,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyHistoryReadOKResultsItemMaterialType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyHistoryReadOKResultsItemMaterialTypeGS:
+		return []byte(s), nil
+	case CytologyHistoryReadOKResultsItemMaterialTypeBP:
+		return []byte(s), nil
+	case CytologyHistoryReadOKResultsItemMaterialTypeTP:
+		return []byte(s), nil
+	case CytologyHistoryReadOKResultsItemMaterialTypePTP:
+		return []byte(s), nil
+	case CytologyHistoryReadOKResultsItemMaterialTypeLNP:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyHistoryReadOKResultsItemMaterialType) UnmarshalText(data []byte) error {
+	switch CytologyHistoryReadOKResultsItemMaterialType(data) {
+	case CytologyHistoryReadOKResultsItemMaterialTypeGS:
+		*s = CytologyHistoryReadOKResultsItemMaterialTypeGS
+		return nil
+	case CytologyHistoryReadOKResultsItemMaterialTypeBP:
+		*s = CytologyHistoryReadOKResultsItemMaterialTypeBP
+		return nil
+	case CytologyHistoryReadOKResultsItemMaterialTypeTP:
+		*s = CytologyHistoryReadOKResultsItemMaterialTypeTP
+		return nil
+	case CytologyHistoryReadOKResultsItemMaterialTypePTP:
+		*s = CytologyHistoryReadOKResultsItemMaterialTypePTP
+		return nil
+	case CytologyHistoryReadOKResultsItemMaterialTypeLNP:
+		*s = CytologyHistoryReadOKResultsItemMaterialTypeLNP
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyReadInternalServerError ErrorStatusCode
+
+func (*CytologyReadInternalServerError) cytologyReadRes() {}
+
+type CytologyReadNotFound ErrorStatusCode
+
+func (*CytologyReadNotFound) cytologyReadRes() {}
+
+type CytologyReadOK struct {
+	OriginalImage CytologyReadOKOriginalImage `json:"original_image"`
+	Info          CytologyReadOKInfo          `json:"info"`
+}
+
+// GetOriginalImage returns the value of OriginalImage.
+func (s *CytologyReadOK) GetOriginalImage() CytologyReadOKOriginalImage {
+	return s.OriginalImage
+}
+
+// GetInfo returns the value of Info.
+func (s *CytologyReadOK) GetInfo() CytologyReadOKInfo {
+	return s.Info
+}
+
+// SetOriginalImage sets the value of OriginalImage.
+func (s *CytologyReadOK) SetOriginalImage(val CytologyReadOKOriginalImage) {
+	s.OriginalImage = val
+}
+
+// SetInfo sets the value of Info.
+func (s *CytologyReadOK) SetInfo(val CytologyReadOKInfo) {
+	s.Info = val
+}
+
+func (*CytologyReadOK) cytologyReadRes() {}
+
+type CytologyReadOKInfo struct {
+	Patient     Patient                      `json:"patient"`
+	PatientCard PatientCard                  `json:"patient_card"`
+	ImageGroup  CytologyReadOKInfoImageGroup `json:"image_group"`
+}
+
+// GetPatient returns the value of Patient.
+func (s *CytologyReadOKInfo) GetPatient() Patient {
+	return s.Patient
+}
+
+// GetPatientCard returns the value of PatientCard.
+func (s *CytologyReadOKInfo) GetPatientCard() PatientCard {
+	return s.PatientCard
+}
+
+// GetImageGroup returns the value of ImageGroup.
+func (s *CytologyReadOKInfo) GetImageGroup() CytologyReadOKInfoImageGroup {
+	return s.ImageGroup
+}
+
+// SetPatient sets the value of Patient.
+func (s *CytologyReadOKInfo) SetPatient(val Patient) {
+	s.Patient = val
+}
+
+// SetPatientCard sets the value of PatientCard.
+func (s *CytologyReadOKInfo) SetPatientCard(val PatientCard) {
+	s.PatientCard = val
+}
+
+// SetImageGroup sets the value of ImageGroup.
+func (s *CytologyReadOKInfo) SetImageGroup(val CytologyReadOKInfoImageGroup) {
+	s.ImageGroup = val
+}
+
+type CytologyReadOKInfoImageGroup struct {
+	ID                OptInt                                           `json:"id"`
+	IsLast            OptBool                                          `json:"is_last"`
+	DiagnosDate       OptDateTime                                      `json:"diagnos_date"`
+	Details           *CytologyReadOKInfoImageGroupDetails             `json:"details"`
+	DiagnosticMarking OptCytologyReadOKInfoImageGroupDiagnosticMarking `json:"diagnostic_marking"`
+	DiagnosticNumber  int                                              `json:"diagnostic_number"`
+	MaterialType      OptCytologyReadOKInfoImageGroupMaterialType      `json:"material_type"`
+	Calcitonin        OptInt                                           `json:"calcitonin"`
+	CalcitoninInFlush OptInt                                           `json:"calcitonin_in_flush"`
+	Thyroglobulin     OptInt                                           `json:"thyroglobulin"`
+	Prev              OptUUID                                          `json:"prev"`
+	ParentPrev        OptUUID                                          `json:"parent_prev"`
+	OriginalImage     OptInt                                           `json:"original_image"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologyReadOKInfoImageGroup) GetID() OptInt {
+	return s.ID
+}
+
+// GetIsLast returns the value of IsLast.
+func (s *CytologyReadOKInfoImageGroup) GetIsLast() OptBool {
+	return s.IsLast
+}
+
+// GetDiagnosDate returns the value of DiagnosDate.
+func (s *CytologyReadOKInfoImageGroup) GetDiagnosDate() OptDateTime {
+	return s.DiagnosDate
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologyReadOKInfoImageGroup) GetDetails() *CytologyReadOKInfoImageGroupDetails {
+	return s.Details
+}
+
+// GetDiagnosticMarking returns the value of DiagnosticMarking.
+func (s *CytologyReadOKInfoImageGroup) GetDiagnosticMarking() OptCytologyReadOKInfoImageGroupDiagnosticMarking {
+	return s.DiagnosticMarking
+}
+
+// GetDiagnosticNumber returns the value of DiagnosticNumber.
+func (s *CytologyReadOKInfoImageGroup) GetDiagnosticNumber() int {
+	return s.DiagnosticNumber
+}
+
+// GetMaterialType returns the value of MaterialType.
+func (s *CytologyReadOKInfoImageGroup) GetMaterialType() OptCytologyReadOKInfoImageGroupMaterialType {
+	return s.MaterialType
+}
+
+// GetCalcitonin returns the value of Calcitonin.
+func (s *CytologyReadOKInfoImageGroup) GetCalcitonin() OptInt {
+	return s.Calcitonin
+}
+
+// GetCalcitoninInFlush returns the value of CalcitoninInFlush.
+func (s *CytologyReadOKInfoImageGroup) GetCalcitoninInFlush() OptInt {
+	return s.CalcitoninInFlush
+}
+
+// GetThyroglobulin returns the value of Thyroglobulin.
+func (s *CytologyReadOKInfoImageGroup) GetThyroglobulin() OptInt {
+	return s.Thyroglobulin
+}
+
+// GetPrev returns the value of Prev.
+func (s *CytologyReadOKInfoImageGroup) GetPrev() OptUUID {
+	return s.Prev
+}
+
+// GetParentPrev returns the value of ParentPrev.
+func (s *CytologyReadOKInfoImageGroup) GetParentPrev() OptUUID {
+	return s.ParentPrev
+}
+
+// GetOriginalImage returns the value of OriginalImage.
+func (s *CytologyReadOKInfoImageGroup) GetOriginalImage() OptInt {
+	return s.OriginalImage
+}
+
+// SetID sets the value of ID.
+func (s *CytologyReadOKInfoImageGroup) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetIsLast sets the value of IsLast.
+func (s *CytologyReadOKInfoImageGroup) SetIsLast(val OptBool) {
+	s.IsLast = val
+}
+
+// SetDiagnosDate sets the value of DiagnosDate.
+func (s *CytologyReadOKInfoImageGroup) SetDiagnosDate(val OptDateTime) {
+	s.DiagnosDate = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologyReadOKInfoImageGroup) SetDetails(val *CytologyReadOKInfoImageGroupDetails) {
+	s.Details = val
+}
+
+// SetDiagnosticMarking sets the value of DiagnosticMarking.
+func (s *CytologyReadOKInfoImageGroup) SetDiagnosticMarking(val OptCytologyReadOKInfoImageGroupDiagnosticMarking) {
+	s.DiagnosticMarking = val
+}
+
+// SetDiagnosticNumber sets the value of DiagnosticNumber.
+func (s *CytologyReadOKInfoImageGroup) SetDiagnosticNumber(val int) {
+	s.DiagnosticNumber = val
+}
+
+// SetMaterialType sets the value of MaterialType.
+func (s *CytologyReadOKInfoImageGroup) SetMaterialType(val OptCytologyReadOKInfoImageGroupMaterialType) {
+	s.MaterialType = val
+}
+
+// SetCalcitonin sets the value of Calcitonin.
+func (s *CytologyReadOKInfoImageGroup) SetCalcitonin(val OptInt) {
+	s.Calcitonin = val
+}
+
+// SetCalcitoninInFlush sets the value of CalcitoninInFlush.
+func (s *CytologyReadOKInfoImageGroup) SetCalcitoninInFlush(val OptInt) {
+	s.CalcitoninInFlush = val
+}
+
+// SetThyroglobulin sets the value of Thyroglobulin.
+func (s *CytologyReadOKInfoImageGroup) SetThyroglobulin(val OptInt) {
+	s.Thyroglobulin = val
+}
+
+// SetPrev sets the value of Prev.
+func (s *CytologyReadOKInfoImageGroup) SetPrev(val OptUUID) {
+	s.Prev = val
+}
+
+// SetParentPrev sets the value of ParentPrev.
+func (s *CytologyReadOKInfoImageGroup) SetParentPrev(val OptUUID) {
+	s.ParentPrev = val
+}
+
+// SetOriginalImage sets the value of OriginalImage.
+func (s *CytologyReadOKInfoImageGroup) SetOriginalImage(val OptInt) {
+	s.OriginalImage = val
+}
+
+type CytologyReadOKInfoImageGroupDetails struct{}
+
+type CytologyReadOKInfoImageGroupDiagnosticMarking string
+
+const (
+	CytologyReadOKInfoImageGroupDiagnosticMarking11 CytologyReadOKInfoImageGroupDiagnosticMarking = "П11"
+	CytologyReadOKInfoImageGroupDiagnosticMarking23 CytologyReadOKInfoImageGroupDiagnosticMarking = "Л23"
+)
+
+// AllValues returns all CytologyReadOKInfoImageGroupDiagnosticMarking values.
+func (CytologyReadOKInfoImageGroupDiagnosticMarking) AllValues() []CytologyReadOKInfoImageGroupDiagnosticMarking {
+	return []CytologyReadOKInfoImageGroupDiagnosticMarking{
+		CytologyReadOKInfoImageGroupDiagnosticMarking11,
+		CytologyReadOKInfoImageGroupDiagnosticMarking23,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyReadOKInfoImageGroupDiagnosticMarking) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyReadOKInfoImageGroupDiagnosticMarking11:
+		return []byte(s), nil
+	case CytologyReadOKInfoImageGroupDiagnosticMarking23:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyReadOKInfoImageGroupDiagnosticMarking) UnmarshalText(data []byte) error {
+	switch CytologyReadOKInfoImageGroupDiagnosticMarking(data) {
+	case CytologyReadOKInfoImageGroupDiagnosticMarking11:
+		*s = CytologyReadOKInfoImageGroupDiagnosticMarking11
+		return nil
+	case CytologyReadOKInfoImageGroupDiagnosticMarking23:
+		*s = CytologyReadOKInfoImageGroupDiagnosticMarking23
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyReadOKInfoImageGroupMaterialType string
+
+const (
+	CytologyReadOKInfoImageGroupMaterialTypeGS  CytologyReadOKInfoImageGroupMaterialType = "GS"
+	CytologyReadOKInfoImageGroupMaterialTypeBP  CytologyReadOKInfoImageGroupMaterialType = "BP"
+	CytologyReadOKInfoImageGroupMaterialTypeTP  CytologyReadOKInfoImageGroupMaterialType = "TP"
+	CytologyReadOKInfoImageGroupMaterialTypePTP CytologyReadOKInfoImageGroupMaterialType = "PTP"
+	CytologyReadOKInfoImageGroupMaterialTypeLNP CytologyReadOKInfoImageGroupMaterialType = "LNP"
+)
+
+// AllValues returns all CytologyReadOKInfoImageGroupMaterialType values.
+func (CytologyReadOKInfoImageGroupMaterialType) AllValues() []CytologyReadOKInfoImageGroupMaterialType {
+	return []CytologyReadOKInfoImageGroupMaterialType{
+		CytologyReadOKInfoImageGroupMaterialTypeGS,
+		CytologyReadOKInfoImageGroupMaterialTypeBP,
+		CytologyReadOKInfoImageGroupMaterialTypeTP,
+		CytologyReadOKInfoImageGroupMaterialTypePTP,
+		CytologyReadOKInfoImageGroupMaterialTypeLNP,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyReadOKInfoImageGroupMaterialType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyReadOKInfoImageGroupMaterialTypeGS:
+		return []byte(s), nil
+	case CytologyReadOKInfoImageGroupMaterialTypeBP:
+		return []byte(s), nil
+	case CytologyReadOKInfoImageGroupMaterialTypeTP:
+		return []byte(s), nil
+	case CytologyReadOKInfoImageGroupMaterialTypePTP:
+		return []byte(s), nil
+	case CytologyReadOKInfoImageGroupMaterialTypeLNP:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyReadOKInfoImageGroupMaterialType) UnmarshalText(data []byte) error {
+	switch CytologyReadOKInfoImageGroupMaterialType(data) {
+	case CytologyReadOKInfoImageGroupMaterialTypeGS:
+		*s = CytologyReadOKInfoImageGroupMaterialTypeGS
+		return nil
+	case CytologyReadOKInfoImageGroupMaterialTypeBP:
+		*s = CytologyReadOKInfoImageGroupMaterialTypeBP
+		return nil
+	case CytologyReadOKInfoImageGroupMaterialTypeTP:
+		*s = CytologyReadOKInfoImageGroupMaterialTypeTP
+		return nil
+	case CytologyReadOKInfoImageGroupMaterialTypePTP:
+		*s = CytologyReadOKInfoImageGroupMaterialTypePTP
+		return nil
+	case CytologyReadOKInfoImageGroupMaterialTypeLNP:
+		*s = CytologyReadOKInfoImageGroupMaterialTypeLNP
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyReadOKOriginalImage struct {
+	ID         OptInt      `json:"id"`
+	CreateDate OptDateTime `json:"create_date"`
+	DelayTime  OptFloat64  `json:"delay_time"`
+	ViewedFlag OptBool     `json:"viewed_flag"`
+	Image      OptURI      `json:"image"`
+	// Путь к файлу изображения для DZI.
+	FilePath OptString `json:"file_path"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologyReadOKOriginalImage) GetID() OptInt {
+	return s.ID
+}
+
+// GetCreateDate returns the value of CreateDate.
+func (s *CytologyReadOKOriginalImage) GetCreateDate() OptDateTime {
+	return s.CreateDate
+}
+
+// GetDelayTime returns the value of DelayTime.
+func (s *CytologyReadOKOriginalImage) GetDelayTime() OptFloat64 {
+	return s.DelayTime
+}
+
+// GetViewedFlag returns the value of ViewedFlag.
+func (s *CytologyReadOKOriginalImage) GetViewedFlag() OptBool {
+	return s.ViewedFlag
+}
+
+// GetImage returns the value of Image.
+func (s *CytologyReadOKOriginalImage) GetImage() OptURI {
+	return s.Image
+}
+
+// GetFilePath returns the value of FilePath.
+func (s *CytologyReadOKOriginalImage) GetFilePath() OptString {
+	return s.FilePath
+}
+
+// SetID sets the value of ID.
+func (s *CytologyReadOKOriginalImage) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetCreateDate sets the value of CreateDate.
+func (s *CytologyReadOKOriginalImage) SetCreateDate(val OptDateTime) {
+	s.CreateDate = val
+}
+
+// SetDelayTime sets the value of DelayTime.
+func (s *CytologyReadOKOriginalImage) SetDelayTime(val OptFloat64) {
+	s.DelayTime = val
+}
+
+// SetViewedFlag sets the value of ViewedFlag.
+func (s *CytologyReadOKOriginalImage) SetViewedFlag(val OptBool) {
+	s.ViewedFlag = val
+}
+
+// SetImage sets the value of Image.
+func (s *CytologyReadOKOriginalImage) SetImage(val OptURI) {
+	s.Image = val
+}
+
+// SetFilePath sets the value of FilePath.
+func (s *CytologyReadOKOriginalImage) SetFilePath(val OptString) {
+	s.FilePath = val
+}
+
+type CytologySegmentGroupCreateCreateBadRequest ErrorStatusCode
+
+func (*CytologySegmentGroupCreateCreateBadRequest) cytologySegmentGroupCreateCreateRes() {}
+
+type CytologySegmentGroupCreateCreateCreated struct {
+	ID      OptInt                                         `json:"id"`
+	Data    OptCytologySegmentGroupCreateCreateCreatedData `json:"data"`
+	SegType OptString                                      `json:"seg_type"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologySegmentGroupCreateCreateCreated) GetID() OptInt {
+	return s.ID
+}
+
+// GetData returns the value of Data.
+func (s *CytologySegmentGroupCreateCreateCreated) GetData() OptCytologySegmentGroupCreateCreateCreatedData {
+	return s.Data
+}
+
+// GetSegType returns the value of SegType.
+func (s *CytologySegmentGroupCreateCreateCreated) GetSegType() OptString {
+	return s.SegType
+}
+
+// SetID sets the value of ID.
+func (s *CytologySegmentGroupCreateCreateCreated) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetData sets the value of Data.
+func (s *CytologySegmentGroupCreateCreateCreated) SetData(val OptCytologySegmentGroupCreateCreateCreatedData) {
+	s.Data = val
+}
+
+// SetSegType sets the value of SegType.
+func (s *CytologySegmentGroupCreateCreateCreated) SetSegType(val OptString) {
+	s.SegType = val
+}
+
+func (*CytologySegmentGroupCreateCreateCreated) cytologySegmentGroupCreateCreateRes() {}
+
+type CytologySegmentGroupCreateCreateCreatedData struct {
+	Points []CytologySegmentGroupCreateCreateCreatedDataPointsItem `json:"points"`
+}
+
+// GetPoints returns the value of Points.
+func (s *CytologySegmentGroupCreateCreateCreatedData) GetPoints() []CytologySegmentGroupCreateCreateCreatedDataPointsItem {
+	return s.Points
+}
+
+// SetPoints sets the value of Points.
+func (s *CytologySegmentGroupCreateCreateCreatedData) SetPoints(val []CytologySegmentGroupCreateCreateCreatedDataPointsItem) {
+	s.Points = val
+}
+
+type CytologySegmentGroupCreateCreateCreatedDataPointsItem struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
+// GetX returns the value of X.
+func (s *CytologySegmentGroupCreateCreateCreatedDataPointsItem) GetX() int {
+	return s.X
+}
+
+// GetY returns the value of Y.
+func (s *CytologySegmentGroupCreateCreateCreatedDataPointsItem) GetY() int {
+	return s.Y
+}
+
+// SetX sets the value of X.
+func (s *CytologySegmentGroupCreateCreateCreatedDataPointsItem) SetX(val int) {
+	s.X = val
+}
+
+// SetY sets the value of Y.
+func (s *CytologySegmentGroupCreateCreateCreatedDataPointsItem) SetY(val int) {
+	s.Y = val
+}
+
+type CytologySegmentGroupCreateCreateInternalServerError ErrorStatusCode
+
+func (*CytologySegmentGroupCreateCreateInternalServerError) cytologySegmentGroupCreateCreateRes() {}
+
+type CytologySegmentGroupCreateCreateNotFound ErrorStatusCode
+
+func (*CytologySegmentGroupCreateCreateNotFound) cytologySegmentGroupCreateCreateRes() {}
+
+type CytologySegmentGroupCreateCreateReq struct {
+	Data    CytologySegmentGroupCreateCreateReqData    `json:"data"`
+	SegType CytologySegmentGroupCreateCreateReqSegType `json:"seg_type"`
+}
+
+// GetData returns the value of Data.
+func (s *CytologySegmentGroupCreateCreateReq) GetData() CytologySegmentGroupCreateCreateReqData {
+	return s.Data
+}
+
+// GetSegType returns the value of SegType.
+func (s *CytologySegmentGroupCreateCreateReq) GetSegType() CytologySegmentGroupCreateCreateReqSegType {
+	return s.SegType
+}
+
+// SetData sets the value of Data.
+func (s *CytologySegmentGroupCreateCreateReq) SetData(val CytologySegmentGroupCreateCreateReqData) {
+	s.Data = val
+}
+
+// SetSegType sets the value of SegType.
+func (s *CytologySegmentGroupCreateCreateReq) SetSegType(val CytologySegmentGroupCreateCreateReqSegType) {
+	s.SegType = val
+}
+
+type CytologySegmentGroupCreateCreateReqData struct {
+	Points []CytologySegmentGroupCreateCreateReqDataPointsItem `json:"points"`
+}
+
+// GetPoints returns the value of Points.
+func (s *CytologySegmentGroupCreateCreateReqData) GetPoints() []CytologySegmentGroupCreateCreateReqDataPointsItem {
+	return s.Points
+}
+
+// SetPoints sets the value of Points.
+func (s *CytologySegmentGroupCreateCreateReqData) SetPoints(val []CytologySegmentGroupCreateCreateReqDataPointsItem) {
+	s.Points = val
+}
+
+type CytologySegmentGroupCreateCreateReqDataPointsItem struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
+// GetX returns the value of X.
+func (s *CytologySegmentGroupCreateCreateReqDataPointsItem) GetX() int {
+	return s.X
+}
+
+// GetY returns the value of Y.
+func (s *CytologySegmentGroupCreateCreateReqDataPointsItem) GetY() int {
+	return s.Y
+}
+
+// SetX sets the value of X.
+func (s *CytologySegmentGroupCreateCreateReqDataPointsItem) SetX(val int) {
+	s.X = val
+}
+
+// SetY sets the value of Y.
+func (s *CytologySegmentGroupCreateCreateReqDataPointsItem) SetY(val int) {
+	s.Y = val
+}
+
+type CytologySegmentGroupCreateCreateReqSegType string
+
+const (
+	CytologySegmentGroupCreateCreateReqSegTypeNIL CytologySegmentGroupCreateCreateReqSegType = "NIL"
+	CytologySegmentGroupCreateCreateReqSegTypeNIR CytologySegmentGroupCreateCreateReqSegType = "NIR"
+	CytologySegmentGroupCreateCreateReqSegTypeNIM CytologySegmentGroupCreateCreateReqSegType = "NIM"
+	CytologySegmentGroupCreateCreateReqSegTypeCNO CytologySegmentGroupCreateCreateReqSegType = "CNO"
+	CytologySegmentGroupCreateCreateReqSegTypeCGE CytologySegmentGroupCreateCreateReqSegType = "CGE"
+	CytologySegmentGroupCreateCreateReqSegTypeC2N CytologySegmentGroupCreateCreateReqSegType = "C2N"
+	CytologySegmentGroupCreateCreateReqSegTypeCPS CytologySegmentGroupCreateCreateReqSegType = "CPS"
+	CytologySegmentGroupCreateCreateReqSegTypeCFC CytologySegmentGroupCreateCreateReqSegType = "CFC"
+	CytologySegmentGroupCreateCreateReqSegTypeCLY CytologySegmentGroupCreateCreateReqSegType = "CLY"
+	CytologySegmentGroupCreateCreateReqSegTypeSOS CytologySegmentGroupCreateCreateReqSegType = "SOS"
+	CytologySegmentGroupCreateCreateReqSegTypeSDS CytologySegmentGroupCreateCreateReqSegType = "SDS"
+	CytologySegmentGroupCreateCreateReqSegTypeSMS CytologySegmentGroupCreateCreateReqSegType = "SMS"
+	CytologySegmentGroupCreateCreateReqSegTypeSTS CytologySegmentGroupCreateCreateReqSegType = "STS"
+	CytologySegmentGroupCreateCreateReqSegTypeSPS CytologySegmentGroupCreateCreateReqSegType = "SPS"
+	CytologySegmentGroupCreateCreateReqSegTypeSNM CytologySegmentGroupCreateCreateReqSegType = "SNM"
+	CytologySegmentGroupCreateCreateReqSegTypeSTM CytologySegmentGroupCreateCreateReqSegType = "STM"
+)
+
+// AllValues returns all CytologySegmentGroupCreateCreateReqSegType values.
+func (CytologySegmentGroupCreateCreateReqSegType) AllValues() []CytologySegmentGroupCreateCreateReqSegType {
+	return []CytologySegmentGroupCreateCreateReqSegType{
+		CytologySegmentGroupCreateCreateReqSegTypeNIL,
+		CytologySegmentGroupCreateCreateReqSegTypeNIR,
+		CytologySegmentGroupCreateCreateReqSegTypeNIM,
+		CytologySegmentGroupCreateCreateReqSegTypeCNO,
+		CytologySegmentGroupCreateCreateReqSegTypeCGE,
+		CytologySegmentGroupCreateCreateReqSegTypeC2N,
+		CytologySegmentGroupCreateCreateReqSegTypeCPS,
+		CytologySegmentGroupCreateCreateReqSegTypeCFC,
+		CytologySegmentGroupCreateCreateReqSegTypeCLY,
+		CytologySegmentGroupCreateCreateReqSegTypeSOS,
+		CytologySegmentGroupCreateCreateReqSegTypeSDS,
+		CytologySegmentGroupCreateCreateReqSegTypeSMS,
+		CytologySegmentGroupCreateCreateReqSegTypeSTS,
+		CytologySegmentGroupCreateCreateReqSegTypeSPS,
+		CytologySegmentGroupCreateCreateReqSegTypeSNM,
+		CytologySegmentGroupCreateCreateReqSegTypeSTM,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologySegmentGroupCreateCreateReqSegType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologySegmentGroupCreateCreateReqSegTypeNIL:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeNIR:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeNIM:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCNO:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCGE:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeC2N:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCPS:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCFC:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCLY:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSOS:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSDS:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSMS:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSTS:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSPS:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSNM:
+		return []byte(s), nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSTM:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologySegmentGroupCreateCreateReqSegType) UnmarshalText(data []byte) error {
+	switch CytologySegmentGroupCreateCreateReqSegType(data) {
+	case CytologySegmentGroupCreateCreateReqSegTypeNIL:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeNIL
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeNIR:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeNIR
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeNIM:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeNIM
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCNO:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeCNO
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCGE:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeCGE
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeC2N:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeC2N
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCPS:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeCPS
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCFC:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeCFC
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeCLY:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeCLY
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSOS:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeSOS
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSDS:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeSDS
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSMS:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeSMS
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSTS:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeSTS
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSPS:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeSPS
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSNM:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeSNM
+		return nil
+	case CytologySegmentGroupCreateCreateReqSegTypeSTM:
+		*s = CytologySegmentGroupCreateCreateReqSegTypeSTM
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologySegmentGroupCreateCreateUnprocessableEntity ErrorStatusCode
+
+func (*CytologySegmentGroupCreateCreateUnprocessableEntity) cytologySegmentGroupCreateCreateRes() {}
+
+type CytologySegmentUpdateDeleteInternalServerError ErrorStatusCode
+
+func (*CytologySegmentUpdateDeleteInternalServerError) cytologySegmentUpdateDeleteRes() {}
+
+// CytologySegmentUpdateDeleteNoContent is response for CytologySegmentUpdateDelete operation.
+type CytologySegmentUpdateDeleteNoContent struct{}
+
+func (*CytologySegmentUpdateDeleteNoContent) cytologySegmentUpdateDeleteRes() {}
+
+type CytologySegmentUpdateDeleteNotFound ErrorStatusCode
+
+func (*CytologySegmentUpdateDeleteNotFound) cytologySegmentUpdateDeleteRes() {}
+
+type CytologySegmentUpdatePartialUpdateBadRequest ErrorStatusCode
+
+func (*CytologySegmentUpdatePartialUpdateBadRequest) cytologySegmentUpdatePartialUpdateRes() {}
+
+type CytologySegmentUpdatePartialUpdateInternalServerError ErrorStatusCode
+
+func (*CytologySegmentUpdatePartialUpdateInternalServerError) cytologySegmentUpdatePartialUpdateRes() {
+}
+
+type CytologySegmentUpdatePartialUpdateNotFound ErrorStatusCode
+
+func (*CytologySegmentUpdatePartialUpdateNotFound) cytologySegmentUpdatePartialUpdateRes() {}
+
+type CytologySegmentUpdatePartialUpdateOK struct {
+	Points       []CytologySegmentUpdatePartialUpdateOKPointsItem `json:"points"`
+	SegmentGroup OptInt                                           `json:"segment_group"`
+}
+
+// GetPoints returns the value of Points.
+func (s *CytologySegmentUpdatePartialUpdateOK) GetPoints() []CytologySegmentUpdatePartialUpdateOKPointsItem {
+	return s.Points
+}
+
+// GetSegmentGroup returns the value of SegmentGroup.
+func (s *CytologySegmentUpdatePartialUpdateOK) GetSegmentGroup() OptInt {
+	return s.SegmentGroup
+}
+
+// SetPoints sets the value of Points.
+func (s *CytologySegmentUpdatePartialUpdateOK) SetPoints(val []CytologySegmentUpdatePartialUpdateOKPointsItem) {
+	s.Points = val
+}
+
+// SetSegmentGroup sets the value of SegmentGroup.
+func (s *CytologySegmentUpdatePartialUpdateOK) SetSegmentGroup(val OptInt) {
+	s.SegmentGroup = val
+}
+
+func (*CytologySegmentUpdatePartialUpdateOK) cytologySegmentUpdatePartialUpdateRes() {}
+
+type CytologySegmentUpdatePartialUpdateOKPointsItem struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
+// GetX returns the value of X.
+func (s *CytologySegmentUpdatePartialUpdateOKPointsItem) GetX() int {
+	return s.X
+}
+
+// GetY returns the value of Y.
+func (s *CytologySegmentUpdatePartialUpdateOKPointsItem) GetY() int {
+	return s.Y
+}
+
+// SetX sets the value of X.
+func (s *CytologySegmentUpdatePartialUpdateOKPointsItem) SetX(val int) {
+	s.X = val
+}
+
+// SetY sets the value of Y.
+func (s *CytologySegmentUpdatePartialUpdateOKPointsItem) SetY(val int) {
+	s.Y = val
+}
+
+type CytologySegmentUpdatePartialUpdateReq struct {
+	Points       []CytologySegmentUpdatePartialUpdateReqPointsItem `json:"points"`
+	SegmentGroup OptInt                                            `json:"segment_group"`
+}
+
+// GetPoints returns the value of Points.
+func (s *CytologySegmentUpdatePartialUpdateReq) GetPoints() []CytologySegmentUpdatePartialUpdateReqPointsItem {
+	return s.Points
+}
+
+// GetSegmentGroup returns the value of SegmentGroup.
+func (s *CytologySegmentUpdatePartialUpdateReq) GetSegmentGroup() OptInt {
+	return s.SegmentGroup
+}
+
+// SetPoints sets the value of Points.
+func (s *CytologySegmentUpdatePartialUpdateReq) SetPoints(val []CytologySegmentUpdatePartialUpdateReqPointsItem) {
+	s.Points = val
+}
+
+// SetSegmentGroup sets the value of SegmentGroup.
+func (s *CytologySegmentUpdatePartialUpdateReq) SetSegmentGroup(val OptInt) {
+	s.SegmentGroup = val
+}
+
+type CytologySegmentUpdatePartialUpdateReqPointsItem struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
+// GetX returns the value of X.
+func (s *CytologySegmentUpdatePartialUpdateReqPointsItem) GetX() int {
+	return s.X
+}
+
+// GetY returns the value of Y.
+func (s *CytologySegmentUpdatePartialUpdateReqPointsItem) GetY() int {
+	return s.Y
+}
+
+// SetX sets the value of X.
+func (s *CytologySegmentUpdatePartialUpdateReqPointsItem) SetX(val int) {
+	s.X = val
+}
+
+// SetY sets the value of Y.
+func (s *CytologySegmentUpdatePartialUpdateReqPointsItem) SetY(val int) {
+	s.Y = val
+}
+
+type CytologySegmentUpdateReadInternalServerError ErrorStatusCode
+
+func (*CytologySegmentUpdateReadInternalServerError) cytologySegmentUpdateReadRes() {}
+
+type CytologySegmentUpdateReadNotFound ErrorStatusCode
+
+func (*CytologySegmentUpdateReadNotFound) cytologySegmentUpdateReadRes() {}
+
+type CytologySegmentUpdateReadOK struct {
+	Points       []CytologySegmentUpdateReadOKPointsItem `json:"points"`
+	SegmentGroup OptInt                                  `json:"segment_group"`
+}
+
+// GetPoints returns the value of Points.
+func (s *CytologySegmentUpdateReadOK) GetPoints() []CytologySegmentUpdateReadOKPointsItem {
+	return s.Points
+}
+
+// GetSegmentGroup returns the value of SegmentGroup.
+func (s *CytologySegmentUpdateReadOK) GetSegmentGroup() OptInt {
+	return s.SegmentGroup
+}
+
+// SetPoints sets the value of Points.
+func (s *CytologySegmentUpdateReadOK) SetPoints(val []CytologySegmentUpdateReadOKPointsItem) {
+	s.Points = val
+}
+
+// SetSegmentGroup sets the value of SegmentGroup.
+func (s *CytologySegmentUpdateReadOK) SetSegmentGroup(val OptInt) {
+	s.SegmentGroup = val
+}
+
+func (*CytologySegmentUpdateReadOK) cytologySegmentUpdateReadRes() {}
+
+type CytologySegmentUpdateReadOKPointsItem struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
+// GetX returns the value of X.
+func (s *CytologySegmentUpdateReadOKPointsItem) GetX() int {
+	return s.X
+}
+
+// GetY returns the value of Y.
+func (s *CytologySegmentUpdateReadOKPointsItem) GetY() int {
+	return s.Y
+}
+
+// SetX sets the value of X.
+func (s *CytologySegmentUpdateReadOKPointsItem) SetX(val int) {
+	s.X = val
+}
+
+// SetY sets the value of Y.
+func (s *CytologySegmentUpdateReadOKPointsItem) SetY(val int) {
+	s.Y = val
+}
+
+type CytologySegmentUpdateUpdateBadRequest ErrorStatusCode
+
+func (*CytologySegmentUpdateUpdateBadRequest) cytologySegmentUpdateUpdateRes() {}
+
+type CytologySegmentUpdateUpdateInternalServerError ErrorStatusCode
+
+func (*CytologySegmentUpdateUpdateInternalServerError) cytologySegmentUpdateUpdateRes() {}
+
+type CytologySegmentUpdateUpdateNotFound ErrorStatusCode
+
+func (*CytologySegmentUpdateUpdateNotFound) cytologySegmentUpdateUpdateRes() {}
+
+type CytologySegmentUpdateUpdateOK struct {
+	Points       []CytologySegmentUpdateUpdateOKPointsItem `json:"points"`
+	SegmentGroup OptInt                                    `json:"segment_group"`
+}
+
+// GetPoints returns the value of Points.
+func (s *CytologySegmentUpdateUpdateOK) GetPoints() []CytologySegmentUpdateUpdateOKPointsItem {
+	return s.Points
+}
+
+// GetSegmentGroup returns the value of SegmentGroup.
+func (s *CytologySegmentUpdateUpdateOK) GetSegmentGroup() OptInt {
+	return s.SegmentGroup
+}
+
+// SetPoints sets the value of Points.
+func (s *CytologySegmentUpdateUpdateOK) SetPoints(val []CytologySegmentUpdateUpdateOKPointsItem) {
+	s.Points = val
+}
+
+// SetSegmentGroup sets the value of SegmentGroup.
+func (s *CytologySegmentUpdateUpdateOK) SetSegmentGroup(val OptInt) {
+	s.SegmentGroup = val
+}
+
+func (*CytologySegmentUpdateUpdateOK) cytologySegmentUpdateUpdateRes() {}
+
+type CytologySegmentUpdateUpdateOKPointsItem struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
+// GetX returns the value of X.
+func (s *CytologySegmentUpdateUpdateOKPointsItem) GetX() int {
+	return s.X
+}
+
+// GetY returns the value of Y.
+func (s *CytologySegmentUpdateUpdateOKPointsItem) GetY() int {
+	return s.Y
+}
+
+// SetX sets the value of X.
+func (s *CytologySegmentUpdateUpdateOKPointsItem) SetX(val int) {
+	s.X = val
+}
+
+// SetY sets the value of Y.
+func (s *CytologySegmentUpdateUpdateOKPointsItem) SetY(val int) {
+	s.Y = val
+}
+
+type CytologySegmentUpdateUpdateReq struct {
+	Points       []CytologySegmentUpdateUpdateReqPointsItem `json:"points"`
+	SegmentGroup OptInt                                     `json:"segment_group"`
+}
+
+// GetPoints returns the value of Points.
+func (s *CytologySegmentUpdateUpdateReq) GetPoints() []CytologySegmentUpdateUpdateReqPointsItem {
+	return s.Points
+}
+
+// GetSegmentGroup returns the value of SegmentGroup.
+func (s *CytologySegmentUpdateUpdateReq) GetSegmentGroup() OptInt {
+	return s.SegmentGroup
+}
+
+// SetPoints sets the value of Points.
+func (s *CytologySegmentUpdateUpdateReq) SetPoints(val []CytologySegmentUpdateUpdateReqPointsItem) {
+	s.Points = val
+}
+
+// SetSegmentGroup sets the value of SegmentGroup.
+func (s *CytologySegmentUpdateUpdateReq) SetSegmentGroup(val OptInt) {
+	s.SegmentGroup = val
+}
+
+type CytologySegmentUpdateUpdateReqPointsItem struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
+// GetX returns the value of X.
+func (s *CytologySegmentUpdateUpdateReqPointsItem) GetX() int {
+	return s.X
+}
+
+// GetY returns the value of Y.
+func (s *CytologySegmentUpdateUpdateReqPointsItem) GetY() int {
+	return s.Y
+}
+
+// SetX sets the value of X.
+func (s *CytologySegmentUpdateUpdateReqPointsItem) SetX(val int) {
+	s.X = val
+}
+
+// SetY sets the value of Y.
+func (s *CytologySegmentUpdateUpdateReqPointsItem) SetY(val int) {
+	s.Y = val
+}
+
+type CytologySegmentsListGroupType string
+
+const (
+	CytologySegmentsListGroupTypeCE CytologySegmentsListGroupType = "CE"
+	CytologySegmentsListGroupTypeCL CytologySegmentsListGroupType = "CL"
+	CytologySegmentsListGroupTypeME CytologySegmentsListGroupType = "ME"
+)
+
+// AllValues returns all CytologySegmentsListGroupType values.
+func (CytologySegmentsListGroupType) AllValues() []CytologySegmentsListGroupType {
+	return []CytologySegmentsListGroupType{
+		CytologySegmentsListGroupTypeCE,
+		CytologySegmentsListGroupTypeCL,
+		CytologySegmentsListGroupTypeME,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologySegmentsListGroupType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologySegmentsListGroupTypeCE:
+		return []byte(s), nil
+	case CytologySegmentsListGroupTypeCL:
+		return []byte(s), nil
+	case CytologySegmentsListGroupTypeME:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologySegmentsListGroupType) UnmarshalText(data []byte) error {
+	switch CytologySegmentsListGroupType(data) {
+	case CytologySegmentsListGroupTypeCE:
+		*s = CytologySegmentsListGroupTypeCE
+		return nil
+	case CytologySegmentsListGroupTypeCL:
+		*s = CytologySegmentsListGroupTypeCL
+		return nil
+	case CytologySegmentsListGroupTypeME:
+		*s = CytologySegmentsListGroupTypeME
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologySegmentsListInternalServerError ErrorStatusCode
+
+func (*CytologySegmentsListInternalServerError) cytologySegmentsListRes() {}
+
+type CytologySegmentsListNotFound ErrorStatusCode
+
+func (*CytologySegmentsListNotFound) cytologySegmentsListRes() {}
+
+type CytologySegmentsListOK struct {
+	Count    int                                 `json:"count"`
+	Next     OptURI                              `json:"next"`
+	Previous OptURI                              `json:"previous"`
+	Results  []CytologySegmentsListOKResultsItem `json:"results"`
+}
+
+// GetCount returns the value of Count.
+func (s *CytologySegmentsListOK) GetCount() int {
+	return s.Count
+}
+
+// GetNext returns the value of Next.
+func (s *CytologySegmentsListOK) GetNext() OptURI {
+	return s.Next
+}
+
+// GetPrevious returns the value of Previous.
+func (s *CytologySegmentsListOK) GetPrevious() OptURI {
+	return s.Previous
+}
+
+// GetResults returns the value of Results.
+func (s *CytologySegmentsListOK) GetResults() []CytologySegmentsListOKResultsItem {
+	return s.Results
+}
+
+// SetCount sets the value of Count.
+func (s *CytologySegmentsListOK) SetCount(val int) {
+	s.Count = val
+}
+
+// SetNext sets the value of Next.
+func (s *CytologySegmentsListOK) SetNext(val OptURI) {
+	s.Next = val
+}
+
+// SetPrevious sets the value of Previous.
+func (s *CytologySegmentsListOK) SetPrevious(val OptURI) {
+	s.Previous = val
+}
+
+// SetResults sets the value of Results.
+func (s *CytologySegmentsListOK) SetResults(val []CytologySegmentsListOKResultsItem) {
+	s.Results = val
+}
+
+func (*CytologySegmentsListOK) cytologySegmentsListRes() {}
+
+type CytologySegmentsListOKResultsItem struct {
+	ID        OptInt                                        `json:"id"`
+	Data      []CytologySegmentsListOKResultsItemDataItem   `json:"data"`
+	GroupType OptCytologySegmentsListOKResultsItemGroupType `json:"group_type"`
+	SegType   OptCytologySegmentsListOKResultsItemSegType   `json:"seg_type"`
+	Details   *CytologySegmentsListOKResultsItemDetails     `json:"details"`
+	IsAi      OptBool                                       `json:"is_ai"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologySegmentsListOKResultsItem) GetID() OptInt {
+	return s.ID
+}
+
+// GetData returns the value of Data.
+func (s *CytologySegmentsListOKResultsItem) GetData() []CytologySegmentsListOKResultsItemDataItem {
+	return s.Data
+}
+
+// GetGroupType returns the value of GroupType.
+func (s *CytologySegmentsListOKResultsItem) GetGroupType() OptCytologySegmentsListOKResultsItemGroupType {
+	return s.GroupType
+}
+
+// GetSegType returns the value of SegType.
+func (s *CytologySegmentsListOKResultsItem) GetSegType() OptCytologySegmentsListOKResultsItemSegType {
+	return s.SegType
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologySegmentsListOKResultsItem) GetDetails() *CytologySegmentsListOKResultsItemDetails {
+	return s.Details
+}
+
+// GetIsAi returns the value of IsAi.
+func (s *CytologySegmentsListOKResultsItem) GetIsAi() OptBool {
+	return s.IsAi
+}
+
+// SetID sets the value of ID.
+func (s *CytologySegmentsListOKResultsItem) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetData sets the value of Data.
+func (s *CytologySegmentsListOKResultsItem) SetData(val []CytologySegmentsListOKResultsItemDataItem) {
+	s.Data = val
+}
+
+// SetGroupType sets the value of GroupType.
+func (s *CytologySegmentsListOKResultsItem) SetGroupType(val OptCytologySegmentsListOKResultsItemGroupType) {
+	s.GroupType = val
+}
+
+// SetSegType sets the value of SegType.
+func (s *CytologySegmentsListOKResultsItem) SetSegType(val OptCytologySegmentsListOKResultsItemSegType) {
+	s.SegType = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologySegmentsListOKResultsItem) SetDetails(val *CytologySegmentsListOKResultsItemDetails) {
+	s.Details = val
+}
+
+// SetIsAi sets the value of IsAi.
+func (s *CytologySegmentsListOKResultsItem) SetIsAi(val OptBool) {
+	s.IsAi = val
+}
+
+type CytologySegmentsListOKResultsItemDataItem struct {
+	ID      OptInt                                                `json:"id"`
+	Points  []CytologySegmentsListOKResultsItemDataItemPointsItem `json:"points"`
+	Details OptString                                             `json:"details"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologySegmentsListOKResultsItemDataItem) GetID() OptInt {
+	return s.ID
+}
+
+// GetPoints returns the value of Points.
+func (s *CytologySegmentsListOKResultsItemDataItem) GetPoints() []CytologySegmentsListOKResultsItemDataItemPointsItem {
+	return s.Points
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologySegmentsListOKResultsItemDataItem) GetDetails() OptString {
+	return s.Details
+}
+
+// SetID sets the value of ID.
+func (s *CytologySegmentsListOKResultsItemDataItem) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetPoints sets the value of Points.
+func (s *CytologySegmentsListOKResultsItemDataItem) SetPoints(val []CytologySegmentsListOKResultsItemDataItemPointsItem) {
+	s.Points = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologySegmentsListOKResultsItemDataItem) SetDetails(val OptString) {
+	s.Details = val
+}
+
+type CytologySegmentsListOKResultsItemDataItemPointsItem struct {
+	ID  OptInt `json:"id"`
+	UID int    `json:"uid"`
+	X   int    `json:"x"`
+	Y   int    `json:"y"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologySegmentsListOKResultsItemDataItemPointsItem) GetID() OptInt {
+	return s.ID
+}
+
+// GetUID returns the value of UID.
+func (s *CytologySegmentsListOKResultsItemDataItemPointsItem) GetUID() int {
+	return s.UID
+}
+
+// GetX returns the value of X.
+func (s *CytologySegmentsListOKResultsItemDataItemPointsItem) GetX() int {
+	return s.X
+}
+
+// GetY returns the value of Y.
+func (s *CytologySegmentsListOKResultsItemDataItemPointsItem) GetY() int {
+	return s.Y
+}
+
+// SetID sets the value of ID.
+func (s *CytologySegmentsListOKResultsItemDataItemPointsItem) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetUID sets the value of UID.
+func (s *CytologySegmentsListOKResultsItemDataItemPointsItem) SetUID(val int) {
+	s.UID = val
+}
+
+// SetX sets the value of X.
+func (s *CytologySegmentsListOKResultsItemDataItemPointsItem) SetX(val int) {
+	s.X = val
+}
+
+// SetY sets the value of Y.
+func (s *CytologySegmentsListOKResultsItemDataItemPointsItem) SetY(val int) {
+	s.Y = val
+}
+
+type CytologySegmentsListOKResultsItemDetails struct{}
+
+type CytologySegmentsListOKResultsItemGroupType string
+
+const (
+	CytologySegmentsListOKResultsItemGroupTypeCE CytologySegmentsListOKResultsItemGroupType = "CE"
+	CytologySegmentsListOKResultsItemGroupTypeCL CytologySegmentsListOKResultsItemGroupType = "CL"
+	CytologySegmentsListOKResultsItemGroupTypeME CytologySegmentsListOKResultsItemGroupType = "ME"
+)
+
+// AllValues returns all CytologySegmentsListOKResultsItemGroupType values.
+func (CytologySegmentsListOKResultsItemGroupType) AllValues() []CytologySegmentsListOKResultsItemGroupType {
+	return []CytologySegmentsListOKResultsItemGroupType{
+		CytologySegmentsListOKResultsItemGroupTypeCE,
+		CytologySegmentsListOKResultsItemGroupTypeCL,
+		CytologySegmentsListOKResultsItemGroupTypeME,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologySegmentsListOKResultsItemGroupType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologySegmentsListOKResultsItemGroupTypeCE:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemGroupTypeCL:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemGroupTypeME:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologySegmentsListOKResultsItemGroupType) UnmarshalText(data []byte) error {
+	switch CytologySegmentsListOKResultsItemGroupType(data) {
+	case CytologySegmentsListOKResultsItemGroupTypeCE:
+		*s = CytologySegmentsListOKResultsItemGroupTypeCE
+		return nil
+	case CytologySegmentsListOKResultsItemGroupTypeCL:
+		*s = CytologySegmentsListOKResultsItemGroupTypeCL
+		return nil
+	case CytologySegmentsListOKResultsItemGroupTypeME:
+		*s = CytologySegmentsListOKResultsItemGroupTypeME
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologySegmentsListOKResultsItemSegType string
+
+const (
+	CytologySegmentsListOKResultsItemSegTypeNIL CytologySegmentsListOKResultsItemSegType = "NIL"
+	CytologySegmentsListOKResultsItemSegTypeNIR CytologySegmentsListOKResultsItemSegType = "NIR"
+	CytologySegmentsListOKResultsItemSegTypeNIM CytologySegmentsListOKResultsItemSegType = "NIM"
+	CytologySegmentsListOKResultsItemSegTypeCNO CytologySegmentsListOKResultsItemSegType = "CNO"
+	CytologySegmentsListOKResultsItemSegTypeCGE CytologySegmentsListOKResultsItemSegType = "CGE"
+	CytologySegmentsListOKResultsItemSegTypeC2N CytologySegmentsListOKResultsItemSegType = "C2N"
+	CytologySegmentsListOKResultsItemSegTypeCPS CytologySegmentsListOKResultsItemSegType = "CPS"
+	CytologySegmentsListOKResultsItemSegTypeCFC CytologySegmentsListOKResultsItemSegType = "CFC"
+	CytologySegmentsListOKResultsItemSegTypeCLY CytologySegmentsListOKResultsItemSegType = "CLY"
+	CytologySegmentsListOKResultsItemSegTypeSOS CytologySegmentsListOKResultsItemSegType = "SOS"
+	CytologySegmentsListOKResultsItemSegTypeSDS CytologySegmentsListOKResultsItemSegType = "SDS"
+	CytologySegmentsListOKResultsItemSegTypeSMS CytologySegmentsListOKResultsItemSegType = "SMS"
+	CytologySegmentsListOKResultsItemSegTypeSTS CytologySegmentsListOKResultsItemSegType = "STS"
+	CytologySegmentsListOKResultsItemSegTypeSPS CytologySegmentsListOKResultsItemSegType = "SPS"
+	CytologySegmentsListOKResultsItemSegTypeSNM CytologySegmentsListOKResultsItemSegType = "SNM"
+	CytologySegmentsListOKResultsItemSegTypeSTM CytologySegmentsListOKResultsItemSegType = "STM"
+)
+
+// AllValues returns all CytologySegmentsListOKResultsItemSegType values.
+func (CytologySegmentsListOKResultsItemSegType) AllValues() []CytologySegmentsListOKResultsItemSegType {
+	return []CytologySegmentsListOKResultsItemSegType{
+		CytologySegmentsListOKResultsItemSegTypeNIL,
+		CytologySegmentsListOKResultsItemSegTypeNIR,
+		CytologySegmentsListOKResultsItemSegTypeNIM,
+		CytologySegmentsListOKResultsItemSegTypeCNO,
+		CytologySegmentsListOKResultsItemSegTypeCGE,
+		CytologySegmentsListOKResultsItemSegTypeC2N,
+		CytologySegmentsListOKResultsItemSegTypeCPS,
+		CytologySegmentsListOKResultsItemSegTypeCFC,
+		CytologySegmentsListOKResultsItemSegTypeCLY,
+		CytologySegmentsListOKResultsItemSegTypeSOS,
+		CytologySegmentsListOKResultsItemSegTypeSDS,
+		CytologySegmentsListOKResultsItemSegTypeSMS,
+		CytologySegmentsListOKResultsItemSegTypeSTS,
+		CytologySegmentsListOKResultsItemSegTypeSPS,
+		CytologySegmentsListOKResultsItemSegTypeSNM,
+		CytologySegmentsListOKResultsItemSegTypeSTM,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologySegmentsListOKResultsItemSegType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologySegmentsListOKResultsItemSegTypeNIL:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeNIR:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeNIM:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeCNO:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeCGE:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeC2N:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeCPS:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeCFC:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeCLY:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeSOS:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeSDS:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeSMS:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeSTS:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeSPS:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeSNM:
+		return []byte(s), nil
+	case CytologySegmentsListOKResultsItemSegTypeSTM:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologySegmentsListOKResultsItemSegType) UnmarshalText(data []byte) error {
+	switch CytologySegmentsListOKResultsItemSegType(data) {
+	case CytologySegmentsListOKResultsItemSegTypeNIL:
+		*s = CytologySegmentsListOKResultsItemSegTypeNIL
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeNIR:
+		*s = CytologySegmentsListOKResultsItemSegTypeNIR
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeNIM:
+		*s = CytologySegmentsListOKResultsItemSegTypeNIM
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeCNO:
+		*s = CytologySegmentsListOKResultsItemSegTypeCNO
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeCGE:
+		*s = CytologySegmentsListOKResultsItemSegTypeCGE
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeC2N:
+		*s = CytologySegmentsListOKResultsItemSegTypeC2N
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeCPS:
+		*s = CytologySegmentsListOKResultsItemSegTypeCPS
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeCFC:
+		*s = CytologySegmentsListOKResultsItemSegTypeCFC
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeCLY:
+		*s = CytologySegmentsListOKResultsItemSegTypeCLY
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeSOS:
+		*s = CytologySegmentsListOKResultsItemSegTypeSOS
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeSDS:
+		*s = CytologySegmentsListOKResultsItemSegTypeSDS
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeSMS:
+		*s = CytologySegmentsListOKResultsItemSegTypeSMS
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeSTS:
+		*s = CytologySegmentsListOKResultsItemSegTypeSTS
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeSPS:
+		*s = CytologySegmentsListOKResultsItemSegTypeSPS
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeSNM:
+		*s = CytologySegmentsListOKResultsItemSegTypeSNM
+		return nil
+	case CytologySegmentsListOKResultsItemSegTypeSTM:
+		*s = CytologySegmentsListOKResultsItemSegTypeSTM
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologySegmentsListSegType string
+
+const (
+	CytologySegmentsListSegTypeNIL CytologySegmentsListSegType = "NIL"
+	CytologySegmentsListSegTypeNIR CytologySegmentsListSegType = "NIR"
+	CytologySegmentsListSegTypeNIM CytologySegmentsListSegType = "NIM"
+	CytologySegmentsListSegTypeCNO CytologySegmentsListSegType = "CNO"
+	CytologySegmentsListSegTypeCGE CytologySegmentsListSegType = "CGE"
+	CytologySegmentsListSegTypeC2N CytologySegmentsListSegType = "C2N"
+	CytologySegmentsListSegTypeCPS CytologySegmentsListSegType = "CPS"
+	CytologySegmentsListSegTypeCFC CytologySegmentsListSegType = "CFC"
+	CytologySegmentsListSegTypeCLY CytologySegmentsListSegType = "CLY"
+	CytologySegmentsListSegTypeSOS CytologySegmentsListSegType = "SOS"
+	CytologySegmentsListSegTypeSDS CytologySegmentsListSegType = "SDS"
+	CytologySegmentsListSegTypeSMS CytologySegmentsListSegType = "SMS"
+	CytologySegmentsListSegTypeSTS CytologySegmentsListSegType = "STS"
+	CytologySegmentsListSegTypeSPS CytologySegmentsListSegType = "SPS"
+	CytologySegmentsListSegTypeSNM CytologySegmentsListSegType = "SNM"
+	CytologySegmentsListSegTypeSTM CytologySegmentsListSegType = "STM"
+)
+
+// AllValues returns all CytologySegmentsListSegType values.
+func (CytologySegmentsListSegType) AllValues() []CytologySegmentsListSegType {
+	return []CytologySegmentsListSegType{
+		CytologySegmentsListSegTypeNIL,
+		CytologySegmentsListSegTypeNIR,
+		CytologySegmentsListSegTypeNIM,
+		CytologySegmentsListSegTypeCNO,
+		CytologySegmentsListSegTypeCGE,
+		CytologySegmentsListSegTypeC2N,
+		CytologySegmentsListSegTypeCPS,
+		CytologySegmentsListSegTypeCFC,
+		CytologySegmentsListSegTypeCLY,
+		CytologySegmentsListSegTypeSOS,
+		CytologySegmentsListSegTypeSDS,
+		CytologySegmentsListSegTypeSMS,
+		CytologySegmentsListSegTypeSTS,
+		CytologySegmentsListSegTypeSPS,
+		CytologySegmentsListSegTypeSNM,
+		CytologySegmentsListSegTypeSTM,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologySegmentsListSegType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologySegmentsListSegTypeNIL:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeNIR:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeNIM:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeCNO:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeCGE:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeC2N:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeCPS:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeCFC:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeCLY:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeSOS:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeSDS:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeSMS:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeSTS:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeSPS:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeSNM:
+		return []byte(s), nil
+	case CytologySegmentsListSegTypeSTM:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologySegmentsListSegType) UnmarshalText(data []byte) error {
+	switch CytologySegmentsListSegType(data) {
+	case CytologySegmentsListSegTypeNIL:
+		*s = CytologySegmentsListSegTypeNIL
+		return nil
+	case CytologySegmentsListSegTypeNIR:
+		*s = CytologySegmentsListSegTypeNIR
+		return nil
+	case CytologySegmentsListSegTypeNIM:
+		*s = CytologySegmentsListSegTypeNIM
+		return nil
+	case CytologySegmentsListSegTypeCNO:
+		*s = CytologySegmentsListSegTypeCNO
+		return nil
+	case CytologySegmentsListSegTypeCGE:
+		*s = CytologySegmentsListSegTypeCGE
+		return nil
+	case CytologySegmentsListSegTypeC2N:
+		*s = CytologySegmentsListSegTypeC2N
+		return nil
+	case CytologySegmentsListSegTypeCPS:
+		*s = CytologySegmentsListSegTypeCPS
+		return nil
+	case CytologySegmentsListSegTypeCFC:
+		*s = CytologySegmentsListSegTypeCFC
+		return nil
+	case CytologySegmentsListSegTypeCLY:
+		*s = CytologySegmentsListSegTypeCLY
+		return nil
+	case CytologySegmentsListSegTypeSOS:
+		*s = CytologySegmentsListSegTypeSOS
+		return nil
+	case CytologySegmentsListSegTypeSDS:
+		*s = CytologySegmentsListSegTypeSDS
+		return nil
+	case CytologySegmentsListSegTypeSMS:
+		*s = CytologySegmentsListSegTypeSMS
+		return nil
+	case CytologySegmentsListSegTypeSTS:
+		*s = CytologySegmentsListSegTypeSTS
+		return nil
+	case CytologySegmentsListSegTypeSPS:
+		*s = CytologySegmentsListSegTypeSPS
+		return nil
+	case CytologySegmentsListSegTypeSNM:
+		*s = CytologySegmentsListSegTypeSNM
+		return nil
+	case CytologySegmentsListSegTypeSTM:
+		*s = CytologySegmentsListSegTypeSTM
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyUpdatePartialUpdateBadRequest ErrorStatusCode
+
+func (*CytologyUpdatePartialUpdateBadRequest) cytologyUpdatePartialUpdateRes() {}
+
+type CytologyUpdatePartialUpdateInternalServerError ErrorStatusCode
+
+func (*CytologyUpdatePartialUpdateInternalServerError) cytologyUpdatePartialUpdateRes() {}
+
+type CytologyUpdatePartialUpdateNotFound ErrorStatusCode
+
+func (*CytologyUpdatePartialUpdateNotFound) cytologyUpdatePartialUpdateRes() {}
+
+type CytologyUpdatePartialUpdateOK struct {
+	ID                OptInt                                   `json:"id"`
+	PatientCard       CytologyUpdatePartialUpdateOKPatientCard `json:"patient_card"`
+	Details           *CytologyUpdatePartialUpdateOKDetails    `json:"details"`
+	IsLast            OptBool                                  `json:"is_last"`
+	DiagnosDate       OptDateTime                              `json:"diagnos_date"`
+	DiagnosticMarking OptString                                `json:"diagnostic_marking"`
+	DiagnosticNumber  int                                      `json:"diagnostic_number"`
+	MaterialType      OptString                                `json:"material_type"`
+	Calcitonin        OptInt                                   `json:"calcitonin"`
+	CalcitoninInFlush OptInt                                   `json:"calcitonin_in_flush"`
+	Thyroglobulin     OptInt                                   `json:"thyroglobulin"`
+	Prev              OptUUID                                  `json:"prev"`
+	ParentPrev        OptUUID                                  `json:"parent_prev"`
+	OriginalImage     OptInt                                   `json:"original_image"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologyUpdatePartialUpdateOK) GetID() OptInt {
+	return s.ID
+}
+
+// GetPatientCard returns the value of PatientCard.
+func (s *CytologyUpdatePartialUpdateOK) GetPatientCard() CytologyUpdatePartialUpdateOKPatientCard {
+	return s.PatientCard
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologyUpdatePartialUpdateOK) GetDetails() *CytologyUpdatePartialUpdateOKDetails {
+	return s.Details
+}
+
+// GetIsLast returns the value of IsLast.
+func (s *CytologyUpdatePartialUpdateOK) GetIsLast() OptBool {
+	return s.IsLast
+}
+
+// GetDiagnosDate returns the value of DiagnosDate.
+func (s *CytologyUpdatePartialUpdateOK) GetDiagnosDate() OptDateTime {
+	return s.DiagnosDate
+}
+
+// GetDiagnosticMarking returns the value of DiagnosticMarking.
+func (s *CytologyUpdatePartialUpdateOK) GetDiagnosticMarking() OptString {
+	return s.DiagnosticMarking
+}
+
+// GetDiagnosticNumber returns the value of DiagnosticNumber.
+func (s *CytologyUpdatePartialUpdateOK) GetDiagnosticNumber() int {
+	return s.DiagnosticNumber
+}
+
+// GetMaterialType returns the value of MaterialType.
+func (s *CytologyUpdatePartialUpdateOK) GetMaterialType() OptString {
+	return s.MaterialType
+}
+
+// GetCalcitonin returns the value of Calcitonin.
+func (s *CytologyUpdatePartialUpdateOK) GetCalcitonin() OptInt {
+	return s.Calcitonin
+}
+
+// GetCalcitoninInFlush returns the value of CalcitoninInFlush.
+func (s *CytologyUpdatePartialUpdateOK) GetCalcitoninInFlush() OptInt {
+	return s.CalcitoninInFlush
+}
+
+// GetThyroglobulin returns the value of Thyroglobulin.
+func (s *CytologyUpdatePartialUpdateOK) GetThyroglobulin() OptInt {
+	return s.Thyroglobulin
+}
+
+// GetPrev returns the value of Prev.
+func (s *CytologyUpdatePartialUpdateOK) GetPrev() OptUUID {
+	return s.Prev
+}
+
+// GetParentPrev returns the value of ParentPrev.
+func (s *CytologyUpdatePartialUpdateOK) GetParentPrev() OptUUID {
+	return s.ParentPrev
+}
+
+// GetOriginalImage returns the value of OriginalImage.
+func (s *CytologyUpdatePartialUpdateOK) GetOriginalImage() OptInt {
+	return s.OriginalImage
+}
+
+// SetID sets the value of ID.
+func (s *CytologyUpdatePartialUpdateOK) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetPatientCard sets the value of PatientCard.
+func (s *CytologyUpdatePartialUpdateOK) SetPatientCard(val CytologyUpdatePartialUpdateOKPatientCard) {
+	s.PatientCard = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologyUpdatePartialUpdateOK) SetDetails(val *CytologyUpdatePartialUpdateOKDetails) {
+	s.Details = val
+}
+
+// SetIsLast sets the value of IsLast.
+func (s *CytologyUpdatePartialUpdateOK) SetIsLast(val OptBool) {
+	s.IsLast = val
+}
+
+// SetDiagnosDate sets the value of DiagnosDate.
+func (s *CytologyUpdatePartialUpdateOK) SetDiagnosDate(val OptDateTime) {
+	s.DiagnosDate = val
+}
+
+// SetDiagnosticMarking sets the value of DiagnosticMarking.
+func (s *CytologyUpdatePartialUpdateOK) SetDiagnosticMarking(val OptString) {
+	s.DiagnosticMarking = val
+}
+
+// SetDiagnosticNumber sets the value of DiagnosticNumber.
+func (s *CytologyUpdatePartialUpdateOK) SetDiagnosticNumber(val int) {
+	s.DiagnosticNumber = val
+}
+
+// SetMaterialType sets the value of MaterialType.
+func (s *CytologyUpdatePartialUpdateOK) SetMaterialType(val OptString) {
+	s.MaterialType = val
+}
+
+// SetCalcitonin sets the value of Calcitonin.
+func (s *CytologyUpdatePartialUpdateOK) SetCalcitonin(val OptInt) {
+	s.Calcitonin = val
+}
+
+// SetCalcitoninInFlush sets the value of CalcitoninInFlush.
+func (s *CytologyUpdatePartialUpdateOK) SetCalcitoninInFlush(val OptInt) {
+	s.CalcitoninInFlush = val
+}
+
+// SetThyroglobulin sets the value of Thyroglobulin.
+func (s *CytologyUpdatePartialUpdateOK) SetThyroglobulin(val OptInt) {
+	s.Thyroglobulin = val
+}
+
+// SetPrev sets the value of Prev.
+func (s *CytologyUpdatePartialUpdateOK) SetPrev(val OptUUID) {
+	s.Prev = val
+}
+
+// SetParentPrev sets the value of ParentPrev.
+func (s *CytologyUpdatePartialUpdateOK) SetParentPrev(val OptUUID) {
+	s.ParentPrev = val
+}
+
+// SetOriginalImage sets the value of OriginalImage.
+func (s *CytologyUpdatePartialUpdateOK) SetOriginalImage(val OptInt) {
+	s.OriginalImage = val
+}
+
+func (*CytologyUpdatePartialUpdateOK) cytologyUpdatePartialUpdateRes() {}
+
+type CytologyUpdatePartialUpdateOKDetails struct{}
+
+type CytologyUpdatePartialUpdateOKPatientCard struct{}
+
+type CytologyUpdatePartialUpdateReq struct {
+	ID                OptInt                                             `json:"id"`
+	PatientCard       CytologyUpdatePartialUpdateReqPatientCard          `json:"patient_card"`
+	Details           *CytologyUpdatePartialUpdateReqDetails             `json:"details"`
+	IsLast            OptBool                                            `json:"is_last"`
+	DiagnosDate       OptDateTime                                        `json:"diagnos_date"`
+	DiagnosticMarking OptCytologyUpdatePartialUpdateReqDiagnosticMarking `json:"diagnostic_marking"`
+	DiagnosticNumber  int                                                `json:"diagnostic_number"`
+	MaterialType      OptCytologyUpdatePartialUpdateReqMaterialType      `json:"material_type"`
+	Calcitonin        OptInt                                             `json:"calcitonin"`
+	CalcitoninInFlush OptInt                                             `json:"calcitonin_in_flush"`
+	Thyroglobulin     OptInt                                             `json:"thyroglobulin"`
+	Prev              OptUUID                                            `json:"prev"`
+	ParentPrev        OptUUID                                            `json:"parent_prev"`
+	OriginalImage     OptInt                                             `json:"original_image"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologyUpdatePartialUpdateReq) GetID() OptInt {
+	return s.ID
+}
+
+// GetPatientCard returns the value of PatientCard.
+func (s *CytologyUpdatePartialUpdateReq) GetPatientCard() CytologyUpdatePartialUpdateReqPatientCard {
+	return s.PatientCard
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologyUpdatePartialUpdateReq) GetDetails() *CytologyUpdatePartialUpdateReqDetails {
+	return s.Details
+}
+
+// GetIsLast returns the value of IsLast.
+func (s *CytologyUpdatePartialUpdateReq) GetIsLast() OptBool {
+	return s.IsLast
+}
+
+// GetDiagnosDate returns the value of DiagnosDate.
+func (s *CytologyUpdatePartialUpdateReq) GetDiagnosDate() OptDateTime {
+	return s.DiagnosDate
+}
+
+// GetDiagnosticMarking returns the value of DiagnosticMarking.
+func (s *CytologyUpdatePartialUpdateReq) GetDiagnosticMarking() OptCytologyUpdatePartialUpdateReqDiagnosticMarking {
+	return s.DiagnosticMarking
+}
+
+// GetDiagnosticNumber returns the value of DiagnosticNumber.
+func (s *CytologyUpdatePartialUpdateReq) GetDiagnosticNumber() int {
+	return s.DiagnosticNumber
+}
+
+// GetMaterialType returns the value of MaterialType.
+func (s *CytologyUpdatePartialUpdateReq) GetMaterialType() OptCytologyUpdatePartialUpdateReqMaterialType {
+	return s.MaterialType
+}
+
+// GetCalcitonin returns the value of Calcitonin.
+func (s *CytologyUpdatePartialUpdateReq) GetCalcitonin() OptInt {
+	return s.Calcitonin
+}
+
+// GetCalcitoninInFlush returns the value of CalcitoninInFlush.
+func (s *CytologyUpdatePartialUpdateReq) GetCalcitoninInFlush() OptInt {
+	return s.CalcitoninInFlush
+}
+
+// GetThyroglobulin returns the value of Thyroglobulin.
+func (s *CytologyUpdatePartialUpdateReq) GetThyroglobulin() OptInt {
+	return s.Thyroglobulin
+}
+
+// GetPrev returns the value of Prev.
+func (s *CytologyUpdatePartialUpdateReq) GetPrev() OptUUID {
+	return s.Prev
+}
+
+// GetParentPrev returns the value of ParentPrev.
+func (s *CytologyUpdatePartialUpdateReq) GetParentPrev() OptUUID {
+	return s.ParentPrev
+}
+
+// GetOriginalImage returns the value of OriginalImage.
+func (s *CytologyUpdatePartialUpdateReq) GetOriginalImage() OptInt {
+	return s.OriginalImage
+}
+
+// SetID sets the value of ID.
+func (s *CytologyUpdatePartialUpdateReq) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetPatientCard sets the value of PatientCard.
+func (s *CytologyUpdatePartialUpdateReq) SetPatientCard(val CytologyUpdatePartialUpdateReqPatientCard) {
+	s.PatientCard = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologyUpdatePartialUpdateReq) SetDetails(val *CytologyUpdatePartialUpdateReqDetails) {
+	s.Details = val
+}
+
+// SetIsLast sets the value of IsLast.
+func (s *CytologyUpdatePartialUpdateReq) SetIsLast(val OptBool) {
+	s.IsLast = val
+}
+
+// SetDiagnosDate sets the value of DiagnosDate.
+func (s *CytologyUpdatePartialUpdateReq) SetDiagnosDate(val OptDateTime) {
+	s.DiagnosDate = val
+}
+
+// SetDiagnosticMarking sets the value of DiagnosticMarking.
+func (s *CytologyUpdatePartialUpdateReq) SetDiagnosticMarking(val OptCytologyUpdatePartialUpdateReqDiagnosticMarking) {
+	s.DiagnosticMarking = val
+}
+
+// SetDiagnosticNumber sets the value of DiagnosticNumber.
+func (s *CytologyUpdatePartialUpdateReq) SetDiagnosticNumber(val int) {
+	s.DiagnosticNumber = val
+}
+
+// SetMaterialType sets the value of MaterialType.
+func (s *CytologyUpdatePartialUpdateReq) SetMaterialType(val OptCytologyUpdatePartialUpdateReqMaterialType) {
+	s.MaterialType = val
+}
+
+// SetCalcitonin sets the value of Calcitonin.
+func (s *CytologyUpdatePartialUpdateReq) SetCalcitonin(val OptInt) {
+	s.Calcitonin = val
+}
+
+// SetCalcitoninInFlush sets the value of CalcitoninInFlush.
+func (s *CytologyUpdatePartialUpdateReq) SetCalcitoninInFlush(val OptInt) {
+	s.CalcitoninInFlush = val
+}
+
+// SetThyroglobulin sets the value of Thyroglobulin.
+func (s *CytologyUpdatePartialUpdateReq) SetThyroglobulin(val OptInt) {
+	s.Thyroglobulin = val
+}
+
+// SetPrev sets the value of Prev.
+func (s *CytologyUpdatePartialUpdateReq) SetPrev(val OptUUID) {
+	s.Prev = val
+}
+
+// SetParentPrev sets the value of ParentPrev.
+func (s *CytologyUpdatePartialUpdateReq) SetParentPrev(val OptUUID) {
+	s.ParentPrev = val
+}
+
+// SetOriginalImage sets the value of OriginalImage.
+func (s *CytologyUpdatePartialUpdateReq) SetOriginalImage(val OptInt) {
+	s.OriginalImage = val
+}
+
+type CytologyUpdatePartialUpdateReqDetails struct{}
+
+type CytologyUpdatePartialUpdateReqDiagnosticMarking string
+
+const (
+	CytologyUpdatePartialUpdateReqDiagnosticMarking11 CytologyUpdatePartialUpdateReqDiagnosticMarking = "П11"
+	CytologyUpdatePartialUpdateReqDiagnosticMarking23 CytologyUpdatePartialUpdateReqDiagnosticMarking = "Л23"
+)
+
+// AllValues returns all CytologyUpdatePartialUpdateReqDiagnosticMarking values.
+func (CytologyUpdatePartialUpdateReqDiagnosticMarking) AllValues() []CytologyUpdatePartialUpdateReqDiagnosticMarking {
+	return []CytologyUpdatePartialUpdateReqDiagnosticMarking{
+		CytologyUpdatePartialUpdateReqDiagnosticMarking11,
+		CytologyUpdatePartialUpdateReqDiagnosticMarking23,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyUpdatePartialUpdateReqDiagnosticMarking) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyUpdatePartialUpdateReqDiagnosticMarking11:
+		return []byte(s), nil
+	case CytologyUpdatePartialUpdateReqDiagnosticMarking23:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyUpdatePartialUpdateReqDiagnosticMarking) UnmarshalText(data []byte) error {
+	switch CytologyUpdatePartialUpdateReqDiagnosticMarking(data) {
+	case CytologyUpdatePartialUpdateReqDiagnosticMarking11:
+		*s = CytologyUpdatePartialUpdateReqDiagnosticMarking11
+		return nil
+	case CytologyUpdatePartialUpdateReqDiagnosticMarking23:
+		*s = CytologyUpdatePartialUpdateReqDiagnosticMarking23
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyUpdatePartialUpdateReqMaterialType string
+
+const (
+	CytologyUpdatePartialUpdateReqMaterialTypeGS  CytologyUpdatePartialUpdateReqMaterialType = "GS"
+	CytologyUpdatePartialUpdateReqMaterialTypeBP  CytologyUpdatePartialUpdateReqMaterialType = "BP"
+	CytologyUpdatePartialUpdateReqMaterialTypeTP  CytologyUpdatePartialUpdateReqMaterialType = "TP"
+	CytologyUpdatePartialUpdateReqMaterialTypePTP CytologyUpdatePartialUpdateReqMaterialType = "PTP"
+	CytologyUpdatePartialUpdateReqMaterialTypeLNP CytologyUpdatePartialUpdateReqMaterialType = "LNP"
+)
+
+// AllValues returns all CytologyUpdatePartialUpdateReqMaterialType values.
+func (CytologyUpdatePartialUpdateReqMaterialType) AllValues() []CytologyUpdatePartialUpdateReqMaterialType {
+	return []CytologyUpdatePartialUpdateReqMaterialType{
+		CytologyUpdatePartialUpdateReqMaterialTypeGS,
+		CytologyUpdatePartialUpdateReqMaterialTypeBP,
+		CytologyUpdatePartialUpdateReqMaterialTypeTP,
+		CytologyUpdatePartialUpdateReqMaterialTypePTP,
+		CytologyUpdatePartialUpdateReqMaterialTypeLNP,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyUpdatePartialUpdateReqMaterialType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyUpdatePartialUpdateReqMaterialTypeGS:
+		return []byte(s), nil
+	case CytologyUpdatePartialUpdateReqMaterialTypeBP:
+		return []byte(s), nil
+	case CytologyUpdatePartialUpdateReqMaterialTypeTP:
+		return []byte(s), nil
+	case CytologyUpdatePartialUpdateReqMaterialTypePTP:
+		return []byte(s), nil
+	case CytologyUpdatePartialUpdateReqMaterialTypeLNP:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyUpdatePartialUpdateReqMaterialType) UnmarshalText(data []byte) error {
+	switch CytologyUpdatePartialUpdateReqMaterialType(data) {
+	case CytologyUpdatePartialUpdateReqMaterialTypeGS:
+		*s = CytologyUpdatePartialUpdateReqMaterialTypeGS
+		return nil
+	case CytologyUpdatePartialUpdateReqMaterialTypeBP:
+		*s = CytologyUpdatePartialUpdateReqMaterialTypeBP
+		return nil
+	case CytologyUpdatePartialUpdateReqMaterialTypeTP:
+		*s = CytologyUpdatePartialUpdateReqMaterialTypeTP
+		return nil
+	case CytologyUpdatePartialUpdateReqMaterialTypePTP:
+		*s = CytologyUpdatePartialUpdateReqMaterialTypePTP
+		return nil
+	case CytologyUpdatePartialUpdateReqMaterialTypeLNP:
+		*s = CytologyUpdatePartialUpdateReqMaterialTypeLNP
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyUpdatePartialUpdateReqPatientCard struct {
+	Patient            OptInt      `json:"patient"`
+	AcceptanceDatetime OptDateTime `json:"acceptance_datetime"`
+	Diagnosis          OptString   `json:"diagnosis"`
+}
+
+// GetPatient returns the value of Patient.
+func (s *CytologyUpdatePartialUpdateReqPatientCard) GetPatient() OptInt {
+	return s.Patient
+}
+
+// GetAcceptanceDatetime returns the value of AcceptanceDatetime.
+func (s *CytologyUpdatePartialUpdateReqPatientCard) GetAcceptanceDatetime() OptDateTime {
+	return s.AcceptanceDatetime
+}
+
+// GetDiagnosis returns the value of Diagnosis.
+func (s *CytologyUpdatePartialUpdateReqPatientCard) GetDiagnosis() OptString {
+	return s.Diagnosis
+}
+
+// SetPatient sets the value of Patient.
+func (s *CytologyUpdatePartialUpdateReqPatientCard) SetPatient(val OptInt) {
+	s.Patient = val
+}
+
+// SetAcceptanceDatetime sets the value of AcceptanceDatetime.
+func (s *CytologyUpdatePartialUpdateReqPatientCard) SetAcceptanceDatetime(val OptDateTime) {
+	s.AcceptanceDatetime = val
+}
+
+// SetDiagnosis sets the value of Diagnosis.
+func (s *CytologyUpdatePartialUpdateReqPatientCard) SetDiagnosis(val OptString) {
+	s.Diagnosis = val
+}
+
+type CytologyUpdatePartialUpdateUnprocessableEntity ErrorStatusCode
+
+func (*CytologyUpdatePartialUpdateUnprocessableEntity) cytologyUpdatePartialUpdateRes() {}
+
+type CytologyUpdateUpdateBadRequest ErrorStatusCode
+
+func (*CytologyUpdateUpdateBadRequest) cytologyUpdateUpdateRes() {}
+
+type CytologyUpdateUpdateInternalServerError ErrorStatusCode
+
+func (*CytologyUpdateUpdateInternalServerError) cytologyUpdateUpdateRes() {}
+
+type CytologyUpdateUpdateNotFound ErrorStatusCode
+
+func (*CytologyUpdateUpdateNotFound) cytologyUpdateUpdateRes() {}
+
+type CytologyUpdateUpdateOK struct {
+	ID                OptInt                            `json:"id"`
+	PatientCard       CytologyUpdateUpdateOKPatientCard `json:"patient_card"`
+	Details           *CytologyUpdateUpdateOKDetails    `json:"details"`
+	IsLast            OptBool                           `json:"is_last"`
+	DiagnosDate       OptDateTime                       `json:"diagnos_date"`
+	DiagnosticMarking OptString                         `json:"diagnostic_marking"`
+	DiagnosticNumber  int                               `json:"diagnostic_number"`
+	MaterialType      OptString                         `json:"material_type"`
+	Calcitonin        OptInt                            `json:"calcitonin"`
+	CalcitoninInFlush OptInt                            `json:"calcitonin_in_flush"`
+	Thyroglobulin     OptInt                            `json:"thyroglobulin"`
+	Prev              OptUUID                           `json:"prev"`
+	ParentPrev        OptUUID                           `json:"parent_prev"`
+	OriginalImage     OptInt                            `json:"original_image"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologyUpdateUpdateOK) GetID() OptInt {
+	return s.ID
+}
+
+// GetPatientCard returns the value of PatientCard.
+func (s *CytologyUpdateUpdateOK) GetPatientCard() CytologyUpdateUpdateOKPatientCard {
+	return s.PatientCard
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologyUpdateUpdateOK) GetDetails() *CytologyUpdateUpdateOKDetails {
+	return s.Details
+}
+
+// GetIsLast returns the value of IsLast.
+func (s *CytologyUpdateUpdateOK) GetIsLast() OptBool {
+	return s.IsLast
+}
+
+// GetDiagnosDate returns the value of DiagnosDate.
+func (s *CytologyUpdateUpdateOK) GetDiagnosDate() OptDateTime {
+	return s.DiagnosDate
+}
+
+// GetDiagnosticMarking returns the value of DiagnosticMarking.
+func (s *CytologyUpdateUpdateOK) GetDiagnosticMarking() OptString {
+	return s.DiagnosticMarking
+}
+
+// GetDiagnosticNumber returns the value of DiagnosticNumber.
+func (s *CytologyUpdateUpdateOK) GetDiagnosticNumber() int {
+	return s.DiagnosticNumber
+}
+
+// GetMaterialType returns the value of MaterialType.
+func (s *CytologyUpdateUpdateOK) GetMaterialType() OptString {
+	return s.MaterialType
+}
+
+// GetCalcitonin returns the value of Calcitonin.
+func (s *CytologyUpdateUpdateOK) GetCalcitonin() OptInt {
+	return s.Calcitonin
+}
+
+// GetCalcitoninInFlush returns the value of CalcitoninInFlush.
+func (s *CytologyUpdateUpdateOK) GetCalcitoninInFlush() OptInt {
+	return s.CalcitoninInFlush
+}
+
+// GetThyroglobulin returns the value of Thyroglobulin.
+func (s *CytologyUpdateUpdateOK) GetThyroglobulin() OptInt {
+	return s.Thyroglobulin
+}
+
+// GetPrev returns the value of Prev.
+func (s *CytologyUpdateUpdateOK) GetPrev() OptUUID {
+	return s.Prev
+}
+
+// GetParentPrev returns the value of ParentPrev.
+func (s *CytologyUpdateUpdateOK) GetParentPrev() OptUUID {
+	return s.ParentPrev
+}
+
+// GetOriginalImage returns the value of OriginalImage.
+func (s *CytologyUpdateUpdateOK) GetOriginalImage() OptInt {
+	return s.OriginalImage
+}
+
+// SetID sets the value of ID.
+func (s *CytologyUpdateUpdateOK) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetPatientCard sets the value of PatientCard.
+func (s *CytologyUpdateUpdateOK) SetPatientCard(val CytologyUpdateUpdateOKPatientCard) {
+	s.PatientCard = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologyUpdateUpdateOK) SetDetails(val *CytologyUpdateUpdateOKDetails) {
+	s.Details = val
+}
+
+// SetIsLast sets the value of IsLast.
+func (s *CytologyUpdateUpdateOK) SetIsLast(val OptBool) {
+	s.IsLast = val
+}
+
+// SetDiagnosDate sets the value of DiagnosDate.
+func (s *CytologyUpdateUpdateOK) SetDiagnosDate(val OptDateTime) {
+	s.DiagnosDate = val
+}
+
+// SetDiagnosticMarking sets the value of DiagnosticMarking.
+func (s *CytologyUpdateUpdateOK) SetDiagnosticMarking(val OptString) {
+	s.DiagnosticMarking = val
+}
+
+// SetDiagnosticNumber sets the value of DiagnosticNumber.
+func (s *CytologyUpdateUpdateOK) SetDiagnosticNumber(val int) {
+	s.DiagnosticNumber = val
+}
+
+// SetMaterialType sets the value of MaterialType.
+func (s *CytologyUpdateUpdateOK) SetMaterialType(val OptString) {
+	s.MaterialType = val
+}
+
+// SetCalcitonin sets the value of Calcitonin.
+func (s *CytologyUpdateUpdateOK) SetCalcitonin(val OptInt) {
+	s.Calcitonin = val
+}
+
+// SetCalcitoninInFlush sets the value of CalcitoninInFlush.
+func (s *CytologyUpdateUpdateOK) SetCalcitoninInFlush(val OptInt) {
+	s.CalcitoninInFlush = val
+}
+
+// SetThyroglobulin sets the value of Thyroglobulin.
+func (s *CytologyUpdateUpdateOK) SetThyroglobulin(val OptInt) {
+	s.Thyroglobulin = val
+}
+
+// SetPrev sets the value of Prev.
+func (s *CytologyUpdateUpdateOK) SetPrev(val OptUUID) {
+	s.Prev = val
+}
+
+// SetParentPrev sets the value of ParentPrev.
+func (s *CytologyUpdateUpdateOK) SetParentPrev(val OptUUID) {
+	s.ParentPrev = val
+}
+
+// SetOriginalImage sets the value of OriginalImage.
+func (s *CytologyUpdateUpdateOK) SetOriginalImage(val OptInt) {
+	s.OriginalImage = val
+}
+
+func (*CytologyUpdateUpdateOK) cytologyUpdateUpdateRes() {}
+
+type CytologyUpdateUpdateOKDetails struct{}
+
+type CytologyUpdateUpdateOKPatientCard struct{}
+
+type CytologyUpdateUpdateReq struct {
+	ID                OptInt                                      `json:"id"`
+	PatientCard       CytologyUpdateUpdateReqPatientCard          `json:"patient_card"`
+	Details           OptCytologyUpdateUpdateReqDetails           `json:"details"`
+	IsLast            OptBool                                     `json:"is_last"`
+	DiagnosDate       OptDateTime                                 `json:"diagnos_date"`
+	DiagnosticMarking OptCytologyUpdateUpdateReqDiagnosticMarking `json:"diagnostic_marking"`
+	DiagnosticNumber  int                                         `json:"diagnostic_number"`
+	MaterialType      OptCytologyUpdateUpdateReqMaterialType      `json:"material_type"`
+	Calcitonin        OptInt                                      `json:"calcitonin"`
+	CalcitoninInFlush OptInt                                      `json:"calcitonin_in_flush"`
+	Thyroglobulin     OptInt                                      `json:"thyroglobulin"`
+	Prev              OptUUID                                     `json:"prev"`
+	ParentPrev        OptUUID                                     `json:"parent_prev"`
+	OriginalImage     OptInt                                      `json:"original_image"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologyUpdateUpdateReq) GetID() OptInt {
+	return s.ID
+}
+
+// GetPatientCard returns the value of PatientCard.
+func (s *CytologyUpdateUpdateReq) GetPatientCard() CytologyUpdateUpdateReqPatientCard {
+	return s.PatientCard
+}
+
+// GetDetails returns the value of Details.
+func (s *CytologyUpdateUpdateReq) GetDetails() OptCytologyUpdateUpdateReqDetails {
+	return s.Details
+}
+
+// GetIsLast returns the value of IsLast.
+func (s *CytologyUpdateUpdateReq) GetIsLast() OptBool {
+	return s.IsLast
+}
+
+// GetDiagnosDate returns the value of DiagnosDate.
+func (s *CytologyUpdateUpdateReq) GetDiagnosDate() OptDateTime {
+	return s.DiagnosDate
+}
+
+// GetDiagnosticMarking returns the value of DiagnosticMarking.
+func (s *CytologyUpdateUpdateReq) GetDiagnosticMarking() OptCytologyUpdateUpdateReqDiagnosticMarking {
+	return s.DiagnosticMarking
+}
+
+// GetDiagnosticNumber returns the value of DiagnosticNumber.
+func (s *CytologyUpdateUpdateReq) GetDiagnosticNumber() int {
+	return s.DiagnosticNumber
+}
+
+// GetMaterialType returns the value of MaterialType.
+func (s *CytologyUpdateUpdateReq) GetMaterialType() OptCytologyUpdateUpdateReqMaterialType {
+	return s.MaterialType
+}
+
+// GetCalcitonin returns the value of Calcitonin.
+func (s *CytologyUpdateUpdateReq) GetCalcitonin() OptInt {
+	return s.Calcitonin
+}
+
+// GetCalcitoninInFlush returns the value of CalcitoninInFlush.
+func (s *CytologyUpdateUpdateReq) GetCalcitoninInFlush() OptInt {
+	return s.CalcitoninInFlush
+}
+
+// GetThyroglobulin returns the value of Thyroglobulin.
+func (s *CytologyUpdateUpdateReq) GetThyroglobulin() OptInt {
+	return s.Thyroglobulin
+}
+
+// GetPrev returns the value of Prev.
+func (s *CytologyUpdateUpdateReq) GetPrev() OptUUID {
+	return s.Prev
+}
+
+// GetParentPrev returns the value of ParentPrev.
+func (s *CytologyUpdateUpdateReq) GetParentPrev() OptUUID {
+	return s.ParentPrev
+}
+
+// GetOriginalImage returns the value of OriginalImage.
+func (s *CytologyUpdateUpdateReq) GetOriginalImage() OptInt {
+	return s.OriginalImage
+}
+
+// SetID sets the value of ID.
+func (s *CytologyUpdateUpdateReq) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetPatientCard sets the value of PatientCard.
+func (s *CytologyUpdateUpdateReq) SetPatientCard(val CytologyUpdateUpdateReqPatientCard) {
+	s.PatientCard = val
+}
+
+// SetDetails sets the value of Details.
+func (s *CytologyUpdateUpdateReq) SetDetails(val OptCytologyUpdateUpdateReqDetails) {
+	s.Details = val
+}
+
+// SetIsLast sets the value of IsLast.
+func (s *CytologyUpdateUpdateReq) SetIsLast(val OptBool) {
+	s.IsLast = val
+}
+
+// SetDiagnosDate sets the value of DiagnosDate.
+func (s *CytologyUpdateUpdateReq) SetDiagnosDate(val OptDateTime) {
+	s.DiagnosDate = val
+}
+
+// SetDiagnosticMarking sets the value of DiagnosticMarking.
+func (s *CytologyUpdateUpdateReq) SetDiagnosticMarking(val OptCytologyUpdateUpdateReqDiagnosticMarking) {
+	s.DiagnosticMarking = val
+}
+
+// SetDiagnosticNumber sets the value of DiagnosticNumber.
+func (s *CytologyUpdateUpdateReq) SetDiagnosticNumber(val int) {
+	s.DiagnosticNumber = val
+}
+
+// SetMaterialType sets the value of MaterialType.
+func (s *CytologyUpdateUpdateReq) SetMaterialType(val OptCytologyUpdateUpdateReqMaterialType) {
+	s.MaterialType = val
+}
+
+// SetCalcitonin sets the value of Calcitonin.
+func (s *CytologyUpdateUpdateReq) SetCalcitonin(val OptInt) {
+	s.Calcitonin = val
+}
+
+// SetCalcitoninInFlush sets the value of CalcitoninInFlush.
+func (s *CytologyUpdateUpdateReq) SetCalcitoninInFlush(val OptInt) {
+	s.CalcitoninInFlush = val
+}
+
+// SetThyroglobulin sets the value of Thyroglobulin.
+func (s *CytologyUpdateUpdateReq) SetThyroglobulin(val OptInt) {
+	s.Thyroglobulin = val
+}
+
+// SetPrev sets the value of Prev.
+func (s *CytologyUpdateUpdateReq) SetPrev(val OptUUID) {
+	s.Prev = val
+}
+
+// SetParentPrev sets the value of ParentPrev.
+func (s *CytologyUpdateUpdateReq) SetParentPrev(val OptUUID) {
+	s.ParentPrev = val
+}
+
+// SetOriginalImage sets the value of OriginalImage.
+func (s *CytologyUpdateUpdateReq) SetOriginalImage(val OptInt) {
+	s.OriginalImage = val
+}
+
+type CytologyUpdateUpdateReqDetails struct {
+	ID                OptInt                                             `json:"id"`
+	IsLast            OptBool                                            `json:"is_last"`
+	DiagnosDate       OptDateTime                                        `json:"diagnos_date"`
+	DiagnosticMarking OptCytologyUpdateUpdateReqDetailsDiagnosticMarking `json:"diagnostic_marking"`
+	DiagnosticNumber  int                                                `json:"diagnostic_number"`
+	MaterialType      OptCytologyUpdateUpdateReqDetailsMaterialType      `json:"material_type"`
+	Calcitonin        OptInt                                             `json:"calcitonin"`
+	CalcitoninInFlush OptInt                                             `json:"calcitonin_in_flush"`
+	Thyroglobulin     OptInt                                             `json:"thyroglobulin"`
+	Prev              OptUUID                                            `json:"prev"`
+	ParentPrev        OptUUID                                            `json:"parent_prev"`
+	PatientCard       OptInt                                             `json:"patient_card"`
+	OriginalImage     OptInt                                             `json:"original_image"`
+}
+
+// GetID returns the value of ID.
+func (s *CytologyUpdateUpdateReqDetails) GetID() OptInt {
+	return s.ID
+}
+
+// GetIsLast returns the value of IsLast.
+func (s *CytologyUpdateUpdateReqDetails) GetIsLast() OptBool {
+	return s.IsLast
+}
+
+// GetDiagnosDate returns the value of DiagnosDate.
+func (s *CytologyUpdateUpdateReqDetails) GetDiagnosDate() OptDateTime {
+	return s.DiagnosDate
+}
+
+// GetDiagnosticMarking returns the value of DiagnosticMarking.
+func (s *CytologyUpdateUpdateReqDetails) GetDiagnosticMarking() OptCytologyUpdateUpdateReqDetailsDiagnosticMarking {
+	return s.DiagnosticMarking
+}
+
+// GetDiagnosticNumber returns the value of DiagnosticNumber.
+func (s *CytologyUpdateUpdateReqDetails) GetDiagnosticNumber() int {
+	return s.DiagnosticNumber
+}
+
+// GetMaterialType returns the value of MaterialType.
+func (s *CytologyUpdateUpdateReqDetails) GetMaterialType() OptCytologyUpdateUpdateReqDetailsMaterialType {
+	return s.MaterialType
+}
+
+// GetCalcitonin returns the value of Calcitonin.
+func (s *CytologyUpdateUpdateReqDetails) GetCalcitonin() OptInt {
+	return s.Calcitonin
+}
+
+// GetCalcitoninInFlush returns the value of CalcitoninInFlush.
+func (s *CytologyUpdateUpdateReqDetails) GetCalcitoninInFlush() OptInt {
+	return s.CalcitoninInFlush
+}
+
+// GetThyroglobulin returns the value of Thyroglobulin.
+func (s *CytologyUpdateUpdateReqDetails) GetThyroglobulin() OptInt {
+	return s.Thyroglobulin
+}
+
+// GetPrev returns the value of Prev.
+func (s *CytologyUpdateUpdateReqDetails) GetPrev() OptUUID {
+	return s.Prev
+}
+
+// GetParentPrev returns the value of ParentPrev.
+func (s *CytologyUpdateUpdateReqDetails) GetParentPrev() OptUUID {
+	return s.ParentPrev
+}
+
+// GetPatientCard returns the value of PatientCard.
+func (s *CytologyUpdateUpdateReqDetails) GetPatientCard() OptInt {
+	return s.PatientCard
+}
+
+// GetOriginalImage returns the value of OriginalImage.
+func (s *CytologyUpdateUpdateReqDetails) GetOriginalImage() OptInt {
+	return s.OriginalImage
+}
+
+// SetID sets the value of ID.
+func (s *CytologyUpdateUpdateReqDetails) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetIsLast sets the value of IsLast.
+func (s *CytologyUpdateUpdateReqDetails) SetIsLast(val OptBool) {
+	s.IsLast = val
+}
+
+// SetDiagnosDate sets the value of DiagnosDate.
+func (s *CytologyUpdateUpdateReqDetails) SetDiagnosDate(val OptDateTime) {
+	s.DiagnosDate = val
+}
+
+// SetDiagnosticMarking sets the value of DiagnosticMarking.
+func (s *CytologyUpdateUpdateReqDetails) SetDiagnosticMarking(val OptCytologyUpdateUpdateReqDetailsDiagnosticMarking) {
+	s.DiagnosticMarking = val
+}
+
+// SetDiagnosticNumber sets the value of DiagnosticNumber.
+func (s *CytologyUpdateUpdateReqDetails) SetDiagnosticNumber(val int) {
+	s.DiagnosticNumber = val
+}
+
+// SetMaterialType sets the value of MaterialType.
+func (s *CytologyUpdateUpdateReqDetails) SetMaterialType(val OptCytologyUpdateUpdateReqDetailsMaterialType) {
+	s.MaterialType = val
+}
+
+// SetCalcitonin sets the value of Calcitonin.
+func (s *CytologyUpdateUpdateReqDetails) SetCalcitonin(val OptInt) {
+	s.Calcitonin = val
+}
+
+// SetCalcitoninInFlush sets the value of CalcitoninInFlush.
+func (s *CytologyUpdateUpdateReqDetails) SetCalcitoninInFlush(val OptInt) {
+	s.CalcitoninInFlush = val
+}
+
+// SetThyroglobulin sets the value of Thyroglobulin.
+func (s *CytologyUpdateUpdateReqDetails) SetThyroglobulin(val OptInt) {
+	s.Thyroglobulin = val
+}
+
+// SetPrev sets the value of Prev.
+func (s *CytologyUpdateUpdateReqDetails) SetPrev(val OptUUID) {
+	s.Prev = val
+}
+
+// SetParentPrev sets the value of ParentPrev.
+func (s *CytologyUpdateUpdateReqDetails) SetParentPrev(val OptUUID) {
+	s.ParentPrev = val
+}
+
+// SetPatientCard sets the value of PatientCard.
+func (s *CytologyUpdateUpdateReqDetails) SetPatientCard(val OptInt) {
+	s.PatientCard = val
+}
+
+// SetOriginalImage sets the value of OriginalImage.
+func (s *CytologyUpdateUpdateReqDetails) SetOriginalImage(val OptInt) {
+	s.OriginalImage = val
+}
+
+type CytologyUpdateUpdateReqDetailsDiagnosticMarking string
+
+const (
+	CytologyUpdateUpdateReqDetailsDiagnosticMarking11 CytologyUpdateUpdateReqDetailsDiagnosticMarking = "П11"
+	CytologyUpdateUpdateReqDetailsDiagnosticMarking23 CytologyUpdateUpdateReqDetailsDiagnosticMarking = "Л23"
+)
+
+// AllValues returns all CytologyUpdateUpdateReqDetailsDiagnosticMarking values.
+func (CytologyUpdateUpdateReqDetailsDiagnosticMarking) AllValues() []CytologyUpdateUpdateReqDetailsDiagnosticMarking {
+	return []CytologyUpdateUpdateReqDetailsDiagnosticMarking{
+		CytologyUpdateUpdateReqDetailsDiagnosticMarking11,
+		CytologyUpdateUpdateReqDetailsDiagnosticMarking23,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyUpdateUpdateReqDetailsDiagnosticMarking) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyUpdateUpdateReqDetailsDiagnosticMarking11:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqDetailsDiagnosticMarking23:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyUpdateUpdateReqDetailsDiagnosticMarking) UnmarshalText(data []byte) error {
+	switch CytologyUpdateUpdateReqDetailsDiagnosticMarking(data) {
+	case CytologyUpdateUpdateReqDetailsDiagnosticMarking11:
+		*s = CytologyUpdateUpdateReqDetailsDiagnosticMarking11
+		return nil
+	case CytologyUpdateUpdateReqDetailsDiagnosticMarking23:
+		*s = CytologyUpdateUpdateReqDetailsDiagnosticMarking23
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyUpdateUpdateReqDetailsMaterialType string
+
+const (
+	CytologyUpdateUpdateReqDetailsMaterialTypeGS  CytologyUpdateUpdateReqDetailsMaterialType = "GS"
+	CytologyUpdateUpdateReqDetailsMaterialTypeBP  CytologyUpdateUpdateReqDetailsMaterialType = "BP"
+	CytologyUpdateUpdateReqDetailsMaterialTypeTP  CytologyUpdateUpdateReqDetailsMaterialType = "TP"
+	CytologyUpdateUpdateReqDetailsMaterialTypePTP CytologyUpdateUpdateReqDetailsMaterialType = "PTP"
+	CytologyUpdateUpdateReqDetailsMaterialTypeLNP CytologyUpdateUpdateReqDetailsMaterialType = "LNP"
+)
+
+// AllValues returns all CytologyUpdateUpdateReqDetailsMaterialType values.
+func (CytologyUpdateUpdateReqDetailsMaterialType) AllValues() []CytologyUpdateUpdateReqDetailsMaterialType {
+	return []CytologyUpdateUpdateReqDetailsMaterialType{
+		CytologyUpdateUpdateReqDetailsMaterialTypeGS,
+		CytologyUpdateUpdateReqDetailsMaterialTypeBP,
+		CytologyUpdateUpdateReqDetailsMaterialTypeTP,
+		CytologyUpdateUpdateReqDetailsMaterialTypePTP,
+		CytologyUpdateUpdateReqDetailsMaterialTypeLNP,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyUpdateUpdateReqDetailsMaterialType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyUpdateUpdateReqDetailsMaterialTypeGS:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqDetailsMaterialTypeBP:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqDetailsMaterialTypeTP:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqDetailsMaterialTypePTP:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqDetailsMaterialTypeLNP:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyUpdateUpdateReqDetailsMaterialType) UnmarshalText(data []byte) error {
+	switch CytologyUpdateUpdateReqDetailsMaterialType(data) {
+	case CytologyUpdateUpdateReqDetailsMaterialTypeGS:
+		*s = CytologyUpdateUpdateReqDetailsMaterialTypeGS
+		return nil
+	case CytologyUpdateUpdateReqDetailsMaterialTypeBP:
+		*s = CytologyUpdateUpdateReqDetailsMaterialTypeBP
+		return nil
+	case CytologyUpdateUpdateReqDetailsMaterialTypeTP:
+		*s = CytologyUpdateUpdateReqDetailsMaterialTypeTP
+		return nil
+	case CytologyUpdateUpdateReqDetailsMaterialTypePTP:
+		*s = CytologyUpdateUpdateReqDetailsMaterialTypePTP
+		return nil
+	case CytologyUpdateUpdateReqDetailsMaterialTypeLNP:
+		*s = CytologyUpdateUpdateReqDetailsMaterialTypeLNP
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyUpdateUpdateReqDiagnosticMarking string
+
+const (
+	CytologyUpdateUpdateReqDiagnosticMarking11 CytologyUpdateUpdateReqDiagnosticMarking = "П11"
+	CytologyUpdateUpdateReqDiagnosticMarking23 CytologyUpdateUpdateReqDiagnosticMarking = "Л23"
+)
+
+// AllValues returns all CytologyUpdateUpdateReqDiagnosticMarking values.
+func (CytologyUpdateUpdateReqDiagnosticMarking) AllValues() []CytologyUpdateUpdateReqDiagnosticMarking {
+	return []CytologyUpdateUpdateReqDiagnosticMarking{
+		CytologyUpdateUpdateReqDiagnosticMarking11,
+		CytologyUpdateUpdateReqDiagnosticMarking23,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyUpdateUpdateReqDiagnosticMarking) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyUpdateUpdateReqDiagnosticMarking11:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqDiagnosticMarking23:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyUpdateUpdateReqDiagnosticMarking) UnmarshalText(data []byte) error {
+	switch CytologyUpdateUpdateReqDiagnosticMarking(data) {
+	case CytologyUpdateUpdateReqDiagnosticMarking11:
+		*s = CytologyUpdateUpdateReqDiagnosticMarking11
+		return nil
+	case CytologyUpdateUpdateReqDiagnosticMarking23:
+		*s = CytologyUpdateUpdateReqDiagnosticMarking23
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyUpdateUpdateReqMaterialType string
+
+const (
+	CytologyUpdateUpdateReqMaterialTypeGS  CytologyUpdateUpdateReqMaterialType = "GS"
+	CytologyUpdateUpdateReqMaterialTypeBP  CytologyUpdateUpdateReqMaterialType = "BP"
+	CytologyUpdateUpdateReqMaterialTypeTP  CytologyUpdateUpdateReqMaterialType = "TP"
+	CytologyUpdateUpdateReqMaterialTypePTP CytologyUpdateUpdateReqMaterialType = "PTP"
+	CytologyUpdateUpdateReqMaterialTypeLNP CytologyUpdateUpdateReqMaterialType = "LNP"
+)
+
+// AllValues returns all CytologyUpdateUpdateReqMaterialType values.
+func (CytologyUpdateUpdateReqMaterialType) AllValues() []CytologyUpdateUpdateReqMaterialType {
+	return []CytologyUpdateUpdateReqMaterialType{
+		CytologyUpdateUpdateReqMaterialTypeGS,
+		CytologyUpdateUpdateReqMaterialTypeBP,
+		CytologyUpdateUpdateReqMaterialTypeTP,
+		CytologyUpdateUpdateReqMaterialTypePTP,
+		CytologyUpdateUpdateReqMaterialTypeLNP,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CytologyUpdateUpdateReqMaterialType) MarshalText() ([]byte, error) {
+	switch s {
+	case CytologyUpdateUpdateReqMaterialTypeGS:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqMaterialTypeBP:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqMaterialTypeTP:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqMaterialTypePTP:
+		return []byte(s), nil
+	case CytologyUpdateUpdateReqMaterialTypeLNP:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CytologyUpdateUpdateReqMaterialType) UnmarshalText(data []byte) error {
+	switch CytologyUpdateUpdateReqMaterialType(data) {
+	case CytologyUpdateUpdateReqMaterialTypeGS:
+		*s = CytologyUpdateUpdateReqMaterialTypeGS
+		return nil
+	case CytologyUpdateUpdateReqMaterialTypeBP:
+		*s = CytologyUpdateUpdateReqMaterialTypeBP
+		return nil
+	case CytologyUpdateUpdateReqMaterialTypeTP:
+		*s = CytologyUpdateUpdateReqMaterialTypeTP
+		return nil
+	case CytologyUpdateUpdateReqMaterialTypePTP:
+		*s = CytologyUpdateUpdateReqMaterialTypePTP
+		return nil
+	case CytologyUpdateUpdateReqMaterialTypeLNP:
+		*s = CytologyUpdateUpdateReqMaterialTypeLNP
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CytologyUpdateUpdateReqPatientCard struct {
+	Patient            OptInt      `json:"patient"`
+	AcceptanceDatetime OptDateTime `json:"acceptance_datetime"`
+	Diagnosis          OptString   `json:"diagnosis"`
+}
+
+// GetPatient returns the value of Patient.
+func (s *CytologyUpdateUpdateReqPatientCard) GetPatient() OptInt {
+	return s.Patient
+}
+
+// GetAcceptanceDatetime returns the value of AcceptanceDatetime.
+func (s *CytologyUpdateUpdateReqPatientCard) GetAcceptanceDatetime() OptDateTime {
+	return s.AcceptanceDatetime
+}
+
+// GetDiagnosis returns the value of Diagnosis.
+func (s *CytologyUpdateUpdateReqPatientCard) GetDiagnosis() OptString {
+	return s.Diagnosis
+}
+
+// SetPatient sets the value of Patient.
+func (s *CytologyUpdateUpdateReqPatientCard) SetPatient(val OptInt) {
+	s.Patient = val
+}
+
+// SetAcceptanceDatetime sets the value of AcceptanceDatetime.
+func (s *CytologyUpdateUpdateReqPatientCard) SetAcceptanceDatetime(val OptDateTime) {
+	s.AcceptanceDatetime = val
+}
+
+// SetDiagnosis sets the value of Diagnosis.
+func (s *CytologyUpdateUpdateReqPatientCard) SetDiagnosis(val OptString) {
+	s.Diagnosis = val
+}
+
+type CytologyUpdateUpdateUnprocessableEntity ErrorStatusCode
+
+func (*CytologyUpdateUpdateUnprocessableEntity) cytologyUpdateUpdateRes() {}
+
 // Узи аппарат.
 // Ref: #/components/schemas/device
 type Device struct {
@@ -199,6 +3899,67 @@ func (s *Doctor) SetDescription(val OptString) {
 }
 
 func (*Doctor) medDoctorIDGetRes() {}
+
+type DownloadCytologyCytologyIDOriginalImageIDGetInternalServerError ErrorStatusCode
+
+func (*DownloadCytologyCytologyIDOriginalImageIDGetInternalServerError) downloadCytologyCytologyIDOriginalImageIDGetRes() {
+}
+
+type DownloadCytologyCytologyIDOriginalImageIDGetNotFound ErrorStatusCode
+
+func (*DownloadCytologyCytologyIDOriginalImageIDGetNotFound) downloadCytologyCytologyIDOriginalImageIDGetRes() {
+}
+
+type DownloadCytologyCytologyIDOriginalImageIDGetOKApplicationOctetStream struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s DownloadCytologyCytologyIDOriginalImageIDGetOKApplicationOctetStream) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*DownloadCytologyCytologyIDOriginalImageIDGetOKApplicationOctetStream) downloadCytologyCytologyIDOriginalImageIDGetRes() {
+}
+
+type DownloadCytologyCytologyIDOriginalImageIDGetOKImageJpeg struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s DownloadCytologyCytologyIDOriginalImageIDGetOKImageJpeg) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*DownloadCytologyCytologyIDOriginalImageIDGetOKImageJpeg) downloadCytologyCytologyIDOriginalImageIDGetRes() {
+}
+
+type DownloadCytologyCytologyIDOriginalImageIDGetOKImagePNG struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s DownloadCytologyCytologyIDOriginalImageIDGetOKImagePNG) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*DownloadCytologyCytologyIDOriginalImageIDGetOKImagePNG) downloadCytologyCytologyIDOriginalImageIDGetRes() {
+}
 
 type DownloadUziIDImageIDGetOK struct {
 	Data io.Reader
@@ -1019,6 +4780,926 @@ func (o OptBool) Or(d bool) bool {
 	return d
 }
 
+// NewOptCytologyCreateCreateCreatedDiagnosticMarking returns new OptCytologyCreateCreateCreatedDiagnosticMarking with value set to v.
+func NewOptCytologyCreateCreateCreatedDiagnosticMarking(v CytologyCreateCreateCreatedDiagnosticMarking) OptCytologyCreateCreateCreatedDiagnosticMarking {
+	return OptCytologyCreateCreateCreatedDiagnosticMarking{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyCreateCreateCreatedDiagnosticMarking is optional CytologyCreateCreateCreatedDiagnosticMarking.
+type OptCytologyCreateCreateCreatedDiagnosticMarking struct {
+	Value CytologyCreateCreateCreatedDiagnosticMarking
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyCreateCreateCreatedDiagnosticMarking was set.
+func (o OptCytologyCreateCreateCreatedDiagnosticMarking) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyCreateCreateCreatedDiagnosticMarking) Reset() {
+	var v CytologyCreateCreateCreatedDiagnosticMarking
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyCreateCreateCreatedDiagnosticMarking) SetTo(v CytologyCreateCreateCreatedDiagnosticMarking) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyCreateCreateCreatedDiagnosticMarking) Get() (v CytologyCreateCreateCreatedDiagnosticMarking, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyCreateCreateCreatedDiagnosticMarking) Or(d CytologyCreateCreateCreatedDiagnosticMarking) CytologyCreateCreateCreatedDiagnosticMarking {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyCreateCreateCreatedMaterialType returns new OptCytologyCreateCreateCreatedMaterialType with value set to v.
+func NewOptCytologyCreateCreateCreatedMaterialType(v CytologyCreateCreateCreatedMaterialType) OptCytologyCreateCreateCreatedMaterialType {
+	return OptCytologyCreateCreateCreatedMaterialType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyCreateCreateCreatedMaterialType is optional CytologyCreateCreateCreatedMaterialType.
+type OptCytologyCreateCreateCreatedMaterialType struct {
+	Value CytologyCreateCreateCreatedMaterialType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyCreateCreateCreatedMaterialType was set.
+func (o OptCytologyCreateCreateCreatedMaterialType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyCreateCreateCreatedMaterialType) Reset() {
+	var v CytologyCreateCreateCreatedMaterialType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyCreateCreateCreatedMaterialType) SetTo(v CytologyCreateCreateCreatedMaterialType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyCreateCreateCreatedMaterialType) Get() (v CytologyCreateCreateCreatedMaterialType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyCreateCreateCreatedMaterialType) Or(d CytologyCreateCreateCreatedMaterialType) CytologyCreateCreateCreatedMaterialType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyCreateCreateReqDiagnosticMarking returns new OptCytologyCreateCreateReqDiagnosticMarking with value set to v.
+func NewOptCytologyCreateCreateReqDiagnosticMarking(v CytologyCreateCreateReqDiagnosticMarking) OptCytologyCreateCreateReqDiagnosticMarking {
+	return OptCytologyCreateCreateReqDiagnosticMarking{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyCreateCreateReqDiagnosticMarking is optional CytologyCreateCreateReqDiagnosticMarking.
+type OptCytologyCreateCreateReqDiagnosticMarking struct {
+	Value CytologyCreateCreateReqDiagnosticMarking
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyCreateCreateReqDiagnosticMarking was set.
+func (o OptCytologyCreateCreateReqDiagnosticMarking) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyCreateCreateReqDiagnosticMarking) Reset() {
+	var v CytologyCreateCreateReqDiagnosticMarking
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyCreateCreateReqDiagnosticMarking) SetTo(v CytologyCreateCreateReqDiagnosticMarking) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyCreateCreateReqDiagnosticMarking) Get() (v CytologyCreateCreateReqDiagnosticMarking, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyCreateCreateReqDiagnosticMarking) Or(d CytologyCreateCreateReqDiagnosticMarking) CytologyCreateCreateReqDiagnosticMarking {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyCreateCreateReqMaterialType returns new OptCytologyCreateCreateReqMaterialType with value set to v.
+func NewOptCytologyCreateCreateReqMaterialType(v CytologyCreateCreateReqMaterialType) OptCytologyCreateCreateReqMaterialType {
+	return OptCytologyCreateCreateReqMaterialType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyCreateCreateReqMaterialType is optional CytologyCreateCreateReqMaterialType.
+type OptCytologyCreateCreateReqMaterialType struct {
+	Value CytologyCreateCreateReqMaterialType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyCreateCreateReqMaterialType was set.
+func (o OptCytologyCreateCreateReqMaterialType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyCreateCreateReqMaterialType) Reset() {
+	var v CytologyCreateCreateReqMaterialType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyCreateCreateReqMaterialType) SetTo(v CytologyCreateCreateReqMaterialType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyCreateCreateReqMaterialType) Get() (v CytologyCreateCreateReqMaterialType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyCreateCreateReqMaterialType) Or(d CytologyCreateCreateReqMaterialType) CytologyCreateCreateReqMaterialType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyHistoryReadOKResultsItemDiagnosticMarking returns new OptCytologyHistoryReadOKResultsItemDiagnosticMarking with value set to v.
+func NewOptCytologyHistoryReadOKResultsItemDiagnosticMarking(v CytologyHistoryReadOKResultsItemDiagnosticMarking) OptCytologyHistoryReadOKResultsItemDiagnosticMarking {
+	return OptCytologyHistoryReadOKResultsItemDiagnosticMarking{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyHistoryReadOKResultsItemDiagnosticMarking is optional CytologyHistoryReadOKResultsItemDiagnosticMarking.
+type OptCytologyHistoryReadOKResultsItemDiagnosticMarking struct {
+	Value CytologyHistoryReadOKResultsItemDiagnosticMarking
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyHistoryReadOKResultsItemDiagnosticMarking was set.
+func (o OptCytologyHistoryReadOKResultsItemDiagnosticMarking) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyHistoryReadOKResultsItemDiagnosticMarking) Reset() {
+	var v CytologyHistoryReadOKResultsItemDiagnosticMarking
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyHistoryReadOKResultsItemDiagnosticMarking) SetTo(v CytologyHistoryReadOKResultsItemDiagnosticMarking) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyHistoryReadOKResultsItemDiagnosticMarking) Get() (v CytologyHistoryReadOKResultsItemDiagnosticMarking, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyHistoryReadOKResultsItemDiagnosticMarking) Or(d CytologyHistoryReadOKResultsItemDiagnosticMarking) CytologyHistoryReadOKResultsItemDiagnosticMarking {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyHistoryReadOKResultsItemMaterialType returns new OptCytologyHistoryReadOKResultsItemMaterialType with value set to v.
+func NewOptCytologyHistoryReadOKResultsItemMaterialType(v CytologyHistoryReadOKResultsItemMaterialType) OptCytologyHistoryReadOKResultsItemMaterialType {
+	return OptCytologyHistoryReadOKResultsItemMaterialType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyHistoryReadOKResultsItemMaterialType is optional CytologyHistoryReadOKResultsItemMaterialType.
+type OptCytologyHistoryReadOKResultsItemMaterialType struct {
+	Value CytologyHistoryReadOKResultsItemMaterialType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyHistoryReadOKResultsItemMaterialType was set.
+func (o OptCytologyHistoryReadOKResultsItemMaterialType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyHistoryReadOKResultsItemMaterialType) Reset() {
+	var v CytologyHistoryReadOKResultsItemMaterialType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyHistoryReadOKResultsItemMaterialType) SetTo(v CytologyHistoryReadOKResultsItemMaterialType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyHistoryReadOKResultsItemMaterialType) Get() (v CytologyHistoryReadOKResultsItemMaterialType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyHistoryReadOKResultsItemMaterialType) Or(d CytologyHistoryReadOKResultsItemMaterialType) CytologyHistoryReadOKResultsItemMaterialType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyReadOKInfoImageGroupDiagnosticMarking returns new OptCytologyReadOKInfoImageGroupDiagnosticMarking with value set to v.
+func NewOptCytologyReadOKInfoImageGroupDiagnosticMarking(v CytologyReadOKInfoImageGroupDiagnosticMarking) OptCytologyReadOKInfoImageGroupDiagnosticMarking {
+	return OptCytologyReadOKInfoImageGroupDiagnosticMarking{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyReadOKInfoImageGroupDiagnosticMarking is optional CytologyReadOKInfoImageGroupDiagnosticMarking.
+type OptCytologyReadOKInfoImageGroupDiagnosticMarking struct {
+	Value CytologyReadOKInfoImageGroupDiagnosticMarking
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyReadOKInfoImageGroupDiagnosticMarking was set.
+func (o OptCytologyReadOKInfoImageGroupDiagnosticMarking) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyReadOKInfoImageGroupDiagnosticMarking) Reset() {
+	var v CytologyReadOKInfoImageGroupDiagnosticMarking
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyReadOKInfoImageGroupDiagnosticMarking) SetTo(v CytologyReadOKInfoImageGroupDiagnosticMarking) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyReadOKInfoImageGroupDiagnosticMarking) Get() (v CytologyReadOKInfoImageGroupDiagnosticMarking, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyReadOKInfoImageGroupDiagnosticMarking) Or(d CytologyReadOKInfoImageGroupDiagnosticMarking) CytologyReadOKInfoImageGroupDiagnosticMarking {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyReadOKInfoImageGroupMaterialType returns new OptCytologyReadOKInfoImageGroupMaterialType with value set to v.
+func NewOptCytologyReadOKInfoImageGroupMaterialType(v CytologyReadOKInfoImageGroupMaterialType) OptCytologyReadOKInfoImageGroupMaterialType {
+	return OptCytologyReadOKInfoImageGroupMaterialType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyReadOKInfoImageGroupMaterialType is optional CytologyReadOKInfoImageGroupMaterialType.
+type OptCytologyReadOKInfoImageGroupMaterialType struct {
+	Value CytologyReadOKInfoImageGroupMaterialType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyReadOKInfoImageGroupMaterialType was set.
+func (o OptCytologyReadOKInfoImageGroupMaterialType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyReadOKInfoImageGroupMaterialType) Reset() {
+	var v CytologyReadOKInfoImageGroupMaterialType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyReadOKInfoImageGroupMaterialType) SetTo(v CytologyReadOKInfoImageGroupMaterialType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyReadOKInfoImageGroupMaterialType) Get() (v CytologyReadOKInfoImageGroupMaterialType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyReadOKInfoImageGroupMaterialType) Or(d CytologyReadOKInfoImageGroupMaterialType) CytologyReadOKInfoImageGroupMaterialType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologySegmentGroupCreateCreateCreatedData returns new OptCytologySegmentGroupCreateCreateCreatedData with value set to v.
+func NewOptCytologySegmentGroupCreateCreateCreatedData(v CytologySegmentGroupCreateCreateCreatedData) OptCytologySegmentGroupCreateCreateCreatedData {
+	return OptCytologySegmentGroupCreateCreateCreatedData{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologySegmentGroupCreateCreateCreatedData is optional CytologySegmentGroupCreateCreateCreatedData.
+type OptCytologySegmentGroupCreateCreateCreatedData struct {
+	Value CytologySegmentGroupCreateCreateCreatedData
+	Set   bool
+}
+
+// IsSet returns true if OptCytologySegmentGroupCreateCreateCreatedData was set.
+func (o OptCytologySegmentGroupCreateCreateCreatedData) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologySegmentGroupCreateCreateCreatedData) Reset() {
+	var v CytologySegmentGroupCreateCreateCreatedData
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologySegmentGroupCreateCreateCreatedData) SetTo(v CytologySegmentGroupCreateCreateCreatedData) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologySegmentGroupCreateCreateCreatedData) Get() (v CytologySegmentGroupCreateCreateCreatedData, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologySegmentGroupCreateCreateCreatedData) Or(d CytologySegmentGroupCreateCreateCreatedData) CytologySegmentGroupCreateCreateCreatedData {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologySegmentsListGroupType returns new OptCytologySegmentsListGroupType with value set to v.
+func NewOptCytologySegmentsListGroupType(v CytologySegmentsListGroupType) OptCytologySegmentsListGroupType {
+	return OptCytologySegmentsListGroupType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologySegmentsListGroupType is optional CytologySegmentsListGroupType.
+type OptCytologySegmentsListGroupType struct {
+	Value CytologySegmentsListGroupType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologySegmentsListGroupType was set.
+func (o OptCytologySegmentsListGroupType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologySegmentsListGroupType) Reset() {
+	var v CytologySegmentsListGroupType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologySegmentsListGroupType) SetTo(v CytologySegmentsListGroupType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologySegmentsListGroupType) Get() (v CytologySegmentsListGroupType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologySegmentsListGroupType) Or(d CytologySegmentsListGroupType) CytologySegmentsListGroupType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologySegmentsListOKResultsItemGroupType returns new OptCytologySegmentsListOKResultsItemGroupType with value set to v.
+func NewOptCytologySegmentsListOKResultsItemGroupType(v CytologySegmentsListOKResultsItemGroupType) OptCytologySegmentsListOKResultsItemGroupType {
+	return OptCytologySegmentsListOKResultsItemGroupType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologySegmentsListOKResultsItemGroupType is optional CytologySegmentsListOKResultsItemGroupType.
+type OptCytologySegmentsListOKResultsItemGroupType struct {
+	Value CytologySegmentsListOKResultsItemGroupType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologySegmentsListOKResultsItemGroupType was set.
+func (o OptCytologySegmentsListOKResultsItemGroupType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologySegmentsListOKResultsItemGroupType) Reset() {
+	var v CytologySegmentsListOKResultsItemGroupType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologySegmentsListOKResultsItemGroupType) SetTo(v CytologySegmentsListOKResultsItemGroupType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologySegmentsListOKResultsItemGroupType) Get() (v CytologySegmentsListOKResultsItemGroupType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologySegmentsListOKResultsItemGroupType) Or(d CytologySegmentsListOKResultsItemGroupType) CytologySegmentsListOKResultsItemGroupType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologySegmentsListOKResultsItemSegType returns new OptCytologySegmentsListOKResultsItemSegType with value set to v.
+func NewOptCytologySegmentsListOKResultsItemSegType(v CytologySegmentsListOKResultsItemSegType) OptCytologySegmentsListOKResultsItemSegType {
+	return OptCytologySegmentsListOKResultsItemSegType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologySegmentsListOKResultsItemSegType is optional CytologySegmentsListOKResultsItemSegType.
+type OptCytologySegmentsListOKResultsItemSegType struct {
+	Value CytologySegmentsListOKResultsItemSegType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologySegmentsListOKResultsItemSegType was set.
+func (o OptCytologySegmentsListOKResultsItemSegType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologySegmentsListOKResultsItemSegType) Reset() {
+	var v CytologySegmentsListOKResultsItemSegType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologySegmentsListOKResultsItemSegType) SetTo(v CytologySegmentsListOKResultsItemSegType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologySegmentsListOKResultsItemSegType) Get() (v CytologySegmentsListOKResultsItemSegType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologySegmentsListOKResultsItemSegType) Or(d CytologySegmentsListOKResultsItemSegType) CytologySegmentsListOKResultsItemSegType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologySegmentsListSegType returns new OptCytologySegmentsListSegType with value set to v.
+func NewOptCytologySegmentsListSegType(v CytologySegmentsListSegType) OptCytologySegmentsListSegType {
+	return OptCytologySegmentsListSegType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologySegmentsListSegType is optional CytologySegmentsListSegType.
+type OptCytologySegmentsListSegType struct {
+	Value CytologySegmentsListSegType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologySegmentsListSegType was set.
+func (o OptCytologySegmentsListSegType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologySegmentsListSegType) Reset() {
+	var v CytologySegmentsListSegType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologySegmentsListSegType) SetTo(v CytologySegmentsListSegType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologySegmentsListSegType) Get() (v CytologySegmentsListSegType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologySegmentsListSegType) Or(d CytologySegmentsListSegType) CytologySegmentsListSegType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyUpdatePartialUpdateReqDiagnosticMarking returns new OptCytologyUpdatePartialUpdateReqDiagnosticMarking with value set to v.
+func NewOptCytologyUpdatePartialUpdateReqDiagnosticMarking(v CytologyUpdatePartialUpdateReqDiagnosticMarking) OptCytologyUpdatePartialUpdateReqDiagnosticMarking {
+	return OptCytologyUpdatePartialUpdateReqDiagnosticMarking{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyUpdatePartialUpdateReqDiagnosticMarking is optional CytologyUpdatePartialUpdateReqDiagnosticMarking.
+type OptCytologyUpdatePartialUpdateReqDiagnosticMarking struct {
+	Value CytologyUpdatePartialUpdateReqDiagnosticMarking
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyUpdatePartialUpdateReqDiagnosticMarking was set.
+func (o OptCytologyUpdatePartialUpdateReqDiagnosticMarking) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyUpdatePartialUpdateReqDiagnosticMarking) Reset() {
+	var v CytologyUpdatePartialUpdateReqDiagnosticMarking
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyUpdatePartialUpdateReqDiagnosticMarking) SetTo(v CytologyUpdatePartialUpdateReqDiagnosticMarking) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyUpdatePartialUpdateReqDiagnosticMarking) Get() (v CytologyUpdatePartialUpdateReqDiagnosticMarking, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyUpdatePartialUpdateReqDiagnosticMarking) Or(d CytologyUpdatePartialUpdateReqDiagnosticMarking) CytologyUpdatePartialUpdateReqDiagnosticMarking {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyUpdatePartialUpdateReqMaterialType returns new OptCytologyUpdatePartialUpdateReqMaterialType with value set to v.
+func NewOptCytologyUpdatePartialUpdateReqMaterialType(v CytologyUpdatePartialUpdateReqMaterialType) OptCytologyUpdatePartialUpdateReqMaterialType {
+	return OptCytologyUpdatePartialUpdateReqMaterialType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyUpdatePartialUpdateReqMaterialType is optional CytologyUpdatePartialUpdateReqMaterialType.
+type OptCytologyUpdatePartialUpdateReqMaterialType struct {
+	Value CytologyUpdatePartialUpdateReqMaterialType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyUpdatePartialUpdateReqMaterialType was set.
+func (o OptCytologyUpdatePartialUpdateReqMaterialType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyUpdatePartialUpdateReqMaterialType) Reset() {
+	var v CytologyUpdatePartialUpdateReqMaterialType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyUpdatePartialUpdateReqMaterialType) SetTo(v CytologyUpdatePartialUpdateReqMaterialType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyUpdatePartialUpdateReqMaterialType) Get() (v CytologyUpdatePartialUpdateReqMaterialType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyUpdatePartialUpdateReqMaterialType) Or(d CytologyUpdatePartialUpdateReqMaterialType) CytologyUpdatePartialUpdateReqMaterialType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyUpdateUpdateReqDetails returns new OptCytologyUpdateUpdateReqDetails with value set to v.
+func NewOptCytologyUpdateUpdateReqDetails(v CytologyUpdateUpdateReqDetails) OptCytologyUpdateUpdateReqDetails {
+	return OptCytologyUpdateUpdateReqDetails{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyUpdateUpdateReqDetails is optional CytologyUpdateUpdateReqDetails.
+type OptCytologyUpdateUpdateReqDetails struct {
+	Value CytologyUpdateUpdateReqDetails
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyUpdateUpdateReqDetails was set.
+func (o OptCytologyUpdateUpdateReqDetails) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyUpdateUpdateReqDetails) Reset() {
+	var v CytologyUpdateUpdateReqDetails
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyUpdateUpdateReqDetails) SetTo(v CytologyUpdateUpdateReqDetails) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyUpdateUpdateReqDetails) Get() (v CytologyUpdateUpdateReqDetails, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyUpdateUpdateReqDetails) Or(d CytologyUpdateUpdateReqDetails) CytologyUpdateUpdateReqDetails {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyUpdateUpdateReqDetailsDiagnosticMarking returns new OptCytologyUpdateUpdateReqDetailsDiagnosticMarking with value set to v.
+func NewOptCytologyUpdateUpdateReqDetailsDiagnosticMarking(v CytologyUpdateUpdateReqDetailsDiagnosticMarking) OptCytologyUpdateUpdateReqDetailsDiagnosticMarking {
+	return OptCytologyUpdateUpdateReqDetailsDiagnosticMarking{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyUpdateUpdateReqDetailsDiagnosticMarking is optional CytologyUpdateUpdateReqDetailsDiagnosticMarking.
+type OptCytologyUpdateUpdateReqDetailsDiagnosticMarking struct {
+	Value CytologyUpdateUpdateReqDetailsDiagnosticMarking
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyUpdateUpdateReqDetailsDiagnosticMarking was set.
+func (o OptCytologyUpdateUpdateReqDetailsDiagnosticMarking) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyUpdateUpdateReqDetailsDiagnosticMarking) Reset() {
+	var v CytologyUpdateUpdateReqDetailsDiagnosticMarking
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyUpdateUpdateReqDetailsDiagnosticMarking) SetTo(v CytologyUpdateUpdateReqDetailsDiagnosticMarking) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyUpdateUpdateReqDetailsDiagnosticMarking) Get() (v CytologyUpdateUpdateReqDetailsDiagnosticMarking, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyUpdateUpdateReqDetailsDiagnosticMarking) Or(d CytologyUpdateUpdateReqDetailsDiagnosticMarking) CytologyUpdateUpdateReqDetailsDiagnosticMarking {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyUpdateUpdateReqDetailsMaterialType returns new OptCytologyUpdateUpdateReqDetailsMaterialType with value set to v.
+func NewOptCytologyUpdateUpdateReqDetailsMaterialType(v CytologyUpdateUpdateReqDetailsMaterialType) OptCytologyUpdateUpdateReqDetailsMaterialType {
+	return OptCytologyUpdateUpdateReqDetailsMaterialType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyUpdateUpdateReqDetailsMaterialType is optional CytologyUpdateUpdateReqDetailsMaterialType.
+type OptCytologyUpdateUpdateReqDetailsMaterialType struct {
+	Value CytologyUpdateUpdateReqDetailsMaterialType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyUpdateUpdateReqDetailsMaterialType was set.
+func (o OptCytologyUpdateUpdateReqDetailsMaterialType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyUpdateUpdateReqDetailsMaterialType) Reset() {
+	var v CytologyUpdateUpdateReqDetailsMaterialType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyUpdateUpdateReqDetailsMaterialType) SetTo(v CytologyUpdateUpdateReqDetailsMaterialType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyUpdateUpdateReqDetailsMaterialType) Get() (v CytologyUpdateUpdateReqDetailsMaterialType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyUpdateUpdateReqDetailsMaterialType) Or(d CytologyUpdateUpdateReqDetailsMaterialType) CytologyUpdateUpdateReqDetailsMaterialType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyUpdateUpdateReqDiagnosticMarking returns new OptCytologyUpdateUpdateReqDiagnosticMarking with value set to v.
+func NewOptCytologyUpdateUpdateReqDiagnosticMarking(v CytologyUpdateUpdateReqDiagnosticMarking) OptCytologyUpdateUpdateReqDiagnosticMarking {
+	return OptCytologyUpdateUpdateReqDiagnosticMarking{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyUpdateUpdateReqDiagnosticMarking is optional CytologyUpdateUpdateReqDiagnosticMarking.
+type OptCytologyUpdateUpdateReqDiagnosticMarking struct {
+	Value CytologyUpdateUpdateReqDiagnosticMarking
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyUpdateUpdateReqDiagnosticMarking was set.
+func (o OptCytologyUpdateUpdateReqDiagnosticMarking) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyUpdateUpdateReqDiagnosticMarking) Reset() {
+	var v CytologyUpdateUpdateReqDiagnosticMarking
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyUpdateUpdateReqDiagnosticMarking) SetTo(v CytologyUpdateUpdateReqDiagnosticMarking) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyUpdateUpdateReqDiagnosticMarking) Get() (v CytologyUpdateUpdateReqDiagnosticMarking, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyUpdateUpdateReqDiagnosticMarking) Or(d CytologyUpdateUpdateReqDiagnosticMarking) CytologyUpdateUpdateReqDiagnosticMarking {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCytologyUpdateUpdateReqMaterialType returns new OptCytologyUpdateUpdateReqMaterialType with value set to v.
+func NewOptCytologyUpdateUpdateReqMaterialType(v CytologyUpdateUpdateReqMaterialType) OptCytologyUpdateUpdateReqMaterialType {
+	return OptCytologyUpdateUpdateReqMaterialType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCytologyUpdateUpdateReqMaterialType is optional CytologyUpdateUpdateReqMaterialType.
+type OptCytologyUpdateUpdateReqMaterialType struct {
+	Value CytologyUpdateUpdateReqMaterialType
+	Set   bool
+}
+
+// IsSet returns true if OptCytologyUpdateUpdateReqMaterialType was set.
+func (o OptCytologyUpdateUpdateReqMaterialType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCytologyUpdateUpdateReqMaterialType) Reset() {
+	var v CytologyUpdateUpdateReqMaterialType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCytologyUpdateUpdateReqMaterialType) SetTo(v CytologyUpdateUpdateReqMaterialType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCytologyUpdateUpdateReqMaterialType) Get() (v CytologyUpdateUpdateReqMaterialType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCytologyUpdateUpdateReqMaterialType) Or(d CytologyUpdateUpdateReqMaterialType) CytologyUpdateUpdateReqMaterialType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptDate returns new OptDate with value set to v.
 func NewOptDate(v time.Time) OptDate {
 	return OptDate{
@@ -1151,6 +5832,98 @@ func (o OptFloat64) Get() (v float64, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptFloat64) Or(d float64) float64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt returns new OptInt with value set to v.
+func NewOptInt(v int) OptInt {
+	return OptInt{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt is optional int.
+type OptInt struct {
+	Value int
+	Set   bool
+}
+
+// IsSet returns true if OptInt was set.
+func (o OptInt) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt) Reset() {
+	var v int
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt) SetTo(v int) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt) Get() (v int, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptMultipartFile returns new OptMultipartFile with value set to v.
+func NewOptMultipartFile(v ht.MultipartFile) OptMultipartFile {
+	return OptMultipartFile{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptMultipartFile is optional ht.MultipartFile.
+type OptMultipartFile struct {
+	Value ht.MultipartFile
+	Set   bool
+}
+
+// IsSet returns true if OptMultipartFile was set.
+func (o OptMultipartFile) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptMultipartFile) Reset() {
+	var v ht.MultipartFile
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptMultipartFile) SetTo(v ht.MultipartFile) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptMultipartFile) Get() (v ht.MultipartFile, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptMultipartFile) Or(d ht.MultipartFile) ht.MultipartFile {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1323,6 +6096,52 @@ func (o OptString) Get() (v string, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptURI returns new OptURI with value set to v.
+func NewOptURI(v url.URL) OptURI {
+	return OptURI{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptURI is optional url.URL.
+type OptURI struct {
+	Value url.URL
+	Set   bool
+}
+
+// IsSet returns true if OptURI was set.
+func (o OptURI) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptURI) Reset() {
+	var v url.URL
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptURI) SetTo(v url.URL) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptURI) Get() (v url.URL, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptURI) Or(d url.URL) url.URL {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1709,6 +6528,66 @@ func (s *Patient) SetLastUziDate(val OptDate) {
 
 func (*Patient) medPatientIDGetRes()   {}
 func (*Patient) medPatientIDPatchRes() {}
+
+// Карта пациента.
+// Ref: #/components/schemas/patientCard
+type PatientCard struct {
+	ID                 OptInt      `json:"id"`
+	AcceptanceDatetime OptDateTime `json:"acceptance_datetime"`
+	Diagnosis          OptString   `json:"diagnosis"`
+	Patient            OptInt      `json:"patient"`
+	MedWorker          OptInt      `json:"med_worker"`
+}
+
+// GetID returns the value of ID.
+func (s *PatientCard) GetID() OptInt {
+	return s.ID
+}
+
+// GetAcceptanceDatetime returns the value of AcceptanceDatetime.
+func (s *PatientCard) GetAcceptanceDatetime() OptDateTime {
+	return s.AcceptanceDatetime
+}
+
+// GetDiagnosis returns the value of Diagnosis.
+func (s *PatientCard) GetDiagnosis() OptString {
+	return s.Diagnosis
+}
+
+// GetPatient returns the value of Patient.
+func (s *PatientCard) GetPatient() OptInt {
+	return s.Patient
+}
+
+// GetMedWorker returns the value of MedWorker.
+func (s *PatientCard) GetMedWorker() OptInt {
+	return s.MedWorker
+}
+
+// SetID sets the value of ID.
+func (s *PatientCard) SetID(val OptInt) {
+	s.ID = val
+}
+
+// SetAcceptanceDatetime sets the value of AcceptanceDatetime.
+func (s *PatientCard) SetAcceptanceDatetime(val OptDateTime) {
+	s.AcceptanceDatetime = val
+}
+
+// SetDiagnosis sets the value of Diagnosis.
+func (s *PatientCard) SetDiagnosis(val OptString) {
+	s.Diagnosis = val
+}
+
+// SetPatient sets the value of Patient.
+func (s *PatientCard) SetPatient(val OptInt) {
+	s.Patient = val
+}
+
+// SetMedWorker sets the value of MedWorker.
+func (s *PatientCard) SetMedWorker(val OptInt) {
+	s.MedWorker = val
+}
 
 // Платежный провайдер.
 // Ref: #/components/schemas/PaymentProvider
@@ -2376,6 +7255,131 @@ func (*TariffPlan) tariffPlansIDGetRes() {}
 type TariffPlansGetOKApplicationJSON []TariffPlan
 
 func (*TariffPlansGetOKApplicationJSON) tariffPlansGetRes() {}
+
+type TilerDziFilePathFilesLevelColRowFormatGetBadRequest ErrorStatusCode
+
+func (*TilerDziFilePathFilesLevelColRowFormatGetBadRequest) tilerDziFilePathFilesLevelColRowFormatGetRes() {
+}
+
+type TilerDziFilePathFilesLevelColRowFormatGetFormat string
+
+const (
+	TilerDziFilePathFilesLevelColRowFormatGetFormatJpeg TilerDziFilePathFilesLevelColRowFormatGetFormat = "jpeg"
+	TilerDziFilePathFilesLevelColRowFormatGetFormatJPG  TilerDziFilePathFilesLevelColRowFormatGetFormat = "jpg"
+	TilerDziFilePathFilesLevelColRowFormatGetFormatPNG  TilerDziFilePathFilesLevelColRowFormatGetFormat = "png"
+)
+
+// AllValues returns all TilerDziFilePathFilesLevelColRowFormatGetFormat values.
+func (TilerDziFilePathFilesLevelColRowFormatGetFormat) AllValues() []TilerDziFilePathFilesLevelColRowFormatGetFormat {
+	return []TilerDziFilePathFilesLevelColRowFormatGetFormat{
+		TilerDziFilePathFilesLevelColRowFormatGetFormatJpeg,
+		TilerDziFilePathFilesLevelColRowFormatGetFormatJPG,
+		TilerDziFilePathFilesLevelColRowFormatGetFormatPNG,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s TilerDziFilePathFilesLevelColRowFormatGetFormat) MarshalText() ([]byte, error) {
+	switch s {
+	case TilerDziFilePathFilesLevelColRowFormatGetFormatJpeg:
+		return []byte(s), nil
+	case TilerDziFilePathFilesLevelColRowFormatGetFormatJPG:
+		return []byte(s), nil
+	case TilerDziFilePathFilesLevelColRowFormatGetFormatPNG:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *TilerDziFilePathFilesLevelColRowFormatGetFormat) UnmarshalText(data []byte) error {
+	switch TilerDziFilePathFilesLevelColRowFormatGetFormat(data) {
+	case TilerDziFilePathFilesLevelColRowFormatGetFormatJpeg:
+		*s = TilerDziFilePathFilesLevelColRowFormatGetFormatJpeg
+		return nil
+	case TilerDziFilePathFilesLevelColRowFormatGetFormatJPG:
+		*s = TilerDziFilePathFilesLevelColRowFormatGetFormatJPG
+		return nil
+	case TilerDziFilePathFilesLevelColRowFormatGetFormatPNG:
+		*s = TilerDziFilePathFilesLevelColRowFormatGetFormatPNG
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type TilerDziFilePathFilesLevelColRowFormatGetInternalServerError ErrorStatusCode
+
+func (*TilerDziFilePathFilesLevelColRowFormatGetInternalServerError) tilerDziFilePathFilesLevelColRowFormatGetRes() {
+}
+
+type TilerDziFilePathFilesLevelColRowFormatGetNotFound ErrorStatusCode
+
+func (*TilerDziFilePathFilesLevelColRowFormatGetNotFound) tilerDziFilePathFilesLevelColRowFormatGetRes() {
+}
+
+type TilerDziFilePathFilesLevelColRowFormatGetOKImageJpeg struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s TilerDziFilePathFilesLevelColRowFormatGetOKImageJpeg) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*TilerDziFilePathFilesLevelColRowFormatGetOKImageJpeg) tilerDziFilePathFilesLevelColRowFormatGetRes() {
+}
+
+type TilerDziFilePathFilesLevelColRowFormatGetOKImagePNG struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s TilerDziFilePathFilesLevelColRowFormatGetOKImagePNG) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*TilerDziFilePathFilesLevelColRowFormatGetOKImagePNG) tilerDziFilePathFilesLevelColRowFormatGetRes() {
+}
+
+type TilerDziFilePathGetBadRequest ErrorStatusCode
+
+func (*TilerDziFilePathGetBadRequest) tilerDziFilePathGetRes() {}
+
+type TilerDziFilePathGetInternalServerError ErrorStatusCode
+
+func (*TilerDziFilePathGetInternalServerError) tilerDziFilePathGetRes() {}
+
+type TilerDziFilePathGetNotFound ErrorStatusCode
+
+func (*TilerDziFilePathGetNotFound) tilerDziFilePathGetRes() {}
+
+type TilerDziFilePathGetOK struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s TilerDziFilePathGetOK) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*TilerDziFilePathGetOK) tilerDziFilePathGetRes() {}
 
 // Узи.
 // Ref: #/components/schemas/uzi

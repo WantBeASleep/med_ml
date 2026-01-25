@@ -9,6 +9,7 @@ import (
 
 type DownloadHandler interface {
 	DownloadUziIDImageIDGet(ctx context.Context, params api.DownloadUziIDImageIDGetParams) (api.DownloadUziIDImageIDGetRes, error)
+	DownloadCytologyCytologyIDOriginalImageIDGet(ctx context.Context, params api.DownloadCytologyCytologyIDOriginalImageIDGetParams) (api.DownloadCytologyCytologyIDOriginalImageIDGetRes, error)
 }
 
 type handler struct {

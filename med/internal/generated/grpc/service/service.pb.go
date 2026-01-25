@@ -720,6 +720,7 @@ func (x *UpdatePatientOut) GetPatient() *Patient {
 
 type Card struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            *int32                 `protobuf:"varint,50,opt,name=id,proto3,oneof" json:"id,omitempty"` // ID карты (автоинкремент)
 	DoctorId      string                 `protobuf:"bytes,100,opt,name=doctor_id,json=doctorId,proto3" json:"doctor_id,omitempty"`
 	PatientId     string                 `protobuf:"bytes,200,opt,name=patient_id,json=patientId,proto3" json:"patient_id,omitempty"`
 	Diagnosis     *string                `protobuf:"bytes,300,opt,name=diagnosis,proto3,oneof" json:"diagnosis,omitempty"`
@@ -755,6 +756,13 @@ func (x *Card) ProtoReflect() protoreflect.Message {
 // Deprecated: Use Card.ProtoReflect.Descriptor instead.
 func (*Card) Descriptor() ([]byte, []int) {
 	return file_proto_grpc_service_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *Card) GetId() int32 {
+	if x != nil && x.Id != nil {
+		return *x.Id
+	}
+	return 0
 }
 
 func (x *Card) GetDoctorId() string {
@@ -1113,12 +1121,14 @@ const file_proto_grpc_service_proto_rawDesc = "" +
 	"\v_malignancyB\x10\n" +
 	"\x0e_last_uzi_date\"6\n" +
 	"\x10UpdatePatientOut\x12\"\n" +
-	"\apatient\x18d \x01(\v2\b.PatientR\apatient\"u\n" +
-	"\x04Card\x12\x1b\n" +
+	"\apatient\x18d \x01(\v2\b.PatientR\apatient\"\x91\x01\n" +
+	"\x04Card\x12\x13\n" +
+	"\x02id\x182 \x01(\x05H\x00R\x02id\x88\x01\x01\x12\x1b\n" +
 	"\tdoctor_id\x18d \x01(\tR\bdoctorId\x12\x1e\n" +
 	"\n" +
 	"patient_id\x18\xc8\x01 \x01(\tR\tpatientId\x12\"\n" +
-	"\tdiagnosis\x18\xac\x02 \x01(\tH\x00R\tdiagnosis\x88\x01\x01B\f\n" +
+	"\tdiagnosis\x18\xac\x02 \x01(\tH\x01R\tdiagnosis\x88\x01\x01B\x05\n" +
+	"\x03_idB\f\n" +
 	"\n" +
 	"_diagnosis\")\n" +
 	"\fCreateCardIn\x12\x19\n" +
@@ -1135,7 +1145,7 @@ const file_proto_grpc_service_proto_rawDesc = "" +
 	"\fUpdateCardIn\x12\x19\n" +
 	"\x04card\x18d \x01(\v2\x05.CardR\x04card\"*\n" +
 	"\rUpdateCardOut\x12\x19\n" +
-	"\x04card\x18d \x01(\v2\x05.CardR\x04card2\xe1\x03\n" +
+	"\x04card\x18d \x01(\v2\x05.CardR\x04card2\xd9\x03\n" +
 	"\x06MedSrv\x12;\n" +
 	"\x0eregisterDoctor\x12\x11.RegisterDoctorIn\x1a\x16.google.protobuf.Empty\x12(\n" +
 	"\tgetDoctor\x12\f.GetDoctorIn\x1a\r.GetDoctorOut\x129\n" +
@@ -1143,9 +1153,9 @@ const file_proto_grpc_service_proto_rawDesc = "" +
 	"\n" +
 	"getPatient\x12\r.GetPatientIn\x1a\x0e.GetPatientOut\x12L\n" +
 	"\x15getPatientsByDoctorID\x12\x18.GetPatientsByDoctorIDIn\x1a\x19.GetPatientsByDoctorIDOut\x124\n" +
-	"\rupdatePatient\x12\x10.UpdatePatientIn\x1a\x11.UpdatePatientOut\x123\n" +
+	"\rupdatePatient\x12\x10.UpdatePatientIn\x1a\x11.UpdatePatientOut\x12+\n" +
 	"\n" +
-	"createCard\x12\r.CreateCardIn\x1a\x16.google.protobuf.Empty\x12\"\n" +
+	"createCard\x12\r.CreateCardIn\x1a\x0e.CreateCardOut\x12\"\n" +
 	"\agetCard\x12\n" +
 	".GetCardIn\x1a\v.GetCardOut\x12+\n" +
 	"\n" +
@@ -1212,7 +1222,7 @@ var file_proto_grpc_service_proto_depIdxs = []int32{
 	7,  // 22: MedSrv.getPatient:output_type -> GetPatientOut
 	9,  // 23: MedSrv.getPatientsByDoctorID:output_type -> GetPatientsByDoctorIDOut
 	11, // 24: MedSrv.updatePatient:output_type -> UpdatePatientOut
-	19, // 25: MedSrv.createCard:output_type -> google.protobuf.Empty
+	14, // 25: MedSrv.createCard:output_type -> CreateCardOut
 	16, // 26: MedSrv.getCard:output_type -> GetCardOut
 	18, // 27: MedSrv.updateCard:output_type -> UpdateCardOut
 	19, // [19:28] is the sub-list for method output_type

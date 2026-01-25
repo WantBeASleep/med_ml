@@ -1,7 +1,7 @@
 name: yir
-  
+
 volumes:
-  redpanda-0: 
+  redpanda-0:
   minio-s3:
   postgres:
 
@@ -21,7 +21,7 @@ services:
       - deps
       - app
     environment:
-      POSTGRES_MULTIPLE_DATABASES: authdb,meddb,uzidb,billingdb
+      POSTGRES_MULTIPLE_DATABASES: authdb,meddb,uzidb,billingdb,cytologydb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
 
@@ -35,8 +35,8 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
       MINIO_SERVER_URL: http://localhost:9000
-      MINIO_ACCESS_KEY: NZjt6KmuHQRU7IitYUiW   
-      MINIO_SECRET_KEY: ql9DoBMKyqMxQm8j5LQuKwnn68KFsGqn5jGbL7uL    
+      MINIO_ACCESS_KEY: NZjt6KmuHQRU7IitYUiW
+      MINIO_SECRET_KEY: ql9DoBMKyqMxQm8j5LQuKwnn68KFsGqn5jGbL7uL
     volumes:
       - minio-s3:/data
     command: server --address 0.0.0.0:9000 --console-address 0.0.0.0:9001 /data
@@ -81,7 +81,7 @@ services:
       - 19092:19092
       - 19644:9644
     profiles:
-      - deps 
+      - deps
       - app
   ####################
   # Redpanda Console #
@@ -115,7 +115,7 @@ services:
 
   ml_service:
     container_name: ml_service
-    build: 
+    build:
       context: ./ml_service/
       dockerfile: Dockerfile
     depends_on:
@@ -160,7 +160,40 @@ services:
       - 50060:50055
     profiles:
       - app
-    
+
+  cytology_service:
+    container_name: cytology_service
+    build:
+      context: ./cytology/
+      dockerfile: Dockerfile
+    env_file:
+      - ./cytology/.env-docker
+    ports:
+      - 50070:50055
+    restart: always
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "50055"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    profiles:
+      - app
+
+  tiler_service:
+    container_name: tiler_service
+    build:
+      context: ./tiler/
+      dockerfile: Dockerfile
+    env_file:
+      - ./tiler/.env-docker
+    ports:
+      - 50080:50055
+    depends_on:
+      - minio
+    profiles:
+      - app
+
   composition_api:
     container_name: composition_api
     build:
@@ -171,10 +204,19 @@ services:
     ports:
       - 8080:50055
     depends_on:
-      - redpanda-0
-      - uzi_service
-      - med_service
-      - auth_service
+      redpanda-0:
+        condition: service_started
+      uzi_service:
+        condition: service_started
+      med_service:
+        condition: service_started
+      auth_service:
+        condition: service_started
+      cytology_service:
+        condition: service_healthy
+      tiler_service:
+        condition: service_started
+    restart: always
     profiles:
       - app
 
@@ -194,8 +236,14 @@ services:
     image: nginx:alpine
     container_name: nginx
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./certs:/etc/nginx/certs:ro
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+      - type: bind
+        source: ./certs
+        target: /etc/nginx/certs
+        read_only: true
     ports:
       - "80:80"
       - "443:443"

@@ -7,6 +7,7 @@ import (
 
 type DAO interface {
 	NewFileRepo() FileRepo
+	NewFileRepoWithBucket(bucket string) FileRepo
 }
 
 type dao struct {
@@ -26,5 +27,13 @@ func (d *dao) NewFileRepo() FileRepo {
 	return &fileRepo{
 		s3:     d.s3,
 		bucket: d.s3bucket,
+	}
+}
+
+// NewFileRepoWithBucket создает FileRepo с указанным bucket
+func (d *dao) NewFileRepoWithBucket(bucket string) FileRepo {
+	return &fileRepo{
+		s3:     d.s3,
+		bucket: bucket,
 	}
 }

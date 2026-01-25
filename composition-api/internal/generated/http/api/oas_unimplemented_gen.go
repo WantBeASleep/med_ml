@@ -13,6 +13,127 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// CytologyCopyCreate implements CytologyCopyCreate operation.
+//
+// Создает новое цитологическое исследование на основе
+// существующего.
+// Копирует все данные из исходного исследования,
+// включая изображения и сегментации.
+//
+// POST /cytology/copy
+func (UnimplementedHandler) CytologyCopyCreate(ctx context.Context, req *CytologyCopyCreateReq) (r CytologyCopyCreateRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologyCreateCreate implements CytologyCreateCreate operation.
+//
+// Форма для сохранния цитологического изображения.
+//
+// POST /cytology/create
+func (UnimplementedHandler) CytologyCreateCreate(ctx context.Context, req *CytologyCreateCreateReq) (r CytologyCreateCreateRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologyHistoryRead implements CytologyHistoryRead operation.
+//
+// Получить историю цитологического исследования.
+//
+// GET /cytology/history/{id}
+func (UnimplementedHandler) CytologyHistoryRead(ctx context.Context, params CytologyHistoryReadParams) (r CytologyHistoryReadRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologyRead implements CytologyRead operation.
+//
+// Информация об одной группе снимков.
+//
+// GET /cytology/{id}
+func (UnimplementedHandler) CytologyRead(ctx context.Context, params CytologyReadParams) (r CytologyReadRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologySegmentGroupCreateCreate implements CytologySegmentGroupCreateCreate operation.
+//
+// Создать группу сегментаций.
+//
+// POST /cytology/segment/group/create/{cytology_img_id}
+func (UnimplementedHandler) CytologySegmentGroupCreateCreate(ctx context.Context, req *CytologySegmentGroupCreateCreateReq, params CytologySegmentGroupCreateCreateParams) (r CytologySegmentGroupCreateCreateRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologySegmentUpdateDelete implements CytologySegmentUpdateDelete operation.
+//
+// Удалить сегментацию.
+//
+// DELETE /cytology/segment/update/{id}
+func (UnimplementedHandler) CytologySegmentUpdateDelete(ctx context.Context, params CytologySegmentUpdateDeleteParams) (r CytologySegmentUpdateDeleteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologySegmentUpdatePartialUpdate implements CytologySegmentUpdatePartialUpdate operation.
+//
+// Обновить сегментацию.
+//
+// PATCH /cytology/segment/update/{id}
+func (UnimplementedHandler) CytologySegmentUpdatePartialUpdate(ctx context.Context, req *CytologySegmentUpdatePartialUpdateReq, params CytologySegmentUpdatePartialUpdateParams) (r CytologySegmentUpdatePartialUpdateRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologySegmentUpdateRead implements CytologySegmentUpdateRead operation.
+//
+// Получить сегментацию.
+//
+// GET /cytology/segment/update/{id}
+func (UnimplementedHandler) CytologySegmentUpdateRead(ctx context.Context, params CytologySegmentUpdateReadParams) (r CytologySegmentUpdateReadRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologySegmentUpdateUpdate implements CytologySegmentUpdateUpdate operation.
+//
+// Обновить сегментацию.
+//
+// PUT /cytology/segment/update/{id}
+func (UnimplementedHandler) CytologySegmentUpdateUpdate(ctx context.Context, req *CytologySegmentUpdateUpdateReq, params CytologySegmentUpdateUpdateParams) (r CytologySegmentUpdateUpdateRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologySegmentsList implements CytologySegmentsList operation.
+//
+// Информация об одной группе снимков.
+//
+// GET /cytology/{id}/segments
+func (UnimplementedHandler) CytologySegmentsList(ctx context.Context, params CytologySegmentsListParams) (r CytologySegmentsListRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologyUpdatePartialUpdate implements CytologyUpdatePartialUpdate operation.
+//
+// Обновление всей страницы с информацией о приеме.
+//
+// PATCH /cytology/{id}/update
+func (UnimplementedHandler) CytologyUpdatePartialUpdate(ctx context.Context, req *CytologyUpdatePartialUpdateReq, params CytologyUpdatePartialUpdateParams) (r CytologyUpdatePartialUpdateRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// CytologyUpdateUpdate implements CytologyUpdateUpdate operation.
+//
+// Обновление всей страницы с информацией о приеме.
+//
+// PUT /cytology/{id}/update
+func (UnimplementedHandler) CytologyUpdateUpdate(ctx context.Context, req *CytologyUpdateUpdateReq, params CytologyUpdateUpdateParams) (r CytologyUpdateUpdateRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DownloadCytologyCytologyIDOriginalImageIDGet implements GET /download/cytology/{cytology_id}/{original_image_id} operation.
+//
+// Получить оригинальное изображение цитологического
+// исследования.
+//
+// GET /download/cytology/{cytology_id}/{original_image_id}
+func (UnimplementedHandler) DownloadCytologyCytologyIDOriginalImageIDGet(ctx context.Context, params DownloadCytologyCytologyIDOriginalImageIDGetParams) (r DownloadCytologyCytologyIDOriginalImageIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // DownloadUziIDImageIDGet implements GET /download/{uzi_id}/{image_id} operation.
 //
 // Получить кадр узи.
@@ -185,6 +306,31 @@ func (UnimplementedHandler) TariffPlansGet(ctx context.Context) (r TariffPlansGe
 //
 // GET /tariff_plans/{id}
 func (UnimplementedHandler) TariffPlansIDGet(ctx context.Context, params TariffPlansIDGetParams) (r TariffPlansIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// TilerDziFilePathFilesLevelColRowFormatGet implements TilerDziFilePathFilesLevelColRowFormatGet operation.
+//
+// Возвращает конкретный тайл (плитку) изображения для
+// указанного уровня масштабирования,
+// колонки и строки. Запрос проксируется напрямую на
+// tiler_service.
+// Формат пути: `/tiler/dzi/{file_path}/files/{level}/{col}_{row}.{format}`.
+//
+// GET /tiler/dzi/{file_path}/files/{level}/{col}_{row}.{format}
+func (UnimplementedHandler) TilerDziFilePathFilesLevelColRowFormatGet(ctx context.Context, params TilerDziFilePathFilesLevelColRowFormatGetParams) (r TilerDziFilePathFilesLevelColRowFormatGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// TilerDziFilePathGet implements TilerDziFilePathGet operation.
+//
+// Возвращает XML метаданные в формате Deep Zoom Image (DZI) для
+// указанного изображения.
+// Путь к файлу должен быть URL-encoded. Запрос проксируется
+// напрямую на tiler_service.
+//
+// GET /tiler/dzi/{file_path}
+func (UnimplementedHandler) TilerDziFilePathGet(ctx context.Context, params TilerDziFilePathGetParams) (r TilerDziFilePathGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

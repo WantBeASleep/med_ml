@@ -13,7 +13,7 @@ service MedSrv {
   rpc getPatientsByDoctorID(GetPatientsByDoctorIDIn) returns (GetPatientsByDoctorIDOut);
   rpc updatePatient(UpdatePatientIn) returns (UpdatePatientOut);
 
-  rpc createCard(CreateCardIn) returns (google.protobuf.Empty);
+  rpc createCard(CreateCardIn) returns (CreateCardOut);
   rpc getCard(GetCardIn) returns (GetCardOut);
   rpc updateCard(UpdateCardIn) returns (UpdateCardOut);
 }
@@ -74,6 +74,7 @@ message UpdatePatientIn {
 message UpdatePatientOut { Patient patient = 100; }
 
 message Card {
+  optional int32 id = 50; // ID карты (автоинкремент)
   string doctor_id = 100;
   string patient_id = 200;
   optional string diagnosis = 300;

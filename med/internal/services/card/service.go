@@ -10,7 +10,7 @@ import (
 )
 
 type Service interface {
-	CreateCard(ctx context.Context, card domain.Card) error
+	CreateCard(ctx context.Context, card domain.Card) (domain.Card, error)
 
 	GetCard(ctx context.Context, doctorID, patientID uuid.UUID) (domain.Card, error)
 

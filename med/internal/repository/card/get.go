@@ -14,6 +14,7 @@ import (
 func (r *repo) GetCardByPK(doctorID uuid.UUID, patientID uuid.UUID) (entity.Card, error) {
 	query := r.QueryBuilder().
 		Select(
+			columnID,
 			columnDoctorID,
 			columnPatientID,
 			columnDiagnosis,

@@ -40,7 +40,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.notFound(w, r)
 		return
 	}
-	args := [2]string{}
+	args := [5]string{}
 
 	// Static code generated router with unwrapped path search.
 	switch {
@@ -61,6 +61,281 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'c': // Prefix: "cytology/"
+
+				if l := len("cytology/"); len(elem) >= l && elem[0:l] == "cytology/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "c"
+					origElem := elem
+					if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'o': // Prefix: "opy"
+
+						if l := len("opy"); len(elem) >= l && elem[0:l] == "opy" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleCytologyCopyCreateRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					case 'r': // Prefix: "reate"
+
+						if l := len("reate"); len(elem) >= l && elem[0:l] == "reate" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleCytologyCreateCreateRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					}
+
+					elem = origElem
+				case 'h': // Prefix: "history/"
+					origElem := elem
+					if l := len("history/"); len(elem) >= l && elem[0:l] == "history/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleCytologyHistoryReadRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 's': // Prefix: "segment/"
+					origElem := elem
+					if l := len("segment/"); len(elem) >= l && elem[0:l] == "segment/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'g': // Prefix: "group/create/"
+
+						if l := len("group/create/"); len(elem) >= l && elem[0:l] == "group/create/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "cytology_img_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleCytologySegmentGroupCreateCreateRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					case 'u': // Prefix: "update/"
+
+						if l := len("update/"); len(elem) >= l && elem[0:l] == "update/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "DELETE":
+								s.handleCytologySegmentUpdateDeleteRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "GET":
+								s.handleCytologySegmentUpdateReadRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "PATCH":
+								s.handleCytologySegmentUpdatePartialUpdateRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "PUT":
+								s.handleCytologySegmentUpdateUpdateRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "DELETE,GET,PATCH,PUT")
+							}
+
+							return
+						}
+
+					}
+
+					elem = origElem
+				}
+				// Param: "id"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "GET":
+						s.handleCytologyReadRequest([1]string{
+							args[0],
+						}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 's': // Prefix: "segments"
+
+						if l := len("segments"); len(elem) >= l && elem[0:l] == "segments" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleCytologySegmentsListRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+					case 'u': // Prefix: "update"
+
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "PATCH":
+								s.handleCytologyUpdatePartialUpdateRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "PUT":
+								s.handleCytologyUpdateUpdateRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "PATCH,PUT")
+							}
+
+							return
+						}
+
+					}
+
+				}
+
 			case 'd': // Prefix: "download/"
 
 				if l := len("download/"); len(elem) >= l && elem[0:l] == "download/" {
@@ -69,6 +344,67 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "cytology/"
+					origElem := elem
+					if l := len("cytology/"); len(elem) >= l && elem[0:l] == "cytology/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "cytology_id"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "original_image_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[1] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleDownloadCytologyCytologyIDOriginalImageIDGetRequest([2]string{
+									args[0],
+									args[1],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+					}
+
+					elem = origElem
+				}
 				// Param: "uzi_id"
 				// Match until "/"
 				idx := strings.IndexByte(elem, '/')
@@ -523,47 +859,91 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 				}
 
-			case 't': // Prefix: "tariff_plans"
+			case 't': // Prefix: "t"
 
-				if l := len("tariff_plans"); len(elem) >= l && elem[0:l] == "tariff_plans" {
+				if l := len("t"); len(elem) >= l && elem[0:l] == "t" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					switch r.Method {
-					case "GET":
-						s.handleTariffPlansGetRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
-					}
-
-					return
+					break
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/"
+				case 'a': // Prefix: "ariff_plans"
 
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+					if l := len("ariff_plans"); len(elem) >= l && elem[0:l] == "ariff_plans" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "id"
-					// Leaf parameter, slashes are prohibited
-					idx := strings.IndexByte(elem, '/')
-					if idx >= 0 {
-						break
-					}
-					args[0] = elem
-					elem = ""
-
 					if len(elem) == 0 {
-						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleTariffPlansIDGetRequest([1]string{
+							s.handleTariffPlansGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleTariffPlansIDGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+					}
+
+				case 'i': // Prefix: "iler/dzi/"
+
+					if l := len("iler/dzi/"); len(elem) >= l && elem[0:l] == "iler/dzi/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "file_path"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "GET":
+							s.handleTilerDziFilePathGetRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
@@ -571,6 +951,112 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/files/"
+
+						if l := len("/files/"); len(elem) >= l && elem[0:l] == "/files/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "level"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[1] = elem[:idx]
+						elem = elem[idx:]
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "col"
+							// Match until "_"
+							idx := strings.IndexByte(elem, '_')
+							if idx < 0 {
+								idx = len(elem)
+							}
+							args[2] = elem[:idx]
+							elem = elem[idx:]
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case '_': // Prefix: "_"
+
+								if l := len("_"); len(elem) >= l && elem[0:l] == "_" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								// Param: "row"
+								// Match until "."
+								idx := strings.IndexByte(elem, '.')
+								if idx < 0 {
+									idx = len(elem)
+								}
+								args[3] = elem[:idx]
+								elem = elem[idx:]
+
+								if len(elem) == 0 {
+									break
+								}
+								switch elem[0] {
+								case '.': // Prefix: "."
+
+									if l := len("."); len(elem) >= l && elem[0:l] == "." {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									// Param: "format"
+									// Leaf parameter, slashes are prohibited
+									idx := strings.IndexByte(elem, '/')
+									if idx >= 0 {
+										break
+									}
+									args[4] = elem
+									elem = ""
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "GET":
+											s.handleTilerDziFilePathFilesLevelColRowFormatGetRequest([5]string{
+												args[0],
+												args[1],
+												args[2],
+												args[3],
+												args[4],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "GET")
+										}
+
+										return
+									}
+
+								}
+
+							}
+
+						}
+
 					}
 
 				}
@@ -1062,7 +1548,7 @@ type Route struct {
 	operationID string
 	pathPattern string
 	count       int
-	args        [2]string
+	args        [5]string
 }
 
 // Name returns ogen operation name.
@@ -1142,6 +1628,317 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'c': // Prefix: "cytology/"
+
+				if l := len("cytology/"); len(elem) >= l && elem[0:l] == "cytology/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "c"
+					origElem := elem
+					if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'o': // Prefix: "opy"
+
+						if l := len("opy"); len(elem) >= l && elem[0:l] == "opy" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = CytologyCopyCreateOperation
+								r.summary = "Создание нового исследования, на основе предыдущего"
+								r.operationID = "CytologyCopyCreate"
+								r.pathPattern = "/cytology/copy"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'r': // Prefix: "reate"
+
+						if l := len("reate"); len(elem) >= l && elem[0:l] == "reate" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = CytologyCreateCreateOperation
+								r.summary = "Форма для сохранния цитологического изображения"
+								r.operationID = "CytologyCreateCreate"
+								r.pathPattern = "/cytology/create"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+					elem = origElem
+				case 'h': // Prefix: "history/"
+					origElem := elem
+					if l := len("history/"); len(elem) >= l && elem[0:l] == "history/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = CytologyHistoryReadOperation
+							r.summary = "получить историю цитологического исследования"
+							r.operationID = "CytologyHistoryRead"
+							r.pathPattern = "/cytology/history/{id}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 's': // Prefix: "segment/"
+					origElem := elem
+					if l := len("segment/"); len(elem) >= l && elem[0:l] == "segment/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'g': // Prefix: "group/create/"
+
+						if l := len("group/create/"); len(elem) >= l && elem[0:l] == "group/create/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "cytology_img_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = CytologySegmentGroupCreateCreateOperation
+								r.summary = "создать группу сегментаций"
+								r.operationID = "CytologySegmentGroupCreateCreate"
+								r.pathPattern = "/cytology/segment/group/create/{cytology_img_id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'u': // Prefix: "update/"
+
+						if l := len("update/"); len(elem) >= l && elem[0:l] == "update/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "DELETE":
+								r.name = CytologySegmentUpdateDeleteOperation
+								r.summary = "удалить сегментацию"
+								r.operationID = "CytologySegmentUpdateDelete"
+								r.pathPattern = "/cytology/segment/update/{id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "GET":
+								r.name = CytologySegmentUpdateReadOperation
+								r.summary = "получить сегментацию"
+								r.operationID = "CytologySegmentUpdateRead"
+								r.pathPattern = "/cytology/segment/update/{id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "PATCH":
+								r.name = CytologySegmentUpdatePartialUpdateOperation
+								r.summary = "обновить сегментацию"
+								r.operationID = "CytologySegmentUpdatePartialUpdate"
+								r.pathPattern = "/cytology/segment/update/{id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "PUT":
+								r.name = CytologySegmentUpdateUpdateOperation
+								r.summary = "обновить сегментацию"
+								r.operationID = "CytologySegmentUpdateUpdate"
+								r.pathPattern = "/cytology/segment/update/{id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+					elem = origElem
+				}
+				// Param: "id"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						r.name = CytologyReadOperation
+						r.summary = "Информация об одной группе снимков"
+						r.operationID = "CytologyRead"
+						r.pathPattern = "/cytology/{id}"
+						r.args = args
+						r.count = 1
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 's': // Prefix: "segments"
+
+						if l := len("segments"); len(elem) >= l && elem[0:l] == "segments" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = CytologySegmentsListOperation
+								r.summary = "Информация об одной группе снимков"
+								r.operationID = "CytologySegmentsList"
+								r.pathPattern = "/cytology/{id}/segments"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'u': // Prefix: "update"
+
+						if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "PATCH":
+								r.name = CytologyUpdatePartialUpdateOperation
+								r.summary = "Обновление всей страницы с информацией о приеме"
+								r.operationID = "CytologyUpdatePartialUpdate"
+								r.pathPattern = "/cytology/{id}/update"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "PUT":
+								r.name = CytologyUpdateUpdateOperation
+								r.summary = "Обновление всей страницы с информацией о приеме"
+								r.operationID = "CytologyUpdateUpdate"
+								r.pathPattern = "/cytology/{id}/update"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+				}
+
 			case 'd': // Prefix: "download/"
 
 				if l := len("download/"); len(elem) >= l && elem[0:l] == "download/" {
@@ -1150,6 +1947,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "cytology/"
+					origElem := elem
+					if l := len("cytology/"); len(elem) >= l && elem[0:l] == "cytology/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "cytology_id"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "original_image_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[1] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = DownloadCytologyCytologyIDOriginalImageIDGetOperation
+								r.summary = "получить оригинальное изображение цитологического исследования"
+								r.operationID = ""
+								r.pathPattern = "/download/cytology/{cytology_id}/{original_image_id}"
+								r.args = args
+								r.count = 2
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+					elem = origElem
+				}
 				// Param: "uzi_id"
 				// Match until "/"
 				idx := strings.IndexByte(elem, '/')
@@ -1659,60 +2518,210 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 				}
 
-			case 't': // Prefix: "tariff_plans"
+			case 't': // Prefix: "t"
 
-				if l := len("tariff_plans"); len(elem) >= l && elem[0:l] == "tariff_plans" {
+				if l := len("t"); len(elem) >= l && elem[0:l] == "t" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					switch method {
-					case "GET":
-						r.name = TariffPlansGetOperation
-						r.summary = "Получить список всех тарифных планов"
-						r.operationID = ""
-						r.pathPattern = "/tariff_plans"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
+					break
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/"
+				case 'a': // Prefix: "ariff_plans"
 
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+					if l := len("ariff_plans"); len(elem) >= l && elem[0:l] == "ariff_plans" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "id"
-					// Leaf parameter, slashes are prohibited
-					idx := strings.IndexByte(elem, '/')
-					if idx >= 0 {
-						break
-					}
-					args[0] = elem
-					elem = ""
-
 					if len(elem) == 0 {
-						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = TariffPlansIDGetOperation
-							r.summary = "Получить тарифный план по ID"
+							r.name = TariffPlansGetOperation
+							r.summary = "Получить список всех тарифных планов"
 							r.operationID = ""
-							r.pathPattern = "/tariff_plans/{id}"
+							r.pathPattern = "/tariff_plans"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = TariffPlansIDGetOperation
+								r.summary = "Получить тарифный план по ID"
+								r.operationID = ""
+								r.pathPattern = "/tariff_plans/{id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+				case 'i': // Prefix: "iler/dzi/"
+
+					if l := len("iler/dzi/"); len(elem) >= l && elem[0:l] == "iler/dzi/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "file_path"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						switch method {
+						case "GET":
+							r.name = TilerDziFilePathGetOperation
+							r.summary = "Получить DZI XML метаданные для изображения"
+							r.operationID = "TilerDziFilePathGet"
+							r.pathPattern = "/tiler/dzi/{file_path}"
 							r.args = args
 							r.count = 1
 							return r, true
 						default:
 							return
 						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/files/"
+
+						if l := len("/files/"); len(elem) >= l && elem[0:l] == "/files/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "level"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[1] = elem[:idx]
+						elem = elem[idx:]
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "col"
+							// Match until "_"
+							idx := strings.IndexByte(elem, '_')
+							if idx < 0 {
+								idx = len(elem)
+							}
+							args[2] = elem[:idx]
+							elem = elem[idx:]
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case '_': // Prefix: "_"
+
+								if l := len("_"); len(elem) >= l && elem[0:l] == "_" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								// Param: "row"
+								// Match until "."
+								idx := strings.IndexByte(elem, '.')
+								if idx < 0 {
+									idx = len(elem)
+								}
+								args[3] = elem[:idx]
+								elem = elem[idx:]
+
+								if len(elem) == 0 {
+									break
+								}
+								switch elem[0] {
+								case '.': // Prefix: "."
+
+									if l := len("."); len(elem) >= l && elem[0:l] == "." {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									// Param: "format"
+									// Leaf parameter, slashes are prohibited
+									idx := strings.IndexByte(elem, '/')
+									if idx >= 0 {
+										break
+									}
+									args[4] = elem
+									elem = ""
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch method {
+										case "GET":
+											r.name = TilerDziFilePathFilesLevelColRowFormatGetOperation
+											r.summary = "Получить тайл изображения"
+											r.operationID = "TilerDziFilePathFilesLevelColRowFormatGet"
+											r.pathPattern = "/tiler/dzi/{file_path}/files/{level}/{col}_{row}.{format}"
+											r.args = args
+											r.count = 5
+											return r, true
+										default:
+											return
+										}
+									}
+
+								}
+
+							}
+
+						}
+
 					}
 
 				}

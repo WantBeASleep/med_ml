@@ -81,6 +81,814 @@ func TestContorItem_EncodeDecode(t *testing.T) {
 	var typ2 ContorItem
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
+func TestCytologyCopyCreateCreated_EncodeDecode(t *testing.T) {
+	var typ CytologyCopyCreateCreated
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyCopyCreateCreated
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestCytologyCopyCreateCreated_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"id\":\"123e4567-e89b-12d3-a456-426614174001\",\"pk\":\"123e4567-e89b-12d3-a456-426614174000\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ CytologyCopyCreateCreated
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 CytologyCopyCreateCreated
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestCytologyCopyCreateReq_EncodeDecode(t *testing.T) {
+	var typ CytologyCopyCreateReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyCopyCreateReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestCytologyCopyCreateReq_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"id\":\"123e4567-e89b-12d3-a456-426614174000\"}"},
+		{Input: "{\"id\":123}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ CytologyCopyCreateReq
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 CytologyCopyCreateReq
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestCytologyCreateCreateCreated_EncodeDecode(t *testing.T) {
+	var typ CytologyCreateCreateCreated
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyCreateCreateCreated
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyCreateCreateCreatedDetails_EncodeDecode(t *testing.T) {
+	var typ CytologyCreateCreateCreatedDetails
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyCreateCreateCreatedDetails
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyCreateCreateCreatedDiagnosticMarking_EncodeDecode(t *testing.T) {
+	var typ CytologyCreateCreateCreatedDiagnosticMarking
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyCreateCreateCreatedDiagnosticMarking
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyCreateCreateCreatedMaterialType_EncodeDecode(t *testing.T) {
+	var typ CytologyCreateCreateCreatedMaterialType
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyCreateCreateCreatedMaterialType
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyHistoryReadOK_EncodeDecode(t *testing.T) {
+	var typ CytologyHistoryReadOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyHistoryReadOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestCytologyHistoryReadOK_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"count\":3,\"next\":null,\"previous\":null,\"results\":[{\"calcitonin\":5,\"calcitonin_in_flush\":2,\"details\":{\"note\":\"Первичное исследование\"},\"diagnos_date\":\"2024-12-21T10:30:00Z\",\"diagnostic_marking\":\"П11\",\"diagnostic_number\":12345,\"id\":1,\"is_last\":true,\"material_type\":\"GS\",\"original_image\":200,\"parent_prev\":null,\"patient_card\":100,\"prev\":null,\"thyroglobulin\":10},{\"calcitonin\":3,\"calcitonin_in_flush\":1,\"details\":{\"note\":\"Повторное исследование\"},\"diagnos_date\":\"2024-12-20T14:20:00Z\",\"diagnostic_marking\":\"Л23\",\"diagnostic_number\":12344,\"id\":2,\"is_last\":false,\"material_type\":\"BP\",\"original_image\":199,\"parent_prev\":null,\"patient_card\":100,\"prev\":\"123e4567-e89b-12d3-a456-426614174000\",\"thyroglobulin\":8},{\"calcitonin\":4,\"calcitonin_in_flush\":2,\"details\":null,\"diagnos_date\":\"2024-12-19T09:15:00Z\",\"diagnostic_marking\":\"П11\",\"diagnostic_number\":12343,\"id\":3,\"is_last\":false,\"material_type\":\"TP\",\"original_image\":198,\"parent_prev\":null,\"patient_card\":100,\"prev\":\"123e4567-e89b-12d3-a456-426614174001\",\"thyroglobulin\":9}]}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ CytologyHistoryReadOK
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 CytologyHistoryReadOK
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
+}
+func TestCytologyHistoryReadOKResultsItem_EncodeDecode(t *testing.T) {
+	var typ CytologyHistoryReadOKResultsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyHistoryReadOKResultsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyHistoryReadOKResultsItemDetails_EncodeDecode(t *testing.T) {
+	var typ CytologyHistoryReadOKResultsItemDetails
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyHistoryReadOKResultsItemDetails
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyHistoryReadOKResultsItemDiagnosticMarking_EncodeDecode(t *testing.T) {
+	var typ CytologyHistoryReadOKResultsItemDiagnosticMarking
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyHistoryReadOKResultsItemDiagnosticMarking
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyHistoryReadOKResultsItemMaterialType_EncodeDecode(t *testing.T) {
+	var typ CytologyHistoryReadOKResultsItemMaterialType
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyHistoryReadOKResultsItemMaterialType
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyReadOK_EncodeDecode(t *testing.T) {
+	var typ CytologyReadOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyReadOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyReadOKInfo_EncodeDecode(t *testing.T) {
+	var typ CytologyReadOKInfo
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyReadOKInfo
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyReadOKInfoImageGroup_EncodeDecode(t *testing.T) {
+	var typ CytologyReadOKInfoImageGroup
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyReadOKInfoImageGroup
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyReadOKInfoImageGroupDetails_EncodeDecode(t *testing.T) {
+	var typ CytologyReadOKInfoImageGroupDetails
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyReadOKInfoImageGroupDetails
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyReadOKInfoImageGroupDiagnosticMarking_EncodeDecode(t *testing.T) {
+	var typ CytologyReadOKInfoImageGroupDiagnosticMarking
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyReadOKInfoImageGroupDiagnosticMarking
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyReadOKInfoImageGroupMaterialType_EncodeDecode(t *testing.T) {
+	var typ CytologyReadOKInfoImageGroupMaterialType
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyReadOKInfoImageGroupMaterialType
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyReadOKOriginalImage_EncodeDecode(t *testing.T) {
+	var typ CytologyReadOKOriginalImage
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyReadOKOriginalImage
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentGroupCreateCreateCreated_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentGroupCreateCreateCreated
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentGroupCreateCreateCreated
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentGroupCreateCreateCreatedData_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentGroupCreateCreateCreatedData
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentGroupCreateCreateCreatedData
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentGroupCreateCreateCreatedDataPointsItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentGroupCreateCreateCreatedDataPointsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentGroupCreateCreateCreatedDataPointsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentGroupCreateCreateReq_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentGroupCreateCreateReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentGroupCreateCreateReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentGroupCreateCreateReqData_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentGroupCreateCreateReqData
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentGroupCreateCreateReqData
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentGroupCreateCreateReqDataPointsItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentGroupCreateCreateReqDataPointsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentGroupCreateCreateReqDataPointsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentGroupCreateCreateReqSegType_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentGroupCreateCreateReqSegType
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentGroupCreateCreateReqSegType
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdatePartialUpdateOK_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdatePartialUpdateOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdatePartialUpdateOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdatePartialUpdateOKPointsItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdatePartialUpdateOKPointsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdatePartialUpdateOKPointsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdatePartialUpdateReq_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdatePartialUpdateReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdatePartialUpdateReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdatePartialUpdateReqPointsItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdatePartialUpdateReqPointsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdatePartialUpdateReqPointsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdateReadOK_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdateReadOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdateReadOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdateReadOKPointsItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdateReadOKPointsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdateReadOKPointsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdateUpdateOK_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdateUpdateOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdateUpdateOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdateUpdateOKPointsItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdateUpdateOKPointsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdateUpdateOKPointsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdateUpdateReq_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdateUpdateReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdateUpdateReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentUpdateUpdateReqPointsItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentUpdateUpdateReqPointsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentUpdateUpdateReqPointsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentsListOK_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentsListOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentsListOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentsListOKResultsItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentsListOKResultsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentsListOKResultsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentsListOKResultsItemDataItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentsListOKResultsItemDataItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentsListOKResultsItemDataItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentsListOKResultsItemDataItemPointsItem_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentsListOKResultsItemDataItemPointsItem
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentsListOKResultsItemDataItemPointsItem
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentsListOKResultsItemDetails_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentsListOKResultsItemDetails
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentsListOKResultsItemDetails
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentsListOKResultsItemGroupType_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentsListOKResultsItemGroupType
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentsListOKResultsItemGroupType
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologySegmentsListOKResultsItemSegType_EncodeDecode(t *testing.T) {
+	var typ CytologySegmentsListOKResultsItemSegType
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologySegmentsListOKResultsItemSegType
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdatePartialUpdateOK_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdatePartialUpdateOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdatePartialUpdateOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdatePartialUpdateOKDetails_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdatePartialUpdateOKDetails
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdatePartialUpdateOKDetails
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdatePartialUpdateOKPatientCard_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdatePartialUpdateOKPatientCard
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdatePartialUpdateOKPatientCard
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdatePartialUpdateReq_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdatePartialUpdateReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdatePartialUpdateReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdatePartialUpdateReqDetails_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdatePartialUpdateReqDetails
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdatePartialUpdateReqDetails
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdatePartialUpdateReqDiagnosticMarking_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdatePartialUpdateReqDiagnosticMarking
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdatePartialUpdateReqDiagnosticMarking
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdatePartialUpdateReqMaterialType_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdatePartialUpdateReqMaterialType
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdatePartialUpdateReqMaterialType
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdatePartialUpdateReqPatientCard_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdatePartialUpdateReqPatientCard
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdatePartialUpdateReqPatientCard
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateOK_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateOK
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateOK
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateOKDetails_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateOKDetails
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateOKDetails
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateOKPatientCard_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateOKPatientCard
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateOKPatientCard
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateReq_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateReq
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateReq
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateReqDetails_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateReqDetails
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateReqDetails
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateReqDetailsDiagnosticMarking_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateReqDetailsDiagnosticMarking
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateReqDetailsDiagnosticMarking
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateReqDetailsMaterialType_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateReqDetailsMaterialType
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateReqDetailsMaterialType
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateReqDiagnosticMarking_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateReqDiagnosticMarking
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateReqDiagnosticMarking
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateReqMaterialType_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateReqMaterialType
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateReqMaterialType
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestCytologyUpdateUpdateReqPatientCard_EncodeDecode(t *testing.T) {
+	var typ CytologyUpdateUpdateReqPatientCard
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 CytologyUpdateUpdateReqPatientCard
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
 func TestDevice_EncodeDecode(t *testing.T) {
 	var typ Device
 	typ.SetFake()
@@ -451,6 +1259,18 @@ func TestPatient_Examples(t *testing.T) {
 			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
 		})
 	}
+}
+func TestPatientCard_EncodeDecode(t *testing.T) {
+	var typ PatientCard
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 PatientCard
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
 func TestPaymentProvider_EncodeDecode(t *testing.T) {
 	var typ PaymentProvider
